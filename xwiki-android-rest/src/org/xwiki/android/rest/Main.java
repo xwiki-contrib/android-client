@@ -11,7 +11,6 @@ public class Main extends Activity {
 	// IP of the development machine in Android emulator 10.0.2.2
 	// These variables are uses for testing
 	String domain = "10.0.2.2";
-	int port = 8080;
 	String searchKeyword = "test";
 
 	/** Called when the activity is first created. */
@@ -20,28 +19,39 @@ public class Main extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
-		
-
-
 	}
-	
-	public void searchButtonClick(View v){
-		
-		TextView tv_result = (TextView) findViewById(R.id.textView1);
-		TextView et_domain = (TextView)findViewById(R.id.editText_domain);
-		TextView et_port = (TextView)findViewById(R.id.editText_port);
-		TextView et_searchText = (TextView)findViewById(R.id.editText_SearchText);
-		
-		domain = et_domain.getText().toString();
-		port = Integer.parseInt(et_port.getText().toString());
-		searchKeyword = et_searchText.getText().toString();
-		
-		Log.d("Info", "domain="+ domain +" port=" + port + " text=" + searchKeyword);
-		Requests searchRequest = new Requests(domain, port);
-		String result = searchRequest.requestSearch(searchKeyword);
 
-		Log.d("Final result:","result=" + result);
-		tv_result.setText("Search Results\n" + searchRequest.decodeSearchResponse(result));
-	
+	public void searchButtonClick(View v) {
+
+		TextView tv_result = (TextView) findViewById(R.id.textView1);
+		TextView et_domain = (TextView) findViewById(R.id.editText_domain);
+		TextView et_searchText = (TextView) findViewById(R.id.editText_SearchText);
+
+		domain = et_domain.getText().toString();
+		searchKeyword = et_searchText.getText().toString();
+
+		Log.d("Info", "domain=" + domain + " text=" + searchKeyword);
+		Requests request = new Requests(domain);
+
+		//Test wiki search implementation
+		String result = request.requestSearch("xwiki",searchKeyword);
+		Log.d("Final result:", "result=" + result);
+		tv_result.setText("Search Results\n" + result);
+		
+		//Test space search implementation
+//		String result = request.requestSearch("xwiki","Blog",searchKeyword);
+//		Log.d("Final result:", "result=" + result);
+//		tv_result.setText("Search Results\n" + result);
+		
+		//Test wiki implementation
+//		String result = request.requestWiki();
+//		Log.d("Final result:", "result=" + result);
+//		tv_result.setText("Search Results\n" + result);
+		
+		//Test space implementation
+//		String result = request.requestSpaces();
+//		Log.d("Final result:", "result=" + result);
+//		tv_result.setText("Search Results\n" + result);
+		
 	}
 }

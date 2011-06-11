@@ -1,86 +1,89 @@
 package org.xwiki.android.rest;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URLEncoder;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.util.Log;
 
-public class Search {
+public class Search extends HttpConnector {
 
-	private final String PAGE_SEARCH_REQUEST = "/xwiki/rest/wikis/xwiki/search?scope=name&number=10&media=json&q=";
+	private final String SEARCH_REQUEST_PREFIX = "/xwiki/rest/wikis/";
+	private final String WIKI_SEARCH_REQUEST_SUFFIX = "/search?scope=name&number=10&media=json&q=";
+	private final String JSON_ARRAY_IDENTIFIER = "searchResults";  
+	private String URLprefix;
 
-	private String domain;
-	private String port;
-	private String keyword;
-
-	public Search(String domain, int port) {
-		this.domain = domain;
-		this.port = Integer.toString(port);
+	public Search(String URLprefix) {
+		this.URLprefix = URLprefix;
 	}
 
-	public void setKeyword(String keyword) {
+	public String doSpacesSearch(String wikiName, String spaceName, String keyword) {
 
+		// Convert keyword to UTF
 		try {
-			this.keyword = URLEncoder.encode(keyword, "UTF-8");
+			keyword = URLEncoder.encode(keyword, "UTF-8");
+
 		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
+			Log.d("Error", "Unsupported keyword is found");
 			e.printStackTrace();
 		}
+
+		String Uri = "http://" + URLprefix + SEARCH_REQUEST_PREFIX + wikiName + "/spaces/" + spaceName
+				+ WIKI_SEARCH_REQUEST_SUFFIX + keyword;
+
+		return super.getResponse(Uri);
 	}
 
-	public String doPageSearch() {
+	public String doWikiSearch(String wikiName, String keyword) {
 
-		BufferedReader in = null;
-		HttpClient client = new DefaultHttpClient();
-		HttpGet request = new HttpGet();
-		String responseText = new String();
-		HttpResponse response;
-
+		// Convert keyword to UTF
 		try {
-			// request.setURI(new URI(
-			// "http://10.0.2.2:8080/xwiki/rest/wikis/xwiki/search?scope=name&number=10&media=xml&q=is%20great"));
+			keyword = URLEncoder.encode(keyword, "UTF-8");
 
-			request.setURI(new URI("http://" + domain + ":" + port
-					+ PAGE_SEARCH_REQUEST + keyword));
-
-		} catch (URISyntaxException e) {
-			// TODO Auto-generated catch block
+		} catch (UnsupportedEncodingException e) {
+			Log.d("Error", "Unsupported keyword is found");
 			e.printStackTrace();
 		}
 
+		String Uri = "http://" + URLprefix + SEARCH_REQUEST_PREFIX + wikiName
+				+ WIKI_SEARCH_REQUEST_SUFFIX + keyword;
+
+		return super.getResponse(Uri);
+	}
+
+	// Temporary method to decode JSON reply
+	public String decodeSearchResponse(String response) {
+
+		String searchResultText = "";
 		try {
-			response = client.execute(request);
-			in = new BufferedReader(new InputStreamReader(response.getEntity()
-					.getContent()));
-			StringBuffer sb = new StringBuffer("");
-			String line = "";
-			String NL = System.getProperty("line.separator");
-			while ((line = in.readLine()) != null) {
-				sb.append(line + NL);
+			JSONObject jsonobject = new JSONObject(response);
+			JSONArray dataArray = jsonobject.getJSONArray(JSON_ARRAY_IDENTIFIER);
+
+			Log.d("JSON", "JSON array built");
+
+			Log.d("JSON", "Number of entrees in array: " + dataArray.length());
+
+			for (int i = 0; i < dataArray.length(); i++) {
+				if (!dataArray.isNull(i)) {
+					JSONObject item = dataArray.getJSONObject(i);
+
+					if (item.has("id")) {
+						String id = item.getString("id");
+						Log.d("JSON Array", "id= " + id);
+						searchResultText += ("\n" + id);
+					}
+				}
 			}
-			in.close();
-			responseText = sb.toString();
-			Log.d("Response", "response: " + responseText);
-
-		} catch (ClientProtocolException e) {
+		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log.d("JSON", "Error in JSON object or Array");
 		}
 
-		return responseText;
+		return searchResultText;
+
 	}
 }

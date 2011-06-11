@@ -1,62 +1,41 @@
 package org.xwiki.android.rest;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.util.Log;
-
 public class Requests {
 
-	private String domain;
-	private int port;
+	private String URLprefix;
 
-	public Requests(String domain, int port) {
-		this.domain = domain;
-		this.port = port;
+	public Requests(String URLprefix) {
+		this.URLprefix = URLprefix;
 	}
 
 	// Method for search
-	public String requestSearch(String keyword) {
+	public String requestSearch(String wikiName, String keyword) {
 
-		Search search = new Search(domain, port);
-		search.setKeyword(keyword);
-
-		return search.doPageSearch();
+		Search search = new Search(URLprefix);
+		return search.decodeSearchResponse(search.doWikiSearch(wikiName,
+				keyword));
 	}
 
-	// Temporary method to decode JSON reply
-	public String decodeSearchResponse(String response) {
+	public String requestSearch(String wikiName, String spaceName,
+			String keyword) {
 
-		String searchResultText="";
-		try {
-			JSONObject jsonobject = new JSONObject(response);
-			JSONArray dataArray = jsonobject.getJSONArray("searchResults");
+		Search search = new Search(URLprefix);
+		return search.decodeSearchResponse(search.doSpacesSearch(wikiName,
+				spaceName, keyword));
+	}
 
-			Log.d("JSON", "JSON array built");
+	// Method for retrieving Wikis
+	public String requestWiki() {
 
-			Log.d("JSON", "Number of entrees in array: " + dataArray.length());
+		WikiResources wikiresources = new WikiResources(URLprefix);
+		return wikiresources.decodeWikiResponse(wikiresources.getWikis());
+	}
 
-			for (int i = 0; i < dataArray.length(); i++) {
-				if (!dataArray.isNull(i)) {
-					JSONObject item = dataArray.getJSONObject(i);
-
-					if (item.has("id")) {
-						String id = item.getString("id");
-						Log.d("JSON Array", "id= " + id);
-						searchResultText += ("\n" + id );
-					}
-				}
-			}
-
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			Log.d("JSON", "Error in JSON object or Array");
-		}
-		
-		return searchResultText;
-
+	// Method for retrieving Spaces
+	public String requestSpaces() {
+		String wikiName = "xwiki";
+		SpaceResources spacesresources = new SpaceResources(URLprefix, wikiName);
+		return spacesresources.decodeSpaceResponse(spacesresources.getSpaces());
 	}
 
 	// Method for requesting pages (to be implemented)
