@@ -1,89 +1,74 @@
 package org.xwiki.android.rest;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.util.Log;
 
-public class Search extends HttpConnector {
+public class Search extends HttpConnector
+{
 
-	private final String SEARCH_REQUEST_PREFIX = "/xwiki/rest/wikis/";
-	private final String WIKI_SEARCH_REQUEST_SUFFIX = "/search?scope=name&number=10&media=json&q=";
-	private final String JSON_ARRAY_IDENTIFIER = "searchResults";  
-	private String URLprefix;
+    private final String SEARCH_REQUEST_PREFIX = "/xwiki/rest/wikis/";
 
-	public Search(String URLprefix) {
-		this.URLprefix = URLprefix;
-	}
+    private final String WIKI_SEARCH_REQUEST_SUFFIX = "/search?scope=name&number=10&media=json&q=";
 
-	public String doSpacesSearch(String wikiName, String spaceName, String keyword) {
+    private final String JSON_ARRAY_IDENTIFIER = "searchResults";
 
-		// Convert keyword to UTF
-		try {
-			keyword = URLEncoder.encode(keyword, "UTF-8");
+    private String URLprefix;
 
-		} catch (UnsupportedEncodingException e) {
-			Log.d("Error", "Unsupported keyword is found");
-			e.printStackTrace();
-		}
+    public Search(String URLprefix)
+    {
+        this.URLprefix = URLprefix;
+    }
 
-		String Uri = "http://" + URLprefix + SEARCH_REQUEST_PREFIX + wikiName + "/spaces/" + spaceName
-				+ WIKI_SEARCH_REQUEST_SUFFIX + keyword;
+    public String doSpacesSearch(String wikiName, String spaceName, String keyword)
+    {
+        String Uri =
+            "http://" + URLprefix + SEARCH_REQUEST_PREFIX + wikiName + "/spaces/" + spaceName
+                + WIKI_SEARCH_REQUEST_SUFFIX + keyword;
 
-		return super.getResponse(Uri);
-	}
+        return super.getResponse(Uri);
+    }
 
-	public String doWikiSearch(String wikiName, String keyword) {
+    public String doWikiSearch(String wikiName, String keyword)
+    {
+        String Uri = "http://" + URLprefix + SEARCH_REQUEST_PREFIX + wikiName + WIKI_SEARCH_REQUEST_SUFFIX + keyword;
 
-		// Convert keyword to UTF
-		try {
-			keyword = URLEncoder.encode(keyword, "UTF-8");
+        return super.getResponse(Uri);
+    }
 
-		} catch (UnsupportedEncodingException e) {
-			Log.d("Error", "Unsupported keyword is found");
-			e.printStackTrace();
-		}
+    // Temporary method to decode JSON reply
+    public String decodeSearchResponse(String response)
+    {
 
-		String Uri = "http://" + URLprefix + SEARCH_REQUEST_PREFIX + wikiName
-				+ WIKI_SEARCH_REQUEST_SUFFIX + keyword;
+        String searchResultText = "";
+        try {
+            JSONObject jsonobject = new JSONObject(response);
+            JSONArray dataArray = jsonobject.getJSONArray(JSON_ARRAY_IDENTIFIER);
 
-		return super.getResponse(Uri);
-	}
+            Log.d("JSON", "JSON array built");
 
-	// Temporary method to decode JSON reply
-	public String decodeSearchResponse(String response) {
+            Log.d("JSON", "Number of entrees in array: " + dataArray.length());
 
-		String searchResultText = "";
-		try {
-			JSONObject jsonobject = new JSONObject(response);
-			JSONArray dataArray = jsonobject.getJSONArray(JSON_ARRAY_IDENTIFIER);
+            for (int i = 0; i < dataArray.length(); i++) {
+                if (!dataArray.isNull(i)) {
+                    JSONObject item = dataArray.getJSONObject(i);
 
-			Log.d("JSON", "JSON array built");
+                    if (item.has("id")) {
+                        String id = item.getString("id");
+                        Log.d("JSON Array", "id= " + id);
+                        searchResultText += ("\n" + id);
+                    }
+                }
+            }
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            Log.d("JSON", "Error in JSON object or Array");
+        }
 
-			Log.d("JSON", "Number of entrees in array: " + dataArray.length());
+        return searchResultText;
 
-			for (int i = 0; i < dataArray.length(); i++) {
-				if (!dataArray.isNull(i)) {
-					JSONObject item = dataArray.getJSONObject(i);
-
-					if (item.has("id")) {
-						String id = item.getString("id");
-						Log.d("JSON Array", "id= " + id);
-						searchResultText += ("\n" + id);
-					}
-				}
-			}
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			Log.d("JSON", "Error in JSON object or Array");
-		}
-
-		return searchResultText;
-
-	}
+    }
 }

@@ -6,58 +6,65 @@ import org.json.JSONObject;
 
 import android.util.Log;
 
-public class SpaceResources extends HttpConnector {
+public class SpaceResources extends HttpConnector
+{
 
-	private final String SPACE_URL_PREFIX = "/xwiki/rest/wikis/";
-	private final String SPACE_URL_SUFFIX = "/spaces?media=json";
-	private final String JSON_ARRAY_IDENTIFIER = "spaces";  
+    private final String SPACE_URL_PREFIX = "/xwiki/rest/wikis/";
 
-	private String URLprefix;
-	private String wikiName;
+    private final String SPACE_URL_SUFFIX = "/spaces?media=json";
 
-	public SpaceResources(String URLprefix, String wikiName) {
-		this.URLprefix = URLprefix;
-		this.wikiName = wikiName;
-	}
+    private final String JSON_ARRAY_IDENTIFIER = "spaces";
 
-	public String getSpaces() {
+    private String URLprefix;
 
-		String Uri = "http://" + URLprefix + SPACE_URL_PREFIX + wikiName + SPACE_URL_SUFFIX;
+    private String wikiName;
 
-		return super.getResponse(Uri);
-	}
-	
-	// Temporary method to decode JSON reply
-	public String decodeSpaceResponse(String response) {
+    public SpaceResources(String URLprefix, String wikiName)
+    {
+        this.URLprefix = URLprefix;
+        this.wikiName = wikiName;
+    }
 
-		String wikiResultText = "";
-		try {
-			JSONObject jsonobject = new JSONObject(response);
-			JSONArray dataArray = jsonobject.getJSONArray(JSON_ARRAY_IDENTIFIER);
+    public String getSpaces()
+    {
 
-			Log.d("JSON", "JSON array built");
+        String Uri = "http://" + URLprefix + SPACE_URL_PREFIX + wikiName + SPACE_URL_SUFFIX;
 
-			Log.d("JSON", "Number of entrees in array: " + dataArray.length());
+        return super.getResponse(Uri);
+    }
 
-			for (int i = 0; i < dataArray.length(); i++) {
-				if (!dataArray.isNull(i)) {
-					JSONObject item = dataArray.getJSONObject(i);
+    // Temporary method to decode JSON reply
+    public String decodeSpaceResponse(String response)
+    {
 
-					if (item.has("id")) {
-						String id = item.getString("id");
-						Log.d("JSON Array", "id= " + id);
-						wikiResultText += ("\n" + id);
-					}
-				}
-			}
+        String wikiResultText = "";
+        try {
+            JSONObject jsonobject = new JSONObject(response);
+            JSONArray dataArray = jsonobject.getJSONArray(JSON_ARRAY_IDENTIFIER);
 
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			Log.d("JSON", "Error in JSON object or Array");
-		}
+            Log.d("JSON", "JSON array built");
 
-		return wikiResultText;
+            Log.d("JSON", "Number of entrees in array: " + dataArray.length());
 
-	}
+            for (int i = 0; i < dataArray.length(); i++) {
+                if (!dataArray.isNull(i)) {
+                    JSONObject item = dataArray.getJSONObject(i);
+
+                    if (item.has("id")) {
+                        String id = item.getString("id");
+                        Log.d("JSON Array", "id= " + id);
+                        wikiResultText += ("\n" + id);
+                    }
+                }
+            }
+
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            Log.d("JSON", "Error in JSON object or Array");
+        }
+
+        return wikiResultText;
+
+    }
 }

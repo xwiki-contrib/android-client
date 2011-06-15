@@ -8,9 +8,9 @@
     android:layout_width="fill_parent" 
     android:layout_height="wrap_content" android:text="XWiki Android"/>
 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/textView_domain" android:text="Domain"></TextView>
-<EditText android:layout_width="match_parent" android:layout_height="wrap_content" android:id="@+id/editText_domain" android:text="10.0.2.2:8080"></EditText>
+<EditText android:layout_height="wrap_content" android:id="@+id/editText_domain" android:text="10.0.2.2:8080" android:layout_width="fill_parent"></EditText>
 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/textView_Keyword" android:text="Search Text"></TextView>
-<EditText android:layout_width="match_parent" android:layout_height="wrap_content" android:text="test" android:id="@+id/editText_SearchText"></EditText>
+<EditText android:layout_height="wrap_content" android:text="test" android:id="@+id/editText_SearchText" android:layout_width="fill_parent"></EditText>
 <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Search" android:id="@+id/button_Search" android:onClick="@string/searchButtonClick"></Button>
 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/textView1" android:text="Results goes here"></TextView>
 </LinearLayout>
