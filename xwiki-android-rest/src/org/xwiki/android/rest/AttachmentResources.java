@@ -1,5 +1,10 @@
 package org.xwiki.android.rest;
 
+import org.xwiki.android.resources.Attachments;
+import org.xwiki.android.resources.Wikis;
+
+import com.google.gson.Gson;
+
 public class AttachmentResources extends HttpConnector
 {
 
@@ -23,15 +28,16 @@ public class AttachmentResources extends HttpConnector
         this.pageName = pageName;
     }
 
-    public String getAllPageAttachments()
+    public Attachments getAllPageAttachments()
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
                 + "/attachments" + JSON_URL_SUFFIX;
 
-        return super.getResponse(Uri);
+        return decodeAttachments(super.getResponse(Uri));
     }
 
+    // should return attachment bytes
     public String getPageAttachment(String attachmentName)
     {
         String Uri =
@@ -42,15 +48,16 @@ public class AttachmentResources extends HttpConnector
     }
 
     // get attachments of page history
-    public String getPageAttachmentsInHistory(String version)
+    public Attachments getPageAttachmentsInHistory(String version)
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
                 + "/history/" + version + "/attachments" + JSON_URL_SUFFIX;
 
-        return super.getResponse(Uri);
+        return decodeAttachments(super.getResponse(Uri));
     }
 
+    // get Attachment in specific page version
     public String getPageAttachmentsInHistory(String version, String attachmentName)
     {
         String Uri =
@@ -60,16 +67,17 @@ public class AttachmentResources extends HttpConnector
         return super.getResponse(Uri);
     }
 
-    // get attachment of attachment history
-    public String getPageAttachmentsInAttachmentHistory(String attachmentName)
+    // get attachments history of a attachment
+    public Attachments getPageAttachmentsInAttachmentHistory(String attachmentName)
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
                 + "/attachments/" + attachmentName + "/history" + JSON_URL_SUFFIX;
 
-        return super.getResponse(Uri);
+        return decodeAttachments(super.getResponse(Uri));
     }
 
+    //get attachment of a specific attachment history
     public String getPageAttachmentsInAttachmentHistory(String attachmentName, String attachmentVersion)
     {
         String Uri =
@@ -78,5 +86,15 @@ public class AttachmentResources extends HttpConnector
 
         return super.getResponse(Uri);
     }
-    
+
+    // decode json content to Wikis
+    private Attachments decodeAttachments(String content)
+    {
+        Gson gson = new Gson();
+
+        Attachments attachments = new Attachments();
+        attachments = gson.fromJson(content, Attachments.class);
+        return attachments;
+    }
+
 }

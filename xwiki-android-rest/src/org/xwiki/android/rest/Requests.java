@@ -3,6 +3,18 @@ package org.xwiki.android.rest;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+import org.xwiki.android.resources.Attachments;
+import org.xwiki.android.resources.Comment;
+import org.xwiki.android.resources.Comments;
+import org.xwiki.android.resources.History;
+import org.xwiki.android.resources.Objects;
+import org.xwiki.android.resources.Page;
+import org.xwiki.android.resources.Pages;
+import org.xwiki.android.resources.SearchResults;
+import org.xwiki.android.resources.Spaces;
+import org.xwiki.android.resources.Tags;
+import org.xwiki.android.resources.Wikis;
+
 import android.util.Log;
 
 public class Requests
@@ -15,18 +27,19 @@ public class Requests
         this.URLprefix = URLprefix;
     }
 
-    // Method for search
-    public String requestSearch(String wikiName, String keyword)
+    // Method for search [complete]
+    public SearchResults requestSearch(String wikiName, String keyword)
     {
 
         wikiName = convertToUTF(wikiName);
         keyword = convertToUTF(keyword);
 
         Search search = new Search(URLprefix);
-        return search.decodeSearchResponse(search.doWikiSearch(wikiName, keyword));
+        return search.doWikiSearch(wikiName, keyword);
     }
 
-    public String requestSearch(String wikiName, String spaceName, String keyword)
+    // search with spaces [complete]
+    public SearchResults requestSearch(String wikiName, String spaceName, String keyword)
     {
 
         wikiName = convertToUTF(wikiName);
@@ -34,43 +47,44 @@ public class Requests
         keyword = convertToUTF(keyword);
 
         Search search = new Search(URLprefix);
-        return search.decodeSearchResponse(search.doSpacesSearch(wikiName, spaceName, keyword));
+        return search.doSpacesSearch(wikiName, spaceName, keyword);
     }
 
-    // Method for retrieving Wikis
-    public String requestWiki()
+    // Method for retrieving Wikis [complete]
+    public Wikis requestWikis()
     {
 
         WikiResources wikiresources = new WikiResources(URLprefix);
-        return wikiresources.decodeWikiResponse(wikiresources.getWikis());
+        Wikis wikis = wikiresources.getWikis();
+        return wikis;
     }
 
-    // Method for retrieving Spaces
-    public String requestSpaces(String wikiName)
+    // Method for retrieving Spaces [complete]
+    public Spaces requestSpaces(String wikiName)
     {
         wikiName = convertToUTF(wikiName);
         SpaceResources spacesresources = new SpaceResources(URLprefix, wikiName);
-        return spacesresources.decodeSpaceResponse(spacesresources.getSpaces());
+        return spacesresources.getSpaces();
     }
 
-    // Method for retrieving Spaces
-    public String requestAllPages(String wikiName, String spaceName)
+    // Method for retrieving Pages [complete]
+    public Pages requestAllPages(String wikiName, String spaceName)
     {
         wikiName = convertToUTF(wikiName);
         spaceName = convertToUTF(spaceName);
         PageResources pagesresources = new PageResources(URLprefix, wikiName, spaceName);
-        return pagesresources.decodeAllPagesResponse(pagesresources.getAllPages());
+        return pagesresources.getAllPages();
     }
 
-    // Method for requesting pages
-    public String requestPage(String wikiName, String spaceName, String pageName)
+    // Method for requesting page [complete but not working due to calendar]
+    public Page requestPage(String wikiName, String spaceName, String pageName)
     {
         wikiName = convertToUTF(wikiName);
         spaceName = convertToUTF(spaceName);
         pageName = convertToUTF(pageName);
 
         PageResources pagesresources = new PageResources(URLprefix, wikiName, spaceName);
-        return pagesresources.decodePageResponse(pagesresources.getPage(pageName), "id");
+        return pagesresources.getPage(pageName);
     }
 
     // Method for deleting pages
@@ -84,8 +98,8 @@ public class Requests
         return pagesresources.deletePage(pageName);
     }
 
-    // Method for getting page history
-    public String requestPageHistory(String wikiName, String spaceName, String pageName)
+    // Method for getting page history [complete but not working due to calendar]
+    public History requestPageHistory(String wikiName, String spaceName, String pageName)
     {
         wikiName = convertToUTF(wikiName);
         spaceName = convertToUTF(spaceName);
@@ -95,19 +109,19 @@ public class Requests
         return historyresources.getPageHistory();
     }
 
-    // Method for getting page history
-    public String requestPageInVersionHistory(String wikiName, String spaceName, String pageName, String version)
+    // Method for getting page history [complete but not working due to calendar]
+    public Page requestPageInVersionHistory(String wikiName, String spaceName, String pageName, String version)
     {
         wikiName = convertToUTF(wikiName);
         spaceName = convertToUTF(spaceName);
         pageName = convertToUTF(pageName);
 
         PageResources pagesresources = new PageResources(URLprefix, wikiName, spaceName);
-        return pagesresources.decodePageResponse(pagesresources.getPageHistoryOnVersion(pageName, version), "content");
+        return pagesresources.getPageHistoryOnVersion(pageName, version);
     }
 
-    // Method for getting page children
-    public String requestPageChildren(String wikiName, String spaceName, String pageName)
+    // Method for getting page children [complete]
+    public Pages requestPageChildren(String wikiName, String spaceName, String pageName)
     {
         wikiName = convertToUTF(wikiName);
         spaceName = convertToUTF(spaceName);
@@ -119,8 +133,8 @@ public class Requests
 
     }
 
-    // Method for getting page tags
-    public String requestPageTags(String wikiName, String spaceName, String pageName)
+    // Method for getting page tags [complete]
+    public Tags requestPageTags(String wikiName, String spaceName, String pageName)
     {
         wikiName = convertToUTF(wikiName);
         spaceName = convertToUTF(spaceName);
@@ -131,8 +145,8 @@ public class Requests
         return tagresources.getTags();
     }
 
-    // Method for getting wiki tags
-    public String requestWikiTags(String wikiName)
+    // Method for getting wiki tags [complete]
+    public Tags requestWikiTags(String wikiName)
     {
         wikiName = convertToUTF(wikiName);
 
@@ -141,8 +155,8 @@ public class Requests
         return tagresources.getTags();
     }
 
-    // Method for getting page tags
-    public String requestPageComments(String wikiName, String spaceName, String pageName)
+    // Method for getting page comments [complete but not working due to calendar]
+    public Comments requestPageComments(String wikiName, String spaceName, String pageName)
     {
         wikiName = convertToUTF(wikiName);
         spaceName = convertToUTF(spaceName);
@@ -153,8 +167,8 @@ public class Requests
         return commentresources.getPageComments();
     }
 
-    // Method for getting page tags with comment id
-    public String requestPageComments(String wikiName, String spaceName, String pageName, String commentId)
+    // Method for getting page comments with comment id [complete but not working due to calendar]
+    public Comment requestPageComments(String wikiName, String spaceName, String pageName, String commentId)
     {
         wikiName = convertToUTF(wikiName);
         spaceName = convertToUTF(spaceName);
@@ -165,8 +179,8 @@ public class Requests
         return commentresources.getPageComments(commentId);
     }
 
-    // Method for getting page tags with comment id
-    public String requestPageCommentsInHistory(String wikiName, String spaceName, String pageName, String version)
+    // Method for getting page comments with comment id [complete but not working due to calendar]
+    public Comments requestPageCommentsInHistory(String wikiName, String spaceName, String pageName, String version)
     {
         wikiName = convertToUTF(wikiName);
         spaceName = convertToUTF(spaceName);
@@ -177,7 +191,8 @@ public class Requests
         return commentresources.getPageCommentsInHistory(version);
     }
 
-    public String requestPageCommentsInHistory(String wikiName, String spaceName, String pageName, String version,
+    // Method for getting page comments with version and comment id [complete but not working due to calendar]
+    public Comments requestPageCommentsInHistory(String wikiName, String spaceName, String pageName, String version,
         String commentId)
     {
         wikiName = convertToUTF(wikiName);
@@ -189,7 +204,8 @@ public class Requests
         return commentresources.getPageCommentsInHistory(version, commentId);
     }
 
-    public String getAllPageAttachments(String wikiName, String spaceName, String pageName)
+    // Mehtod for getting all attachements in a page [complete but not working due to calendar]
+    public Attachments requestAllPageAttachments(String wikiName, String spaceName, String pageName)
     {
         wikiName = convertToUTF(wikiName);
         spaceName = convertToUTF(spaceName);
@@ -200,7 +216,8 @@ public class Requests
         return attachmentresources.getAllPageAttachments();
     }
 
-    public String getPageAttachment(String wikiName, String spaceName, String pageName, String attachmentName)
+    // Method for getting attachment by name in a page [should return attachment bytes]
+    public String requestPageAttachment(String wikiName, String spaceName, String pageName, String attachmentName)
     {
         wikiName = convertToUTF(wikiName);
         spaceName = convertToUTF(spaceName);
@@ -212,7 +229,9 @@ public class Requests
         return attachmentresources.getPageAttachment(attachmentName);
     }
 
-    public String getPageAttachmentsInHistory(String wikiName, String spaceName, String pageName, String pageVersion)
+    // Method for getting attachments in a specific page version [complete but not working due to calendar]
+    public Attachments requestPageAttachmentsInHistory(String wikiName, String spaceName, String pageName,
+        String pageVersion)
     {
         wikiName = convertToUTF(wikiName);
         spaceName = convertToUTF(spaceName);
@@ -223,8 +242,9 @@ public class Requests
         return attachmentresources.getPageAttachmentsInHistory(pageVersion);
     }
 
-    public String getPageAttachmentsInHistory(String wikiName, String spaceName, String pageName, String pageVersion,
-        String attachmentName)
+    // Method for getting attachment by name in a specific page version [should return attachment bytes]
+    public String requestPageAttachmentsInHistory(String wikiName, String spaceName, String pageName,
+        String pageVersion, String attachmentName)
     {
         wikiName = convertToUTF(wikiName);
         spaceName = convertToUTF(spaceName);
@@ -236,7 +256,8 @@ public class Requests
         return attachmentresources.getPageAttachmentsInHistory(pageVersion, attachmentName);
     }
 
-    public String getPageAttachmentsInAttachmentHistory(String wikiName, String spaceName, String pageName,
+    //Method for getting attachment history of a attachment [complete but not working due to calendar]
+    public Attachments requestPageAttachmentsInAttachmentHistory(String wikiName, String spaceName, String pageName,
         String attachmentName)
     {
         wikiName = convertToUTF(wikiName);
@@ -249,7 +270,8 @@ public class Requests
         return attachmentresources.getPageAttachmentsInAttachmentHistory(attachmentName);
     }
 
-    public String getPageAttachmentsInAttachmentHistory(String wikiName, String spaceName, String pageName,
+ // Method for getting attachment by name in a specific attachment version [should return attachment bytes]
+    public String requestPageAttachmentsInAttachmentHistory(String wikiName, String spaceName, String pageName,
         String attachmentName, String attachmentVersion)
     {
         wikiName = convertToUTF(wikiName);
@@ -263,7 +285,7 @@ public class Requests
     }
 
     // Method for getting all objects in a page
-    public String getAllObjects(String wikiName, String spaceName, String pageName)
+    public Objects requestAllObjects(String wikiName, String spaceName, String pageName)
     {
         wikiName = convertToUTF(wikiName);
         spaceName = convertToUTF(spaceName);
@@ -274,17 +296,17 @@ public class Requests
         return objectresources.getAllObjects();
     }
 
-    //Method for getting all classes in wiki
-    public String getWikiClasses(String wikiName)
+    // Method for getting all classes in wiki
+    public String requestWikiClasses(String wikiName)
     {
         wikiName = convertToUTF(wikiName);
 
         ClassResources classresources = new ClassResources(URLprefix, wikiName);
         return classresources.getWikiClasses();
     }
-    
-  //Method for getting class in wiki
-    public String getWikiClasses(String wikiName, String classname)
+
+    // Method for getting class in wiki
+    public String requestWikiClasses(String wikiName, String classname)
     {
         wikiName = convertToUTF(wikiName);
         classname = convertToUTF(classname);

@@ -35,7 +35,7 @@ public class HttpConnector {
 		}
 
 		request.setURI(requestUri);
-
+		Log.d("Request URL", Uri);
 		try {
 			response = client.execute(request);
 			in = new BufferedReader(new InputStreamReader(response.getEntity()

@@ -1,61 +1,36 @@
 package org.xwiki.android.rest;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.xwiki.android.resources.Wikis;
 
-import android.util.Log;
+import com.google.gson.Gson;
 
+public class WikiResources extends HttpConnector
+{
 
-public class WikiResources extends HttpConnector {
+    private final String WIKI_URL = "/xwiki/rest/wikis?media=json";
 
-	private final String WIKI_URL = "/xwiki/rest/wikis?media=json"; 
-	private final String JSON_ARRAY_IDENTIFIER = "wikis";
-	
-	private String URLprefix;
-	
-	public WikiResources(String URLprefix) {
-		this.URLprefix = URLprefix;
-	}
-	
-	public String getWikis(){
-		
-		String Uri = "http://" + URLprefix + WIKI_URL;
+    private String URLprefix;
 
-		return super.getResponse(Uri);
-	}
-	
-	// Temporary method to decode JSON reply
-	public String decodeWikiResponse(String response) {
+    public WikiResources(String URLprefix)
+    {
+        this.URLprefix = URLprefix;
+    }
 
-		String wikiResultText = "";
-		try {
-			JSONObject jsonobject = new JSONObject(response);
-			JSONArray dataArray = jsonobject.getJSONArray(JSON_ARRAY_IDENTIFIER);
+    public Wikis getWikis()
+    {
 
-			Log.d("JSON", "JSON array built");
+        String Uri = "http://" + URLprefix + WIKI_URL;
 
-			Log.d("JSON", "Number of entrees in array: " + dataArray.length());
+        return decode(super.getResponse(Uri));
+    }
 
-			for (int i = 0; i < dataArray.length(); i++) {
-				if (!dataArray.isNull(i)) {
-					JSONObject item = dataArray.getJSONObject(i);
+    // decode json content to Wikis
+    private Wikis decode(String content)
+    {
+        Gson gson = new Gson();
 
-					if (item.has("id")) {
-						String id = item.getString("id");
-						Log.d("JSON Array", "id= " + id);
-						wikiResultText += ("\n" + id);
-					}
-				}
-			}
-
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			Log.d("JSON", "Error in JSON object or Array");
-		}
-
-		return wikiResultText;
-
-	}
+        Wikis wikis = new Wikis();
+        wikis = gson.fromJson(content, Wikis.class);
+        return wikis;
+    }
 }

@@ -3,6 +3,10 @@ package org.xwiki.android.rest;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.xwiki.android.resources.Spaces;
+import org.xwiki.android.resources.Wikis;
+
+import com.google.gson.Gson;
 
 import android.util.Log;
 
@@ -25,12 +29,12 @@ public class SpaceResources extends HttpConnector
         this.wikiName = wikiName;
     }
 
-    public String getSpaces()
+    public Spaces getSpaces()
     {
 
         String Uri = "http://" + URLprefix + SPACE_URL_PREFIX + wikiName + SPACE_URL_SUFFIX;
 
-        return super.getResponse(Uri);
+        return decodeSpaces(super.getResponse(Uri));
     }
 
     // Temporary method to decode JSON reply
@@ -66,5 +70,15 @@ public class SpaceResources extends HttpConnector
 
         return wikiResultText;
 
+    }
+    
+    // decode json content into Spaces
+    private Spaces decodeSpaces(String content)
+    {
+        Gson gson = new Gson();
+
+        Spaces spaces = new Spaces();
+        spaces = gson.fromJson(content, Spaces.class);
+        return spaces;
     }
 }

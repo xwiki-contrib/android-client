@@ -1,5 +1,9 @@
 package org.xwiki.android.rest;
 
+import org.xwiki.android.resources.Tags;
+
+import com.google.gson.Gson;
+
 public class TagResources extends HttpConnector
 {
 
@@ -33,8 +37,8 @@ public class TagResources extends HttpConnector
         tagType = 1;
     }
 
-    // get all tags in page
-    public String getTags()
+    // get all tags in page or wiki
+    public Tags getTags()
     {
 
         String Uri;
@@ -49,6 +53,16 @@ public class TagResources extends HttpConnector
             Uri = "";
         }
 
-        return super.getResponse(Uri);
+        return decodeTags(super.getResponse(Uri));
+    }
+    
+ // decode json content to Tags element
+    private Tags decodeTags(String content)
+    {
+        Gson gson = new Gson();
+
+        Tags tags = new Tags();
+        tags = gson.fromJson(content, Tags.class);
+        return tags;
     }
 }

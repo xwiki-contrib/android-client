@@ -1,5 +1,10 @@
 package org.xwiki.android.rest;
 
+import org.xwiki.android.resources.Objects;
+import org.xwiki.android.resources.Tags;
+
+import com.google.gson.Gson;
+
 public class ObjectResources extends HttpConnector
 {
     private final String PAGE_URL_PREFIX = "/xwiki/rest/wikis/";
@@ -24,12 +29,22 @@ public class ObjectResources extends HttpConnector
         this.pageName = pageName;
     }
     
-    public String getAllObjects(){
+    public Objects getAllObjects(){
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
                 + "/objects" + JSON_URL_SUFFIX;
 
-        return super.getResponse(Uri);
+        return decodeObjects(super.getResponse(Uri));
         
+    }
+    
+    // decode json content to Objects element
+    private Objects decodeObjects(String content)
+    {
+        Gson gson = new Gson();
+
+        Objects objects = new Objects();
+        objects = gson.fromJson(content, Objects.class);
+        return objects;
     }
 }

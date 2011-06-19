@@ -1,5 +1,10 @@
 package org.xwiki.android.rest;
 
+import org.xwiki.android.resources.History;
+import org.xwiki.android.resources.Wikis;
+
+import com.google.gson.Gson;
+
 public class HistoryResources extends HttpConnector
 {
 
@@ -23,13 +28,23 @@ public class HistoryResources extends HttpConnector
         this.pageName = pageName;
     }
 
-    public String getPageHistory()
+    public History getPageHistory()
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
                 + "/history" + JSON_URL_SUFFIX;
 
-        return super.getResponse(Uri);
+        return decodeHistory(super.getResponse(Uri));
+    }
+    
+    // decode json content to History element
+    private History decodeHistory(String content)
+    {
+        Gson gson = new Gson();
+
+        History history = new History();
+        history = gson.fromJson(content,History.class);
+        return history;
     }
 
 }
