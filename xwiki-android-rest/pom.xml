@@ -27,25 +27,11 @@ http://maven.apache.org/maven-v4_0_0.xsd">
 		<scope>provided</scope>
 		</dependency>
 	 	<dependency>
-	 		<groupId>org.xwiki.platform</groupId>
-	 		<artifactId>xwiki-core-rest</artifactId>
-	 		<version>3.0</version>
-	 		<type>pom</type>
-	 		<scope>provided</scope>
-	 	</dependency>
-	 	<dependency>
-	 		<groupId>org.xwiki.platform</groupId>
-	 		<artifactId>xwiki-core-annotations-rest</artifactId>
-	 		<version>3.0</version>
+	 		<groupId>com.google.code.gson</groupId>
+	 		<artifactId>gson</artifactId>
+	 		<version>1.7.1</version>
 	 		<type>jar</type>
-	 		<scope>provided</scope>
-	 	</dependency>
-	 	<dependency>
-	 		<groupId>org.xwiki.platform</groupId>
-	 		<artifactId>xwiki-core-rest-model</artifactId>
-	 		<version>3.0</version>
-	 		<type>jar</type>
-	 		<scope>provided</scope>
+	 		<scope>compile</scope>
 	 	</dependency>
 	</dependencies>
 
