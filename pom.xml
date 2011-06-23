@@ -40,5 +40,6 @@
   </properties>
   <modules>
     <module>xwiki-android-rest</module>
+    <module>xwiki-android-components</module>
   </modules>
 </project>

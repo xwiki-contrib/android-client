@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
+
+    <TextView android:id="@+id/childname"
+		 android:paddingLeft="100px"
+         android:textSize="20px"
+         android:textStyle="italic"
+         android:layout_width="250px"
+         android:layout_height="wrap_content"/>
+
+    <TextView android:id="@+id/rgb"
+         android:textSize="20px"
+         android:textStyle="italic"
+         android:layout_width="150px"
+         android:layout_height="wrap_content"/>
+         
+         
+</LinearLayout>
