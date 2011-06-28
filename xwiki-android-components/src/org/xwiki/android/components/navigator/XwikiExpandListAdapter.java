@@ -1,5 +1,6 @@
 package org.xwiki.android.components.navigator;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,21 +16,53 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 
+import org.xwiki.android.resources.PageSummary;
+import org.xwiki.android.resources.Pages;
+import org.xwiki.android.resources.Space;
+import org.xwiki.android.resources.Spaces;
+import org.xwiki.android.resources.Wikis;
+import org.xwiki.android.rest.Requests;
+
 public class XwikiExpandListAdapter extends BaseExpandableListAdapter
 {
 
-    public XwikiExpandListAdapter(Context context, ExpandableListView topExpList, String listdesc[][][][])
+    private Context context;
+
+    private LayoutInflater inflater;
+
+    private ExpandableListView topExpList;
+
+    private ModifiedExpandableListView listViewCache[];
+
+    private static final String KEY_COLORNAME = "colorName";
+
+    private static final String KEY_SHADENAME = "shadeName";
+
+    private static final String KEY_RGB = "rgb";
+
+    private static final String LOG_TAG = "ColorExpListAdapter";
+
+    private String wikiURL;
+    
+    private Wikis wikis;
+
+    public XwikiExpandListAdapter(Context context, ExpandableListView topExpList, String wikiURL)
     {
         this.context = context;
         this.topExpList = topExpList;
-        this.listdesc = listdesc;
         inflater = LayoutInflater.from(context);
-        listViewCache = new ModifiedExpandableListView[listdesc.length];
+        listViewCache = new ModifiedExpandableListView[3]; //Modified by Chamika. replace listdesc.length = 3
+        this.wikiURL = wikiURL;
+        wikis = getWikiList();
     }
 
     public Object getChild(int groupPosition, int childPosition)
     {
-        return listdesc[groupPosition][childPosition];
+        String wikiname = wikis.getWikis().get(groupPosition).getName();
+        String spacename = getSpacesList(wikiname).getSpaces().get(childPosition).getName();
+        //return listdesc[groupPosition][childPosition]; modified by Chamika.
+        
+        return getPagesList(wikiname, spacename);
     }
 
     public long getChildId(int groupPosition, int childPosition)
@@ -47,11 +80,8 @@ public class XwikiExpandListAdapter extends BaseExpandableListAdapter
         else {
             ModifiedExpandableListView dev = new ModifiedExpandableListView(context);
             dev.setRows(calculateRowCount(groupPosition, null));
-            dev.setAdapter(new ModifiedSimpleExpandableListAdapter(context, createGroupList(groupPosition), // groupData
-                                                                                                         // describes
-                                                                                                         // the
-                                                                                                         // first-level
-                                                                                                         // entries
+            // groupData describes the first-level entries
+            dev.setAdapter(new ModifiedSimpleExpandableListAdapter(context, createGroupList(groupPosition),
                 R.layout.child3_row, // Layout for the first-level entries
                 new String[] {KEY_COLORNAME}, // Key in the groupData maps to display
                 new int[] {R.id.childname}, // Data under "colorName" key goes into this TextView
@@ -74,12 +104,16 @@ public class XwikiExpandListAdapter extends BaseExpandableListAdapter
 
     public Object getGroup(int groupPosition)
     {
-        return listdesc[groupPosition][0][0][0];
+        String wikiname = wikis.getWikis().get(groupPosition).getName();
+               
+        //return listdesc[groupPosition][0][0][0]; //Modified by Chamika
+        return wikiname;
     }
 
     public int getGroupCount()
     {
-        return listdesc.length;
+        //return listdesc.length; //Modified by Chamika
+        return 3;
     }
 
     public long getGroupId(int groupPosition)
@@ -119,6 +153,31 @@ public class XwikiExpandListAdapter extends BaseExpandableListAdapter
     public void onGroupExpanded(int groupPosition)
     {
     }
+    
+    private Wikis getWikiList(){
+        
+        Wikis temp_wikis;
+        Requests requests = new Requests(wikiURL);
+        temp_wikis = requests.requestWikis();
+        
+        return temp_wikis;
+    }
+    
+    private Spaces getSpacesList(String wikiName){
+        Spaces temp_spaces;
+        Requests requests = new Requests(wikiURL);
+        temp_spaces = requests.requestSpaces(wikiName);
+        
+        return temp_spaces;
+    }
+    
+    private Pages getPagesList(String wikiName, String spaceName){
+        Pages temp_pages;
+        Requests requests = new Requests(wikiURL);
+        temp_pages = requests.requestAllPages(wikiName, spaceName);
+        
+        return temp_pages;
+    }
 
     /**
      * Creates a level2 group list out of the listdesc array according to the structure required by
@@ -129,13 +188,42 @@ public class XwikiExpandListAdapter extends BaseExpandableListAdapter
      */
     private List createGroupList(int level1)
     {
+        Log.d("Group", "Group list created");
         ArrayList result = new ArrayList();
-        for (int i = 0; i < listdesc[level1].length; ++i) {
+
+        result = createGroupLlistFromXwiki("xwiki");
+        // for (int i = 0; i < listdesc[level1].length; ++i) {
+        // HashMap m = new HashMap();
+        // //m.put(KEY_COLORNAME, listdesc[level1][i][0][1]);
+        // result.add(m);
+        // }
+        return (List) result;
+    }
+
+    private ArrayList createGroupLlistFromXwiki(String wikiName)
+    {
+        Log.d("data", "URL=" + wikiURL + " wiki=" + wikiName);
+        ArrayList result = new ArrayList();
+        Spaces spaces = new Spaces();
+        // Requests requests = new Requests(wikiURL);
+        // spaces=requests.requestSpaces(wikiName);
+
+        Space space1 = new Space();
+        space1.setId("space1");
+
+        Space space2 = new Space();
+        space2.setId("space2");
+
+        spaces.getSpaces().add(space1);
+        spaces.getSpaces().add(space2);
+
+        for (int i = 0; i < spaces.getSpaces().size(); ++i) {
             HashMap m = new HashMap();
-            m.put(KEY_COLORNAME, listdesc[level1][i][0][1]);
+            m.put(KEY_COLORNAME, spaces.getSpaces().get(i).getId());
             result.add(m);
         }
-        return (List) result;
+
+        return result;
     }
 
     /**
@@ -146,16 +234,24 @@ public class XwikiExpandListAdapter extends BaseExpandableListAdapter
      * 
      * @param level1 Index of the level1 group whose level2 subgroups are included in the child list.
      */
-    private List createChildList(int level1)
+    private List createChildList(int wikiPosition)
     {
-        ArrayList result = new ArrayList();
-        for (int i = 0; i < listdesc[level1].length; ++i) {
-            // Second-level lists
-            ArrayList secList = new ArrayList();
-            for (int n = 1; n < listdesc[level1][i].length; ++n) {
-                HashMap child = new HashMap();
-                child.put(KEY_SHADENAME, listdesc[level1][i][n][0]);
-                child.put(KEY_RGB, listdesc[level1][i][n][1]);
+        //Modified by Chamika
+        Log.d("Child group", "Child group created");
+        ArrayList<ArrayList<HashMap<String,String>>> result = new ArrayList<ArrayList<HashMap<String,String>>>();
+        
+        String wikiname = wikis.getWikis().get(wikiPosition).getName();
+        
+        List<Space> spacesList = getSpacesList(wikiname).getSpaces();
+        
+        for(int i=0; i < spacesList.size() ; i++){
+            List<PageSummary> pagesList= getPagesList(wikiname, spacesList.get(i).getName()).getPageSummaries();
+            ArrayList<HashMap<String,String>> secList = new ArrayList<HashMap<String,String>>();
+            
+            for(int j=0;j<pagesList.size(); j++){
+                HashMap<String,String> child = new HashMap<String,String>();
+                child.put(KEY_SHADENAME, pagesList.get(j).getName());
+                child.put(KEY_RGB, pagesList.get(j).getId());
                 secList.add(child);
             }
             result.add(secList);
@@ -165,36 +261,31 @@ public class XwikiExpandListAdapter extends BaseExpandableListAdapter
 
     // Calculates the row count for a level1 expandable list adapter. Each level2 group counts 1 row (group row) plus
     // any child row that
-    // belongs to the group
-    private int calculateRowCount(int level1, ExpandableListView level2view)
+    // belongs to the group Modified by Chamika
+    private int calculateRowCount(int wikiPosition, ExpandableListView level2view)
     {
-        int level2GroupCount = listdesc[level1].length;
         int rowCtr = 0;
+        int level2GroupCount=0;
+        
+        String wikiname = wikis.getWikis().get(wikiPosition).getName();
+        List<Space> spacesList = getSpacesList(wikiname).getSpaces();
+        
+        for(int i=0; i < spacesList.size() ; i++){
+            List<PageSummary> pagesList= getPagesList(wikiname, spacesList.get(i).getName()).getPageSummaries();
+            
+            level2GroupCount += pagesList.size();
+            
+        }
+        
         for (int i = 0; i < level2GroupCount; ++i) {
             ++rowCtr; // for the group row
-            if ((level2view != null) && (level2view.isGroupExpanded(i)))
-                rowCtr += listdesc[level1][i].length - 1; // then add the children too (minus the group descriptor)
+            if ((level2view != null) && (level2view.isGroupExpanded(i))){
+                List<PageSummary> pagesList= getPagesList(wikiname, spacesList.get(i).getName()).getPageSummaries();
+                rowCtr += pagesList.size() ; 
+            }
         }
         return rowCtr;
     }
-
-    private Context context;
-
-    private String listdesc[][][][];
-
-    private LayoutInflater inflater;
-
-    private ExpandableListView topExpList;
-
-    private ModifiedExpandableListView listViewCache[];
-
-    private static final String KEY_COLORNAME = "colorName";
-
-    private static final String KEY_SHADENAME = "shadeName";
-
-    private static final String KEY_RGB = "rgb";
-
-    private static final String LOG_TAG = "ColorExpListAdapter";
 
     class Level2GroupExpandListener implements ExpandableListView.OnGroupClickListener
     {
