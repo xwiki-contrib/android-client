@@ -49,6 +49,13 @@
 		<version>2.2.1</version>
 		<scope>provided</scope>
 		</dependency>
+	 	<dependency>
+	 		<groupId>org.xwiki.android</groupId>
+	 		<artifactId>xwiki-android-rest</artifactId>
+	 		<version>1.0-SNAPSHOT</version>
+	 		<scope>compile</scope>
+	 		<type>apk</type>
+	 	</dependency>
 	</dependencies>
 
 	<build>

@@ -36,14 +36,23 @@ public class HistoryResources extends HttpConnector
 
         return decodeHistory(super.getResponse(Uri));
     }
-    
+
+    public History getPageHistory(String language)
+    {
+        String Uri =
+            "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
+                + "/translations/" + language + "/history" + JSON_URL_SUFFIX;
+
+        return decodeHistory(super.getResponse(Uri));
+    }
+
     // decode json content to History element
     private History decodeHistory(String content)
     {
         Gson gson = new Gson();
 
         History history = new History();
-        history = gson.fromJson(content,History.class);
+        history = gson.fromJson(content, History.class);
         return history;
     }
 

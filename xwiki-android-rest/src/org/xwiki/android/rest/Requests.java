@@ -10,9 +10,12 @@ import org.xwiki.android.resources.History;
 import org.xwiki.android.resources.Objects;
 import org.xwiki.android.resources.Page;
 import org.xwiki.android.resources.Pages;
+import org.xwiki.android.resources.Properties;
+import org.xwiki.android.resources.Property;
 import org.xwiki.android.resources.SearchResults;
 import org.xwiki.android.resources.Spaces;
 import org.xwiki.android.resources.Tags;
+import org.xwiki.android.resources.Translations;
 import org.xwiki.android.resources.Wikis;
 
 import android.util.Log;
@@ -25,6 +28,23 @@ public class Requests
     public Requests(String URLprefix)
     {
         this.URLprefix = URLprefix;
+    }
+
+    // Method to convert String to the UTF
+    private String convertToUTF(String keyword)
+    {
+
+        // Convert keyword to UTF
+        try {
+            keyword = URLEncoder.encode(keyword, "UTF-8");
+
+        } catch (UnsupportedEncodingException e) {
+            Log.d("Error", "Unsupported keyword is found");
+            keyword = "error";
+            e.printStackTrace();
+        }
+
+        return keyword;
     }
 
     // Method for search [complete]
@@ -256,7 +276,7 @@ public class Requests
         return attachmentresources.getPageAttachmentsInHistory(pageVersion, attachmentName);
     }
 
-    //Method for getting attachment history of a attachment [complete but not working due to calendar]
+    // Method for getting attachment history of a attachment [complete but not working due to calendar]
     public Attachments requestPageAttachmentsInAttachmentHistory(String wikiName, String spaceName, String pageName,
         String attachmentName)
     {
@@ -270,7 +290,7 @@ public class Requests
         return attachmentresources.getPageAttachmentsInAttachmentHistory(attachmentName);
     }
 
- // Method for getting attachment by name in a specific attachment version [should return attachment bytes]
+    // Method for getting attachment by name in a specific attachment version [should return attachment bytes]
     public String requestPageAttachmentsInAttachmentHistory(String wikiName, String spaceName, String pageName,
         String attachmentName, String attachmentVersion)
     {
@@ -282,18 +302,6 @@ public class Requests
         AttachmentResources attachmentresources = new AttachmentResources(URLprefix, wikiName, spaceName, pageName);
 
         return attachmentresources.getPageAttachmentsInAttachmentHistory(attachmentName, attachmentVersion);
-    }
-
-    // Method for getting all objects in a page
-    public Objects requestAllObjects(String wikiName, String spaceName, String pageName)
-    {
-        wikiName = convertToUTF(wikiName);
-        spaceName = convertToUTF(spaceName);
-        pageName = convertToUTF(pageName);
-
-        ObjectResources objectresources = new ObjectResources(URLprefix, wikiName, spaceName, pageName);
-
-        return objectresources.getAllObjects();
     }
 
     // Method for getting all classes in wiki
@@ -315,20 +323,120 @@ public class Requests
         return classresources.getWikiClasses(classname);
     }
 
-    // Method to convert String to the UTF
-    public String convertToUTF(String keyword)
+    // Method for getting all Translations in page [complete]
+    public Translations requestAllPageTranslations(String wikiName, String spaceName, String pageName)
     {
+        wikiName = convertToUTF(wikiName);
+        spaceName = convertToUTF(spaceName);
+        pageName = convertToUTF(pageName);
 
-        // Convert keyword to UTF
-        try {
-            keyword = URLEncoder.encode(keyword, "UTF-8");
-
-        } catch (UnsupportedEncodingException e) {
-            Log.d("Error", "Unsupported keyword is found");
-            keyword = "error";
-            e.printStackTrace();
-        }
-
-        return keyword;
+        TranslationResources translationresources = new TranslationResources(URLprefix, wikiName, spaceName, pageName);
+        return translationresources.getAllTranslations();
     }
+
+    // Method for getting page translation on specific language
+    public Page requestPageTranslation(String wikiName, String spaceName, String pageName, String language)
+    {
+        wikiName = convertToUTF(wikiName);
+        spaceName = convertToUTF(spaceName);
+        pageName = convertToUTF(pageName);
+
+        PageResources pageresources = new PageResources(URLprefix, wikiName, spaceName);
+        return pageresources.getPageTranslation(pageName, language);
+    }
+
+    // Method for getting history of a page in a specific language
+    public History requestPageHistoryInLanguage(String wikiName, String spaceName, String pageName, String language)
+    {
+        wikiName = convertToUTF(wikiName);
+        spaceName = convertToUTF(spaceName);
+        pageName = convertToUTF(pageName);
+
+        HistoryResources historyresources = new HistoryResources(URLprefix, wikiName, spaceName, pageName);
+        return historyresources.getPageHistory(language);
+    }
+
+    // Method for getting page with translation on specific version
+    public Page requestPageTranslationInHistory(String wikiName, String spaceName, String pageName, String language,
+        String version)
+    {
+        wikiName = convertToUTF(wikiName);
+        spaceName = convertToUTF(spaceName);
+        pageName = convertToUTF(pageName);
+
+        PageResources pageresources = new PageResources(URLprefix, wikiName, spaceName);
+        return pageresources.getPageTranslation(pageName, language, version);
+    }
+
+    // Method for getting all objects in a page
+    public Objects requestAllObjects(String wikiName, String spaceName, String pageName)
+    {
+        wikiName = convertToUTF(wikiName);
+        spaceName = convertToUTF(spaceName);
+        pageName = convertToUTF(pageName);
+
+        ObjectResources objectresources = new ObjectResources(URLprefix, wikiName, spaceName, pageName);
+
+        return objectresources.getAllObjects();
+    }
+
+    // Method for getting all objects in specific class in a page
+    public Objects requestObjectsInClass(String wikiName, String spaceName, String pageName, String objectClassname)
+    {
+        wikiName = convertToUTF(wikiName);
+        spaceName = convertToUTF(spaceName);
+        pageName = convertToUTF(pageName);
+        objectClassname = convertToUTF(objectClassname);
+
+        ObjectResources objectresources = new ObjectResources(URLprefix, wikiName, spaceName, pageName);
+
+        return objectresources.getObjectsInClassname(objectClassname);
+    }
+
+    // Method for getting object in specific class in a page
+    public Object requestObject(String wikiName, String spaceName, String pageName, String objectClassname,
+        String objectNumber)
+    {
+        wikiName = convertToUTF(wikiName);
+        spaceName = convertToUTF(spaceName);
+        pageName = convertToUTF(pageName);
+        objectClassname = convertToUTF(objectClassname);
+        objectNumber = convertToUTF(objectNumber);
+
+        ObjectResources objectresources = new ObjectResources(URLprefix, wikiName, spaceName, pageName);
+
+        return objectresources.getObject(objectClassname, objectNumber);
+    }
+    
+    // Method for getting object in specific class in a page
+    public Properties requestObjectAllProperties(String wikiName, String spaceName, String pageName, String objectClassname,
+        String objectNumber)
+    {
+        wikiName = convertToUTF(wikiName);
+        spaceName = convertToUTF(spaceName);
+        pageName = convertToUTF(pageName);
+        objectClassname = convertToUTF(objectClassname);
+        objectNumber = convertToUTF(objectNumber);
+
+        ObjectResources objectresources = new ObjectResources(URLprefix, wikiName, spaceName, pageName);
+
+        return objectresources.getObjectProperties(objectClassname, objectNumber);
+    }
+    
+ // Method for getting object in specific class in a page
+    public Property requestObjectProperty(String wikiName, String spaceName, String pageName, String objectClassname,
+        String objectNumber, String propertyName)
+    {
+        wikiName = convertToUTF(wikiName);
+        spaceName = convertToUTF(spaceName);
+        pageName = convertToUTF(pageName);
+        objectClassname = convertToUTF(objectClassname);
+        objectNumber = convertToUTF(objectNumber);
+        propertyName = convertToUTF(propertyName);
+        
+        ObjectResources objectresources = new ObjectResources(URLprefix, wikiName, spaceName, pageName);
+
+        return objectresources.getObjectProperty(objectClassname, objectNumber, propertyName);
+    }
+
 }

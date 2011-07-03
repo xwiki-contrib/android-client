@@ -38,6 +38,7 @@ public class HttpConnector {
 		Log.d("Request URL", Uri);
 		try {
 			response = client.execute(request);
+			Log.d("Response status", response.getStatusLine().toString());
 			in = new BufferedReader(new InputStreamReader(response.getEntity()
 					.getContent()));
 			StringBuffer sb = new StringBuffer("");

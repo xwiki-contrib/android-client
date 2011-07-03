@@ -1,7 +1,9 @@
 package org.xwiki.android.rest;
 
 import org.xwiki.android.resources.Objects;
-import org.xwiki.android.resources.Tags;
+import org.xwiki.android.resources.Object;
+import org.xwiki.android.resources.Properties;
+import org.xwiki.android.resources.Property;
 
 import com.google.gson.Gson;
 
@@ -19,8 +21,6 @@ public class ObjectResources extends HttpConnector
 
     private String pageName;
 
-    
-
     public ObjectResources(String URLprefix, String wikiName, String spaceName, String pageName)
     {
         this.URLprefix = URLprefix;
@@ -28,16 +28,65 @@ public class ObjectResources extends HttpConnector
         this.spaceName = spaceName;
         this.pageName = pageName;
     }
-    
-    public Objects getAllObjects(){
+
+    public Objects getAllObjects()
+    {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
                 + "/objects" + JSON_URL_SUFFIX;
 
         return decodeObjects(super.getResponse(Uri));
-        
+
     }
-    
+
+    // Add POST method
+
+    public Objects getObjectsInClassname(String objectClassname)
+    {
+        String Uri =
+            "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
+                + "/objects/" + objectClassname + JSON_URL_SUFFIX;
+
+        return decodeObjects(super.getResponse(Uri));
+
+    }
+
+    // /wikis/{wikiName}/spaces/{spaceName}/pages/{pageName}/objects/{className}/{objectNumber}
+    public Object getObject(String objectClassname, String objectNumber)
+    {
+        String Uri =
+            "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
+                + "/objects/" + objectClassname + "/" + objectNumber + JSON_URL_SUFFIX;
+
+        return decodeObject(super.getResponse(Uri));
+
+    }
+
+    // Add PUT method
+    // Add DELETE method
+
+    public Properties getObjectProperties(String objectClassname, String objectNumber)
+    {
+        String Uri =
+            "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
+                + "/objects/" + objectClassname + "/" + objectNumber + "/properties" + JSON_URL_SUFFIX;
+
+        return decodeProperties(super.getResponse(Uri));
+
+    }
+
+    // wikis/{wikiName}/spaces/{spaceName}/pages/{pageName}/objects/{className}/{objectNumber}/properties/{propertyName}
+    public Property getObjectProperty(String objectClassname, String objectNumber, String propertyName)
+    {
+        String Uri =
+            "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
+                + "/objects/" + objectClassname + "/" + objectNumber + "/properties/" + propertyName + JSON_URL_SUFFIX;
+
+        return decodeProperty(super.getResponse(Uri));
+
+    }
+    //Add PUT method
+
     // decode json content to Objects element
     private Objects decodeObjects(String content)
     {
@@ -46,5 +95,35 @@ public class ObjectResources extends HttpConnector
         Objects objects = new Objects();
         objects = gson.fromJson(content, Objects.class);
         return objects;
+    }
+
+    // decode json content to Object element
+    private Object decodeObject(String content)
+    {
+        Gson gson = new Gson();
+
+        Object object = new Object();
+        object = gson.fromJson(content, Object.class);
+        return object;
+    }
+
+    // decode json content to Properties element
+    private Properties decodeProperties(String content)
+    {
+        Gson gson = new Gson();
+
+        Properties properties = new Properties();
+        properties = gson.fromJson(content, Properties.class);
+        return properties;
+    }
+    
+    // decode json content to Properties element
+    private Property decodeProperty(String content)
+    {
+        Gson gson = new Gson();
+
+        Property property = new Property();
+        property = gson.fromJson(content, Property.class);
+        return property;
     }
 }

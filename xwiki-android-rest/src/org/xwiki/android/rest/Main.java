@@ -7,9 +7,12 @@ import org.xwiki.android.resources.History;
 import org.xwiki.android.resources.Objects;
 import org.xwiki.android.resources.Page;
 import org.xwiki.android.resources.Pages;
+import org.xwiki.android.resources.Properties;
+import org.xwiki.android.resources.Property;
 import org.xwiki.android.resources.SearchResults;
 import org.xwiki.android.resources.Spaces;
 import org.xwiki.android.resources.Tags;
+import org.xwiki.android.resources.Translations;
 import org.xwiki.android.resources.Wikis;
 
 import android.app.Activity;
@@ -66,17 +69,22 @@ public class Main extends Activity
 
         // Test space implementation
         // Spaces s = request.requestSpaces("xwiki");
+        // Log.d("Spaces", "It worked");
         // Log.d("Final result:", "result=" + result);
         // tv_result.setText("Space Results\n" + result);
 
         // Test all pages implementation
         // Pages ps = request.requestAllPages("xwiki", "Blog");
+        // for (int i = 0; i < ps.pageSummaries.size(); i++) {
+        // Log.d("id", "id=" + i + "=" + ps.pageSummaries.get(i).id);
+        // }
         // Log.d("Final result:", "result=" + result);
         // tv_result.setText("All Pages Results\n" + result);
 
         // Test one page implementation
-         Page p = request.requestPage("xwiki", "Blog", "This is test 2");
-         Log.d("Info","worked");
+        // Page p = request.requestPage("xwiki", "Blog", "This is test 2");
+        // Log.d("page", "page details=" + p.name + "," + p.title + "," + p.xwikiRelativeUrl + "," + p.content);
+        // Log.d("Info", "worked");
         // Log.d("Final result:", "result=" + result);
         // tv_result.setText("Page Results\n" + result);
 
@@ -151,12 +159,44 @@ public class Main extends Activity
         // Log.d("Info","worked");
 
         // Test page attachment versions in a page
-//        Attachments as =
-//            request.requestPageAttachmentsInAttachmentHistory("xwiki", "Blog", "This is test 2", "snapshot2.png");
-//        Log.d("Info", "worked");
-        
+        // Attachments as =
+        // request.requestPageAttachmentsInAttachmentHistory("xwiki", "Blog", "This is test 2", "snapshot2.png");
+        // Log.d("Info", "worked");
+
+        // Test translations in a page
+        // Translations ts=request.requestAllPageTranslations("xwiki", "Blog", "This is test 2");
+        // Log.d("Info", "worked");
+
+        // Test page translation implementation
+        // Page p = request.requestPageTranslation("xwiki", "Blog", "This is test 2","null");
+        // Log.d("Info","worked");
+
+        // Test one page history implementation in language
+        // History h = request.requestPageHistoryInLanguage("xwiki", "Blog", "This is test 2", "null");
+        // Log.d("Info","worked");
+
+        // Test page translation with history implementation
+        // Page p = request.requestPageTranslationInHistory("xwiki", "Blog", "This is test 2","null","6.1");
+        // Log.d("Info","worked");
+
         // Test page objects in a page
-//      Objects os =request.requestAllObjects("xwiki", "Blog", "This is test 2");
-//      Log.d("Info", "worked");
+        // Objects os = request.requestAllObjects("xwiki", "Blog", "test");
+        // Log.d("Info", "worked");
+
+        // Test page objects in a specific class in a page
+        // Objects os = request.requestObjectsInClass("xwiki", "Blog", "test", "Blog.BlogPostClass");
+        // Log.d("Info", "worked");
+
+        // Test object in a specific obejct number in a objects
+        // Object o = request.requestObject("xwiki", "Blog", "test", "Blog.BlogPostClass", "0");
+        // Log.d("Info", "worked");
+
+        // Test properties of a object in a specific obejct number in a objects
+        // Properties ps = request.requestObjectAllProperties("xwiki", "Blog", "test", "Blog.BlogPostClass", "0");
+        // Log.d("Info", "worked");
+
+        // Test property of a object in a specific obejct number in a objects
+//         Property p = request.requestObjectProperty("xwiki", "Blog", "test", "Blog.BlogPostClass", "0", "content");
+//         Log.d("Info", "worked");
     }
 }

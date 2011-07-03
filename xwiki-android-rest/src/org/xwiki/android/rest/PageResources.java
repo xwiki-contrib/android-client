@@ -89,74 +89,24 @@ public class PageResources extends HttpConnector
         return decodePages(super.getResponse(Uri));
     }
 
-    // Temporary method to decode JSON reply
-    public String decodeAllPagesResponse(String response)
-    {
-
-        String wikiResultText = "";
-        try {
-            JSONObject jsonobject = new JSONObject(response);
-            JSONArray dataArray = jsonobject.getJSONArray(JSON_ARRAY_IDENTIFIER);
-
-            Log.d("JSON", "JSON array built");
-
-            Log.d("JSON", "Number of entrees in array: " + dataArray.length());
-
-            for (int i = 0; i < dataArray.length(); i++) {
-                if (!dataArray.isNull(i)) {
-                    JSONObject item = dataArray.getJSONObject(i);
-
-                    if (item.has("id")) {
-                        String id = item.getString("id");
-                        Log.d("JSON Array", "id= " + id);
-                        wikiResultText += ("\n" + id);
-                    }
-                }
-            }
-
-        } catch (JSONException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            Log.d("JSON", "Error in JSON object or Array");
-        }
-
-        return wikiResultText;
+    // Get page translation
+    public Page getPageTranslation(String pageName, String language){
+        String Uri =
+            "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
+                + "/translations/" + language + JSON_URL_SUFFIX;
+        
+        return decodePage(super.getResponse(Uri));
     }
-
-    // Temporary method to decode JSON reply
-    public String decodePageResponse(String response, String key)
-    {
-
-        String wikiResultText = "";
-        try {
-            JSONObject jsonobject = new JSONObject(response);
-            JSONArray dataArray = jsonobject.getJSONArray(key);
-
-            Log.d("JSON", "JSON array built");
-
-            Log.d("JSON", "Number of entrees in array: " + dataArray.length());
-
-            for (int i = 0; i < dataArray.length(); i++) {
-                if (!dataArray.isNull(i)) {
-                    JSONObject item = dataArray.getJSONObject(i);
-
-                    if (item.has("pageId")) {
-                        String id = item.getString("pageId");
-                        Log.d("JSON Array", "id= " + id);
-                        wikiResultText += ("\n" + id);
-                    }
-                }
-            }
-
-        } catch (JSONException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            Log.d("JSON", "Error in JSON object or Array");
-        }
-
-        return wikiResultText;
+    
+    //wikis/{wikiName}/spaces/{spaceName}/pages/{pageName}/translations/{lang}/history/{version}
+    public Page getPageTranslation(String pageName, String language,String version){
+        String Uri =
+            "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
+                + "/translations/" + language +"/history/" + version + JSON_URL_SUFFIX;
+        
+        return decodePage(super.getResponse(Uri));
     }
-
+    
     // decode json content to Pages element
     private Pages decodePages(String content)
     {
@@ -232,5 +182,7 @@ public class PageResources extends HttpConnector
         greg.setMinimalDaysInFirstWeek(Integer.parseInt(allData.get(5)));
         return greg;
     }
+    
+    
 
 }
