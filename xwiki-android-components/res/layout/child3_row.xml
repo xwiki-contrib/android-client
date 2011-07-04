@@ -11,11 +11,4 @@
          android:layout_width="250px"
          android:layout_height="wrap_content"/>
 
-    <TextView android:id="@+id/rgb"
-         android:textSize="14px"
-         android:textStyle="italic"
-         android:layout_width="150px"
-         android:layout_height="wrap_content"/>
-         
-         
 </LinearLayout>

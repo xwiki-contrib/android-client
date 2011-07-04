@@ -42,15 +42,15 @@ public class Main extends Activity
     public void searchButtonClick(View v)
     {
 
-        TextView tv_result = (TextView) findViewById(R.id.textView1);
-        TextView et_domain = (TextView) findViewById(R.id.editText_domain);
-        TextView et_searchText = (TextView) findViewById(R.id.editText_SearchText);
-
-        domain = et_domain.getText().toString();
-        searchKeyword = et_searchText.getText().toString();
-
-        Log.d("Info", "domain=" + domain + " text=" + searchKeyword);
-        Requests request = new Requests(domain);
+        // TextView tv_result = (TextView) findViewById(R.id.textView1);
+        // TextView et_domain = (TextView) findViewById(R.id.editText_domain);
+        // TextView et_searchText = (TextView) findViewById(R.id.editText_SearchText);
+        //
+        // domain = et_domain.getText().toString();
+        // searchKeyword = et_searchText.getText().toString();
+        //
+        // Log.d("Info", "domain=" + domain + " text=" + searchKeyword);
+        // Requests request = new Requests(domain);
 
         // Test wiki search implementation
         // SearchResults sr = request.requestSearch("xwiki",searchKeyword);

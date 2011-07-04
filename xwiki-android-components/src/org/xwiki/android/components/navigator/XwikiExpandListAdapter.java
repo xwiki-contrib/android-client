@@ -87,8 +87,8 @@ public class XwikiExpandListAdapter extends BaseExpandableListAdapter
                 new int[] {R.id.childname}, // Data under "colorName" key goes into this TextView
                 createChildList(groupPosition), // childData describes second-level entries
                 R.layout.child3_row, // Layout for second-level entries
-                new String[] {KEY_SHADENAME, KEY_RGB}, // Keys in childData maps to display
-                new int[] {R.id.childname, R.id.rgb} // Data under the keys above go into these TextViews
+                new String[] {KEY_SHADENAME}, // Keys in childData maps to display
+                new int[] {R.id.childname} // Data under the keys above go into these TextViews
             ));
             dev.setOnGroupClickListener(new Level2GroupExpandListener(groupPosition));
             listViewCache[groupPosition] = dev;

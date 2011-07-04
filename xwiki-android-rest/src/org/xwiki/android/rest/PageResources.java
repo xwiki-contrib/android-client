@@ -11,7 +11,6 @@ import org.json.JSONObject;
 import org.xwiki.android.resources.Page;
 import org.xwiki.android.resources.Pages;
 
-import sun.util.calendar.ZoneInfo;
 import android.util.Log;
 
 import com.google.gson.Gson;

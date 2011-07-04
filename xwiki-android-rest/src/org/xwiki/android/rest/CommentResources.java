@@ -2,12 +2,8 @@ package org.xwiki.android.rest;
 
 import org.xwiki.android.resources.Comment;
 import org.xwiki.android.resources.Comments;
-import org.xwiki.android.resources.Page;
-import org.xwiki.android.resources.Tags;
-import org.xwiki.android.resources.TimeZoneDeserializer;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 public class CommentResources extends HttpConnector
 {

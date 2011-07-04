@@ -8,6 +8,7 @@ import org.xwiki.android.resources.Comment;
 import org.xwiki.android.resources.Comments;
 import org.xwiki.android.resources.History;
 import org.xwiki.android.resources.Objects;
+import org.xwiki.android.resources.Object;
 import org.xwiki.android.resources.Page;
 import org.xwiki.android.resources.Pages;
 import org.xwiki.android.resources.Properties;

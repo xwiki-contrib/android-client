@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.os.Bundle;
 
 import org.xwiki.android.resources.Object;
+import org.xwiki.android.rest.Requests;
 
 public class ObjectEditorActivity extends Activity
 {
@@ -19,20 +20,9 @@ public class ObjectEditorActivity extends Activity
 
     private Object testProperty()
     {
-        Object obj = new Object();
-        obj.setPageName("Page 1");
-
-        Property prop1 = new Property();
-        prop1.setName("category");
-        prop1.setValue("Blog.Other");
-
-        Property prop2 = new Property();
-        prop2.setName("content");
-        prop2.setValue("This is a perfect test");
-
-        obj.getProperties().add(prop1);
-        obj.getProperties().add(prop2);
-
-        return obj;
+        Requests request = new Requests("10.0.2.2:8080");
+        Object o = request.requestObject("xwiki", "Blog", "test", "Blog.BlogPostClass", "0");
+        
+        return o;
     }
 }
