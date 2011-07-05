@@ -52,11 +52,9 @@
 	 	<dependency>
 	 		<groupId>org.xwiki.android</groupId>
 	 		<artifactId>xwiki-android-rest</artifactId>
-	 		<version>1.0-SNAPSHOT</version>
-	 		<scope>compile</scope>
-	 		<type>apk</type>
+	 		<version>${project.version}</version>
 	 	</dependency>
-		<dependency>
+	 	<dependency>
 	 		<groupId>com.google.code.gson</groupId>
 	 		<artifactId>gson</artifactId>
 	 		<version>1.7.1</version>
