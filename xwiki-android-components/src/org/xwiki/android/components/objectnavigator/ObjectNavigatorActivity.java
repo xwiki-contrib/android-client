@@ -77,8 +77,19 @@ public class ObjectNavigatorActivity extends ExpandableListActivity
 
     private void createObjects()
     {
-        Requests request = new Requests("10.0.2.2:8080");
-        Objects os = request.requestAllObjects("xwiki", "Blog", "test");
+        String username, password, url;
+
+        username = getIntent().getExtras().getString("username");
+        password = getIntent().getExtras().getString("password");
+        url = getIntent().getExtras().getString("url");
+
+        // Requests request = new Requests("10.0.2.2:8080");
+        // Objects os = request.requestAllObjects("xwiki", "Blog", "test");
+        // objects = os;
+
+        Requests request = new Requests(url);
+        request.setAuthentication(username, password);
+        Objects os = request.requestAllObjects("xwiki", "Blog", "BlogIntroduction");
         objects = os;
     }
 }

@@ -1,7 +1,6 @@
 package org.xwiki.android.rest;
 
 import org.xwiki.android.resources.Attachments;
-import org.xwiki.android.resources.Wikis;
 
 import com.google.gson.Gson;
 
@@ -19,7 +18,7 @@ public class AttachmentResources extends HttpConnector
     private String spaceName;
 
     private String pageName;
-
+    
     public AttachmentResources(String URLprefix, String wikiName, String spaceName, String pageName)
     {
         this.URLprefix = URLprefix;

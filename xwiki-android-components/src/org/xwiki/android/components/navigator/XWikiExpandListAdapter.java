@@ -23,7 +23,7 @@ import org.xwiki.android.resources.Spaces;
 import org.xwiki.android.resources.Wikis;
 import org.xwiki.android.rest.Requests;
 
-public class XwikiExpandListAdapter extends BaseExpandableListAdapter
+public class XWikiExpandListAdapter extends BaseExpandableListAdapter
 {
 
     private Context context;
@@ -44,24 +44,48 @@ public class XwikiExpandListAdapter extends BaseExpandableListAdapter
 
     private String wikiURL;
     
+    private String username;
+    
+    private String password;
+    
+    private boolean isAuthenticated;
+
     private Wikis wikis;
 
-    public XwikiExpandListAdapter(Context context, ExpandableListView topExpList, String wikiURL)
+    public XWikiExpandListAdapter(Context context, ExpandableListView topExpList, String wikiURL)
     {
+        isAuthenticated= false;
+        this.wikiURL = wikiURL;
         this.context = context;
         this.topExpList = topExpList;
         inflater = LayoutInflater.from(context);
-        listViewCache = new ModifiedExpandableListView[3]; //Modified by Chamika. replace listdesc.length = 3
-        this.wikiURL = wikiURL;
         wikis = getWikiList();
+        listViewCache = new ModifiedExpandableListView[wikis.wikis.size()]; // Modified by Chamika. replace listdesc.length = 3
+      
+        
+    }
+
+    public XWikiExpandListAdapter(Context context, ExpandableListView topExpList, String wikiURL, String username,
+        String password)
+    {
+        this.wikiURL = wikiURL;
+        this.username = username;
+        this.password = password;
+        isAuthenticated = true;
+        this.context = context;
+        this.topExpList = topExpList;
+        inflater = LayoutInflater.from(context);
+        wikis = getWikiList();
+        listViewCache = new ModifiedExpandableListView[wikis.wikis.size()]; // Modified by Chamika. replace listdesc.length = 3
+       
     }
 
     public Object getChild(int groupPosition, int childPosition)
     {
         String wikiname = wikis.getWikis().get(groupPosition).getName();
         String spacename = getSpacesList(wikiname).getSpaces().get(childPosition).getName();
-        //return listdesc[groupPosition][childPosition]; modified by Chamika.
-        
+        // return listdesc[groupPosition][childPosition]; modified by Chamika.
+
         return getPagesList(wikiname, spacename);
     }
 
@@ -105,15 +129,15 @@ public class XwikiExpandListAdapter extends BaseExpandableListAdapter
     public Object getGroup(int groupPosition)
     {
         String wikiname = wikis.getWikis().get(groupPosition).getName();
-               
-        //return listdesc[groupPosition][0][0][0]; //Modified by Chamika
+
+        // return listdesc[groupPosition][0][0][0]; //Modified by Chamika
         return wikiname;
     }
 
     public int getGroupCount()
     {
-        //return listdesc.length; //Modified by Chamika
-        return 3;
+        // return listdesc.length; //Modified by Chamika
+        return wikis.wikis.size();
     }
 
     public long getGroupId(int groupPosition)
@@ -153,29 +177,41 @@ public class XwikiExpandListAdapter extends BaseExpandableListAdapter
     public void onGroupExpanded(int groupPosition)
     {
     }
-    
-    private Wikis getWikiList(){
-        
+
+    private Wikis getWikiList()
+    {
+
         Wikis temp_wikis;
         Requests requests = new Requests(wikiURL);
+        if(isAuthenticated){
+            requests.setAuthentication(username, password);
+        }
         temp_wikis = requests.requestWikis();
-        
+
         return temp_wikis;
     }
-    
-    private Spaces getSpacesList(String wikiName){
+
+    private Spaces getSpacesList(String wikiName)
+    {
         Spaces temp_spaces;
         Requests requests = new Requests(wikiURL);
+        if(isAuthenticated){
+            requests.setAuthentication(username, password);
+        }
         temp_spaces = requests.requestSpaces(wikiName);
-        
+
         return temp_spaces;
     }
-    
-    private Pages getPagesList(String wikiName, String spaceName){
+
+    private Pages getPagesList(String wikiName, String spaceName)
+    {
         Pages temp_pages;
         Requests requests = new Requests(wikiURL);
+        if(isAuthenticated){
+            requests.setAuthentication(username, password);
+        }
         temp_pages = requests.requestAllPages(wikiName, spaceName);
-        
+
         return temp_pages;
     }
 
@@ -205,17 +241,20 @@ public class XwikiExpandListAdapter extends BaseExpandableListAdapter
         Log.d("data", "URL=" + wikiURL + " wiki=" + wikiName);
         ArrayList result = new ArrayList();
         Spaces spaces = new Spaces();
-        // Requests requests = new Requests(wikiURL);
-        // spaces=requests.requestSpaces(wikiName);
+        Requests requests = new Requests(wikiURL);
+        if(isAuthenticated){
+            requests.setAuthentication(username, password);
+        }
+        spaces = requests.requestSpaces(wikiName);
 
-        Space space1 = new Space();
-        space1.setId("space1");
-
-        Space space2 = new Space();
-        space2.setId("space2");
-
-        spaces.getSpaces().add(space1);
-        spaces.getSpaces().add(space2);
+        // Space space1 = new Space();
+        // space1.setId("space1");
+        //
+        // Space space2 = new Space();
+        // space2.setId("space2");
+        //
+        // spaces.getSpaces().add(space1);
+        // spaces.getSpaces().add(space2);
 
         for (int i = 0; i < spaces.getSpaces().size(); ++i) {
             HashMap m = new HashMap();
@@ -236,20 +275,20 @@ public class XwikiExpandListAdapter extends BaseExpandableListAdapter
      */
     private List createChildList(int wikiPosition)
     {
-        //Modified by Chamika
+        // Modified by Chamika
         Log.d("Child group", "Child group created");
-        ArrayList<ArrayList<HashMap<String,String>>> result = new ArrayList<ArrayList<HashMap<String,String>>>();
-        
+        ArrayList<ArrayList<HashMap<String, String>>> result = new ArrayList<ArrayList<HashMap<String, String>>>();
+
         String wikiname = wikis.getWikis().get(wikiPosition).getName();
-        
+
         List<Space> spacesList = getSpacesList(wikiname).getSpaces();
-        
-        for(int i=0; i < spacesList.size() ; i++){
-            List<PageSummary> pagesList= getPagesList(wikiname, spacesList.get(i).getName()).getPageSummaries();
-            ArrayList<HashMap<String,String>> secList = new ArrayList<HashMap<String,String>>();
-            
-            for(int j=0;j<pagesList.size(); j++){
-                HashMap<String,String> child = new HashMap<String,String>();
+
+        for (int i = 0; i < spacesList.size(); i++) {
+            List<PageSummary> pagesList = getPagesList(wikiname, spacesList.get(i).getName()).getPageSummaries();
+            ArrayList<HashMap<String, String>> secList = new ArrayList<HashMap<String, String>>();
+
+            for (int j = 0; j < pagesList.size(); j++) {
+                HashMap<String, String> child = new HashMap<String, String>();
                 child.put(KEY_SHADENAME, pagesList.get(j).getName());
                 child.put(KEY_RGB, pagesList.get(j).getId());
                 secList.add(child);
@@ -265,23 +304,23 @@ public class XwikiExpandListAdapter extends BaseExpandableListAdapter
     private int calculateRowCount(int wikiPosition, ExpandableListView level2view)
     {
         int rowCtr = 0;
-        int level2GroupCount=0;
-        
+        int level2GroupCount = 0;
+
         String wikiname = wikis.getWikis().get(wikiPosition).getName();
         List<Space> spacesList = getSpacesList(wikiname).getSpaces();
-        
-        for(int i=0; i < spacesList.size() ; i++){
-            List<PageSummary> pagesList= getPagesList(wikiname, spacesList.get(i).getName()).getPageSummaries();
-            
+
+        for (int i = 0; i < spacesList.size(); i++) {
+            List<PageSummary> pagesList = getPagesList(wikiname, spacesList.get(i).getName()).getPageSummaries();
+
             level2GroupCount += pagesList.size();
-            
+
         }
-        
+
         for (int i = 0; i < level2GroupCount; ++i) {
             ++rowCtr; // for the group row
-            if ((level2view != null) && (level2view.isGroupExpanded(i))){
-                List<PageSummary> pagesList= getPagesList(wikiname, spacesList.get(i).getName()).getPageSummaries();
-                rowCtr += pagesList.size() ; 
+            if ((level2view != null) && (level2view.isGroupExpanded(i))) {
+                List<PageSummary> pagesList = getPagesList(wikiname, spacesList.get(i).getName()).getPageSummaries();
+                rowCtr += pagesList.size();
             }
         }
         return rowCtr;

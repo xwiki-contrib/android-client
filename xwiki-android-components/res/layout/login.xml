@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent" android:orientation="vertical">
+    <ImageView android:layout_height="wrap_content" android:id="@+id/imageView1" android:layout_gravity="center" android:src="@drawable/xwiki_small_logo" android:layout_width="fill_parent"></ImageView>
+    <TableLayout android:layout_width="fill_parent" android:id="@+id/tableLayout1" android:layout_height="wrap_content">
+        <TableRow android:id="@+id/tableRow1" android:layout_height="wrap_content" android:layout_width="fill_parent">
+            <TextView android:text="Username : " android:id="@+id/textView_login_username" android:layout_height="wrap_content" android:layout_width="wrap_content"></TextView>
+            <EditText android:id="@+id/editText_login_username" android:layout_height="wrap_content" android:layout_width="fill_parent" android:text="Admin"></EditText>
+        </TableRow>
+        <TableRow android:id="@+id/tableRow2" android:layout_height="wrap_content" android:layout_width="fill_parent">
+            <TextView android:text="Password : " android:id="@+id/textView_login_password" android:layout_height="wrap_content" android:layout_width="wrap_content"></TextView>
+            <EditText android:id="@+id/editText_login_password" android:layout_height="wrap_content" android:layout_width="fill_parent" android:text="admin" android:inputType="textPassword"></EditText>
+        </TableRow>
+        <TableRow android:id="@+id/tableRow3" android:layout_height="wrap_content" android:layout_width="fill_parent">
+            <TextView android:text="URL :" android:id="@+id/textView_login_Url" android:layout_height="wrap_content" android:layout_width="wrap_content"></TextView>
+            <EditText android:id="@+id/editText_login_url" android:layout_height="wrap_content" android:layout_width="fill_parent" android:text="10.0.2.2:8080"></EditText>
+        </TableRow>
+    </TableLayout>
+    <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center" android:id="@+id/button_login_login" android:text="Login"></Button>
+</LinearLayout>

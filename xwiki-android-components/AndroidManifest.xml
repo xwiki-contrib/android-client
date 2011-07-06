@@ -14,9 +14,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".navigator.SampleListActivity"></activity>
+        <activity android:name="navigator.XWikiNavigatorActivity"></activity>
         <activity android:name=".propertyeditor.PropertyEditorActivity"></activity>
         <activity android:name=".objecteditor.ObjectEditorActivity"></activity>
+        <activity android:name=".pageeditor.PageEditorActivity"></activity>
+        <activity android:name=".objectnavigator.ObjectNavigatorActivity"></activity>
+        <activity android:name=".login.LoginActivity"></activity>
 
     </application>
 </manifest>
