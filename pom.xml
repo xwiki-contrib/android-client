@@ -41,5 +41,6 @@
   <modules>
     <module>xwiki-android-rest</module>
     <module>xwiki-android-components</module>
+    <module>xwiki-android-client</module>
   </modules>
 </project>
