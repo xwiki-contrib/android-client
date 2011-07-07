@@ -1,27 +1,28 @@
 package org.xwiki.android.components.navigator;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import org.xwiki.android.components.R;
-
-import android.content.Context;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseExpandableListAdapter;
-import android.widget.ExpandableListView;
-import android.widget.TextView;
-
 import org.xwiki.android.resources.PageSummary;
 import org.xwiki.android.resources.Pages;
 import org.xwiki.android.resources.Space;
 import org.xwiki.android.resources.Spaces;
 import org.xwiki.android.resources.Wikis;
 import org.xwiki.android.rest.Requests;
+
+import android.content.Context;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseExpandableListAdapter;
+import android.widget.ExpandableListView;
+import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.TextView;
 
 public class XWikiExpandListAdapter extends BaseExpandableListAdapter
 {
@@ -43,26 +44,32 @@ public class XWikiExpandListAdapter extends BaseExpandableListAdapter
     private static final String LOG_TAG = "ColorExpListAdapter";
 
     private String wikiURL;
-    
+
     private String username;
-    
+
     private String password;
-    
+
     private boolean isAuthenticated;
 
     private Wikis wikis;
 
+    private boolean isSelected;
+
+    public String wikiName, spaceName, pageName;
+
+    public Handler handler;
+
     public XWikiExpandListAdapter(Context context, ExpandableListView topExpList, String wikiURL)
     {
-        isAuthenticated= false;
+        isAuthenticated = false;
+        isSelected = false;
         this.wikiURL = wikiURL;
         this.context = context;
         this.topExpList = topExpList;
         inflater = LayoutInflater.from(context);
         wikis = getWikiList();
-        listViewCache = new ModifiedExpandableListView[wikis.wikis.size()]; // Modified by Chamika. replace listdesc.length = 3
-      
-        
+        listViewCache = new ModifiedExpandableListView[wikis.wikis.size()];
+
     }
 
     public XWikiExpandListAdapter(Context context, ExpandableListView topExpList, String wikiURL, String username,
@@ -72,19 +79,29 @@ public class XWikiExpandListAdapter extends BaseExpandableListAdapter
         this.username = username;
         this.password = password;
         isAuthenticated = true;
+        isSelected = false;
         this.context = context;
         this.topExpList = topExpList;
         inflater = LayoutInflater.from(context);
         wikis = getWikiList();
-        listViewCache = new ModifiedExpandableListView[wikis.wikis.size()]; // Modified by Chamika. replace listdesc.length = 3
-       
+        listViewCache = new ModifiedExpandableListView[wikis.wikis.size()];
+    }
+
+    public void setHandler(Handler hand)
+    {
+        handler = hand;
+
+    }
+
+    public boolean getIsSelected()
+    {
+        return isSelected;
     }
 
     public Object getChild(int groupPosition, int childPosition)
     {
         String wikiname = wikis.getWikis().get(groupPosition).getName();
         String spacename = getSpacesList(wikiname).getSpaces().get(childPosition).getName();
-        // return listdesc[groupPosition][childPosition]; modified by Chamika.
 
         return getPagesList(wikiname, spacename);
     }
@@ -105,6 +122,7 @@ public class XWikiExpandListAdapter extends BaseExpandableListAdapter
             ModifiedExpandableListView dev = new ModifiedExpandableListView(context);
             dev.setRows(calculateRowCount(groupPosition, null));
             // groupData describes the first-level entries
+            dev.setTag(groupPosition);
             dev.setAdapter(new ModifiedSimpleExpandableListAdapter(context, createGroupList(groupPosition),
                 R.layout.child3_row, // Layout for the first-level entries
                 new String[] {KEY_COLORNAME}, // Key in the groupData maps to display
@@ -115,10 +133,59 @@ public class XWikiExpandListAdapter extends BaseExpandableListAdapter
                 new int[] {R.id.childname} // Data under the keys above go into these TextViews
             ));
             dev.setOnGroupClickListener(new Level2GroupExpandListener(groupPosition));
+            dev.setOnChildClickListener(new OnChildClickListener()
+            {
+
+                @Override
+                public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition,
+                    long id)
+                {
+
+                    Log.d("child click", "child click: " + "group position:" + String.valueOf(groupPosition)
+                        + " child position:" + String.valueOf(childPosition));
+
+                    wikiName = wikis.wikis.get(Integer.parseInt(parent.getTag().toString())).getName();
+                    spaceName = getGroupName((Integer) parent.getTag(), groupPosition);
+                    pageName = getChildName((Integer) parent.getTag(), groupPosition, childPosition);
+                    isSelected = true;
+
+                    Message ms = new Message();
+                    ms.arg1 = 0;
+                    handler.sendMessage(ms);
+
+                    return false;
+                }
+            });
             listViewCache[groupPosition] = dev;
             v = dev;
         }
         return v;
+    }
+
+    private String getGroupName(int wikiPosition, int groupPosition)
+    {
+
+        Spaces spaces = new Spaces();
+        Requests requests = new Requests(wikiURL);
+        if (isAuthenticated) {
+            requests.setAuthentication(username, password);
+        }
+        spaces = requests.requestSpaces(wikis.wikis.get(wikiPosition).getName());
+
+        return spaces.spaces.get(groupPosition).getName();
+    }
+
+    private String getChildName(int wikiPosition, int groupPosition, int childPosition)
+    {
+
+        String wikiname = wikis.getWikis().get(wikiPosition).getName();
+        List<Space> spacesList = getSpacesList(wikiname).getSpaces();
+
+        List<PageSummary> pagesList =
+            getPagesList(wikiname, spacesList.get(groupPosition).getName()).getPageSummaries();
+
+        return pagesList.get(childPosition).getName();
+
     }
 
     public int getChildrenCount(int groupPosition)
@@ -129,14 +196,11 @@ public class XWikiExpandListAdapter extends BaseExpandableListAdapter
     public Object getGroup(int groupPosition)
     {
         String wikiname = wikis.getWikis().get(groupPosition).getName();
-
-        // return listdesc[groupPosition][0][0][0]; //Modified by Chamika
         return wikiname;
     }
 
     public int getGroupCount()
     {
-        // return listdesc.length; //Modified by Chamika
         return wikis.wikis.size();
     }
 
@@ -155,8 +219,11 @@ public class XWikiExpandListAdapter extends BaseExpandableListAdapter
             v = inflater.inflate(R.layout.group_row, parent, false);
         String gt = (String) getGroup(groupPosition);
         TextView colorGroup = (TextView) v.findViewById(R.id.groupname);
-        if (gt != null)
+        if (gt != null) {
             colorGroup.setText(gt);
+            v.setTag(gt);
+        }
+
         return v;
     }
 
@@ -183,7 +250,7 @@ public class XWikiExpandListAdapter extends BaseExpandableListAdapter
 
         Wikis temp_wikis;
         Requests requests = new Requests(wikiURL);
-        if(isAuthenticated){
+        if (isAuthenticated) {
             requests.setAuthentication(username, password);
         }
         temp_wikis = requests.requestWikis();
@@ -195,7 +262,7 @@ public class XWikiExpandListAdapter extends BaseExpandableListAdapter
     {
         Spaces temp_spaces;
         Requests requests = new Requests(wikiURL);
-        if(isAuthenticated){
+        if (isAuthenticated) {
             requests.setAuthentication(username, password);
         }
         temp_spaces = requests.requestSpaces(wikiName);
@@ -205,9 +272,10 @@ public class XWikiExpandListAdapter extends BaseExpandableListAdapter
 
     private Pages getPagesList(String wikiName, String spaceName)
     {
+
         Pages temp_pages;
         Requests requests = new Requests(wikiURL);
-        if(isAuthenticated){
+        if (isAuthenticated) {
             requests.setAuthentication(username, password);
         }
         temp_pages = requests.requestAllPages(wikiName, spaceName);
@@ -227,7 +295,7 @@ public class XWikiExpandListAdapter extends BaseExpandableListAdapter
         Log.d("Group", "Group list created");
         ArrayList result = new ArrayList();
 
-        result = createGroupLlistFromXwiki("xwiki");
+        result = createGroupLlistFromXwiki(wikis.wikis.get(level1).getName());
         // for (int i = 0; i < listdesc[level1].length; ++i) {
         // HashMap m = new HashMap();
         // //m.put(KEY_COLORNAME, listdesc[level1][i][0][1]);
@@ -242,19 +310,10 @@ public class XWikiExpandListAdapter extends BaseExpandableListAdapter
         ArrayList result = new ArrayList();
         Spaces spaces = new Spaces();
         Requests requests = new Requests(wikiURL);
-        if(isAuthenticated){
+        if (isAuthenticated) {
             requests.setAuthentication(username, password);
         }
         spaces = requests.requestSpaces(wikiName);
-
-        // Space space1 = new Space();
-        // space1.setId("space1");
-        //
-        // Space space2 = new Space();
-        // space2.setId("space2");
-        //
-        // spaces.getSpaces().add(space1);
-        // spaces.getSpaces().add(space2);
 
         for (int i = 0; i < spaces.getSpaces().size(); ++i) {
             HashMap m = new HashMap();
@@ -350,4 +409,5 @@ public class XWikiExpandListAdapter extends BaseExpandableListAdapter
 
         private int level1GroupPosition;
     }
+
 }

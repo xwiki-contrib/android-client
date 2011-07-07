@@ -60,5 +60,7 @@ public class ModifiedExpandableListView extends ExpandableListView
         }
         return modeString + Integer.toString(View.MeasureSpec.getSize(measureSpec));
     }
+    
+    
 
 }

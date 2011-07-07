@@ -17,6 +17,8 @@ import android.widget.SimpleExpandableListAdapter;
 public class ObjectNavigatorActivity extends ExpandableListActivity
 {
     Objects objects;
+    
+    String username, password, url, wikiName, spaceName, pageName;
 
     ArrayList<String> allClassNames;
 
@@ -27,9 +29,6 @@ public class ObjectNavigatorActivity extends ExpandableListActivity
         setContentView(R.layout.objectnavigator);
 
         createObjects();
-
-        List a = createGroupList();
-        List b = createChildList();
 
         SimpleExpandableListAdapter expListAdapter =
             new SimpleExpandableListAdapter(this, createGroupList(), R.layout.group_row, new String[] {"className"},
@@ -83,13 +82,13 @@ public class ObjectNavigatorActivity extends ExpandableListActivity
         password = getIntent().getExtras().getString("password");
         url = getIntent().getExtras().getString("url");
 
-        // Requests request = new Requests("10.0.2.2:8080");
-        // Objects os = request.requestAllObjects("xwiki", "Blog", "test");
-        // objects = os;
-
+        wikiName = getIntent().getExtras().getString("wikiname");
+        spaceName = getIntent().getExtras().getString("spacename");
+        pageName = getIntent().getExtras().getString("pagename");
+      
         Requests request = new Requests(url);
         request.setAuthentication(username, password);
-        Objects os = request.requestAllObjects("xwiki", "Blog", "BlogIntroduction");
+        Objects os = request.requestAllObjects(wikiName, spaceName, pageName);
         objects = os;
     }
 }

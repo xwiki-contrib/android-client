@@ -20,6 +20,7 @@
         <activity android:name=".pageeditor.PageEditorActivity"></activity>
         <activity android:name=".objectnavigator.ObjectNavigatorActivity"></activity>
         <activity android:name=".login.LoginActivity"></activity>
+        <activity android:name=".pageviewer.XWikiPageViewerActivity"></activity>
 
     </application>
 </manifest>

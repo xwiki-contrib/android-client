@@ -17,6 +17,8 @@
         <activity android:name="org.xwiki.android.components.login.LoginActivity"></activity>
         <activity android:name="org.xwiki.android.components.objectnavigator.ObjectNavigatorActivity"></activity>
         <activity android:name="org.xwiki.android.components.navigator.XWikiNavigatorActivity"></activity>
+        <activity android:name="PageViewActivity"></activity>
+        <activity android:name="org.xwiki.android.components.pageviewer.XWikiPageViewerActivity"></activity>
 
     </application>
 </manifest>

@@ -3,4 +3,5 @@
     <string name="hello">Hello World, Main!</string>
     <string name="app_name">Xwiki Components</string>
     <string name="main_no_items">No items</string>
+    <string name="xwikiNavigatorListClick">xwikiNavigatorListClick</string>
 </resources>
