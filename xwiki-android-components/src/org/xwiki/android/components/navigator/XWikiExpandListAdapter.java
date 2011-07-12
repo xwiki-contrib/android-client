@@ -2,6 +2,7 @@ package org.xwiki.android.components.navigator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 
 import org.xwiki.android.components.R;
@@ -58,9 +59,19 @@ public class XWikiExpandListAdapter extends BaseExpandableListAdapter
     public String wikiName, spaceName, pageName;
 
     public Handler handler;
+    
+    //For reducing requests
+    private Spaces temp_spaces;
+    
+    private Pages temp_pages;
+    
+    private HashMap<String, Pages> cachePages;
+    
+    private String recentWikiName="", recentSpaceName="", recentPageName="";
 
     public XWikiExpandListAdapter(Context context, ExpandableListView topExpList, String wikiURL)
     {
+    	cachePages = new HashMap<String, Pages>();
         isAuthenticated = false;
         isSelected = false;
         this.wikiURL = wikiURL;
@@ -69,12 +80,12 @@ public class XWikiExpandListAdapter extends BaseExpandableListAdapter
         inflater = LayoutInflater.from(context);
         wikis = getWikiList();
         listViewCache = new ModifiedExpandableListView[wikis.wikis.size()];
-
     }
 
     public XWikiExpandListAdapter(Context context, ExpandableListView topExpList, String wikiURL, String username,
         String password)
     {
+    	cachePages = new HashMap<String, Pages>();
         this.wikiURL = wikiURL;
         this.username = username;
         this.password = password;
@@ -90,7 +101,6 @@ public class XWikiExpandListAdapter extends BaseExpandableListAdapter
     public void setHandler(Handler hand)
     {
         handler = hand;
-
     }
 
     public boolean getIsSelected()
@@ -260,27 +270,57 @@ public class XWikiExpandListAdapter extends BaseExpandableListAdapter
 
     private Spaces getSpacesList(String wikiName)
     {
-        Spaces temp_spaces;
-        Requests requests = new Requests(wikiURL);
-        if (isAuthenticated) {
-            requests.setAuthentication(username, password);
+    	Log.d("request", "request spaces from:" + wikiName);
+    	
+        if(recentWikiName.equals(wikiName)){
+        	Log.d("optimize", "optimized spaces");
+        	return temp_spaces;
         }
-        temp_spaces = requests.requestSpaces(wikiName);
-
-        return temp_spaces;
+        else{
+        	Log.d("Loading","pages loading started");
+        	Requests requests = new Requests(wikiURL);
+            if (isAuthenticated) {
+                requests.setAuthentication(username, password);
+            }
+            temp_spaces = requests.requestSpaces(wikiName);
+            recentWikiName = wikiName;
+            Log.d("Loading","pages loading stopped");
+            return temp_spaces;
+        }
+        
     }
 
     private Pages getPagesList(String wikiName, String spaceName)
     {
-
-        Pages temp_pages;
-        Requests requests = new Requests(wikiURL);
-        if (isAuthenticated) {
-            requests.setAuthentication(username, password);
+    	String key = wikiName + "," + spaceName ;
+    	
+    	Log.d("request", "request pages from:" + wikiName + "," + spaceName);
+    	
+    	if(recentWikiName.equals(wikiName) && recentSpaceName.equals(spaceName)){
+    		Log.d("optimize", "optimized pages");
+    		return temp_pages;
+    	}else{
+    		
+    		if(cachePages.containsKey(key)){
+    			Log.d("optimize", "optimized level 2 pages");
+    			return cachePages.get(key);
+    		}else{
+    			Log.d("Loading","pages loading started");
+    			Requests requests = new Requests(wikiURL);
+                if (isAuthenticated) {
+                    requests.setAuthentication(username, password);
+                }
+                
+                temp_pages = requests.requestAllPages(wikiName, spaceName);
+                recentWikiName = wikiName;
+                recentSpaceName = spaceName;
+                cachePages.put(key, temp_pages);
+                Log.d("Loading","pages loading started");
+                return temp_pages;
+    		}
+    		
+    		
         }
-        temp_pages = requests.requestAllPages(wikiName, spaceName);
-
-        return temp_pages;
     }
 
     /**
@@ -334,7 +374,6 @@ public class XWikiExpandListAdapter extends BaseExpandableListAdapter
      */
     private List createChildList(int wikiPosition)
     {
-        // Modified by Chamika
         Log.d("Child group", "Child group created");
         ArrayList<ArrayList<HashMap<String, String>>> result = new ArrayList<ArrayList<HashMap<String, String>>>();
 
