@@ -1,8 +1,12 @@
 This is the XWiki Android client repositary
 
+xwiki-android-rest : REST library for android which uses XWiki RESTful API (apklib)
+xwiki-android-component : Includes Android activities which can be used when developing android application (apklib)
+xwiki-android-client : Sample installable XWiki Android Client application (apk)
+
 For testing
 -----------
-1. Download and setup Android Virtual device with the platform version of 2.2 and AVD name as "android2.2". Then run that newly created virtual device
+1. Download and setup Android Virtual device with the platform version of 2.1 or higher. Then run that newly created virtual device.
 
 2. In the terminal set up environmental variable "ANDROID_HOME" to the Android SDK directory
 Example for linux users 
@@ -10,8 +14,8 @@ Example for linux users
 
 3. Go to the source code directory
 4. Run maven clean build by "mvn clean install"
-5. For deploying application run "mvn android:deploy"
-	This will install newly built Android .apk file to the virtual device named "android2.2"
-5. Goto emulator and open the menu. Run "AndroidRest" application
+5. For deploying application run "mvn android:deploy" within the xwiki-android-client
+	This will intall newly built Android .apk file to the virtual device which is running with android platform version 2.1 or higher
+5. Goto emulator and open the menu. Run "XWiki" application
 
 
