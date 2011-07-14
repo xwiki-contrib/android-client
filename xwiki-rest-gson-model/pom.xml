@@ -31,24 +31,9 @@
 		<version>1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>xwiki-android-client</artifactId>
-	<packaging>apk</packaging>
-	<name>XWiki</name>
-
-	<dependencies>
-		<dependency>
-			<groupId>org.xwiki.android</groupId>
-			<artifactId>xwiki-android-rest</artifactId>
-			<type>apklib</type>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.xwiki.android</groupId>
-			<artifactId>xwiki-android-components</artifactId>
-			<type>apklib</type>
-			<version>${project.version}</version>
-		</dependency>
-	</dependencies>
+	<groupId>org.xwiki.android</groupId>
+	<artifactId>xwiki-rest-gson-model</artifactId>
+	<name>XWikiGsonModel</name>
 
 	<build>
 		<sourceDirectory>src</sourceDirectory>
