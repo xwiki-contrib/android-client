@@ -65,7 +65,12 @@ public class PageResources extends HttpConnector
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
                 + JSON_URL_SUFFIX;
 
-        return super.deleteRequest(Uri);
+        if (super.getIsSecured()) {
+            return super.deleteRequest(Uri);
+        } else {
+            return "No authenticaiton details found";
+        }
+
     }
 
     // Get page history on version
@@ -89,23 +94,35 @@ public class PageResources extends HttpConnector
     }
 
     // Get page translation
-    public Page getPageTranslation(String pageName, String language){
+    public Page getPageTranslation(String pageName, String language)
+    {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
                 + "/translations/" + language + JSON_URL_SUFFIX;
-        
+
         return decodePage(super.getResponse(Uri));
     }
     
-    //wikis/{wikiName}/spaces/{spaceName}/pages/{pageName}/translations/{lang}/history/{version}
-    public Page getPageTranslation(String pageName, String language,String version){
+    // Delete page translation
+    public String deletePageTranslation(String pageName, String language)
+    {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
-                + "/translations/" + language +"/history/" + version + JSON_URL_SUFFIX;
-        
+                + "/translations/" + language + JSON_URL_SUFFIX;
+
+        return super.deleteRequest(Uri);
+    }
+
+    // wikis/{wikiName}/spaces/{spaceName}/pages/{pageName}/translations/{lang}/history/{version}
+    public Page getPageTranslation(String pageName, String language, String version)
+    {
+        String Uri =
+            "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
+                + "/translations/" + language + "/history/" + version + JSON_URL_SUFFIX;
+
         return decodePage(super.getResponse(Uri));
     }
-    
+
     // decode json content to Pages element
     private Pages decodePages(String content)
     {
@@ -169,8 +186,8 @@ public class PageResources extends HttpConnector
         }
         Log.d("allData", allData.toString());
 
-        //ZoneInfo zi;
-        //Log.d("zi info", allData.get(23) + " and " + allData.get(24));
+        // ZoneInfo zi;
+        // Log.d("zi info", allData.get(23) + " and " + allData.get(24));
         // zi= new ZoneInfo();
         // zi.setID(allData.get(23));
         // zi.setRawOffset(Integer.parseInt(allData.get(24)));
@@ -181,7 +198,5 @@ public class PageResources extends HttpConnector
         greg.setMinimalDaysInFirstWeek(Integer.parseInt(allData.get(5)));
         return greg;
     }
-    
-    
 
 }

@@ -85,6 +85,16 @@ public class AttachmentResources extends HttpConnector
 
         return super.getResponse(Uri);
     }
+    
+    // delete specific attachment
+    public String deletePageAttachment(String attachmentName)
+    {
+        String Uri =
+            "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
+                + "/attachments/" + attachmentName + JSON_URL_SUFFIX;
+
+        return super.deleteRequest(Uri);
+    }
 
     // decode json content to Wikis
     private Attachments decodeAttachments(String content)

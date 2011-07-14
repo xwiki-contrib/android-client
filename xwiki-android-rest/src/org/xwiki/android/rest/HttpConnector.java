@@ -17,7 +17,6 @@ import org.apache.http.auth.Credentials;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.CredentialsProvider;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.protocol.ClientContext;
@@ -40,6 +39,10 @@ public class HttpConnector {
 		this.username = username;
 		this.password = password;
 		isSecured = true;
+	}
+	
+	public boolean getIsSecured(){
+	    return isSecured;
 	}
 	
 	public String getResponse(String Uri){
@@ -170,45 +173,66 @@ public class HttpConnector {
 	}
 
 	public String deleteRequest(String Uri) {
-		BufferedReader in = null;
-		HttpClient client = new DefaultHttpClient();
-		HttpDelete delete = new HttpDelete();
-		String responseText = new String();
-		HttpResponse response;
+        DefaultHttpClient client = new DefaultHttpClient();
+        HttpDelete request = new HttpDelete();
+        HttpResponse response;
 
-		try {
-			requestUri = new URI(Uri);
+        try {       
+            requestUri = new URI(Uri);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
 
-		} catch (URISyntaxException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        HttpRequestInterceptor preemptiveAuth = new HttpRequestInterceptor() {
 
-		delete.setURI(requestUri);
+            @Override
+            public void process(HttpRequest request, HttpContext context)
+                    throws HttpException, IOException {
+                AuthState authState = (AuthState) context
+                        .getAttribute(ClientContext.TARGET_AUTH_STATE);
+                CredentialsProvider credsProvider = (CredentialsProvider) context
+                        .getAttribute(ClientContext.CREDS_PROVIDER);
+                HttpHost targetHost = (HttpHost) context
+                        .getAttribute(ExecutionContext.HTTP_TARGET_HOST);
 
-		try {
-			response = client.execute(delete);
-			in = new BufferedReader(new InputStreamReader(response.getEntity()
-					.getContent()));
-			StringBuffer sb = new StringBuffer("");
-			String line = "";
-			String NL = System.getProperty("line.separator");
-			while ((line = in.readLine()) != null) {
-				sb.append(line + NL);
-			}
-			in.close();
-			responseText = sb.toString();
-			Log.d("Response", "response: " + responseText);
+                if (authState.getAuthScheme() == null) {
+                    AuthScope authScope = new AuthScope(
+                            targetHost.getHostName(), targetHost.getPort());
+                    Credentials creds = credsProvider.getCredentials(authScope);
+                    if (creds != null) {
+                        authState.setAuthScheme(new BasicScheme());
+                        authState.setCredentials(creds);
+                    }
+                }
+            }
 
-		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        };
 
-		return responseText;
+        client.addRequestInterceptor(preemptiveAuth, 0);
+
+        Credentials defaultcreds = new UsernamePasswordCredentials(username,
+                password);
+        client.getCredentialsProvider().setCredentials(
+                new AuthScope(null, -1, AuthScope.ANY_REALM), defaultcreds);
+
+        request.setURI(requestUri);
+        Log.d("Request URL", Uri);
+      
+        try {
+
+            response = client.execute(request);
+            Log.d("Response status", response.getStatusLine().toString());
+            return response.getStatusLine().toString();
+          
+        } catch (ClientProtocolException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return "error";
 	}
 
 	public int checkLogin(String username, String password, String Url) {
@@ -279,4 +303,8 @@ public class HttpConnector {
 		Log.d("response code", String.valueOf(responseCode));
 		return responseCode;
 	}
+	
+//	private String deleteWithAuth(String Uri, String username, String password) {
+//        
+//    }
 }

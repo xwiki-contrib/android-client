@@ -1,8 +1,6 @@
 package org.xwiki.android.rest;
 
 import org.xwiki.android.resources.History;
-import org.xwiki.android.resources.Wikis;
-
 import com.google.gson.Gson;
 
 public class HistoryResources extends HttpConnector

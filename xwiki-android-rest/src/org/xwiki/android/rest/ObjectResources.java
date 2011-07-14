@@ -63,7 +63,17 @@ public class ObjectResources extends HttpConnector
     }
 
     // Add PUT method
-    // Add DELETE method
+    
+    //Delete object
+    public String deleteObject(String objectClassname, String objectNumber)
+    {
+        String Uri =
+            "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
+                + "/objects/" + objectClassname + "/" + objectNumber + JSON_URL_SUFFIX;
+
+        return super.deleteRequest(Uri);
+
+    }
 
     public Properties getObjectProperties(String objectClassname, String objectNumber)
     {

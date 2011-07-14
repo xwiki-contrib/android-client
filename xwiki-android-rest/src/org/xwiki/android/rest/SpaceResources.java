@@ -4,8 +4,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xwiki.android.resources.Spaces;
-import org.xwiki.android.resources.Wikis;
-
 import com.google.gson.Gson;
 
 import android.util.Log;
