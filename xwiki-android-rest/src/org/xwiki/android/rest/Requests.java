@@ -265,6 +265,23 @@ public class Requests
         return commentresources.getPageComments();
     }
 
+    // Method for getting page comments [complete but not working due to
+    // calendar]
+    public String addPageComment(String wikiName, String spaceName, String pageName, String comment)
+    {
+        wikiName = convertToUTF(wikiName);
+        spaceName = convertToUTF(spaceName);
+        pageName = convertToUTF(pageName);
+
+        CommentResources commentresources = new CommentResources(URLprefix, wikiName, spaceName, pageName);
+        if (isAuthenticated) {
+            commentresources.setAuthenticaion(username, password);
+            return commentresources.addPageComment(comment);
+        } else {
+            return "Autherization details are not provided";
+        }
+    }
+
     // Method for getting page comments with comment id [complete but not
     // working due to calendar]
     public Comment requestPageComments(String wikiName, String spaceName, String pageName, String commentId)
@@ -551,8 +568,8 @@ public class Requests
         }
         return objectresources.getObject(objectClassname, objectNumber);
     }
-    
- // Method for deleting object in specific class in a page
+
+    // Method for deleting object in specific class in a page
     public String deleteObject(String wikiName, String spaceName, String pageName, String objectClassname,
         String objectNumber)
     {

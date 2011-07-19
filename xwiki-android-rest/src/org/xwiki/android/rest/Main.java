@@ -38,16 +38,16 @@ public class Main extends Activity {
 
 	public void searchButtonClick(View v) {
 
-        // TextView tv_result = (TextView) findViewById(R.id.textView1);
-        // TextView et_domain = (TextView) findViewById(R.id.editText_domain);
-        // TextView et_searchText = (TextView)
-        // findViewById(R.id.editText_SearchText);
-        //
-        // domain = et_domain.getText().toString();
-        // searchKeyword = et_searchText.getText().toString();
-        //
-        // Log.d("Info", "domain=" + domain + " text=" + searchKeyword);
-        // Requests request = new Requests(domain);
+//         TextView tv_result = (TextView) findViewById(R.id.textView1);
+//         TextView et_domain = (TextView) findViewById(R.id.editText_domain);
+//         TextView et_searchText = (TextView)
+//         findViewById(R.id.editText_SearchText);
+//        
+//         domain = et_domain.getText().toString();
+//         searchKeyword = et_searchText.getText().toString();
+//        
+//         Log.d("Info", "domain=" + domain + " text=" + searchKeyword);
+//         Requests request = new Requests(domain);
 
 		// Test wiki search implementation
 		// SearchResults sr = request.requestSearch("xwiki",searchKeyword);
@@ -155,9 +155,10 @@ public class Main extends Activity {
 		// Log.d("Info","worked");
 
 		// Test page attachment implementation by attachment name
-		// String s=request.requestPageAttachment("xwiki", "Blog",
-		// "This is test 2","snapshot2.png");
-		// Log.d("Info","worked");
+//         request.setAuthentication("Admin", "admin");
+//		 String s=request.requestPageAttachment("xwiki", "Blog",
+//		 "test","device.png");
+//		 Log.d("Info","worked");
 
 		// Test page attachments in version implementation by attachment name
 		// Attachments as=request.requestPageAttachmentsInHistory("xwiki",
@@ -222,5 +223,12 @@ public class Main extends Activity {
 		// Test for authentication
 		// HttpConnector hc=new HttpConnector();
 		// Log.d("Reply", String.valueOf(hc.checkLogin("chamika", "chamikaya", domain)));
+         
+         //Test for adding page comment
+//         request.setAuthentication("Admin","admin");
+//         String s =request.addPageComment("xwiki", "Blog", "test" , "This is android comment" );
+//         Log.d("Comment add", "result= " + s );
+         
+         
 	}
 }

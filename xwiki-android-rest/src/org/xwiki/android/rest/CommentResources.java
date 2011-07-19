@@ -73,6 +73,19 @@ public class CommentResources extends HttpConnector
         return comments;
     }
     
+    public String addPageComment(String comment)
+    {
+        String Uri =
+            "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
+                + "/comments" + JSON_URL_SUFFIX ;
+
+        Comment commentObject = new Comment();
+        commentObject.setText(comment);
+       
+        return super.postRequest(Uri, encodeComment(commentObject));
+    }
+    
+    
  // decode json content to Page element
     private Comment decodeComment(String content)
     {
@@ -82,4 +95,13 @@ public class CommentResources extends HttpConnector
         comment = gson.fromJson(content, Comment.class);
         return comment;
     }
+    
+ // decode json content to Page element
+    private String encodeComment(Comment comment)
+    {
+        Gson gson = new Gson();
+        return gson.toJson(comment);
+    }
+    
+    
 }

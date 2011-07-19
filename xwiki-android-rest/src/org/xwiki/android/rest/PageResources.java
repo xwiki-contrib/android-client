@@ -57,6 +57,18 @@ public class PageResources extends HttpConnector
 
         return decodePage(super.getResponse(Uri));
     }
+    
+    // add or modify page 
+    public String addPage(Page page)
+    {
+        String Uri =
+            "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + page.getName()
+                + JSON_URL_SUFFIX;
+
+        String content = page.toString();
+        
+        return super.putRequest(Uri, content);
+    }
 
     // Delete page
     public String deletePage(String pageName)
@@ -101,6 +113,18 @@ public class PageResources extends HttpConnector
                 + "/translations/" + language + JSON_URL_SUFFIX;
 
         return decodePage(super.getResponse(Uri));
+    }
+    
+    // add page translation
+    public String addPageTranslation(Page page, String language)
+    {
+        String Uri =
+            "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + page
+                + "/translations/" + language + JSON_URL_SUFFIX;
+        
+        String content = page.toString();
+
+        return super.putRequest(Uri, content);
     }
     
     // Delete page translation

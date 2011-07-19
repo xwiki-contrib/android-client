@@ -40,6 +40,18 @@ public class ObjectResources extends HttpConnector
     }
 
     // Add POST method
+    public String addObject(Object object)
+    {
+        String Uri =
+            "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
+                + "/objects" + JSON_URL_SUFFIX;
+
+        // For generating xml
+        String content = object.toString();
+
+        return super.postRequest(Uri, content);
+
+    }
 
     public Objects getObjectsInClassname(String objectClassname)
     {
@@ -63,8 +75,20 @@ public class ObjectResources extends HttpConnector
     }
 
     // Add PUT method
-    
-    //Delete object
+    public String updateObject(String objectClassname, String objectNumber, Object object)
+    {
+        String Uri =
+            "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
+                + "/objects/" + objectClassname + "/" + objectNumber + JSON_URL_SUFFIX;
+
+        // For generating xml
+        String content = object.toString();
+
+        return super.putRequest(Uri, content);
+
+    }
+
+    // Delete object
     public String deleteObject(String objectClassname, String objectNumber)
     {
         String Uri =
@@ -84,6 +108,19 @@ public class ObjectResources extends HttpConnector
         return decodeProperties(super.getResponse(Uri));
 
     }
+    
+    //add property
+    public String addObjectProperty(String objectClassname, String objectNumber, Property property)
+    {
+        String Uri =
+            "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
+                + "/objects/" + objectClassname + "/" + objectNumber + "/properties" + JSON_URL_SUFFIX;
+
+        String content= property.toString();
+        
+        return super.putRequest(Uri, content);
+
+    }
 
     // wikis/{wikiName}/spaces/{spaceName}/pages/{pageName}/objects/{className}/{objectNumber}/properties/{propertyName}
     public Property getObjectProperty(String objectClassname, String objectNumber, String propertyName)
@@ -95,7 +132,8 @@ public class ObjectResources extends HttpConnector
         return decodeProperty(super.getResponse(Uri));
 
     }
-    //Add PUT method
+
+    // Add PUT method
 
     // decode json content to Objects element
     private Objects decodeObjects(String content)
@@ -126,7 +164,7 @@ public class ObjectResources extends HttpConnector
         properties = gson.fromJson(content, Properties.class);
         return properties;
     }
-    
+
     // decode json content to Properties element
     private Property decodeProperty(String content)
     {

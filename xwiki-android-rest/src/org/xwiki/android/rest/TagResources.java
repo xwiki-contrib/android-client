@@ -1,5 +1,6 @@
 package org.xwiki.android.rest;
 
+import org.xwiki.android.resources.Tag;
 import org.xwiki.android.resources.Tags;
 
 import com.google.gson.Gson;
@@ -55,8 +56,29 @@ public class TagResources extends HttpConnector
 
         return decodeTags(super.getResponse(Uri));
     }
-    
- // decode json content to Tags element
+
+    public String addTag(Tag tag)
+    {
+
+        String Uri;
+
+        if (tagType == 0) {
+            return "cannot add tags to wiki";
+
+        } else if (tagType == 1) {
+            Uri =
+                "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
+                    + "/tags" + JSON_URL_SUFFIX;
+
+            String content = tag.toString();
+            return super.putRequest(Uri, content);
+        } else {
+            return null;
+        }
+
+    }
+
+    // decode json content to Tags element
     private Tags decodeTags(String content)
     {
         Gson gson = new Gson();
