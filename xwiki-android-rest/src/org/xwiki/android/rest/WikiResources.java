@@ -1,13 +1,14 @@
 package org.xwiki.android.rest;
 
+import org.simpleframework.xml.Serializer;
+import org.simpleframework.xml.core.Persister;
+import org.xwiki.android.resources.Tags;
 import org.xwiki.android.resources.Wikis;
-
-import com.google.gson.Gson;
 
 public class WikiResources extends HttpConnector
 {
 
-    private final String WIKI_URL = "/xwiki/rest/wikis?media=json";
+    private final String WIKI_URL = "/xwiki/rest/wikis";
 
     private String URLprefix;
 
@@ -21,16 +22,23 @@ public class WikiResources extends HttpConnector
 
         String Uri = "http://" + URLprefix + WIKI_URL;
 
-        return decode(super.getResponse(Uri));
+        return buildWikis(super.getResponse(Uri));
     }
 
-    // decode json content to Wikis
-    private Wikis decode(String content)
+    // decode xml content to Wikis element
+    private Wikis buildWikis(String content)
     {
-        Gson gson = new Gson();
-
         Wikis wikis = new Wikis();
-        wikis = gson.fromJson(content, Wikis.class);
+
+        Serializer serializer = new Persister();
+
+        try {
+            wikis = serializer.read(Wikis.class, content);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
         return wikis;
     }
 }

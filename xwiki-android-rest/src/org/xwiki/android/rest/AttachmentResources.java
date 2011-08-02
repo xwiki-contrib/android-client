@@ -1,15 +1,16 @@
 package org.xwiki.android.rest;
 
-import org.xwiki.android.resources.Attachments;
+import java.io.InputStream;
+import java.io.StringWriter;
 
-import com.google.gson.Gson;
+import org.simpleframework.xml.Serializer;
+import org.simpleframework.xml.core.Persister;
+import org.xwiki.android.resources.Attachments;
 
 public class AttachmentResources extends HttpConnector
 {
 
     private final String PAGE_URL_PREFIX = "/xwiki/rest/wikis/";
-
-    private final String JSON_URL_SUFFIX = "?media=json";
 
     private String URLprefix;
 
@@ -18,7 +19,7 @@ public class AttachmentResources extends HttpConnector
     private String spaceName;
 
     private String pageName;
-    
+
     public AttachmentResources(String URLprefix, String wikiName, String spaceName, String pageName)
     {
         this.URLprefix = URLprefix;
@@ -31,19 +32,29 @@ public class AttachmentResources extends HttpConnector
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
-                + "/attachments" + JSON_URL_SUFFIX;
+                + "/attachments";
 
-        return decodeAttachments(super.getResponse(Uri));
+        return buildAttachments(super.getResponse(Uri));
     }
 
-    // should return attachment bytes
-    public String getPageAttachment(String attachmentName)
+    // should return attachment bytes [ok]
+    public InputStream getPageAttachment(String attachmentName)
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
-                + "/attachments/" + attachmentName + JSON_URL_SUFFIX;
+                + "/attachments/" + attachmentName;
 
-        return super.getResponse(Uri);
+        return super.getResponseAttachment(Uri);
+    }
+
+    // add Attachment
+    public String putPageAttachment(String filePath, String attachmentName)
+    {
+        String Uri =
+            "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
+                + "/attachments/" + attachmentName;
+
+        return super.putRaw(Uri, filePath + attachmentName);
     }
 
     // get attachments of page history
@@ -51,19 +62,19 @@ public class AttachmentResources extends HttpConnector
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
-                + "/history/" + version + "/attachments" + JSON_URL_SUFFIX;
+                + "/history/" + version + "/attachments";
 
-        return decodeAttachments(super.getResponse(Uri));
+        return buildAttachments(super.getResponse(Uri));
     }
 
     // get Attachment in specific page version
-    public String getPageAttachmentsInHistory(String version, String attachmentName)
+    public InputStream getPageAttachmentsInHistory(String version, String attachmentName)
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
-                + "/history/" + version + "/attachments/" + attachmentName + JSON_URL_SUFFIX;
+                + "/history/" + version + "/attachments/" + attachmentName;
 
-        return super.getResponse(Uri);
+        return super.getResponseAttachment(Uri);
     }
 
     // get attachments history of a attachment
@@ -71,39 +82,63 @@ public class AttachmentResources extends HttpConnector
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
-                + "/attachments/" + attachmentName + "/history" + JSON_URL_SUFFIX;
+                + "/attachments/" + attachmentName + "/history";
 
-        return decodeAttachments(super.getResponse(Uri));
+        return buildAttachments(super.getResponse(Uri));
     }
 
-    //get attachment of a specific attachment history
-    public String getPageAttachmentsInAttachmentHistory(String attachmentName, String attachmentVersion)
+    // get attachment of a specific attachment history
+    public InputStream getPageAttachmentsInAttachmentHistory(String attachmentName, String attachmentVersion)
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
-                + "/attachments/" + attachmentName + "/history/" + attachmentVersion + JSON_URL_SUFFIX;
+                + "/attachments/" + attachmentName + "/history/" + attachmentVersion;
 
-        return super.getResponse(Uri);
+        return super.getResponseAttachment(Uri);
     }
-    
+
     // delete specific attachment
     public String deletePageAttachment(String attachmentName)
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
-                + "/attachments/" + attachmentName + JSON_URL_SUFFIX;
+                + "/attachments/" + attachmentName;
 
         return super.deleteRequest(Uri);
     }
 
-    // decode json content to Wikis
-    private Attachments decodeAttachments(String content)
+    // decode xml content to Comments element
+    private Attachments buildAttachments(String content)
     {
-        Gson gson = new Gson();
-
         Attachments attachments = new Attachments();
-        attachments = gson.fromJson(content, Attachments.class);
+
+        Serializer serializer = new Persister();
+
+        try {
+            attachments = serializer.read(Attachments.class, content);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
         return attachments;
+    }
+
+    // build xml from Comments object
+    private String buildXmlAttachments(Attachments attachments)
+    {
+        Serializer serializer = new Persister();
+
+        StringWriter result = new StringWriter();
+
+        try {
+            serializer.write(attachments, result);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return result.toString();
     }
 
 }

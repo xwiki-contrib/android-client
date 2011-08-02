@@ -1,14 +1,17 @@
 package org.xwiki.android.rest;
 
+import java.io.StringWriter;
+
+import org.simpleframework.xml.Serializer;
+import org.simpleframework.xml.core.Persister;
+import org.xwiki.android.resources.Comment;
 import org.xwiki.android.resources.History;
-import com.google.gson.Gson;
+
 
 public class HistoryResources extends HttpConnector
 {
 
     private final String PAGE_URL_PREFIX = "/xwiki/rest/wikis/";
-
-    private final String JSON_URL_SUFFIX = "?media=json";
 
     private String URLprefix;
 
@@ -30,28 +33,52 @@ public class HistoryResources extends HttpConnector
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
-                + "/history" + JSON_URL_SUFFIX;
+                + "/history";
 
-        return decodeHistory(super.getResponse(Uri));
+        return buildHistory(super.getResponse(Uri));
     }
 
     public History getPageHistory(String language)
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
-                + "/translations/" + language + "/history" + JSON_URL_SUFFIX;
+                + "/translations/" + language + "/history";
 
-        return decodeHistory(super.getResponse(Uri));
+        return buildHistory(super.getResponse(Uri));
     }
 
-    // decode json content to History element
-    private History decodeHistory(String content)
+    // decode xml content to History element
+    private History buildHistory(String content)
     {
-        Gson gson = new Gson();
-
         History history = new History();
-        history = gson.fromJson(content, History.class);
+
+        Serializer serializer = new Persister();
+
+        try {
+            history = serializer.read(History.class, content);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
         return history;
+    }
+
+    // build xml from History object
+    private String buildXmlHistory(History history)
+    {
+        Serializer serializer = new Persister();
+
+        StringWriter result = new StringWriter();
+
+        try {
+            serializer.write(history, result);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return result.toString();
     }
 
 }

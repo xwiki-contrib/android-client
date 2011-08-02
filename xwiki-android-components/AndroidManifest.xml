@@ -21,6 +21,8 @@
         <activity android:name=".objectnavigator.ObjectNavigatorActivity"></activity>
         <activity android:name=".login.LoginActivity"></activity>
         <activity android:name=".pageviewer.XWikiPageViewerActivity"></activity>
+        <activity android:name=".attachments.AttachmentActivity"></activity>
+        <activity android:name=".commenteditor.CommentEditorActivity"></activity>
 
     </application>
 </manifest>

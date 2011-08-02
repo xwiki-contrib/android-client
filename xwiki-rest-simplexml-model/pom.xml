@@ -31,17 +31,9 @@
 		<version>1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>xwiki-android-rest</artifactId>
-	<packaging>apklib</packaging>
-	<name>AndroidREST</name>
-
-	<dependencies>
-		<dependency>
-			<groupId>org.xwiki.android</groupId>
-			<artifactId>xwiki-rest-simplexml-model</artifactId>
-			<version>${project.version}</version> 
-		</dependency>
-	</dependencies>
+	<groupId>org.xwiki.android</groupId>
+	<artifactId>xwiki-rest-simplexml-model</artifactId>
+	<name>XWikiSimpleXmlModel</name>
 
 	<build>
 		<sourceDirectory>src</sourceDirectory>

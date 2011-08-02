@@ -1,21 +1,17 @@
 package org.xwiki.android.rest;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.xwiki.android.resources.Spaces;
-import com.google.gson.Gson;
+import java.io.StringWriter;
 
-import android.util.Log;
+import org.simpleframework.xml.Serializer;
+import org.simpleframework.xml.core.Persister;
+import org.xwiki.android.resources.Spaces;
 
 public class SpaceResources extends HttpConnector
 {
 
     private final String SPACE_URL_PREFIX = "/xwiki/rest/wikis/";
 
-    private final String SPACE_URL_SUFFIX = "/spaces?media=json";
-
-    private final String JSON_ARRAY_IDENTIFIER = "spaces";
+    private final String SPACE_URL_SUFFIX = "/spaces";
 
     private String URLprefix;
 
@@ -32,51 +28,41 @@ public class SpaceResources extends HttpConnector
 
         String Uri = "http://" + URLprefix + SPACE_URL_PREFIX + wikiName + SPACE_URL_SUFFIX;
 
-        return decodeSpaces(super.getResponse(Uri));
-    }
-
-    // Temporary method to decode JSON reply
-    public String decodeSpaceResponse(String response)
-    {
-
-        String wikiResultText = "";
-        try {
-            JSONObject jsonobject = new JSONObject(response);
-            JSONArray dataArray = jsonobject.getJSONArray(JSON_ARRAY_IDENTIFIER);
-
-            Log.d("JSON", "JSON array built");
-
-            Log.d("JSON", "Number of entrees in array: " + dataArray.length());
-
-            for (int i = 0; i < dataArray.length(); i++) {
-                if (!dataArray.isNull(i)) {
-                    JSONObject item = dataArray.getJSONObject(i);
-
-                    if (item.has("id")) {
-                        String id = item.getString("id");
-                        Log.d("JSON Array", "id= " + id);
-                        wikiResultText += ("\n" + id);
-                    }
-                }
-            }
-
-        } catch (JSONException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            Log.d("JSON", "Error in JSON object or Array");
-        }
-
-        return wikiResultText;
-
+        return buildSpaces(super.getResponse(Uri));
     }
     
-    // decode json content into Spaces
-    private Spaces decodeSpaces(String content)
+    // decode xml content to Spaces element
+    private Spaces buildSpaces(String content)
     {
-        Gson gson = new Gson();
-
         Spaces spaces = new Spaces();
-        spaces = gson.fromJson(content, Spaces.class);
+
+        Serializer serializer = new Persister();
+
+        try {
+            spaces = serializer.read(Spaces.class, content);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
         return spaces;
     }
+
+    // build xml from Spaces object
+    private String buildXmlSpaces(Spaces spaces)
+    {
+        Serializer serializer = new Persister();
+
+        StringWriter result = new StringWriter();
+
+        try {
+            serializer.write(spaces, result);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return result.toString();
+    }
+
 }

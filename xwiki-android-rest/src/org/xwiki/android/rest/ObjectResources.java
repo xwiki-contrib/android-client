@@ -1,17 +1,18 @@
 package org.xwiki.android.rest;
 
-import org.xwiki.android.resources.Objects;
+import java.io.StringWriter;
+
+import org.simpleframework.xml.Serializer;
+import org.simpleframework.xml.core.Persister;
 import org.xwiki.android.resources.Object;
+import org.xwiki.android.resources.Objects;
 import org.xwiki.android.resources.Properties;
 import org.xwiki.android.resources.Property;
 
-import com.google.gson.Gson;
 
 public class ObjectResources extends HttpConnector
 {
     private final String PAGE_URL_PREFIX = "/xwiki/rest/wikis/";
-
-    private final String JSON_URL_SUFFIX = "?media=json";
 
     private String URLprefix;
 
@@ -33,9 +34,9 @@ public class ObjectResources extends HttpConnector
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
-                + "/objects" + JSON_URL_SUFFIX;
+                + "/objects";
 
-        return decodeObjects(super.getResponse(Uri));
+        return buildObjects(super.getResponse(Uri));
 
     }
 
@@ -44,12 +45,9 @@ public class ObjectResources extends HttpConnector
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
-                + "/objects" + JSON_URL_SUFFIX;
+                + "/objects";
 
-        // For generating xml
-        String content = object.toString();
-
-        return super.postRequest(Uri, content);
+        return super.postRequest(Uri, buildXmlObject(object));
 
     }
 
@@ -57,9 +55,9 @@ public class ObjectResources extends HttpConnector
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
-                + "/objects/" + objectClassname + JSON_URL_SUFFIX;
+                + "/objects/" + objectClassname;
 
-        return decodeObjects(super.getResponse(Uri));
+        return buildObjects(super.getResponse(Uri));
 
     }
 
@@ -68,9 +66,9 @@ public class ObjectResources extends HttpConnector
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
-                + "/objects/" + objectClassname + "/" + objectNumber + JSON_URL_SUFFIX;
+                + "/objects/" + objectClassname + "/" + objectNumber;
 
-        return decodeObject(super.getResponse(Uri));
+        return buildObject(super.getResponse(Uri));
 
     }
 
@@ -79,12 +77,9 @@ public class ObjectResources extends HttpConnector
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
-                + "/objects/" + objectClassname + "/" + objectNumber + JSON_URL_SUFFIX;
+                + "/objects/" + objectClassname + "/" + objectNumber;
 
-        // For generating xml
-        String content = object.toString();
-
-        return super.putRequest(Uri, content);
+        return super.putRequest(Uri, buildXmlObject(object));
 
     }
 
@@ -93,7 +88,7 @@ public class ObjectResources extends HttpConnector
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
-                + "/objects/" + objectClassname + "/" + objectNumber + JSON_URL_SUFFIX;
+                + "/objects/" + objectClassname + "/" + objectNumber;
 
         return super.deleteRequest(Uri);
 
@@ -103,23 +98,20 @@ public class ObjectResources extends HttpConnector
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
-                + "/objects/" + objectClassname + "/" + objectNumber + "/properties" + JSON_URL_SUFFIX;
+                + "/objects/" + objectClassname + "/" + objectNumber + "/properties";
 
-        return decodeProperties(super.getResponse(Uri));
+        return buildProperties(super.getResponse(Uri));
 
     }
-    
-    //add property
+
+    // add property
     public String addObjectProperty(String objectClassname, String objectNumber, Property property)
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
-                + "/objects/" + objectClassname + "/" + objectNumber + "/properties" + JSON_URL_SUFFIX;
+                + "/objects/" + objectClassname + "/" + objectNumber + "/properties";
 
-        String content= property.toString();
-        
-        return super.putRequest(Uri, content);
-
+        return super.putRequest(Uri, buildXmlProperty(property));
     }
 
     // wikis/{wikiName}/spaces/{spaceName}/pages/{pageName}/objects/{className}/{objectNumber}/properties/{propertyName}
@@ -127,51 +119,129 @@ public class ObjectResources extends HttpConnector
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
-                + "/objects/" + objectClassname + "/" + objectNumber + "/properties/" + propertyName + JSON_URL_SUFFIX;
+                + "/objects/" + objectClassname + "/" + objectNumber + "/properties/" + propertyName;
 
-        return decodeProperty(super.getResponse(Uri));
+        return buildProperty(super.getResponse(Uri));
 
     }
 
-    // Add PUT method
 
-    // decode json content to Objects element
-    private Objects decodeObjects(String content)
+    // decode xml content to Objects element
+    private Objects buildObjects(String content)
     {
-        Gson gson = new Gson();
-
         Objects objects = new Objects();
-        objects = gson.fromJson(content, Objects.class);
+
+        Serializer serializer = new Persister();
+
+        try {
+            objects = serializer.read(Objects.class, content);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
         return objects;
     }
 
-    // decode json content to Object element
-    private Object decodeObject(String content)
+    // build xml from Objects object
+    private String buildXmlObjects(Objects objects)
     {
-        Gson gson = new Gson();
+        Serializer serializer = new Persister();
 
+        StringWriter result = new StringWriter();
+
+        try {
+            serializer.write(objects, result);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return result.toString();
+    }
+
+    // build xml from Objects object
+    private String buildXmlObject(Object object)
+    {
+        Serializer serializer = new Persister();
+
+        StringWriter result = new StringWriter();
+
+        try {
+            serializer.write(object, result);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return result.toString();
+    }
+
+    // decode xml content to Object element
+    private Object buildObject(String content)
+    {
         Object object = new Object();
-        object = gson.fromJson(content, Object.class);
+
+        Serializer serializer = new Persister();
+
+        try {
+            object = serializer.read(Object.class, content);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
         return object;
     }
 
-    // decode json content to Properties element
-    private Properties decodeProperties(String content)
+    // decode xml content to Properties elements
+    private Properties buildProperties(String content)
     {
-        Gson gson = new Gson();
-
         Properties properties = new Properties();
-        properties = gson.fromJson(content, Properties.class);
+
+        Serializer serializer = new Persister();
+
+        try {
+            properties = serializer.read(Properties.class, content);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
         return properties;
     }
 
-    // decode json content to Properties element
-    private Property decodeProperty(String content)
+    // build xml from Property object
+    private String buildXmlProperty(Property property)
     {
-        Gson gson = new Gson();
+        Serializer serializer = new Persister();
 
+        StringWriter result = new StringWriter();
+
+        try {
+            serializer.write(property, result);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return result.toString();
+    }
+
+    // decode xml content to Property elements
+    private Property buildProperty(String content)
+    {
         Property property = new Property();
-        property = gson.fromJson(content, Property.class);
+
+        Serializer serializer = new Persister();
+
+        try {
+            property = serializer.read(Property.class, content);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
         return property;
     }
 }

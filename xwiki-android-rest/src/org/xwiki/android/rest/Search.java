@@ -1,15 +1,16 @@
 package org.xwiki.android.rest;
 
+import org.simpleframework.xml.Serializer;
+import org.simpleframework.xml.core.Persister;
 import org.xwiki.android.resources.SearchResults;
 
-import com.google.gson.Gson;
 
 public class Search extends HttpConnector
 {
 
     private final String SEARCH_REQUEST_PREFIX = "/xwiki/rest/wikis/";
 
-    private final String WIKI_SEARCH_REQUEST_SUFFIX = "/search?scope=name&media=json&q=";
+    private final String WIKI_SEARCH_REQUEST_SUFFIX = "/search?scope=name&media=xml&q=";
 
     private String URLprefix;
 
@@ -24,23 +25,30 @@ public class Search extends HttpConnector
             "http://" + URLprefix + SEARCH_REQUEST_PREFIX + wikiName + "/spaces/" + spaceName
                 + WIKI_SEARCH_REQUEST_SUFFIX + keyword;
 
-        return decode(super.getResponse(Uri));
+        return buildSearchResults(super.getResponse(Uri));
     }
 
     public SearchResults doWikiSearch(String wikiName, String keyword)
     {
         String Uri = "http://" + URLprefix + SEARCH_REQUEST_PREFIX + wikiName + WIKI_SEARCH_REQUEST_SUFFIX + keyword;
 
-        return decode(super.getResponse(Uri));
+        return buildSearchResults(super.getResponse(Uri));
     }
 
-    // decode json content into SearchResults
-    private SearchResults decode(String content)
+ // decode xml content to SearchResuts element
+    private SearchResults buildSearchResults(String content)
     {
-        Gson gson = new Gson();
-
         SearchResults searchresults = new SearchResults();
-        searchresults = gson.fromJson(content, SearchResults.class);
+
+        Serializer serializer = new Persister();
+
+        try {
+            searchresults = serializer.read(SearchResults.class, content);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
         return searchresults;
     }
 }

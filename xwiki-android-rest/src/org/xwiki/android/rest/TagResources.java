@@ -1,16 +1,16 @@
 package org.xwiki.android.rest;
 
+import java.io.StringWriter;
+
+import org.simpleframework.xml.Serializer;
+import org.simpleframework.xml.core.Persister;
 import org.xwiki.android.resources.Tag;
 import org.xwiki.android.resources.Tags;
-
-import com.google.gson.Gson;
 
 public class TagResources extends HttpConnector
 {
 
     private final String PAGE_URL_PREFIX = "/xwiki/rest/wikis/";
-
-    private final String JSON_URL_SUFFIX = "?media=json";
 
     private String URLprefix;
 
@@ -45,16 +45,16 @@ public class TagResources extends HttpConnector
         String Uri;
 
         if (tagType == 0) {
-            Uri = "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/tags/" + JSON_URL_SUFFIX;
+            Uri = "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/tags/";
         } else if (tagType == 1) {
             Uri =
                 "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
-                    + "/tags" + JSON_URL_SUFFIX;
+                    + "/tags";
         } else {
             Uri = "";
         }
 
-        return decodeTags(super.getResponse(Uri));
+        return buildTags(super.getResponse(Uri));
     }
 
     public String addTag(Tag tag)
@@ -63,28 +63,66 @@ public class TagResources extends HttpConnector
         String Uri;
 
         if (tagType == 0) {
-            return "cannot add tags to wiki";
+
+            Uri = "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/tags";
+
+            Tags temp_tags;
+
+            temp_tags = buildTags(super.getResponse(Uri));
+
+            temp_tags.getTags().add(tag);
+
+            return super.putRequest(Uri, buildXml(temp_tags));
 
         } else if (tagType == 1) {
             Uri =
                 "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
-                    + "/tags" + JSON_URL_SUFFIX;
+                    + "/tags";
 
-            String content = tag.toString();
-            return super.putRequest(Uri, content);
+            Tags temp_tags;
+
+            temp_tags = buildTags(super.getResponse(Uri));
+
+            temp_tags.getTags().add(tag);
+
+            return super.putRequest(Uri, buildXml(temp_tags));
         } else {
             return null;
         }
 
     }
 
-    // decode json content to Tags element
-    private Tags decodeTags(String content)
+    // decode xml content to Tags element
+    private Tags buildTags(String content)
     {
-        Gson gson = new Gson();
-
         Tags tags = new Tags();
-        tags = gson.fromJson(content, Tags.class);
+
+        Serializer serializer = new Persister();
+
+        try {
+            tags = serializer.read(Tags.class, content);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
         return tags;
+    }
+
+    // build xml from Tags object
+    private String buildXml(Tags tags)
+    {
+        Serializer serializer = new Persister();
+
+        StringWriter result = new StringWriter();
+
+        try {
+            serializer.write(tags, result);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return result.toString();
     }
 }

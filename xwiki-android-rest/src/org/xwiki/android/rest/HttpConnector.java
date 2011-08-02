@@ -1,7 +1,9 @@
 package org.xwiki.android.rest;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -23,6 +25,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.protocol.ClientContext;
+import org.apache.http.entity.FileEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -301,7 +304,6 @@ public class HttpConnector
         return responseCode;
     }
 
-    
     // Post request
     public String postRequest(String Uri, String content)
     {
@@ -349,10 +351,12 @@ public class HttpConnector
         try {
             Log.d("Post content", "content=" + content);
             StringEntity se = new StringEntity(content, "UTF-8");
-            se.setContentType("application/x-www-form-urlencoded");
-            //se.setContentType("text/plain");
+           
+            se.setContentType("application/xml");
+            // se.setContentType("text/plain");
             request.setEntity(se);
-            //request.setHeader("Content-Type","application/xml;charset=UTF-8");
+            request.setHeader("Content-Type","application/xml;charset=UTF-8");
+
 
             response = client.execute(request);
             Log.d("Response status", response.getStatusLine().toString());
@@ -368,9 +372,8 @@ public class HttpConnector
 
         return "error";
     }
-    
-    //Put request
- // Post request
+
+    // Put request
     public String putRequest(String Uri, String content)
     {
         DefaultHttpClient client = new DefaultHttpClient();
@@ -417,10 +420,11 @@ public class HttpConnector
         try {
             Log.d("Put content", "content=" + content);
             StringEntity se = new StringEntity(content, "UTF-8");
+            
             se.setContentType("application/xml");
-            //se.setContentType("text/plain");
+            // se.setContentType("text/plain");
             request.setEntity(se);
-            //request.setHeader("Content-Type","application/xml;charset=UTF-8");
+            request.setHeader("Content-Type","application/xml;charset=UTF-8");
 
             response = client.execute(request);
             Log.d("Response status", response.getStatusLine().toString());
@@ -436,4 +440,136 @@ public class HttpConnector
 
         return "error";
     }
+
+    public InputStream getResponseAttachment(String Uri)
+    {
+        BufferedReader in = null;
+        DefaultHttpClient client = new DefaultHttpClient();
+        HttpGet request = new HttpGet();
+        String responseText = new String();
+        HttpResponse response;
+
+        try {
+            requestUri = new URI(Uri);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+
+        HttpRequestInterceptor preemptiveAuth = new HttpRequestInterceptor()
+        {
+
+            @Override
+            public void process(HttpRequest request, HttpContext context) throws HttpException, IOException
+            {
+                AuthState authState = (AuthState) context.getAttribute(ClientContext.TARGET_AUTH_STATE);
+                CredentialsProvider credsProvider =
+                    (CredentialsProvider) context.getAttribute(ClientContext.CREDS_PROVIDER);
+                HttpHost targetHost = (HttpHost) context.getAttribute(ExecutionContext.HTTP_TARGET_HOST);
+
+                if (authState.getAuthScheme() == null) {
+                    AuthScope authScope = new AuthScope(targetHost.getHostName(), targetHost.getPort());
+                    Credentials creds = credsProvider.getCredentials(authScope);
+                    if (creds != null) {
+                        authState.setAuthScheme(new BasicScheme());
+                        authState.setCredentials(creds);
+                    }
+                }
+            }
+
+        };
+
+        client.addRequestInterceptor(preemptiveAuth, 0);
+
+        Credentials defaultcreds = new UsernamePasswordCredentials(username, password);
+        client.getCredentialsProvider().setCredentials(new AuthScope(null, -1, AuthScope.ANY_REALM), defaultcreds);
+
+        request.setURI(requestUri);
+        Log.d("Request URL", Uri);
+        try {
+
+            response = client.execute(request);
+            Log.d("Response status", response.getStatusLine().toString());
+
+            //in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+            
+            return response.getEntity().getContent();
+        } catch (ClientProtocolException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+    
+    public String putRaw(String Uri, String filePath)
+    {
+        DefaultHttpClient client = new DefaultHttpClient();
+        HttpPut request = new HttpPut();
+        HttpResponse response;
+
+        try {
+            requestUri = new URI(Uri);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+
+        HttpRequestInterceptor preemptiveAuth = new HttpRequestInterceptor()
+        {
+
+            @Override
+            public void process(HttpRequest request, HttpContext context) throws HttpException, IOException
+            {
+                AuthState authState = (AuthState) context.getAttribute(ClientContext.TARGET_AUTH_STATE);
+                CredentialsProvider credsProvider =
+                    (CredentialsProvider) context.getAttribute(ClientContext.CREDS_PROVIDER);
+                HttpHost targetHost = (HttpHost) context.getAttribute(ExecutionContext.HTTP_TARGET_HOST);
+
+                if (authState.getAuthScheme() == null) {
+                    AuthScope authScope = new AuthScope(targetHost.getHostName(), targetHost.getPort());
+                    Credentials creds = credsProvider.getCredentials(authScope);
+                    if (creds != null) {
+                        authState.setAuthScheme(new BasicScheme());
+                        authState.setCredentials(creds);
+                    }
+                }
+            }
+
+        };
+
+        client.addRequestInterceptor(preemptiveAuth, 0);
+
+        Credentials defaultcreds = new UsernamePasswordCredentials(username, password);
+        client.getCredentialsProvider().setCredentials(new AuthScope(null, -1, AuthScope.ANY_REALM), defaultcreds);
+
+        request.setURI(requestUri);
+        Log.d("Request URL", Uri);
+
+        try {
+            
+            File file = new File(filePath);
+            FileEntity fe= new FileEntity(file, "/");
+            
+            
+            request.setEntity(fe);
+            // request.setHeader("Content-Type","application/xml;charset=UTF-8");
+
+            response = client.execute(request);
+            Log.d("Response status", response.getStatusLine().toString());
+            return response.getStatusLine().toString();
+
+        } catch (ClientProtocolException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return "error";
+    }
+
+
 }

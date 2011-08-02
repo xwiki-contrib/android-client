@@ -1,31 +1,18 @@
 package org.xwiki.android.rest;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.TimeZone;
+import java.io.StringWriter;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.simpleframework.xml.Serializer;
+import org.simpleframework.xml.core.Persister;
 import org.xwiki.android.resources.Page;
 import org.xwiki.android.resources.Pages;
-
-import android.util.Log;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 public class PageResources extends HttpConnector
 {
 
     private final String PAGE_URL_PREFIX = "/xwiki/rest/wikis/";
 
-    private final String PAGE_URL_SUFFIX = "/pages?media=json";
-
-    private final String JSON_URL_SUFFIX = "?media=json";
-
-    private final String JSON_ARRAY_IDENTIFIER = "pageSummaries";
+    private final String PAGE_URL_SUFFIX = "/pages";
 
     private String URLprefix;
 
@@ -45,37 +32,31 @@ public class PageResources extends HttpConnector
     {
         String Uri = "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + PAGE_URL_SUFFIX;
 
-        return decodePages(super.getResponse(Uri));
+        return buildPages(super.getResponse(Uri));
     }
 
     // get page [ok]
     public Page getPage(String pageName)
     {
-        String Uri =
-            "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
-                + JSON_URL_SUFFIX;
+        String Uri = "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName;
 
-        return decodePage(super.getResponse(Uri));
+        return buildPage(super.getResponse(Uri));
     }
-    
-    // add or modify page 
+
+    // add or modify page
     public String addPage(Page page)
     {
         String Uri =
-            "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + page.getName()
-                + JSON_URL_SUFFIX;
+            "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + page.getName();
 
-        String content = page.toString();
         
-        return super.putRequest(Uri, content);
+        return super.putRequest(Uri, buildXmlPage(page));
     }
 
     // Delete page
     public String deletePage(String pageName)
     {
-        String Uri =
-            "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
-                + JSON_URL_SUFFIX;
+        String Uri = "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName;
 
         if (super.getIsSecured()) {
             return super.deleteRequest(Uri);
@@ -90,9 +71,9 @@ public class PageResources extends HttpConnector
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
-                + "/history/" + version + JSON_URL_SUFFIX;
+                + "/history/" + version;
 
-        return decodePage(super.getResponse(Uri));
+        return buildPage(super.getResponse(Uri));
     }
 
     // Get page children
@@ -100,9 +81,9 @@ public class PageResources extends HttpConnector
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
-                + "/children" + JSON_URL_SUFFIX;
+                + "/children";
 
-        return decodePages(super.getResponse(Uri));
+        return buildPages(super.getResponse(Uri));
     }
 
     // Get page translation
@@ -110,29 +91,29 @@ public class PageResources extends HttpConnector
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
-                + "/translations/" + language + JSON_URL_SUFFIX;
+                + "/translations/" + language;
 
-        return decodePage(super.getResponse(Uri));
+        return buildPage(super.getResponse(Uri));
     }
-    
+
     // add page translation
     public String addPageTranslation(Page page, String language)
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + page
-                + "/translations/" + language + JSON_URL_SUFFIX;
-        
+                + "/translations/" + language;
+
         String content = page.toString();
 
         return super.putRequest(Uri, content);
     }
-    
+
     // Delete page translation
     public String deletePageTranslation(String pageName, String language)
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
-                + "/translations/" + language + JSON_URL_SUFFIX;
+                + "/translations/" + language;
 
         return super.deleteRequest(Uri);
     }
@@ -142,85 +123,76 @@ public class PageResources extends HttpConnector
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
-                + "/translations/" + language + "/history/" + version + JSON_URL_SUFFIX;
+                + "/translations/" + language + "/history/" + version;
 
-        return decodePage(super.getResponse(Uri));
+        return buildPage(super.getResponse(Uri));
     }
 
-    // decode json content to Pages element
-    private Pages decodePages(String content)
+    // decode xml content to Pages element
+    private Pages buildPages(String content)
     {
-        Gson gson = new Gson();
-
         Pages pages = new Pages();
-        pages = gson.fromJson(content, Pages.class);
+
+        Serializer serializer = new Persister();
+
+        try {
+            pages = serializer.read(Pages.class, content);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
         return pages;
     }
 
-    // decode json content to Page element
-    private Page decodePage(String content)
+    // build xml from Comment object
+    private String buildXmlPages(Pages pages)
     {
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        // gsonBuilder.registerTypeAdapter(sun.util.calendar.ZoneInfo.class, new TimeZoneDeserializer());
-        // gsonBuilder.registerTypeAdapter(ZoneInfo.class, new TimeZoneDeserializer());
-        // Gson gson = gsonBuilder.create();
+        Serializer serializer = new Persister();
 
-        Gson gson = new Gson();
-        Page page = new Page();
-        page = gson.fromJson(content, Page.class);
-
-        // Manually deserialize Calendar
+        StringWriter result = new StringWriter();
 
         try {
-            JSONObject jsonobject = new JSONObject(content);
-            String created = jsonobject.getString("created");
-            page.created1 = convertToCalendar(created);
-            String modified = jsonobject.getString("modified");
-            page.modified1 = convertToCalendar(modified);
+            serializer.write(pages, result);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
-        } catch (JSONException e) {
+        return result.toString();
+    }
+
+    // decode xml content to Comment element
+    private Page buildPage(String content)
+    {
+        Page page = new Page();
+
+        Serializer serializer = new Persister();
+
+        try {
+            page = serializer.read(Page.class, content);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
         return page;
     }
 
-    private GregorianCalendar convertToCalendar(String jsonText)
+    // build xml from Comment object
+    private String buildXmlPage(Page page)
     {
+        Serializer serializer = new Persister();
 
-        GregorianCalendar greg = new GregorianCalendar();
-        ArrayList<String> allData = new ArrayList<String>();
+        StringWriter result = new StringWriter();
 
-        String first = jsonText.substring(28, 98);
-        int x = jsonText.indexOf("]");
-        first += jsonText.substring(x + 1, jsonText.length() - 1);
-        String[] firstdata = first.split(",");
-        for (int i = 0; i < firstdata.length; i++) {
-            String[] seperate = firstdata[i].split("=");
-            allData.add(seperate[1]);
+        try {
+            serializer.write(page, result);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
-        // Get ZoneInfo
-        int w = jsonText.indexOf("id");
-        String second = jsonText.substring(w, x);
-        String[] seconddata = second.split(",");
-        for (int i = 0; i < seconddata.length; i++) {
-            String[] seperate = seconddata[i].split("=");
-            allData.add(seperate[1]);
-        }
-        Log.d("allData", allData.toString());
-
-        // ZoneInfo zi;
-        // Log.d("zi info", allData.get(23) + " and " + allData.get(24));
-        // zi= new ZoneInfo();
-        // zi.setID(allData.get(23));
-        // zi.setRawOffset(Integer.parseInt(allData.get(24)));
-        // zi = new ZoneInfo(allData.get(23), Integer.parseInt(allData.get(24)));
-        // greg.setTimeZone(zi);
-        greg.setTimeInMillis(Long.parseLong(allData.get(0)));
-        greg.setFirstDayOfWeek(Integer.parseInt(allData.get(4)));
-        greg.setMinimalDaysInFirstWeek(Integer.parseInt(allData.get(5)));
-        return greg;
+        return result.toString();
     }
 
 }

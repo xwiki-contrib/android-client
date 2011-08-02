@@ -1,5 +1,7 @@
 package org.xwiki.android.rest;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
@@ -15,6 +17,7 @@ import org.xwiki.android.resources.Properties;
 import org.xwiki.android.resources.Property;
 import org.xwiki.android.resources.SearchResults;
 import org.xwiki.android.resources.Spaces;
+import org.xwiki.android.resources.Tag;
 import org.xwiki.android.resources.Tags;
 import org.xwiki.android.resources.Translations;
 import org.xwiki.android.resources.Wikis;
@@ -149,6 +152,20 @@ public class Requests
         }
         return pagesresources.getPage(pageName);
     }
+    
+ // Method for adding page [complete but not working due to calendar]
+    public String addPage(String wikiName, String spaceName, String pageName, Page page)
+    {
+        wikiName = convertToUTF(wikiName);
+        spaceName = convertToUTF(spaceName);
+        pageName = convertToUTF(pageName);
+
+        PageResources pagesresources = new PageResources(URLprefix, wikiName, spaceName);
+        if (isAuthenticated) {
+            pagesresources.setAuthenticaion(username, password);
+        }
+        return pagesresources.addPage(page);
+    }
 
     // Method for deleting pages
     public String deletePage(String wikiName, String spaceName, String pageName)
@@ -237,6 +254,19 @@ public class Requests
         }
         return tagresources.getTags();
     }
+    
+    public String addPageTag(String wikiName, String spaceName, String pageName, Tag tag){
+        wikiName = convertToUTF(wikiName);
+        spaceName = convertToUTF(spaceName);
+        pageName = convertToUTF(pageName);
+
+        TagResources tagresources = new TagResources(URLprefix, wikiName, spaceName, pageName);
+        if (isAuthenticated) {
+            tagresources.setAuthenticaion(username, password);
+        }
+        return tagresources.addTag(tag);
+        
+    }
 
     // Method for getting wiki tags [complete]
     public Tags requestWikiTags(String wikiName)
@@ -267,7 +297,7 @@ public class Requests
 
     // Method for getting page comments [complete but not working due to
     // calendar]
-    public String addPageComment(String wikiName, String spaceName, String pageName, String comment)
+    public String addPageComment(String wikiName, String spaceName, String pageName, Comment comment)
     {
         wikiName = convertToUTF(wikiName);
         spaceName = convertToUTF(spaceName);
@@ -294,7 +324,7 @@ public class Requests
         if (isAuthenticated) {
             commentresources.setAuthenticaion(username, password);
         }
-        return commentresources.getPageComments(commentId);
+        return commentresources.getPageComment(commentId);
     }
 
     // Method for getting page comments with comment id [complete but not
@@ -345,7 +375,7 @@ public class Requests
 
     // Method for getting attachment by name in a page [should return attachment
     // bytes]
-    public String requestPageAttachment(String wikiName, String spaceName, String pageName, String attachmentName)
+    public InputStream requestPageAttachment(String wikiName, String spaceName, String pageName, String attachmentName)
     {
         wikiName = convertToUTF(wikiName);
         spaceName = convertToUTF(spaceName);
@@ -357,6 +387,21 @@ public class Requests
             attachmentresources.setAuthenticaion(username, password);
         }
         return attachmentresources.getPageAttachment(attachmentName);
+    }
+    
+    //Add attachment
+    public String addPageAttachment(String wikiName, String spaceName, String pageName, String filePath, String attachmentName)
+    {
+        wikiName = convertToUTF(wikiName);
+        spaceName = convertToUTF(spaceName);
+        pageName = convertToUTF(pageName);
+        attachmentName = convertToUTF(attachmentName);
+
+        AttachmentResources attachmentresources = new AttachmentResources(URLprefix, wikiName, spaceName, pageName);
+        if (isAuthenticated) {
+            attachmentresources.setAuthenticaion(username, password);
+        }
+        return attachmentresources.putPageAttachment(filePath, attachmentName);
     }
 
     // Delete page attachment by its' name
@@ -392,7 +437,7 @@ public class Requests
 
     // Method for getting attachment by name in a specific page version [should
     // return attachment bytes]
-    public String requestPageAttachmentsInHistory(String wikiName, String spaceName, String pageName,
+    public InputStream requestPageAttachmentsInHistory(String wikiName, String spaceName, String pageName,
         String pageVersion, String attachmentName)
     {
         wikiName = convertToUTF(wikiName);
@@ -426,7 +471,7 @@ public class Requests
 
     // Method for getting attachment by name in a specific attachment version
     // [should return attachment bytes]
-    public String requestPageAttachmentsInAttachmentHistory(String wikiName, String spaceName, String pageName,
+    public InputStream requestPageAttachmentsInAttachmentHistory(String wikiName, String spaceName, String pageName,
         String attachmentName, String attachmentVersion)
     {
         wikiName = convertToUTF(wikiName);
@@ -523,6 +568,20 @@ public class Requests
         return pageresources.getPageTranslation(pageName, language, version);
     }
 
+  //Method for adding Object to a page
+    public String addObject(String wikiName, String spaceName, String pageName, Object object)
+    {
+        wikiName = convertToUTF(wikiName);
+        spaceName = convertToUTF(spaceName);
+        pageName = convertToUTF(pageName);
+
+        ObjectResources objectresources = new ObjectResources(URLprefix, wikiName, spaceName, pageName);
+        if (isAuthenticated) {
+            objectresources.setAuthenticaion(username, password);
+        }
+        return objectresources.addObject(object);
+    }
+    
     // Method for getting all objects in a page
     public Objects requestAllObjects(String wikiName, String spaceName, String pageName)
     {

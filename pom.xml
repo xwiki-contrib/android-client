@@ -40,7 +40,7 @@
 		<xwiki.clirr.skip>true</xwiki.clirr.skip>
 	</properties>
 	<modules>
-		<module>xwiki-rest-gson-model</module>
+		<module>xwiki-rest-simplexml-model</module>
 		<module>xwiki-android-rest</module>
 		<module>xwiki-android-components</module>
 		<module>xwiki-android-client</module>
@@ -55,12 +55,13 @@
 		</dependency>
 		
 		<dependency>
-			<groupId>com.google.code.gson</groupId>
-			<artifactId>gson</artifactId>
-			<version>1.7.1</version>
+			<groupId>org.simpleframework</groupId>
+			<artifactId>simple-xml</artifactId>
+			<version>2.6</version>
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
+		
 	</dependencies>
 	<build>
 		<plugins>

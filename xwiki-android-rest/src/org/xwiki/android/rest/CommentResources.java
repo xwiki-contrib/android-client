@@ -1,15 +1,16 @@
 package org.xwiki.android.rest;
 
+import java.io.StringWriter;
+
+import org.simpleframework.xml.Serializer;
+import org.simpleframework.xml.core.Persister;
 import org.xwiki.android.resources.Comment;
 import org.xwiki.android.resources.Comments;
 
-import com.google.gson.Gson;
 
 public class CommentResources extends HttpConnector
 {
     private final String PAGE_URL_PREFIX = "/xwiki/rest/wikis/";
-
-    private final String JSON_URL_SUFFIX = "?media=json";
 
     private String URLprefix;
 
@@ -31,77 +32,114 @@ public class CommentResources extends HttpConnector
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
-                + "/comments" + JSON_URL_SUFFIX;
+                + "/comments";
 
-        return decodeComments(super.getResponse(Uri));
+        return buildComments(super.getResponse(Uri));
     }
 
-    public Comment getPageComments(String commentId)
+    public Comment getPageComment(String commentId)
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
-                + "/comments/" + commentId + JSON_URL_SUFFIX;
+                + "/comments/" + commentId;
 
-        return decodeComment(super.getResponse(Uri));
+        return buildComment(super.getResponse(Uri));
     }
 
     public Comments getPageCommentsInHistory(String version)
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
-                + "/history/" + version + "/comments" + JSON_URL_SUFFIX;
+                + "/history/" + version + "/comments";
 
-        return decodeComments(super.getResponse(Uri));
+        return buildComments(super.getResponse(Uri));
     }
 
     public Comments getPageCommentsInHistory(String version, String commentId)
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
-                + "/history/" + version + "/comments/" + commentId + JSON_URL_SUFFIX;
+                + "/history/" + version + "/comments/" + commentId;
 
-        return decodeComments(super.getResponse(Uri));
+        return buildComments(super.getResponse(Uri));
     }
 
-    // decode json content to Page element
-    private Comments decodeComments(String content)
-    {
-        Gson gson = new Gson();
-
-        Comments comments = new Comments();
-        comments = gson.fromJson(content, Comments.class);
-        return comments;
-    }
-    
-    public String addPageComment(String comment)
+    public String addPageComment(Comment comment)
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
-                + "/comments" + JSON_URL_SUFFIX ;
+                + "/comments";
 
-        Comment commentObject = new Comment();
-        commentObject.setText(comment);
-       
-        return super.postRequest(Uri, encodeComment(commentObject));
+        return super.postRequest(Uri, buildXmlComment(comment));
     }
-    
-    
- // decode json content to Page element
-    private Comment decodeComment(String content)
-    {
-        Gson gson = new Gson();
 
+  
+    // decode xml content to Comments element
+    private Comments buildComments(String content)
+    {
+        Comments comments = new Comments();
+
+        Serializer serializer = new Persister();
+
+        try {
+            comments = serializer.read(Comments.class, content);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return comments;
+    }
+
+    // build xml from Comments object
+    private String buildXmlComments(Comments comments)
+    {
+        Serializer serializer = new Persister();
+
+        StringWriter result = new StringWriter();
+
+        try {
+            serializer.write(comments, result);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return result.toString();
+    }
+
+    // decode xml content to Comment element
+    private Comment buildComment(String content)
+    {
         Comment comment = new Comment();
-        comment = gson.fromJson(content, Comment.class);
+
+        Serializer serializer = new Persister();
+
+        try {
+            comment = serializer.read(Comment.class, content);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
         return comment;
     }
-    
- // decode json content to Page element
-    private String encodeComment(Comment comment)
+
+    // build xml from Comment object
+    private String buildXmlComment(Comment comment)
     {
-        Gson gson = new Gson();
-        return gson.toJson(comment);
+        Serializer serializer = new Persister();
+
+        StringWriter result = new StringWriter();
+
+        try {
+            serializer.write(comment, result);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return result.toString();
     }
-    
-    
+
 }

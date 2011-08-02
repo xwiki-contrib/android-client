@@ -1,5 +1,7 @@
 package org.xwiki.android.components;
 
+import org.xwiki.android.components.attachments.AttachmentActivity;
+import org.xwiki.android.components.commenteditor.CommentEditorActivity;
 import org.xwiki.android.components.login.LoginActivity;
 import org.xwiki.android.components.navigator.XWikiNavigatorActivity;
 import org.xwiki.android.components.objecteditor.ObjectEditorActivity;
@@ -24,7 +26,9 @@ public class Main extends Activity {
 		// startActivity(new Intent(this, ObjectEditorActivity.class));
 		// startActivity(new Intent(this, ObjectNavigatorActivity.class));
 		// startActivity(new Intent(this, LoginActivity.class));
-		startActivityForResult(new Intent(this, LoginActivity.class), 0);
+		//startActivityForResult(new Intent(this, LoginActivity.class), 0);
+		
+		startActivity(testIntent());
 	}
 
 	@Override
@@ -39,5 +43,19 @@ public class Main extends Activity {
 			}
 		}
 
+	}
+	
+	private Intent testIntent(){
+	    
+	    Intent intent=new Intent(this, CommentEditorActivity.class);
+	    
+	    intent.putExtra("username", "Admin");
+        intent.putExtra("password", "admin");
+        intent.putExtra("url", "10.0.2.2:8080");
+        intent.putExtra("wikiname", "xwiki");
+        intent.putExtra("spacename", "Blog");
+        intent.putExtra("pagename", "test");
+        
+        return intent;
 	}
 }
