@@ -9,6 +9,7 @@ import java.io.InputStream;
 
 import org.xwiki.android.resources.Attachments;
 import org.xwiki.android.resources.Attribute;
+import org.xwiki.android.resources.Classes;
 import org.xwiki.android.resources.Comment;
 import org.xwiki.android.resources.Comments;
 import org.xwiki.android.resources.History;
@@ -175,22 +176,39 @@ public class Main extends Activity
 //         Log.d("Info","worked");
 
         // Test page attachment implementation by attachment name
+        
         /*
-         * request.setAuthentication("Admin", "admin"); InputStream in = request.requestPageAttachment("xwiki", "Blog",
-         * "test", "device.png"); FileOutputStream f; try { f = new FileOutputStream(new File("/sdcard/", "temp"));
-         * byte[] buffer = new byte[1024]; int len1 = 0; while ((len1 = in.read(buffer)) > 0) { f.write(buffer, 0,
-         * len1); } f.close(); Log.d("Info", "worked"); Intent i = new Intent(android.content.Intent.ACTION_VIEW);
-         * //i.setDataAndType(Uri.parse("file://" + "/sdcard/temp.png"), "image/png");
-         * i.setDataAndType(Uri.parse("file://" + "/sdcard/temp"), "text/plain"); //i.setData(Uri.parse("file://" +
-         * "/sdcard/temp.png")); startActivity(i); } catch (FileNotFoundException e) { // TODO Auto-generated catch
-         * block e.printStackTrace(); } catch (IOException e) { // TODO Auto-generated catch block e.printStackTrace();
-         * }
-         */
+        request.setAuthentication("Admin", "admin"); 
+        InputStream in = request.requestPageAttachment("xwiki", "Blog",
+         "test", "device.png"); 
+        FileOutputStream f; 
+        try { 
+            f = new FileOutputStream(new File("/sdcard/", "temp"));
+            byte[] buffer = new byte[1024]; 
+            int len1 = 0; 
+            while ((len1 = in.read(buffer)) > 0) { 
+                f.write(buffer, 0, len1); 
+                } 
+            f.close(); 
+            Log.d("Info", "worked"); 
+         //  Intent i = new Intent(android.content.Intent.ACTION_VIEW);
+         //i.setDataAndType(Uri.parse("file://" + "/sdcard/temp.png"), "image/png");
+         //i.setDataAndType((Uri.parse("file://" + "/sdcard/temp"), "text/plain"); 
+         //i.setData(Uri.parse("file://" + "/sdcard/temp.png")); startActivity(i); 
+            } 
+         catch (FileNotFoundException e) { 
+             // TODO Auto-generated catch block
+              e.printStackTrace(); 
+             } catch (IOException e) { 
+                 // TODO Auto-generated catch block e.printStackTrace();
+             }
+        
+        */
 
         // Test page attachment upload
         // request.setAuthentication("Admin", "admin");
         // "xwiki", "Blog", "test", "device.png");
-        // request.addPageAttachment("xwiki", "Blog", "test", "/sdcard/", "classeditor.png");
+        //request.addPageAttachment("xwiki", "Blog", "test", "/sdcard/", "classeditor.png");
 
         // Test page attachments in version implementation by attachment name
         // Attachments as=request.requestPageAttachmentsInHistory("xwiki",
@@ -279,6 +297,14 @@ public class Main extends Activity
 //        comment.setText("This is tesing comment in android rest");
 //        String s = request.addPageComment("xwiki", "Blog", "test", comment);
 //        Log.d("Info","It works");
-
+        
+     // Test for classes in wiki    
+//      Classes cs = request.requestWikiClasses("xwiki");
+//      Log.d("Info","It works");
+     
+      
+   // Test for classes in wiki with classname   
+//      org.xwiki.android.resources.Class c = request.requestWikiClasses("xwiki", "Blog.BlogPostClass");
+//      Log.d("Info","It works");
     }
 }

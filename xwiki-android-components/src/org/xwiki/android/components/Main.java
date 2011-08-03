@@ -30,7 +30,7 @@ public class Main extends Activity {
 		
 		startActivity(testIntent());
 	}
-
+	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
@@ -47,7 +47,7 @@ public class Main extends Activity {
 	
 	private Intent testIntent(){
 	    
-	    Intent intent=new Intent(this, CommentEditorActivity.class);
+	    Intent intent=new Intent(this, AttachmentActivity.class);
 	    
 	    intent.putExtra("username", "Admin");
         intent.putExtra("password", "admin");
@@ -58,4 +58,5 @@ public class Main extends Activity {
         
         return intent;
 	}
+	
 }

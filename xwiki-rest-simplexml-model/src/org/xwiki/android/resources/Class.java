@@ -19,6 +19,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 */
 
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Namespace;
+import org.simpleframework.xml.Root;
+
 /**
  * <p>Java class for Class complex type.
  * 
@@ -49,15 +53,20 @@ import javax.xml.bind.annotation.XmlType;
 })
 //@XmlRootElement(name = "class")
 */
+@Root
+@Namespace(reference="http://www.xwiki.org")
 public class Class
     extends LinkCollection
 {
 
     //@XmlElement(required = true)
+    @Element(required = false)
     public String id;
     //@XmlElement(required = true)
+    @Element(required = false)
     public String name;
     //@XmlElement(name = "property")
+    @Element(name="property", required = false)
     public List<Property> properties;
 
     /**

@@ -1,16 +1,24 @@
 package org.xwiki.android.rest;
 
+
+
+import org.simpleframework.xml.Serializer;
+import org.simpleframework.xml.core.Persister;
+import org.xwiki.android.resources.Classes;
+import org.xwiki.android.resources.Class;
+
+
 public class ClassResources extends HttpConnector
 {
     private final String PAGE_URL_PREFIX = "/xwiki/rest/wikis/";
 
-    private final String JSON_URL_SUFFIX = "?media=json";
+  
 
     private String URLprefix;
 
     private String wikiName;
 
-    // wikis/{wikiName}/classes[?start=offset&number=n]
+    
 
     public ClassResources(String URLprefix, String wikiName)
     {
@@ -18,17 +26,52 @@ public class ClassResources extends HttpConnector
         this.wikiName = wikiName;
     }
 
-    public String getWikiClasses()
+    public Classes getWikiClasses()
     {
-        String Uri = "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/classes" + JSON_URL_SUFFIX;
+        String Uri = "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/classes" ;
 
-        return super.getResponse(Uri);
+        return buildClasses(super.getResponse(Uri));
     }
     
-    public String getWikiClasses(String classname)
+    public Class getWikiClasses(String classname)
     {
-        String Uri = "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/classes/" + classname + JSON_URL_SUFFIX;
+        String Uri = "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/classes/" + classname ;
 
-        return super.getResponse(Uri);
+        return buildClass(super.getResponse(Uri));
     }
+    
+    // decode xml content to Classes element
+    private Classes buildClasses(String content)
+    {
+        Classes classes = new Classes();
+
+        Serializer serializer = new Persister();
+
+        try {
+            classes = serializer.read(Classes.class, content);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return classes;
+    }
+    
+    // decode xml content to Class element
+    private Class buildClass(String content)
+    {
+        Class clas =new Class();
+
+        Serializer serializer = new Persister();
+
+        try {
+            clas = serializer.read(Class.class, content);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return clas;
+    }
+
 }

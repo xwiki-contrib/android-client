@@ -11,6 +11,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.simpleframework.xml.ElementList;
+import org.simpleframework.xml.Namespace;
+import org.simpleframework.xml.Root;
+
 /*
  import javax.xml.bind.annotation.XmlAccessType;
  import javax.xml.bind.annotation.XmlAccessorType;
@@ -41,10 +45,13 @@ import java.util.List;
  * //@XmlAccessorType(XmlAccessType.FIELD) //@XmlType(name = "", propOrder = { "clazzs" }) //@XmlRootElement(name =
  * "classes")
  */
-public class Classes extends LinkCollection
+@Root
+@Namespace(reference="http://www.xwiki.org")
+public class Classes //extends LinkCollection
 {
 
     // @XmlElement(name = "class")
+    @ElementList(name = "class", inline=true)
     public List<Class> clazzs;
 
     /**
@@ -88,6 +95,7 @@ public class Classes extends LinkCollection
         return this;
     }
 
+    /*
     @Override
     public Classes withLinks(Link... values)
     {
@@ -107,5 +115,5 @@ public class Classes extends LinkCollection
         }
         return this;
     }
-
+    */
 }

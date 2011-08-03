@@ -38,6 +38,12 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.xwiki.android</groupId>
+			<artifactId>xwiki-rest-simplexml-model</artifactId>
+			<type>jar</type>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.xwiki.android</groupId>
 			<artifactId>xwiki-android-rest</artifactId>
 			<type>apklib</type>
 			<version>${project.version}</version>

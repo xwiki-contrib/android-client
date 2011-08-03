@@ -6,6 +6,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 import org.xwiki.android.resources.Attachments;
+import org.xwiki.android.resources.Class;
+import org.xwiki.android.resources.Classes;
 import org.xwiki.android.resources.Comment;
 import org.xwiki.android.resources.Comments;
 import org.xwiki.android.resources.History;
@@ -487,7 +489,7 @@ public class Requests
     }
 
     // Method for getting all classes in wiki
-    public String requestWikiClasses(String wikiName)
+    public Classes requestWikiClasses(String wikiName)
     {
         wikiName = convertToUTF(wikiName);
 
@@ -499,7 +501,7 @@ public class Requests
     }
 
     // Method for getting class in wiki
-    public String requestWikiClasses(String wikiName, String classname)
+    public Class requestWikiClasses(String wikiName, String classname)
     {
         wikiName = convertToUTF(wikiName);
         classname = convertToUTF(classname);
