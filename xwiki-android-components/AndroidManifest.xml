@@ -26,6 +26,8 @@
         <activity android:name=".pageviewer.XWikiPageViewerActivity"></activity>
         <activity android:name=".attachments.AttachmentActivity"></activity>
         <activity android:name=".commenteditor.CommentEditorActivity"></activity>
+        <activity android:name=".search.SearchActivity"></activity>
+        <activity android:name=".search.SearchResultsActivity"></activity>
 
     </application>
 </manifest>

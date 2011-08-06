@@ -53,60 +53,57 @@ public class Main extends Activity
     public void searchButtonClick(View v)
     {
 
-//        TextView tv_result = (TextView) findViewById(R.id.textView1);
-//        TextView et_domain = (TextView) findViewById(R.id.editText_domain);
-//        TextView et_searchText = (TextView) findViewById(R.id.editText_SearchText);
-//
-//        domain = et_domain.getText().toString();
-//        searchKeyword = et_searchText.getText().toString();
-//
-//        Log.d("Info", "domain=" + domain + " text=" + searchKeyword);
-//        Requests request = new Requests(domain);
-//        request.setAuthentication("Admin", "admin");
+        // TextView tv_result = (TextView) findViewById(R.id.textView1);
+        // TextView et_domain = (TextView) findViewById(R.id.editText_domain);
+        // TextView et_searchText = (TextView) findViewById(R.id.editText_SearchText);
+        //
+        // domain = et_domain.getText().toString();
+        // searchKeyword = et_searchText.getText().toString();
+        //
+        // Log.d("Info", "domain=" + domain + " text=" + searchKeyword);
+        // Requests request = new Requests(domain);
+        // request.setAuthentication("Admin", "admin");
 
         // Test wiki search implementation
-//         SearchResults sr = request.requestSearch("xwiki",searchKeyword);
-//         Log.d("Info", "worked");
-        // tv_result.setText("Search Results\n" + result);
+        // SearchResults sr = request.requestSearch("xwiki",searchKeyword);
+        // Log.d("Info", "worked");
 
         // Test space search implementation
-//         SearchResults sr =
-//         request.requestSearch("xwiki","Blog",searchKeyword);
-//        Log.d("Info", "worked");
-        // tv_result.setText("Search Results\n" + result);
+        // SearchResults sr = request.requestSearch("xwiki","Blog",searchKeyword);
+        // Log.d("Info", "worked");
 
         // Test wiki implementation
-//         Wikis ws= request.requestWikis();
-//         Log.d("Info", "worked");
+        // Wikis ws= request.requestWikis();
+        // Log.d("Info", "worked");
         // tv_result.setText("Wiki Results\n" + result);
 
         // Test space implementation
-//         Spaces s = request.requestSpaces("xwiki");
-//         Log.d("Spaces", "It worked");
+        // Spaces s = request.requestSpaces("xwiki");
+        // Log.d("Spaces", "It worked");
         // Log.d("Final result:", "result=" + result);
         // tv_result.setText("Space Results\n" + result);
 
         // Test all pages implementation
-//         Pages ps = request.requestAllPages("xwiki", "Blog");
-//         for (int i = 0; i < ps.pageSummaries.size(); i++) {
-//         Log.d("id", "id=" + i + "=" + ps.pageSummaries.get(i).id);
-//         }
-//         Log.d("Info", "worked");
+        // Pages ps = request.requestAllPages("xwiki", "Blog");
+        // for (int i = 0; i < ps.pageSummaries.size(); i++) {
+        // Log.d("id", "id=" + i + "=" + ps.pageSummaries.get(i).id);
+        // }
+        // Log.d("Info", "worked");
         // tv_result.setText("All Pages Results\n" + result);
 
         // Test one page implementation
-//         Page p = request.requestPage("xwiki", "Blog", "test");
+        // Page p = request.requestPage("xwiki", "Blog", "test");
         // Log.d("page", "page details=" + p.name + "," + p.title + "," +
         // p.xwikiRelativeUrl + "," + p.content);
-         //Log.d("Info", "worked");
+        // Log.d("Info", "worked");
         // Log.d("Final result:", "result=" + result);
         // tv_result.setText("Page Results\n" + result);
-         
-        //Test one page adding
-//        Page p = request.requestPage("xwiki", "Blog", "test");
-//         p.setContent("Content is changed by android client");
-//         String s= request.addPage("xwiki", "Blog", "test", p);
-//         Log.d("Info", "worked");
+
+        // Test one page adding
+        // Page p = request.requestPage("xwiki", "Blog", "test");
+        // p.setContent("Content is changed by android client");
+        // String s= request.addPage("xwiki", "Blog", "test", p);
+        // Log.d("Info", "worked");
         // Test one page delete implementation
         // request.setAuthentication("Admin", "admin");
         // String result = request.deletePage("xwiki", "Blog", "This is test");
@@ -114,13 +111,12 @@ public class Main extends Activity
         // tv_result.setText("Page Results\n" + result);
 
         // Test one page history implementation
-//         History h = request.requestPageHistory("xwiki", "Blog",
-//         "test");
-//         Log.d("Info","worked");
+        // History h = request.requestPageHistory("xwiki", "Blog",
+        // "test");
+        // Log.d("Info","worked");
         // Log.d("Final result:", "result=" + result);
         // tv_result.setText("Page Results\n" + result);
 
-        
         // Test page children implementation
         // Pages ps=request.requestPageChildren("xwiki", "Blog",
         // "This is test 2");
@@ -147,9 +143,9 @@ public class Main extends Activity
         // Log.d("Info","worked");
 
         // Test page comments implementation
-//         Comments cs = request.requestPageComments("xwiki", "Blog",
-//         "test");
-//         Log.d("Info","worked");
+        // Comments cs = request.requestPageComments("xwiki", "Blog",
+        // "test");
+        // Log.d("Info","worked");
         // Log.d("Final result:", "result=" + result);
         // tv_result.setText("Page Results\n" + result);
 
@@ -171,44 +167,28 @@ public class Main extends Activity
         // Log.d("Info","worked");
 
         // Test page attachments implementation
-//         Attachments as=request.requestAllPageAttachments("xwiki", "Blog",
-//         "test");
-//         Log.d("Info","worked");
+        // Attachments as=request.requestAllPageAttachments("xwiki", "Blog",
+        // "test");
+        // Log.d("Info","worked");
 
         // Test page attachment implementation by attachment name
-        
+
         /*
-        request.setAuthentication("Admin", "admin"); 
-        InputStream in = request.requestPageAttachment("xwiki", "Blog",
-         "test", "device.png"); 
-        FileOutputStream f; 
-        try { 
-            f = new FileOutputStream(new File("/sdcard/", "temp"));
-            byte[] buffer = new byte[1024]; 
-            int len1 = 0; 
-            while ((len1 = in.read(buffer)) > 0) { 
-                f.write(buffer, 0, len1); 
-                } 
-            f.close(); 
-            Log.d("Info", "worked"); 
-         //  Intent i = new Intent(android.content.Intent.ACTION_VIEW);
-         //i.setDataAndType(Uri.parse("file://" + "/sdcard/temp.png"), "image/png");
-         //i.setDataAndType((Uri.parse("file://" + "/sdcard/temp"), "text/plain"); 
-         //i.setData(Uri.parse("file://" + "/sdcard/temp.png")); startActivity(i); 
-            } 
-         catch (FileNotFoundException e) { 
-             // TODO Auto-generated catch block
-              e.printStackTrace(); 
-             } catch (IOException e) { 
-                 // TODO Auto-generated catch block e.printStackTrace();
-             }
-        
-        */
+         * request.setAuthentication("Admin", "admin"); InputStream in = request.requestPageAttachment("xwiki", "Blog",
+         * "test", "device.png"); FileOutputStream f; try { f = new FileOutputStream(new File("/sdcard/", "temp"));
+         * byte[] buffer = new byte[1024]; int len1 = 0; while ((len1 = in.read(buffer)) > 0) { f.write(buffer, 0,
+         * len1); } f.close(); Log.d("Info", "worked"); // Intent i = new Intent(android.content.Intent.ACTION_VIEW);
+         * //i.setDataAndType(Uri.parse("file://" + "/sdcard/temp.png"), "image/png");
+         * //i.setDataAndType((Uri.parse("file://" + "/sdcard/temp"), "text/plain"); //i.setData(Uri.parse("file://" +
+         * "/sdcard/temp.png")); startActivity(i); } catch (FileNotFoundException e) { // TODO Auto-generated catch
+         * block e.printStackTrace(); } catch (IOException e) { // TODO Auto-generated catch block e.printStackTrace();
+         * }
+         */
 
         // Test page attachment upload
         // request.setAuthentication("Admin", "admin");
         // "xwiki", "Blog", "test", "device.png");
-        //request.addPageAttachment("xwiki", "Blog", "test", "/sdcard/", "classeditor.png");
+        // request.addPageAttachment("xwiki", "Blog", "test", "/sdcard/", "classeditor.png");
 
         // Test page attachments in version implementation by attachment name
         // Attachments as=request.requestPageAttachmentsInHistory("xwiki",
@@ -247,26 +227,26 @@ public class Main extends Activity
         // Log.d("Info","worked");
 
         // Test page objects in a page
-//         Objects os = request.requestAllObjects("xwiki", "Blog", "test");
-//         Log.d("Info", "worked");
-        
+        // Objects os = request.requestAllObjects("xwiki", "Blog", "test");
+        // Log.d("Info", "worked");
+
         // Test page object put
-//        org.xwiki.android.resources.Object obj=new org.xwiki.android.resources.Object();
-//        
-//        Attribute att = new Attribute();
-//        att.setName("name");
-//        att.setValue("category");
-//        
-//        Property prop = new Property();
-//        prop.setType("com.xpn.xwiki.objects.classes.TextAreaClass");
-//        prop.setName("content");
-//        prop.setValue("Blog.Other");
-//        prop.getAttributes().add(att);
-//        
-//        obj.getProperties().add(prop);
-//        
-//        String s= request.addObject("xwiki", "Blog", "test", obj);
-//        Log.d("Info", "worked");
+        // org.xwiki.android.resources.Object obj=new org.xwiki.android.resources.Object();
+        //
+        // Attribute att = new Attribute();
+        // att.setName("name");
+        // att.setValue("category");
+        //
+        // Property prop = new Property();
+        // prop.setType("com.xpn.xwiki.objects.classes.TextAreaClass");
+        // prop.setName("content");
+        // prop.setValue("Blog.Other");
+        // prop.getAttributes().add(att);
+        //
+        // obj.getProperties().add(prop);
+        //
+        // String s= request.addObject("xwiki", "Blog", "test", obj);
+        // Log.d("Info", "worked");
 
         // Test page objects in a specific class in a page
         // Objects os = request.requestObjectsInClass("xwiki", "Blog", "test",
@@ -293,18 +273,17 @@ public class Main extends Activity
         // Log.d("Reply", String.valueOf(hc.checkLogin("chamika", "chamikaya", domain)));
 
         // Test for adding page comment
-//        Comment comment = new Comment();
-//        comment.setText("This is tesing comment in android rest");
-//        String s = request.addPageComment("xwiki", "Blog", "test", comment);
-//        Log.d("Info","It works");
-        
-     // Test for classes in wiki    
-//      Classes cs = request.requestWikiClasses("xwiki");
-//      Log.d("Info","It works");
-     
-      
-   // Test for classes in wiki with classname   
-//      org.xwiki.android.resources.Class c = request.requestWikiClasses("xwiki", "Blog.BlogPostClass");
-//      Log.d("Info","It works");
+        // Comment comment = new Comment();
+        // comment.setText("This is tesing comment in android rest");
+        // String s = request.addPageComment("xwiki", "Blog", "test", comment);
+        // Log.d("Info","It works");
+
+        // Test for classes in wiki
+        // Classes cs = request.requestWikiClasses("xwiki");
+        // Log.d("Info","It works");
+
+        // Test for classes in wiki with classname
+        // org.xwiki.android.resources.Class c = request.requestWikiClasses("xwiki", "Blog.BlogPostClass");
+        // Log.d("Info","It works");
     }
 }

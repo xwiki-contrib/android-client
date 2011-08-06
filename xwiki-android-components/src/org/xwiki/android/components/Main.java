@@ -7,7 +7,9 @@ import org.xwiki.android.components.navigator.XWikiNavigatorActivity;
 import org.xwiki.android.components.objecteditor.ObjectEditorActivity;
 import org.xwiki.android.components.objectnavigator.ObjectNavigatorActivity;
 import org.xwiki.android.components.propertyeditor.PropertyEditorActivity;
+import org.xwiki.android.components.search.SearchActivity;
 import org.xwiki.android.resources.Objects;
+import org.xwiki.android.resources.SearchResults;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -47,14 +49,14 @@ public class Main extends Activity {
 	
 	private Intent testIntent(){
 	    
-	    Intent intent=new Intent(this, AttachmentActivity.class);
+	    Intent intent=new Intent(this, SearchActivity.class);
 	    
 	    intent.putExtra("username", "Admin");
         intent.putExtra("password", "admin");
         intent.putExtra("url", "10.0.2.2:8080");
         intent.putExtra("wikiname", "xwiki");
         intent.putExtra("spacename", "Blog");
-        intent.putExtra("pagename", "test");
+        //intent.putExtra("pagename", "test");
         
         return intent;
 	}

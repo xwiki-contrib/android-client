@@ -10,7 +10,7 @@ public class Search extends HttpConnector
 
     private final String SEARCH_REQUEST_PREFIX = "/xwiki/rest/wikis/";
 
-    private final String WIKI_SEARCH_REQUEST_SUFFIX = "/search?scope=name&media=xml&q=";
+    private final String WIKI_SEARCH_REQUEST_SUFFIX = "/search?scope=content&media=xml&q=";
 
     private String URLprefix;
 

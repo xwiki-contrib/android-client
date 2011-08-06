@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent" android:orientation="vertical">
+    <TextView android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/textView_search" android:text="Search text" android:textSize="10pt"></TextView>
+    <EditText android:layout_height="wrap_content" android:singleLine="true" android:layout_width="fill_parent" android:id="@+id/editText_searchKeyword"></EditText>
+    <TableLayout android:id="@+id/tableLayout1" android:layout_height="wrap_content" android:layout_width="fill_parent">
+        <TableRow android:id="@+id/tableRow1" android:layout_height="wrap_content" android:layout_width="fill_parent">
+            <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/textView_Wikiname" android:text="Wiki name"></TextView>
+            <Spinner android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/spinner_wikilist"></Spinner>
+        </TableRow>
+        <TableRow android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/tableRow2">
+            <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/textView_spacename" android:text="Space name"></TextView>
+            <Spinner android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/spinner_spacelist"></Spinner>
+        </TableRow>
+    </TableLayout>
+    <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center" android:text="Search" android:id="@+id/button_searchButton"></Button>
+</LinearLayout>
