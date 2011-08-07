@@ -54,6 +54,7 @@ public class LoginActivity extends Activity {
 										}
 									});
 							alertbox.show();
+							
 						} else if (msg.arg1 == 1) {
 							AlertDialog.Builder alertbox = new AlertDialog.Builder(
 									LoginActivity.this);
