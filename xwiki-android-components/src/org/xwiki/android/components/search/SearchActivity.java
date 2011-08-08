@@ -1,5 +1,6 @@
 package org.xwiki.android.components.search;
 
+import org.xwiki.android.components.IntentExtra;
 import org.xwiki.android.components.R;
 import org.xwiki.android.resources.Spaces;
 import org.xwiki.android.resources.Wikis;
@@ -20,6 +21,18 @@ import android.widget.Spinner;
 
 public class SearchActivity extends Activity
 {
+    public static final String INTENT_EXTRA_PUT_URL = IntentExtra.URL;
+
+    public static final String INTENT_EXTRA_PUT_USERNAME = IntentExtra.USERNAME;
+
+    public static final String INTENT_EXTRA_PUT_PASSWORD = IntentExtra.PASSWORD;
+
+    public static final String INTENT_EXTRA_GET_WIKI_NAME = IntentExtra.WIKI_NAME;
+
+    public static final String INTENT_EXTRA_GET_SPACE_NAME = IntentExtra.SPACE_NAME;
+
+    public static final String INTENT_EXTRA_GET_PAGE_NAME = IntentExtra.PAGE_NAME;
+
     private final int REQUEST_CODE_SEARCH_RESULTS = 1000;
 
     private String url, wikiName, spaceName, pageName, username, password;
@@ -29,7 +42,7 @@ public class SearchActivity extends Activity
     private String[] spaceList;
 
     private boolean isSecured;
-    
+
     Requests request;
 
     @Override
@@ -39,21 +52,20 @@ public class SearchActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search);
 
-        url = getIntent().getExtras().getString("url");
-        
-        if (getIntent().getExtras().getString("password") != null
-            && getIntent().getExtras().getString("username") != null) {
-            username = getIntent().getExtras().getString("username");
-            password = getIntent().getExtras().getString("password");
+        url = getIntent().getExtras().getString(INTENT_EXTRA_PUT_URL);
+
+        if (getIntent().getExtras().getString(INTENT_EXTRA_PUT_PASSWORD) != null
+            && getIntent().getExtras().getString(INTENT_EXTRA_PUT_USERNAME) != null) {
+            username = getIntent().getExtras().getString(INTENT_EXTRA_PUT_USERNAME);
+            password = getIntent().getExtras().getString(INTENT_EXTRA_PUT_PASSWORD);
             isSecured = true;
         }
-        
+
         request = new Requests(url);
-        
-        if(isSecured){
+
+        if (isSecured) {
             request.setAuthentication(username, password);
         }
-        
 
         final EditText searchText = (EditText) findViewById(R.id.editText_searchKeyword);
 
@@ -70,22 +82,21 @@ public class SearchActivity extends Activity
 
                 Intent intent = new Intent(getApplicationContext(), SearchResultsActivity.class);
 
-                intent.putExtra("url", url);
-                intent.putExtra("wikiname", wikiName);
-                intent.putExtra("spacename", spaceName);
-                intent.putExtra("keyword", searchText.getText().toString());
+                intent.putExtra(SearchResultsActivity.INTENT_EXTRA_PUT_URL, url);
+                intent.putExtra(SearchResultsActivity.INTENT_EXTRA_PUT_WIKI_NAME, wikiName);
+                intent.putExtra(SearchResultsActivity.INTENT_EXTRA_PUT_SPACE_NAME, spaceName);
+                intent.putExtra(SearchResultsActivity.INTENT_EXTRA_PUT_KEYWORD, searchText.getText().toString());
 
                 if (isSecured) {
-                    intent.putExtra("username", username);
-                    intent.putExtra("password", password);
+                    intent.putExtra(SearchResultsActivity.INTENT_EXTRA_PUT_USERNAME, username);
+                    intent.putExtra(SearchResultsActivity.INTENT_EXTRA_PUT_PASSWORD, password);
                 }
 
                 startActivityForResult(intent, REQUEST_CODE_SEARCH_RESULTS);
-                // startActivity(intent);
             }
 
         });
-        
+
         loadWikiList();
     }
 
@@ -96,24 +107,30 @@ public class SearchActivity extends Activity
 
         if (requestCode == REQUEST_CODE_SEARCH_RESULTS) {
             if (resultCode == Activity.RESULT_OK) {
-                pageName = data.getExtras().getString("pagename");
+                pageName = data.getExtras().getString(SearchResultsActivity.INTENT_EXTRA_GET_PAGE_NAME);
                 Log.d("Activity Result", "OK pageName=" + pageName);
-
+                getIntent().putExtra(INTENT_EXTRA_GET_WIKI_NAME, wikiName);
+                getIntent().putExtra(INTENT_EXTRA_GET_SPACE_NAME, spaceName);
+                getIntent().putExtra(INTENT_EXTRA_GET_PAGE_NAME, pageName);
+                setResult(Activity.RESULT_OK, getIntent());
+                finish();
+                
+                
             }
         }
     }
 
     private void loadWikiList()
     {
-        
-        Wikis ws= request.requestWikis();
+
+        Wikis ws = request.requestWikis();
 
         wikiList = new String[ws.getWikis().size()];
-        
-        for(int i=0; i< wikiList.length ; i ++){
+
+        for (int i = 0; i < wikiList.length; i++) {
             wikiList[i] = ws.getWikis().get(i).getName();
         }
-        
+
         Spinner spinner = (Spinner) findViewById(R.id.spinner_wikilist);
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, wikiList);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -131,9 +148,9 @@ public class SearchActivity extends Activity
             @Override
             public void onNothingSelected(AdapterView< ? > arg0)
             {
-               
+
             }
-            
+
         });
     }
 
@@ -141,19 +158,19 @@ public class SearchActivity extends Activity
     {
         Log.d("loadspacelist", "wikiName=" + wikiName);
 
-        Spaces spaces= request.requestSpaces(wikiName);
+        Spaces spaces = request.requestSpaces(wikiName);
 
         spaceList = new String[spaces.getSpaces().size()];
-        
-        for(int i=0; i< spaceList.length ; i ++){
+
+        for (int i = 0; i < spaceList.length; i++) {
             spaceList[i] = spaces.getSpaces().get(i).getName();
         }
-        
+
         Spinner spinner = (Spinner) findViewById(R.id.spinner_spacelist);
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, spaceList);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
-        
+
         spinner.setOnItemSelectedListener(new OnItemSelectedListener()
         {
 
@@ -166,11 +183,9 @@ public class SearchActivity extends Activity
             @Override
             public void onNothingSelected(AdapterView< ? > arg0)
             {
-                
+
             }
 
-            
-            
         });
     }
 

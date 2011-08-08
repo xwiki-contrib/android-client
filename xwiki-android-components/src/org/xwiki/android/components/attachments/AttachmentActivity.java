@@ -7,11 +7,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import org.xwiki.android.components.IntentExtra;
 import org.xwiki.android.components.R;
-import org.xwiki.android.components.login.LoginActivity;
 import org.xwiki.android.resources.Attachment;
 import org.xwiki.android.resources.Attachments;
-import org.xwiki.android.resources.Comment;
 import org.xwiki.android.rest.Requests;
 
 import android.app.AlertDialog;
@@ -33,13 +32,23 @@ import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class AttachmentActivity extends ListActivity
 {
+    public static final String INTENT_EXTRA_PUT_WIKI_NAME = IntentExtra.WIKI_NAME;
+
+    public static final String INTENT_EXTRA_PUT_SPACE_NAME = IntentExtra.SPACE_NAME;
+
+    public static final String INTENT_EXTRA_PUT_PAGE_NAME = IntentExtra.PAGE_NAME;
+
+    public static final String INTENT_EXTRA_PUT_URL = IntentExtra.URL;
+
+    public static final String INTENT_EXTRA_PUT_USERNAME = IntentExtra.USERNAME;
+
+    public static final String INTENT_EXTRA_PUT_PASSWORD = IntentExtra.PASSWORD;
+
     private final int SELECT_FILE = 100;
 
     private final int VIEW_FILE = 101;
@@ -57,15 +66,15 @@ public class AttachmentActivity extends ListActivity
     {
         super.onCreate(savedInstanceState);
 
-        wikiName = getIntent().getExtras().getString("wikiname");
-        spaceName = getIntent().getExtras().getString("spacename");
-        pageName = getIntent().getExtras().getString("pagename");
-        url = getIntent().getExtras().getString("url");
+        wikiName = getIntent().getExtras().getString(INTENT_EXTRA_PUT_WIKI_NAME);
+        spaceName = getIntent().getExtras().getString(INTENT_EXTRA_PUT_SPACE_NAME);
+        pageName = getIntent().getExtras().getString(INTENT_EXTRA_PUT_PAGE_NAME);
+        url = getIntent().getExtras().getString(INTENT_EXTRA_PUT_URL);
 
-        if (getIntent().getExtras().getString("password") != null
-            && getIntent().getExtras().getString("username") != null) {
-            username = getIntent().getExtras().getString("username");
-            password = getIntent().getExtras().getString("password");
+        if (getIntent().getExtras().getString(INTENT_EXTRA_PUT_USERNAME) != null
+            && getIntent().getExtras().getString(INTENT_EXTRA_PUT_PASSWORD) != null) {
+            username = getIntent().getExtras().getString(INTENT_EXTRA_PUT_USERNAME);
+            password = getIntent().getExtras().getString(INTENT_EXTRA_PUT_PASSWORD);
             isSecured = true;
         }
 
@@ -121,7 +130,6 @@ public class AttachmentActivity extends ListActivity
             @Override
             public void onItemClick(AdapterView< ? > arg0, View view, int arg2, long arg3)
             {
-                // Toast.makeText(getApplicationContext(), ((TextView) view).getText(), Toast.LENGTH_SHORT).show();
                 downloadAndOpenFile(((TextView) view).getText().toString());
             }
         });
@@ -257,7 +265,6 @@ public class AttachmentActivity extends ListActivity
                     String extension = map.getFileExtensionFromUrl(currentFile.getPath().toLowerCase());
                     String type = map.getMimeTypeFromExtension(extension);
 
-                   
                     Log.d("MIME type", "type=" + type);
 
                     Intent i = new Intent(android.content.Intent.ACTION_VIEW);

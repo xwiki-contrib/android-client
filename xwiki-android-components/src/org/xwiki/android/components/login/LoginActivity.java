@@ -1,5 +1,6 @@
 package org.xwiki.android.components.login;
 
+import org.xwiki.android.components.IntentExtra;
 import org.xwiki.android.components.R;
 import org.xwiki.android.rest.HttpConnector;
 
@@ -16,103 +17,116 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class LoginActivity extends Activity {
-	private String username, password, url;
-	Handler handler;
+public class LoginActivity extends Activity
+{
+    public static final String INTENT_EXTRA_GET_URL = IntentExtra.URL;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.login);
+    public static final String INTENT_EXTRA_GET_USERNAME = IntentExtra.USERNAME;
 
-		Button loginButton = (Button) findViewById(R.id.button_login_login);
+    public static final String INTENT_EXTRA_GET_PASSWORD = IntentExtra.PASSWORD;
 
-		loginButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
+    private String username, password, url;
 
-				EditText et_username = (EditText) findViewById(R.id.editText_login_username);
-				EditText et_password = (EditText) findViewById(R.id.editText_login_password);
-				EditText et_url = (EditText) findViewById(R.id.editText_login_url);
+    Handler handler;
 
-				username = et_username.getText().toString();
-				password = et_password.getText().toString();
-				url = et_url.getText().toString();
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.login);
 
-				handler = new Handler() {
-					@Override
-					public void handleMessage(Message msg) {
+        Button loginButton = (Button) findViewById(R.id.button_login_login);
 
-						if (msg.arg1 == 0) {
-							AlertDialog.Builder alertbox = new AlertDialog.Builder(
-									LoginActivity.this);
-							alertbox.setMessage("Authentication failed");
-							alertbox.setNeutralButton("Ok",
-									new DialogInterface.OnClickListener() {
-										public void onClick(
-												DialogInterface arg0, int arg1) {
-										}
-									});
-							alertbox.show();
-							
-						} else if (msg.arg1 == 1) {
-							AlertDialog.Builder alertbox = new AlertDialog.Builder(
-									LoginActivity.this);
-							alertbox.setMessage("Unable to connect");
-							alertbox.setNeutralButton("Ok",
-									new DialogInterface.OnClickListener() {
-										public void onClick(
-												DialogInterface arg0, int arg1) {
-										}
-									});
-						}
-					}
-				};
+        loginButton.setOnClickListener(new OnClickListener()
+        {
+            @Override
+            public void onClick(View arg0)
+            {
 
-				final ProgressDialog myProgressDialog;
-				myProgressDialog = ProgressDialog.show(LoginActivity.this,
-						"Login", "Please wait while connecting...", true);
-				Thread t = new Thread(new Runnable() {
+                EditText et_username = (EditText) findViewById(R.id.editText_login_username);
+                EditText et_password = (EditText) findViewById(R.id.editText_login_password);
+                EditText et_url = (EditText) findViewById(R.id.editText_login_url);
 
-					@Override
-					public void run() {
+                username = et_username.getText().toString();
+                password = et_password.getText().toString();
+                url = et_url.getText().toString();
 
-						HttpConnector httpConnector = new HttpConnector();
-						int code = httpConnector.checkLogin(username, password,
-								url);
-						myProgressDialog.dismiss();
-						login(code);
-					}
+                handler = new Handler()
+                {
+                    @Override
+                    public void handleMessage(Message msg)
+                    {
 
-				});
-				t.start();
-			}
+                        if (msg.arg1 == 0) {
+                            AlertDialog.Builder alertbox = new AlertDialog.Builder(LoginActivity.this);
+                            alertbox.setMessage("Authentication failed");
+                            alertbox.setNeutralButton("Ok", new DialogInterface.OnClickListener()
+                            {
+                                public void onClick(DialogInterface arg0, int arg1)
+                                {
+                                }
+                            });
+                            alertbox.show();
 
-		});
-	}
+                        } else if (msg.arg1 == 1) {
+                            AlertDialog.Builder alertbox = new AlertDialog.Builder(LoginActivity.this);
+                            alertbox.setMessage("Unable to connect");
+                            alertbox.setNeutralButton("Ok", new DialogInterface.OnClickListener()
+                            {
+                                public void onClick(DialogInterface arg0, int arg1)
+                                {
+                                }
+                            });
+                        }
+                    }
+                };
 
-	private void login(int loginStatus) {
+                final ProgressDialog myProgressDialog;
+                myProgressDialog =
+                    ProgressDialog.show(LoginActivity.this, "Login", "Please wait while connecting...", true);
+                Thread t = new Thread(new Runnable()
+                {
 
-		if (loginStatus == 200) {
-			Log.d("Login", "successful");
-			getIntent().putExtra("username",username);
-			getIntent().putExtra("password", password);
-			getIntent().putExtra("url", url);
-			setResult(Activity.RESULT_OK, getIntent());
-			finish();
-		} else if (loginStatus == 401) {
-			Log.d("Login", "wrong username or password");
-			Message ms = new Message();
-			ms.arg1 = 0;
-			handler.sendMessage(ms);
+                    @Override
+                    public void run()
+                    {
 
-		} else {
-			Log.d("Login", "unable to connect");
-			Message ms = new Message();
-			ms.arg1 = 1;
-			handler.sendMessage(ms);
-		}
+                        HttpConnector httpConnector = new HttpConnector();
+                        int code = httpConnector.checkLogin(username, password, url);
+                        myProgressDialog.dismiss();
+                        login(code);
+                    }
 
-	}
+                });
+                t.start();
+            }
+
+        });
+    }
+
+    private void login(int loginStatus)
+    {
+
+        if (loginStatus == 200) {
+            Log.d("Login", "successful");
+            getIntent().putExtra(INTENT_EXTRA_GET_USERNAME, username);
+            getIntent().putExtra(INTENT_EXTRA_GET_PASSWORD, password);
+            getIntent().putExtra(INTENT_EXTRA_GET_URL, url);
+            setResult(Activity.RESULT_OK, getIntent());
+            finish();
+        } else if (loginStatus == 401) {
+            Log.d("Login", "wrong username or password");
+            Message ms = new Message();
+            ms.arg1 = 0;
+            handler.sendMessage(ms);
+
+        } else {
+            Log.d("Login", "unable to connect");
+            Message ms = new Message();
+            ms.arg1 = 1;
+            handler.sendMessage(ms);
+        }
+
+    }
 
 }

@@ -67,7 +67,7 @@ public class XWikiExpandListAdapter extends BaseExpandableListAdapter
     
     private HashMap<String, Pages> cachePages;
     
-    private String recentWikiName="", recentSpaceName="", recentPageName="";
+    private String recentWikiName="", recentSpaceName="";
 
     public XWikiExpandListAdapter(Context context, ExpandableListView topExpList, String wikiURL)
     {

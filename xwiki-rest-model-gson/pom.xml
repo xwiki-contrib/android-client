@@ -32,7 +32,7 @@
 	</parent>
 
 	<groupId>org.xwiki.android</groupId>
-	<artifactId>xwiki-rest-gson-model</artifactId>
+	<artifactId>xwiki-rest-model-gson</artifactId>
 	<name>XWikiGsonModel</name>
 
 	<build>

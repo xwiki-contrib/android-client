@@ -3,22 +3,35 @@ package org.xwiki.android.components.objectnavigator;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Vector;
 
+import org.xwiki.android.components.IntentExtra;
 import org.xwiki.android.components.R;
 import org.xwiki.android.resources.Objects;
 import org.xwiki.android.rest.Requests;
 
-import android.app.Activity;
 import android.app.ExpandableListActivity;
 import android.os.Bundle;
 import android.widget.SimpleExpandableListAdapter;
 
 public class ObjectNavigatorActivity extends ExpandableListActivity
 {
-    Objects objects;
-    
-    String username, password, url, wikiName, spaceName, pageName;
+    public static final String INTENT_EXTRA_PUT_URL = IntentExtra.URL;
+
+    public static final String INTENT_EXTRA_PUT_USERNAME = IntentExtra.USERNAME;
+
+    public static final String INTENT_EXTRA_PUT_PASSWORD = IntentExtra.PASSWORD;
+
+    public static final String INTENT_EXTRA_PUT_WIKI_NAME = IntentExtra.WIKI_NAME;
+
+    public static final String INTENT_EXTRA_PUT_SPACE_NAME = IntentExtra.SPACE_NAME;
+
+    public static final String INTENT_EXTRA_PUT_PAGE_NAME = IntentExtra.PAGE_NAME;
+
+    private Objects objects;
+
+    private String username, password, url, wikiName, spaceName, pageName;
+
+    private boolean isSecured;
 
     ArrayList<String> allClassNames;
 
@@ -76,18 +89,25 @@ public class ObjectNavigatorActivity extends ExpandableListActivity
 
     private void createObjects()
     {
-        String username, password, url;
 
-        username = getIntent().getExtras().getString("username");
-        password = getIntent().getExtras().getString("password");
-        url = getIntent().getExtras().getString("url");
+        url = getIntent().getExtras().getString(INTENT_EXTRA_PUT_URL);
+        wikiName = getIntent().getExtras().getString(INTENT_EXTRA_PUT_WIKI_NAME);
+        spaceName = getIntent().getExtras().getString(INTENT_EXTRA_PUT_SPACE_NAME);
+        pageName = getIntent().getExtras().getString(INTENT_EXTRA_PUT_PAGE_NAME);
 
-        wikiName = getIntent().getExtras().getString("wikiname");
-        spaceName = getIntent().getExtras().getString("spacename");
-        pageName = getIntent().getExtras().getString("pagename");
-      
+        if (getIntent().getExtras().getString(INTENT_EXTRA_PUT_PASSWORD) != null
+            && getIntent().getExtras().getString(INTENT_EXTRA_PUT_USERNAME) != null) {
+            username = getIntent().getExtras().getString(INTENT_EXTRA_PUT_USERNAME);
+            password = getIntent().getExtras().getString(INTENT_EXTRA_PUT_PASSWORD);
+            isSecured = true;
+        }
+
         Requests request = new Requests(url);
-        request.setAuthentication(username, password);
+
+        if (isSecured) {
+            request.setAuthentication(username, password);
+        }
+
         Objects os = request.requestAllObjects(wikiName, spaceName, pageName);
         objects = os;
     }

@@ -1,35 +1,40 @@
 package org.xwiki.android.components.listnavigator;
 
+import org.xwiki.android.components.IntentExtra;
 import org.xwiki.android.components.R;
-import org.xwiki.android.components.login.LoginActivity;
 import org.xwiki.android.resources.Pages;
 import org.xwiki.android.resources.Spaces;
 import org.xwiki.android.resources.Wikis;
-import org.xwiki.android.rest.HttpConnector;
 import org.xwiki.android.rest.Requests;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.ListActivity;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
 
 public class XWikiListNavigatorActivity extends Activity
 {
-    private String url, wikiName, spaceName, pageName, username, password, cachedWikiName, cachedSpaceName,
-        cachedPageName;
+    public static final String INTENT_EXTRA_PUT_URL = IntentExtra.URL;
+
+    public static final String INTENT_EXTRA_PUT_USERNAME = IntentExtra.USERNAME;
+
+    public static final String INTENT_EXTRA_PUT_PASSWORD = IntentExtra.PASSWORD;
+
+    public static final String INTENT_EXTRA_GET_WIKI_NAME = IntentExtra.WIKI_NAME;
+
+    public static final String INTENT_EXTRA_GET_SPACE_NAME = IntentExtra.SPACE_NAME;
+
+    public static final String INTENT_EXTRA_GET_PAGE_NAME = IntentExtra.PAGE_NAME;
+
+    private String url, wikiName, spaceName, pageName, username, password, cachedWikiName, cachedSpaceName;
 
     private Requests request;
 
@@ -59,12 +64,12 @@ public class XWikiListNavigatorActivity extends Activity
 
         state = 0;
 
-        url = getIntent().getExtras().getString("url");
+        url = getIntent().getExtras().getString(INTENT_EXTRA_PUT_URL);
 
-        if (getIntent().getExtras().getString("password") != null
-            && getIntent().getExtras().getString("username") != null) {
-            username = getIntent().getExtras().getString("username");
-            password = getIntent().getExtras().getString("password");
+        if (getIntent().getExtras().getString(INTENT_EXTRA_PUT_PASSWORD) != null
+            && getIntent().getExtras().getString(INTENT_EXTRA_PUT_USERNAME) != null) {
+            username = getIntent().getExtras().getString(INTENT_EXTRA_PUT_USERNAME);
+            password = getIntent().getExtras().getString(INTENT_EXTRA_PUT_PASSWORD);
             isSecured = true;
         }
 
@@ -220,9 +225,9 @@ public class XWikiListNavigatorActivity extends Activity
 
     private void completeProcess()
     {
-        getIntent().putExtra("wikiname", wikiName);
-        getIntent().putExtra("spacename", spaceName);
-        getIntent().putExtra("pagename", pageName);
+        getIntent().putExtra(INTENT_EXTRA_GET_WIKI_NAME, wikiName);
+        getIntent().putExtra(INTENT_EXTRA_GET_SPACE_NAME, spaceName);
+        getIntent().putExtra(INTENT_EXTRA_GET_PAGE_NAME, pageName);
         setResult(Activity.RESULT_OK, getIntent());
         finish();
     }

@@ -2,13 +2,10 @@ package org.xwiki.android.components.commenteditor;
 
 import java.util.List;
 
+import org.xwiki.android.components.IntentExtra;
 import org.xwiki.android.components.R;
-import org.xwiki.android.components.login.LoginActivity;
-import org.xwiki.android.resources.Attachment;
-import org.xwiki.android.resources.Attachments;
 import org.xwiki.android.resources.Comment;
 import org.xwiki.android.resources.Comments;
-import org.xwiki.android.rest.HttpConnector;
 import org.xwiki.android.rest.Requests;
 
 import android.app.AlertDialog;
@@ -16,23 +13,35 @@ import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.text.InputType;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
 
 public class CommentEditorActivity extends ListActivity
 {
+    public static final String INTENT_EXTRA_PUT_WIKI_NAME = IntentExtra.WIKI_NAME;
+
+    public static final String INTENT_EXTRA_PUT_SPACE_NAME = IntentExtra.SPACE_NAME;
+
+    public static final String INTENT_EXTRA_PUT_PAGE_NAME = IntentExtra.PAGE_NAME;
+
+    public static final String INTENT_EXTRA_PUT_URL = IntentExtra.URL;
+
+    public static final String INTENT_EXTRA_PUT_USERNAME = IntentExtra.USERNAME;
+
+    public static final String INTENT_EXTRA_PUT_PASSWORD = IntentExtra.PASSWORD;
+
     private String[] data;
-    
+
     private List<Comment> commentList;
 
     private String wikiName, spaceName, pageName, username, password, url;
@@ -44,19 +53,17 @@ public class CommentEditorActivity extends ListActivity
     {
         super.onCreate(savedInstanceState);
 
-        wikiName = getIntent().getExtras().getString("wikiname");
-        spaceName = getIntent().getExtras().getString("spacename");
-        pageName = getIntent().getExtras().getString("pagename");
-        url = getIntent().getExtras().getString("url");
+        wikiName = getIntent().getExtras().getString(INTENT_EXTRA_PUT_WIKI_NAME);
+        spaceName = getIntent().getExtras().getString(INTENT_EXTRA_PUT_SPACE_NAME);
+        pageName = getIntent().getExtras().getString(INTENT_EXTRA_PUT_PAGE_NAME);
+        url = getIntent().getExtras().getString(INTENT_EXTRA_PUT_URL);
 
-        if (getIntent().getExtras().getString("password") != null
-            && getIntent().getExtras().getString("username") != null) {
-            username = getIntent().getExtras().getString("username");
-            password = getIntent().getExtras().getString("password");
+        if (getIntent().getExtras().getString(INTENT_EXTRA_PUT_USERNAME) != null
+            && getIntent().getExtras().getString(INTENT_EXTRA_PUT_PASSWORD) != null) {
+            username = getIntent().getExtras().getString(INTENT_EXTRA_PUT_USERNAME);
+            password = getIntent().getExtras().getString(INTENT_EXTRA_PUT_PASSWORD);
             isSecured = true;
         }
-
-      
 
         setupListView();
     }
@@ -95,21 +102,20 @@ public class CommentEditorActivity extends ListActivity
             public void onClick(DialogInterface dialog, int whichButton)
             {
                 dialog.dismiss();
-                
+
                 String value = input.getText().toString().trim();
 
                 Comment comment = new Comment();
                 comment.setText(value);
                 Requests requests = new Requests(url);
-                if(isSecured){
+                if (isSecured) {
                     requests.setAuthentication(username, password);
                 }
-                
+
                 String s = requests.addPageComment(wikiName, spaceName, pageName, comment);
-              
+                Log.d("Comment Status", s);
                 setupListView();
-                
-                
+
             }
         });
 
@@ -126,9 +132,8 @@ public class CommentEditorActivity extends ListActivity
     private void initDataArray()
     {
         final ProgressDialog myProgressDialog;
-        myProgressDialog = ProgressDialog.show(CommentEditorActivity.this,
-                "Comment", "Loading comments...", true);
-        
+        myProgressDialog = ProgressDialog.show(CommentEditorActivity.this, "Comment", "Loading comments...", true);
+
         Requests request = new Requests(url);
         if (isSecured) {
             request.setAuthentication(username, password);
@@ -143,12 +148,13 @@ public class CommentEditorActivity extends ListActivity
         for (int i = 0; i < data.length; i++) {
             data[i] = commentList.get(i).getAuthor() + "\n" + commentList.get(i).getText();
         }
-        
+
         myProgressDialog.dismiss();
     }
-    
-    private void setupListView(){
-        
+
+    private void setupListView()
+    {
+
         initDataArray();
         setListAdapter(new ArrayAdapter<String>(this, R.layout.attachment_list_item, data));
 

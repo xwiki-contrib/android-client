@@ -43,6 +43,11 @@ public class HttpConnector
 
     private boolean isSecured = false;
 
+    // Variables for http connection
+    private HttpRequestInterceptor preemptiveAuth;
+
+    private DefaultHttpClient client;
+
     public void setAuthenticaion(String username, String password)
     {
         this.username = username;
@@ -57,17 +62,9 @@ public class HttpConnector
 
     public String getResponse(String Uri)
     {
-        if (isSecured) {
-            return getResponseWithAuth(Uri, username, password);
-        } else {
-            return getResponseWithoutAuth(Uri);
-        }
-    }
+        initialize();
 
-    private String getResponseWithAuth(String Uri, String username, String password)
-    {
         BufferedReader in = null;
-        DefaultHttpClient client = new DefaultHttpClient();
         HttpGet request = new HttpGet();
         String responseText = new String();
         HttpResponse response;
@@ -78,81 +75,12 @@ public class HttpConnector
             e.printStackTrace();
         }
 
-        HttpRequestInterceptor preemptiveAuth = new HttpRequestInterceptor()
-        {
-
-            @Override
-            public void process(HttpRequest request, HttpContext context) throws HttpException, IOException
-            {
-                AuthState authState = (AuthState) context.getAttribute(ClientContext.TARGET_AUTH_STATE);
-                CredentialsProvider credsProvider =
-                    (CredentialsProvider) context.getAttribute(ClientContext.CREDS_PROVIDER);
-                HttpHost targetHost = (HttpHost) context.getAttribute(ExecutionContext.HTTP_TARGET_HOST);
-
-                if (authState.getAuthScheme() == null) {
-                    AuthScope authScope = new AuthScope(targetHost.getHostName(), targetHost.getPort());
-                    Credentials creds = credsProvider.getCredentials(authScope);
-                    if (creds != null) {
-                        authState.setAuthScheme(new BasicScheme());
-                        authState.setCredentials(creds);
-                    }
-                }
-            }
-
-        };
-
-        client.addRequestInterceptor(preemptiveAuth, 0);
-
-        Credentials defaultcreds = new UsernamePasswordCredentials(username, password);
-        client.getCredentialsProvider().setCredentials(new AuthScope(null, -1, AuthScope.ANY_REALM), defaultcreds);
+        setCredentials();
 
         request.setURI(requestUri);
         Log.d("Request URL", Uri);
         try {
 
-            response = client.execute(request);
-            Log.d("Response status", response.getStatusLine().toString());
-
-            in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-            StringBuffer sb = new StringBuffer("");
-            String line = "";
-            String NL = System.getProperty("line.separator");
-            while ((line = in.readLine()) != null) {
-                sb.append(line + NL);
-            }
-            in.close();
-            responseText = sb.toString();
-            Log.d("Response", "response: " + responseText);
-
-        } catch (ClientProtocolException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-        return responseText;
-    }
-
-    private String getResponseWithoutAuth(String Uri)
-    {
-        BufferedReader in = null;
-        DefaultHttpClient client = new DefaultHttpClient();
-        HttpGet request = new HttpGet();
-        String responseText = new String();
-        HttpResponse response;
-
-        try {
-            requestUri = new URI(Uri);
-
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-
-        request.setURI(requestUri);
-        Log.d("Request URL", Uri);
-        try {
             response = client.execute(request);
             Log.d("Response status", response.getStatusLine().toString());
 
@@ -180,7 +108,8 @@ public class HttpConnector
 
     public String deleteRequest(String Uri)
     {
-        DefaultHttpClient client = new DefaultHttpClient();
+        initialize();
+
         HttpDelete request = new HttpDelete();
         HttpResponse response;
 
@@ -190,33 +119,7 @@ public class HttpConnector
             e.printStackTrace();
         }
 
-        HttpRequestInterceptor preemptiveAuth = new HttpRequestInterceptor()
-        {
-
-            @Override
-            public void process(HttpRequest request, HttpContext context) throws HttpException, IOException
-            {
-                AuthState authState = (AuthState) context.getAttribute(ClientContext.TARGET_AUTH_STATE);
-                CredentialsProvider credsProvider =
-                    (CredentialsProvider) context.getAttribute(ClientContext.CREDS_PROVIDER);
-                HttpHost targetHost = (HttpHost) context.getAttribute(ExecutionContext.HTTP_TARGET_HOST);
-
-                if (authState.getAuthScheme() == null) {
-                    AuthScope authScope = new AuthScope(targetHost.getHostName(), targetHost.getPort());
-                    Credentials creds = credsProvider.getCredentials(authScope);
-                    if (creds != null) {
-                        authState.setAuthScheme(new BasicScheme());
-                        authState.setCredentials(creds);
-                    }
-                }
-            }
-
-        };
-
-        client.addRequestInterceptor(preemptiveAuth, 0);
-
-        Credentials defaultcreds = new UsernamePasswordCredentials(username, password);
-        client.getCredentialsProvider().setCredentials(new AuthScope(null, -1, AuthScope.ANY_REALM), defaultcreds);
+        setCredentials();
 
         request.setURI(requestUri);
         Log.d("Request URL", Uri);
@@ -241,7 +144,8 @@ public class HttpConnector
     public int checkLogin(String username, String password, String Url)
     {
 
-        DefaultHttpClient client = new DefaultHttpClient();
+        initialize();
+
         HttpGet request = new HttpGet();
         HttpResponse response;
         String Uri;
@@ -256,33 +160,7 @@ public class HttpConnector
             e.printStackTrace();
         }
 
-        // Setting preemtiveAuth manually since org.apache.http does not support it
-        HttpRequestInterceptor preemptiveAuth = new HttpRequestInterceptor()
-        {
-
-            @Override
-            public void process(HttpRequest request, HttpContext context) throws HttpException, IOException
-            {
-                AuthState authState = (AuthState) context.getAttribute(ClientContext.TARGET_AUTH_STATE);
-                CredentialsProvider credsProvider =
-                    (CredentialsProvider) context.getAttribute(ClientContext.CREDS_PROVIDER);
-                HttpHost targetHost = (HttpHost) context.getAttribute(ExecutionContext.HTTP_TARGET_HOST);
-
-                if (authState.getAuthScheme() == null) {
-                    AuthScope authScope = new AuthScope(targetHost.getHostName(), targetHost.getPort());
-                    Credentials creds = credsProvider.getCredentials(authScope);
-                    if (creds != null) {
-                        authState.setAuthScheme(new BasicScheme());
-                        authState.setCredentials(creds);
-                    }
-                }
-            }
-        };
-
-        client.addRequestInterceptor(preemptiveAuth, 0);
-
-        Credentials defaultcreds = new UsernamePasswordCredentials(username, password);
-        client.getCredentialsProvider().setCredentials(new AuthScope(null, -1, AuthScope.ANY_REALM), defaultcreds);
+        setCredentials();
 
         request.setURI(requestUri);
         Log.d("Request URL", Uri);
@@ -307,7 +185,8 @@ public class HttpConnector
     // Post request
     public String postRequest(String Uri, String content)
     {
-        DefaultHttpClient client = new DefaultHttpClient();
+        initialize();
+
         HttpPost request = new HttpPost();
         HttpResponse response;
 
@@ -317,33 +196,7 @@ public class HttpConnector
             e.printStackTrace();
         }
 
-        HttpRequestInterceptor preemptiveAuth = new HttpRequestInterceptor()
-        {
-
-            @Override
-            public void process(HttpRequest request, HttpContext context) throws HttpException, IOException
-            {
-                AuthState authState = (AuthState) context.getAttribute(ClientContext.TARGET_AUTH_STATE);
-                CredentialsProvider credsProvider =
-                    (CredentialsProvider) context.getAttribute(ClientContext.CREDS_PROVIDER);
-                HttpHost targetHost = (HttpHost) context.getAttribute(ExecutionContext.HTTP_TARGET_HOST);
-
-                if (authState.getAuthScheme() == null) {
-                    AuthScope authScope = new AuthScope(targetHost.getHostName(), targetHost.getPort());
-                    Credentials creds = credsProvider.getCredentials(authScope);
-                    if (creds != null) {
-                        authState.setAuthScheme(new BasicScheme());
-                        authState.setCredentials(creds);
-                    }
-                }
-            }
-
-        };
-
-        client.addRequestInterceptor(preemptiveAuth, 0);
-
-        Credentials defaultcreds = new UsernamePasswordCredentials(username, password);
-        client.getCredentialsProvider().setCredentials(new AuthScope(null, -1, AuthScope.ANY_REALM), defaultcreds);
+        setCredentials();
 
         request.setURI(requestUri);
         Log.d("Request URL", Uri);
@@ -351,12 +204,11 @@ public class HttpConnector
         try {
             Log.d("Post content", "content=" + content);
             StringEntity se = new StringEntity(content, "UTF-8");
-           
+
             se.setContentType("application/xml");
             // se.setContentType("text/plain");
             request.setEntity(se);
-            request.setHeader("Content-Type","application/xml;charset=UTF-8");
-
+            request.setHeader("Content-Type", "application/xml;charset=UTF-8");
 
             response = client.execute(request);
             Log.d("Response status", response.getStatusLine().toString());
@@ -376,7 +228,6 @@ public class HttpConnector
     // Put request
     public String putRequest(String Uri, String content)
     {
-        DefaultHttpClient client = new DefaultHttpClient();
         HttpPut request = new HttpPut();
         HttpResponse response;
 
@@ -386,33 +237,7 @@ public class HttpConnector
             e.printStackTrace();
         }
 
-        HttpRequestInterceptor preemptiveAuth = new HttpRequestInterceptor()
-        {
-
-            @Override
-            public void process(HttpRequest request, HttpContext context) throws HttpException, IOException
-            {
-                AuthState authState = (AuthState) context.getAttribute(ClientContext.TARGET_AUTH_STATE);
-                CredentialsProvider credsProvider =
-                    (CredentialsProvider) context.getAttribute(ClientContext.CREDS_PROVIDER);
-                HttpHost targetHost = (HttpHost) context.getAttribute(ExecutionContext.HTTP_TARGET_HOST);
-
-                if (authState.getAuthScheme() == null) {
-                    AuthScope authScope = new AuthScope(targetHost.getHostName(), targetHost.getPort());
-                    Credentials creds = credsProvider.getCredentials(authScope);
-                    if (creds != null) {
-                        authState.setAuthScheme(new BasicScheme());
-                        authState.setCredentials(creds);
-                    }
-                }
-            }
-
-        };
-
-        client.addRequestInterceptor(preemptiveAuth, 0);
-
-        Credentials defaultcreds = new UsernamePasswordCredentials(username, password);
-        client.getCredentialsProvider().setCredentials(new AuthScope(null, -1, AuthScope.ANY_REALM), defaultcreds);
+        setCredentials();
 
         request.setURI(requestUri);
         Log.d("Request URL", Uri);
@@ -420,11 +245,11 @@ public class HttpConnector
         try {
             Log.d("Put content", "content=" + content);
             StringEntity se = new StringEntity(content, "UTF-8");
-            
+
             se.setContentType("application/xml");
             // se.setContentType("text/plain");
             request.setEntity(se);
-            request.setHeader("Content-Type","application/xml;charset=UTF-8");
+            request.setHeader("Content-Type", "application/xml;charset=UTF-8");
 
             response = client.execute(request);
             Log.d("Response status", response.getStatusLine().toString());
@@ -443,8 +268,9 @@ public class HttpConnector
 
     public InputStream getResponseAttachment(String Uri)
     {
+        initialize();
+
         BufferedReader in = null;
-        DefaultHttpClient client = new DefaultHttpClient();
         HttpGet request = new HttpGet();
         String responseText = new String();
         HttpResponse response;
@@ -455,33 +281,7 @@ public class HttpConnector
             e.printStackTrace();
         }
 
-        HttpRequestInterceptor preemptiveAuth = new HttpRequestInterceptor()
-        {
-
-            @Override
-            public void process(HttpRequest request, HttpContext context) throws HttpException, IOException
-            {
-                AuthState authState = (AuthState) context.getAttribute(ClientContext.TARGET_AUTH_STATE);
-                CredentialsProvider credsProvider =
-                    (CredentialsProvider) context.getAttribute(ClientContext.CREDS_PROVIDER);
-                HttpHost targetHost = (HttpHost) context.getAttribute(ExecutionContext.HTTP_TARGET_HOST);
-
-                if (authState.getAuthScheme() == null) {
-                    AuthScope authScope = new AuthScope(targetHost.getHostName(), targetHost.getPort());
-                    Credentials creds = credsProvider.getCredentials(authScope);
-                    if (creds != null) {
-                        authState.setAuthScheme(new BasicScheme());
-                        authState.setCredentials(creds);
-                    }
-                }
-            }
-
-        };
-
-        client.addRequestInterceptor(preemptiveAuth, 0);
-
-        Credentials defaultcreds = new UsernamePasswordCredentials(username, password);
-        client.getCredentialsProvider().setCredentials(new AuthScope(null, -1, AuthScope.ANY_REALM), defaultcreds);
+        setCredentials();
 
         request.setURI(requestUri);
         Log.d("Request URL", Uri);
@@ -490,8 +290,8 @@ public class HttpConnector
             response = client.execute(request);
             Log.d("Response status", response.getStatusLine().toString());
 
-            //in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-            
+            // in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+
             return response.getEntity().getContent();
         } catch (ClientProtocolException e) {
             // TODO Auto-generated catch block
@@ -503,10 +303,10 @@ public class HttpConnector
 
         return null;
     }
-    
+
     public String putRaw(String Uri, String filePath)
     {
-        DefaultHttpClient client = new DefaultHttpClient();
+
         HttpPut request = new HttpPut();
         HttpResponse response;
 
@@ -516,43 +316,16 @@ public class HttpConnector
             e.printStackTrace();
         }
 
-        HttpRequestInterceptor preemptiveAuth = new HttpRequestInterceptor()
-        {
-
-            @Override
-            public void process(HttpRequest request, HttpContext context) throws HttpException, IOException
-            {
-                AuthState authState = (AuthState) context.getAttribute(ClientContext.TARGET_AUTH_STATE);
-                CredentialsProvider credsProvider =
-                    (CredentialsProvider) context.getAttribute(ClientContext.CREDS_PROVIDER);
-                HttpHost targetHost = (HttpHost) context.getAttribute(ExecutionContext.HTTP_TARGET_HOST);
-
-                if (authState.getAuthScheme() == null) {
-                    AuthScope authScope = new AuthScope(targetHost.getHostName(), targetHost.getPort());
-                    Credentials creds = credsProvider.getCredentials(authScope);
-                    if (creds != null) {
-                        authState.setAuthScheme(new BasicScheme());
-                        authState.setCredentials(creds);
-                    }
-                }
-            }
-
-        };
-
-        client.addRequestInterceptor(preemptiveAuth, 0);
-
-        Credentials defaultcreds = new UsernamePasswordCredentials(username, password);
-        client.getCredentialsProvider().setCredentials(new AuthScope(null, -1, AuthScope.ANY_REALM), defaultcreds);
+        setCredentials();
 
         request.setURI(requestUri);
         Log.d("Request URL", Uri);
 
         try {
-            
+
             File file = new File(filePath);
-            FileEntity fe= new FileEntity(file, "/");
-            
-            
+            FileEntity fe = new FileEntity(file, "/");
+
             request.setEntity(fe);
             // request.setHeader("Content-Type","application/xml;charset=UTF-8");
 
@@ -571,5 +344,45 @@ public class HttpConnector
         return "error";
     }
 
+    private void initialize()
+    {
+        client = new DefaultHttpClient();
+
+    }
+
+    private void setCredentials()
+    {
+        if (isSecured) {
+
+            // Setting preemtiveAuth manually since org.apache.http does not support it
+            preemptiveAuth = new HttpRequestInterceptor()
+            {
+
+                @Override
+                public void process(HttpRequest request, HttpContext context) throws HttpException, IOException
+                {
+                    AuthState authState = (AuthState) context.getAttribute(ClientContext.TARGET_AUTH_STATE);
+                    CredentialsProvider credsProvider =
+                        (CredentialsProvider) context.getAttribute(ClientContext.CREDS_PROVIDER);
+                    HttpHost targetHost = (HttpHost) context.getAttribute(ExecutionContext.HTTP_TARGET_HOST);
+
+                    if (authState.getAuthScheme() == null) {
+                        AuthScope authScope = new AuthScope(targetHost.getHostName(), targetHost.getPort());
+                        Credentials creds = credsProvider.getCredentials(authScope);
+                        if (creds != null) {
+                            authState.setAuthScheme(new BasicScheme());
+                            authState.setCredentials(creds);
+                        }
+                    }
+                }
+
+            };
+
+            client.addRequestInterceptor(preemptiveAuth, 0);
+
+            Credentials defaultcreds = new UsernamePasswordCredentials(username, password);
+            client.getCredentialsProvider().setCredentials(new AuthScope(null, -1, AuthScope.ANY_REALM), defaultcreds);
+        }
+    }
 
 }

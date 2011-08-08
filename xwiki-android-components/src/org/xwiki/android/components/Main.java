@@ -1,3 +1,23 @@
+/*
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ */
+
 package org.xwiki.android.components;
 
 import org.xwiki.android.components.attachments.AttachmentActivity;
@@ -17,6 +37,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+/**
+ * See {@link com.xpn.xwiki.plugin.zipexplorer.ZipExplorerPluginAPI} for documentation.
+ * 
+ * @version $Id: ZipExplorerPlugin.java 29435 2010-06-12 10:17:42Z vmassol $
+ */
 public class Main extends Activity
 {
     /** Called when the activity is first created. */
@@ -51,22 +76,28 @@ public class Main extends Activity
 
     }
 
+    /**
+     * Returns the XHTML of the requested source, along with annotations inserted as {@code span} elements inside it.
+     * It's a particular case of {@link #getAnnotatedRenderedContent(String, String, String, Collection)} for
+     * unspecified input syntax, {@code xhtml/1.0} output syntax and the list of annotations returned by
+     * {@link #getValidAnnotations(String)} for this source reference.
+     * 
+     * @param sourceReference reference to the source to be rendered in XHTML with annotations
+     * @return rendered and annotated document
+     * @throws AnnotationServiceException if anything goes wrong retrieving or rendering the requested source
+     * @see #getAnnotatedRenderedContent(String, String, String, Collection)
+     */
     private Intent testIntent()
     {
+        Intent intent = new Intent(this, AttachmentActivity.class);
 
-        Intent intent = new Intent(this, XWikiListNavigatorActivity.class);
+        intent.putExtra(IntentExtra.USERNAME, "Admin");
+        intent.putExtra(IntentExtra.PASSWORD, "admin");
+        intent.putExtra(IntentExtra.URL, "10.0.2.2:8080");
 
-         intent.putExtra("username", "Admin");
-         intent.putExtra("password", "admin");
-         intent.putExtra("url", "10.0.2.2:8080");
-
-//        intent.putExtra("username", "chamika");
-//        intent.putExtra("password", "chamikaya");
-//        intent.putExtra("url", "www.xwiki.org");
-
-        intent.putExtra("wikiname", "xwiki");
-        intent.putExtra("spacename", "Blog");
-        intent.putExtra("pagename", "test");
+        intent.putExtra(IntentExtra.WIKI_NAME, "xwiki");
+        intent.putExtra(IntentExtra.SPACE_NAME, "Blog");
+        intent.putExtra(IntentExtra.PAGE_NAME, "test");
 
         return intent;
     }

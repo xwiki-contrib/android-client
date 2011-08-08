@@ -1,15 +1,12 @@
 package org.xwiki.android.components.pageviewer;
 
-import org.xwiki.android.resources.Objects;
 import org.xwiki.android.resources.Object;
+import org.xwiki.android.resources.Objects;
 import org.xwiki.android.rest.Requests;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.AttributeSet;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -20,7 +17,7 @@ public class XWikiPageViewerLayout extends LinearLayout
     private String wikiName, spaceName, pageName, username, password, url;
 
     private boolean isSecured;
-    
+
     public XWikiPageViewerLayout(Context context, String[] data)
     {
         super(context);
@@ -77,7 +74,7 @@ public class XWikiPageViewerLayout extends LinearLayout
                 textViewName.setTextColor(Color.WHITE);
                 textViewName.setTextSize(textViewName.getTextSize() + 0.7f);
                 addView(textViewName);
-                
+
                 TextView textViewValue = new TextView(context);
                 textViewValue.setText(object.properties.get(j).getValue());
                 textViewValue.setTextSize(textViewValue.getTextSize() + 0.5f);

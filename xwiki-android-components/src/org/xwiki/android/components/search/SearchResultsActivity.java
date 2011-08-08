@@ -1,5 +1,6 @@
 package org.xwiki.android.components.search;
 
+import org.xwiki.android.components.IntentExtra;
 import org.xwiki.android.components.R;
 import org.xwiki.android.resources.SearchResults;
 import org.xwiki.android.rest.Requests;
@@ -16,40 +17,52 @@ import android.widget.AdapterView.OnItemClickListener;
 
 public class SearchResultsActivity extends ListActivity
 {
+    public static final String INTENT_EXTRA_PUT_URL = IntentExtra.URL;
+
+    public static final String INTENT_EXTRA_PUT_USERNAME = IntentExtra.USERNAME;
+
+    public static final String INTENT_EXTRA_PUT_PASSWORD = IntentExtra.PASSWORD;
+
+    public static final String INTENT_EXTRA_PUT_WIKI_NAME = IntentExtra.WIKI_NAME;
+
+    public static final String INTENT_EXTRA_PUT_SPACE_NAME = IntentExtra.SPACE_NAME;
+
+    public static final String INTENT_EXTRA_PUT_KEYWORD = IntentExtra.KEYWORD;
+
+    public static final String INTENT_EXTRA_GET_PAGE_NAME = IntentExtra.PAGE_NAME;
+
     private String url, wikiname, spacename, username, password, keyword;
 
     private boolean isSecured;
-    
+
     private String[] data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
 
-        wikiname = getIntent().getExtras().getString("wikiname");
-        spacename = getIntent().getExtras().getString("spacename");
-        url = getIntent().getExtras().getString("url");
-        keyword = getIntent().getExtras().getString("keyword");
+        wikiname = getIntent().getExtras().getString(INTENT_EXTRA_PUT_WIKI_NAME);
+        spacename = getIntent().getExtras().getString(INTENT_EXTRA_PUT_SPACE_NAME);
+        url = getIntent().getExtras().getString(INTENT_EXTRA_PUT_URL);
+        keyword = getIntent().getExtras().getString(INTENT_EXTRA_PUT_KEYWORD);
 
-        if (getIntent().getExtras().getString("password") != null
-            && getIntent().getExtras().getString("username") != null) {
-            username = getIntent().getExtras().getString("username");
-            password = getIntent().getExtras().getString("password");
+        if (getIntent().getExtras().getString(INTENT_EXTRA_PUT_PASSWORD) != null
+            && getIntent().getExtras().getString(INTENT_EXTRA_PUT_USERNAME) != null) {
+            username = getIntent().getExtras().getString(INTENT_EXTRA_PUT_USERNAME);
+            password = getIntent().getExtras().getString(INTENT_EXTRA_PUT_PASSWORD);
             isSecured = true;
         }
 
         loadSearchResults();
-        
+
         setListAdapter(new ArrayAdapter<String>(this, R.layout.searchresults_list_item, data));
 
-        ListView lv = getListView();
-        lv.setTextFilterEnabled(true);
+        ListView listView = getListView();
+        listView.setTextFilterEnabled(true);
 
-        lv.setOnItemClickListener(new OnItemClickListener()
+        listView.setOnItemClickListener(new OnItemClickListener()
         {
-
             @Override
             public void onItemClick(AdapterView< ? > arg0, View view, int arg2, long arg3)
             {
@@ -70,18 +83,16 @@ public class SearchResultsActivity extends ListActivity
         SearchResults sr = request.requestSearch(wikiname, spacename, keyword);
 
         data = new String[sr.getSearchResults().size()];
-        
-        for(int i=0; i < data.length; i++){
+
+        for (int i = 0; i < data.length; i++) {
             data[i] = sr.getSearchResults().get(i).getPageName();
         }
-        
-       
-
     }
-    
-    private void completeProcess(String pageName){
-                
-        getIntent().putExtra("pagename", pageName);
+
+    private void completeProcess(String pageName)
+    {
+
+        getIntent().putExtra(INTENT_EXTRA_GET_PAGE_NAME, pageName);
         setResult(Activity.RESULT_OK, getIntent());
         finish();
     }

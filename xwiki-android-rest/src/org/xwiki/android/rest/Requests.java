@@ -681,5 +681,22 @@ public class Requests
         }
         return objectresources.getObjectProperty(objectClassname, objectNumber, propertyName);
     }
+    
+    //Method for adding Property object in a specific class in a page
+    public String addProperty(String wikiName, String spaceName, String pageName, String objectClassname,
+        String objectNumber, Property property)
+    {
+        wikiName = convertToUTF(wikiName);
+        spaceName = convertToUTF(spaceName);
+        pageName = convertToUTF(pageName);
+        objectClassname = convertToUTF(objectClassname);
+        objectNumber = convertToUTF(objectNumber);
+
+        ObjectResources objectresources = new ObjectResources(URLprefix, wikiName, spaceName, pageName);
+        if (isAuthenticated) {
+            objectresources.setAuthenticaion(username, password);
+        }
+        return objectresources.addObjectProperty(objectClassname, objectNumber, property);
+    }
 
 }
