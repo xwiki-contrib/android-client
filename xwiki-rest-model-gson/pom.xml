@@ -35,8 +35,5 @@
 	<artifactId>xwiki-rest-model-gson</artifactId>
 	<name>XWikiGsonModel</name>
 
-	<build>
-		<sourceDirectory>src</sourceDirectory>
-	</build>
-
+	
 </project>

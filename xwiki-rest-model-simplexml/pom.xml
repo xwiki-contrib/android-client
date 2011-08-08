@@ -35,8 +35,6 @@
 	<artifactId>xwiki-rest-model-simplexml</artifactId>
 	<name>XWikiSimpleXmlModel</name>
 
-	<build>
-		<sourceDirectory>src</sourceDirectory>
-	</build>
+	
 
 </project>
