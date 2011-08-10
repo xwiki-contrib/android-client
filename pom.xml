@@ -38,11 +38,14 @@
 	<description>XWiki Android - Parent POM</description>
 	<properties>
 		<xwiki.clirr.skip>true</xwiki.clirr.skip>
+		<!-- Force accessing banned dependancy junit since android-test artifact uses it -->
+		<enforcer.skip>true</enforcer.skip> 
 	</properties>
 	<modules>
 		<module>xwiki-rest-model-simplexml</module>
 		<module>xwiki-android-rest</module>
 		<module>xwiki-android-components</module>
+		<module>xwiki-android-tests-instrumentation</module>
 		<module>xwiki-android-client</module>
 	</modules>
 
@@ -53,7 +56,12 @@
 			<version>2.2.1</version>
 			<scope>provided</scope>
 		</dependency>
-		
+		<dependency>
+      			<groupId>com.google.android</groupId>
+      			<artifactId>android-test</artifactId>
+		      	<version>2.2.1</version>
+		      	<scope>provided</scope>
+    		</dependency>
 		<dependency>
 			<groupId>org.simpleframework</groupId>
 			<artifactId>simple-xml</artifactId>
@@ -61,8 +69,13 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
-		
+		<dependency>
+		        <groupId>junit</groupId>
+			<artifactId>junit-dep</artifactId>
+		        <version>4.8.1</version>
+            	</dependency>	
 	</dependencies>
+
 	<build>
 		<plugins>
 
