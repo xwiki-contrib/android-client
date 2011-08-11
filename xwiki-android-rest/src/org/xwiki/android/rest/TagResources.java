@@ -1,3 +1,23 @@
+/*
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ */
+
 package org.xwiki.android.rest;
 
 import java.io.StringWriter;
@@ -9,19 +29,42 @@ import org.xwiki.android.resources.Tags;
 
 public class TagResources extends HttpConnector
 {
-
+    /**
+     * Path provided from XWiki RESTful API
+     */
     private final String PAGE_URL_PREFIX = "/xwiki/rest/wikis/";
 
+    /**
+     * URL of the XWiki domain
+     */
     private String URLprefix;
 
+    /**
+     * Name of Wiki for acquiring tags
+     */
     private String wikiName;
 
+    /**
+     * Name of space for acquiring tags
+     */
     private String spaceName;
 
+    /**
+     * Name of page for acquiring tags
+     */
     private String pageName;
 
+    /**
+     * Type of the tag.
+     * <p>
+     * 0= Wiki tag 1=Page tag </>
+     */
     private int tagType;
 
+    /**
+     * @param URLprefix XWiki URl ex:"www.xwiki.org"
+     * @param wikiName name of the wiki in UTF-8 format
+     */
     public TagResources(String URLprefix, String wikiName)
     {
         this.URLprefix = URLprefix;
@@ -29,6 +72,12 @@ public class TagResources extends HttpConnector
         tagType = 0;
     }
 
+    /**
+     * @param URLprefix XWiki URl ex:"www.xwiki.org"
+     * @param wikiName name of the wiki in UTF-8 format
+     * @param spaceName name of the space in UTF-8 format
+     * @param pageName name of the page in UTF-8 format
+     */
     public TagResources(String URLprefix, String wikiName, String spaceName, String pageName)
     {
         this.URLprefix = URLprefix;
@@ -38,7 +87,12 @@ public class TagResources extends HttpConnector
         tagType = 1;
     }
 
-    // get all tags in page or wiki
+    /**
+     * Gets all the tags either from wiki or from the page. If only the URL & Wiki name fields are provided then method
+     * will return wiki tags and if space name and page name is provided it will return page tags
+     * 
+     * @return list of all tags as a Tags object
+     */
     public Tags getTags()
     {
 
@@ -57,6 +111,12 @@ public class TagResources extends HttpConnector
         return buildTags(super.getResponse(Uri));
     }
 
+    /**
+     * Adds tag to the wiki or the page depending on the fields provided in the constructor
+     * 
+     * @param tag Tag object to be added
+     * @return statsu of the HTTP put request
+     */
     public String addTag(Tag tag)
     {
 
@@ -92,7 +152,12 @@ public class TagResources extends HttpConnector
 
     }
 
-    // decode xml content to Tags element
+    /**
+     * Parse xml into a Tags object
+     * 
+     * @param content XML content
+     * @return Tags object deserialized from the xml content
+     */
     private Tags buildTags(String content)
     {
         Tags tags = new Tags();
@@ -102,14 +167,18 @@ public class TagResources extends HttpConnector
         try {
             tags = serializer.read(Tags.class, content);
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
         return tags;
     }
 
-    // build xml from Tags object
+    /**
+     * Generate XML content from the Tags object
+     * 
+     * @param tags Tags object to be serialized into XML
+     * @return XML content of the provided Tags object
+     */
     private String buildXml(Tags tags)
     {
         Serializer serializer = new Persister();
@@ -119,7 +188,6 @@ public class TagResources extends HttpConnector
         try {
             serializer.write(tags, result);
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 

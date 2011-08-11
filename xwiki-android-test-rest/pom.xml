@@ -31,9 +31,9 @@
 		<version>1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>xwiki-android-tests-instrumentation</artifactId>
+	<artifactId>xwiki-android-test-rest</artifactId>
 	<packaging>apk</packaging>
-	<name>XWiki Android Instrumentation Tests</name>
+	<name>XWiki Android REST Tests</name>
 
 	<dependencies>
 		<dependency>

@@ -8,6 +8,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 public class XWikiPageViewerLayout extends LinearLayout
@@ -54,6 +55,13 @@ public class XWikiPageViewerLayout extends LinearLayout
     {
         setOrientation(LinearLayout.VERTICAL);
         setScrollBarStyle(LinearLayout.SCROLLBARS_INSIDE_OVERLAY);
+        
+        LinearLayout innerLayout = new LinearLayout(context);
+        innerLayout.setOrientation(LinearLayout.VERTICAL);
+        innerLayout.setScrollBarStyle(LinearLayout.SCROLLBARS_INSIDE_OVERLAY);
+        
+        ScrollView scrollView = new ScrollView(context);
+        
 
         Requests request = new Requests(url);
         if (isSecured) {
@@ -73,15 +81,18 @@ public class XWikiPageViewerLayout extends LinearLayout
                 textViewName.setText(object.properties.get(j).getName());
                 textViewName.setTextColor(Color.WHITE);
                 textViewName.setTextSize(textViewName.getTextSize() + 0.7f);
-                addView(textViewName);
+                
+                innerLayout.addView(textViewName);
 
                 TextView textViewValue = new TextView(context);
                 textViewValue.setText(object.properties.get(j).getValue());
                 textViewValue.setTextSize(textViewValue.getTextSize() + 0.5f);
-                addView(textViewValue);
+                innerLayout.addView(textViewValue);
             }
 
         }
-
+        
+        scrollView.addView(innerLayout);
+        addView(scrollView);
     }
 }

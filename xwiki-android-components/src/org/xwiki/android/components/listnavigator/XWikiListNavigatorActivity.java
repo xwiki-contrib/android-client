@@ -2,6 +2,8 @@ package org.xwiki.android.components.listnavigator;
 
 import org.xwiki.android.components.IntentExtra;
 import org.xwiki.android.components.R;
+import org.xwiki.android.components.pageviewer.XWikiPageViewerActivity;
+import org.xwiki.android.components.search.SearchActivity;
 import org.xwiki.android.resources.Pages;
 import org.xwiki.android.resources.Spaces;
 import org.xwiki.android.resources.Wikis;
@@ -9,8 +11,12 @@ import org.xwiki.android.rest.Requests;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -34,6 +40,8 @@ public class XWikiListNavigatorActivity extends Activity
 
     public static final String INTENT_EXTRA_GET_PAGE_NAME = IntentExtra.PAGE_NAME;
 
+    private static final int SEARCH_ACTIVITY_REQUEST_CODE = 100;
+    
     private String url, wikiName, spaceName, pageName, username, password, cachedWikiName, cachedSpaceName;
 
     private Requests request;
@@ -102,6 +110,53 @@ public class XWikiListNavigatorActivity extends Activity
 
         addItemsToList(state, null);
 
+    }
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.layout.xwikilistnavigator_menu, menu);
+        return true;
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId()) {
+            case R.id.do_search:
+                showSearch();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+    
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if(requestCode == SEARCH_ACTIVITY_REQUEST_CODE){
+            if(resultCode == Activity.RESULT_OK){
+                wikiName = data.getExtras().getString(SearchActivity.INTENT_EXTRA_GET_WIKI_NAME);
+                spaceName = data.getExtras().getString(SearchActivity.INTENT_EXTRA_GET_SPACE_NAME);
+                pageName = data.getExtras().getString(SearchActivity.INTENT_EXTRA_GET_PAGE_NAME);
+                completeProcess();
+            }
+        }
+    }
+    
+    private void showSearch(){
+        Intent intent = new Intent(this, SearchActivity.class);
+
+        if (isSecured) {
+            intent.putExtra(SearchActivity.INTENT_EXTRA_PUT_USERNAME, username);
+            intent.putExtra(SearchActivity.INTENT_EXTRA_PUT_PASSWORD, password);
+        }
+
+        intent.putExtra(SearchActivity.INTENT_EXTRA_PUT_URL, url);
+        
+        startActivityForResult(intent, SEARCH_ACTIVITY_REQUEST_CODE);
     }
 
     private void loadWikis()
@@ -191,6 +246,8 @@ public class XWikiListNavigatorActivity extends Activity
             }
             titleTextView.setText(wikiName + " > " + spaceName);
             loadPages();
+        } else if (stateID < 0) {
+            finishProcess();
         } else {
             pageName = selectedItem;
             completeProcess();
@@ -229,6 +286,12 @@ public class XWikiListNavigatorActivity extends Activity
         getIntent().putExtra(INTENT_EXTRA_GET_SPACE_NAME, spaceName);
         getIntent().putExtra(INTENT_EXTRA_GET_PAGE_NAME, pageName);
         setResult(Activity.RESULT_OK, getIntent());
+        finish();
+    }
+
+    private void finishProcess()
+    {
+        setResult(Activity.RESULT_CANCELED, getIntent());
         finish();
     }
 }

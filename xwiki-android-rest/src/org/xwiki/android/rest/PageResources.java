@@ -1,3 +1,23 @@
+/*
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ */
+
 package org.xwiki.android.rest;
 
 import java.io.StringWriter;
@@ -7,19 +27,42 @@ import org.simpleframework.xml.core.Persister;
 import org.xwiki.android.resources.Page;
 import org.xwiki.android.resources.Pages;
 
+/**
+ * XWiki Android REST Page(s) related source. Can get the Page details/list as a Page(s) objects of Simple-xml object
+ * model
+ */
 public class PageResources extends HttpConnector
 {
-
+    /**
+     * Path provided from XWiki RESTful API
+     */
     private final String PAGE_URL_PREFIX = "/xwiki/rest/wikis/";
 
+    /**
+     * Path provided from XWiki RESTful API for pages
+     */
     private final String PAGE_URL_SUFFIX = "/pages";
 
+    /**
+     * URL of the XWiki domain
+     */
     private String URLprefix;
 
+    /**
+     * Name of Wiki for acquiring pages
+     */
     private String wikiName;
 
+    /**
+     * Name of space for acquiring pages
+     */
     private String spaceName;
 
+    /**
+     * @param URLprefix XWiki URl ex:"www.xwiki.org"
+     * @param wikiName name of the wiki in UTF-8 format
+     * @param spaceName name of the space in UTF-8 format
+     */
     public PageResources(String URLprefix, String wikiName, String spaceName)
     {
         this.URLprefix = URLprefix;
@@ -27,7 +70,9 @@ public class PageResources extends HttpConnector
         this.spaceName = spaceName;
     }
 
-    // get all pages [ok]
+    /**
+     * @return all the pages as a Pages object in the specified space
+     */
     public Pages getAllPages()
     {
         String Uri = "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + PAGE_URL_SUFFIX;
@@ -35,7 +80,10 @@ public class PageResources extends HttpConnector
         return buildPages(super.getResponse(Uri));
     }
 
-    // get page [ok]
+    /**
+     * @param pageName name of the page
+     * @return requested page as a Page object
+     */
     public Page getPage(String pageName)
     {
         String Uri = "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName;
@@ -43,17 +91,26 @@ public class PageResources extends HttpConnector
         return buildPage(super.getResponse(Uri));
     }
 
-    // add or modify page
+    /**
+     * Adds or Modify the page
+     * 
+     * @param page Page object to be added if not existing in the space or modified if it existing in the space
+     * @return status of the HTTP put request
+     */
     public String addPage(Page page)
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + page.getName();
 
-        
         return super.putRequest(Uri, buildXmlPage(page));
     }
 
-    // Delete page
+    /**
+     * Deletes the page by providing name of the page
+     * 
+     * @param pageName name of the page
+     * @return status of the HTTP delete request
+     */
     public String deletePage(String pageName)
     {
         String Uri = "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName;
@@ -66,7 +123,11 @@ public class PageResources extends HttpConnector
 
     }
 
-    // Get page history on version
+    /**
+     * @param pageName name of the page
+     * @param version history version of the page
+     * @return requested version of the page
+     */
     public Page getPageHistoryOnVersion(String pageName, String version)
     {
         String Uri =
@@ -76,7 +137,10 @@ public class PageResources extends HttpConnector
         return buildPage(super.getResponse(Uri));
     }
 
-    // Get page children
+    /**
+     * @param pageName name of the page
+     * @return children of the page as a Pages object
+     */
     public Pages getPageChildren(String pageName)
     {
         String Uri =
@@ -86,7 +150,11 @@ public class PageResources extends HttpConnector
         return buildPages(super.getResponse(Uri));
     }
 
-    // Get page translation
+    /**
+     * @param pageName name of the page
+     * @param language language name of the page
+     * @return Translated page of the provided language
+     */
     public Page getPageTranslation(String pageName, String language)
     {
         String Uri =
@@ -96,7 +164,13 @@ public class PageResources extends HttpConnector
         return buildPage(super.getResponse(Uri));
     }
 
-    // add page translation
+    /**
+     * Adds page translation to XWiki
+     * 
+     * @param page Page object of the new translation
+     * @param language translated language name of the page
+     * @return status of the HTTP put request
+     */
     public String addPageTranslation(Page page, String language)
     {
         String Uri =
@@ -108,7 +182,13 @@ public class PageResources extends HttpConnector
         return super.putRequest(Uri, content);
     }
 
-    // Delete page translation
+    /**
+     * Deletes specific translation page
+     * 
+     * @param pageName name of the page
+     * @param language translated language name of the page
+     * @return status of the HTTP delete request
+     */
     public String deletePageTranslation(String pageName, String language)
     {
         String Uri =
@@ -118,7 +198,12 @@ public class PageResources extends HttpConnector
         return super.deleteRequest(Uri);
     }
 
-    // wikis/{wikiName}/spaces/{spaceName}/pages/{pageName}/translations/{lang}/history/{version}
+    /**
+     * @param pageName name of the page
+     * @param language translated language name of the page
+     * @param version version of the page
+     * @return translated page of the spcific page history version
+     */
     public Page getPageTranslation(String pageName, String language, String version)
     {
         String Uri =
@@ -128,7 +213,12 @@ public class PageResources extends HttpConnector
         return buildPage(super.getResponse(Uri));
     }
 
-    // decode xml content to Pages element
+    /**
+     * Parse xml into a Pages object
+     * 
+     * @param content XML content
+     * @return Pages object deserialized from the xml content
+     */
     private Pages buildPages(String content)
     {
         Pages pages = new Pages();
@@ -145,7 +235,12 @@ public class PageResources extends HttpConnector
         return pages;
     }
 
-    // build xml from Comment object
+    /**
+     * Generate XML content from the Pages object
+     * 
+     * @param pages Pages object to be serialized into XML
+     * @return XML content of the provided Pages object
+     */
     private String buildXmlPages(Pages pages)
     {
         Serializer serializer = new Persister();
@@ -162,7 +257,12 @@ public class PageResources extends HttpConnector
         return result.toString();
     }
 
-    // decode xml content to Comment element
+    /**
+     * Parse xml into a Page object
+     * 
+     * @param content XML content
+     * @return Page object deserialized from the xml content
+     */
     private Page buildPage(String content)
     {
         Page page = new Page();
@@ -179,7 +279,12 @@ public class PageResources extends HttpConnector
         return page;
     }
 
-    // build xml from Comment object
+    /**
+     * Generate XML content from the Page object
+     * 
+     * @param page Page object to be serialized into XML
+     * @return XML content of the provided Page object
+     */
     private String buildXmlPage(Page page)
     {
         Serializer serializer = new Persister();
@@ -194,5 +299,4 @@ public class PageResources extends HttpConnector
 
         return result.toString();
     }
-
 }

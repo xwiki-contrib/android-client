@@ -45,8 +45,9 @@
 		<module>xwiki-rest-model-simplexml</module>
 		<module>xwiki-android-rest</module>
 		<module>xwiki-android-components</module>
-		<module>xwiki-android-tests-instrumentation</module>
 		<module>xwiki-android-client</module>
+		<module>xwiki-android-test-rest</module>
+		<module>xwiki-android-tests-instrumentation</module>
 	</modules>
 
 	<dependencies>
@@ -57,23 +58,12 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-      			<groupId>com.google.android</groupId>
-      			<artifactId>android-test</artifactId>
-		      	<version>2.2.1</version>
-		      	<scope>provided</scope>
-    		</dependency>
-		<dependency>
 			<groupId>org.simpleframework</groupId>
 			<artifactId>simple-xml</artifactId>
 			<version>2.6</version>
 			<type>jar</type>
 			<scope>compile</scope>
-		</dependency>
-		<dependency>
-		        <groupId>junit</groupId>
-			<artifactId>junit-dep</artifactId>
-		        <version>4.8.1</version>
-            	</dependency>	
+		</dependency>	
 	</dependencies>
 
 	<build>

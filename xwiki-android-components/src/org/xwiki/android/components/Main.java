@@ -27,6 +27,7 @@ import org.xwiki.android.components.login.LoginActivity;
 import org.xwiki.android.components.navigator.XWikiNavigatorActivity;
 import org.xwiki.android.components.objecteditor.ObjectEditorActivity;
 import org.xwiki.android.components.objectnavigator.ObjectNavigatorActivity;
+import org.xwiki.android.components.pageviewer.XWikiPageViewerActivity;
 import org.xwiki.android.components.propertyeditor.PropertyEditorActivity;
 import org.xwiki.android.components.search.SearchActivity;
 import org.xwiki.android.resources.Objects;
@@ -76,20 +77,10 @@ public class Main extends Activity
 
     }
 
-    /**
-     * Returns the XHTML of the requested source, along with annotations inserted as {@code span} elements inside it.
-     * It's a particular case of {@link #getAnnotatedRenderedContent(String, String, String, Collection)} for
-     * unspecified input syntax, {@code xhtml/1.0} output syntax and the list of annotations returned by
-     * {@link #getValidAnnotations(String)} for this source reference.
-     * 
-     * @param sourceReference reference to the source to be rendered in XHTML with annotations
-     * @return rendered and annotated document
-     * @throws AnnotationServiceException if anything goes wrong retrieving or rendering the requested source
-     * @see #getAnnotatedRenderedContent(String, String, String, Collection)
-     */
+    
     private Intent testIntent()
     {
-        Intent intent = new Intent(this, AttachmentActivity.class);
+        Intent intent = new Intent(this, XWikiPageViewerActivity.class);
 
         intent.putExtra(IntentExtra.USERNAME, "Admin");
         intent.putExtra(IntentExtra.PASSWORD, "admin");

@@ -1,5 +1,6 @@
 package org.xwiki.android.client;
 
+import org.xwiki.android.components.listnavigator.XWikiListNavigatorActivity;
 import org.xwiki.android.components.login.LoginActivity;
 import org.xwiki.android.components.navigator.XWikiNavigatorActivity;
 import org.xwiki.android.components.objectnavigator.ObjectNavigatorActivity;
@@ -38,8 +39,7 @@ public class Main extends Activity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        //startActivity(new Intent(this, PageViewActivity.class));
-         startActivityForResult(new Intent(getApplicationContext(), LoginActivity.class), REQUEST_CODE_LOGINACTIVITY);
+        startActivityForResult(new Intent(getApplicationContext(), LoginActivity.class), REQUEST_CODE_LOGINACTIVITY);
     }
 
     @Override
@@ -51,33 +51,32 @@ public class Main extends Activity
         if (requestCode == REQUEST_CODE_LOGINACTIVITY) {
             if (resultCode == Activity.RESULT_OK) {
                 Log.d("Activity Result", "OK");
-                username = data.getExtras().getString("username");
-                password = data.getExtras().getString("password");
-                url = data.getExtras().getString("url");
+                username = data.getExtras().getString(LoginActivity.INTENT_EXTRA_GET_USERNAME);
+                password = data.getExtras().getString(LoginActivity.INTENT_EXTRA_GET_PASSWORD);
+                url = data.getExtras().getString(LoginActivity.INTENT_EXTRA_GET_URL);
                 Log.d("data", "username=" + username + " password=" + password + " url=" + url);
-
                 startXWikiNavigator();
             } else {
                 finish();
             }
         } else if (requestCode == REQUEST_CODE_XWIKI_NAVIGATOR) {
             if (resultCode == Activity.RESULT_OK) {
-                wikiName = data.getExtras().getString("wikiname");
-                spaceName = data.getExtras().getString("spacename");
-                pageName = data.getExtras().getString("pagename");
+                wikiName = data.getExtras().getString(XWikiListNavigatorActivity.INTENT_EXTRA_GET_WIKI_NAME);
+                spaceName = data.getExtras().getString(XWikiListNavigatorActivity.INTENT_EXTRA_GET_SPACE_NAME);
+                pageName = data.getExtras().getString(XWikiListNavigatorActivity.INTENT_EXTRA_GET_PAGE_NAME);
 
                 Intent intent = new Intent(this, PageViewActivity.class);
-                intent.putExtra("username", username);
-                intent.putExtra("password", password);
-                intent.putExtra("url", url);
-                intent.putExtra("wikiname", wikiName);
-                intent.putExtra("spacename", spaceName);
-                intent.putExtra("pagename", pageName);
+                intent.putExtra(PageViewActivity.INTENT_EXTRA_PUT_USERNAME, username);
+                intent.putExtra(PageViewActivity.INTENT_EXTRA_PUT_PASSWORD, password);
+                intent.putExtra(PageViewActivity.INTENT_EXTRA_PUT_URL, url);
+                intent.putExtra(PageViewActivity.INTENT_EXTRA_PUT_WIKI_NAME, wikiName);
+                intent.putExtra(PageViewActivity.INTENT_EXTRA_PUT_SPACE_NAME, spaceName);
+                intent.putExtra(PageViewActivity.INTENT_EXTRA_PUT_PAGE_NAME, pageName);
 
                 startActivityForResult(intent, REQUEST_CODE_XWIKI_PAGEVIEWER);
-            }
-            else{
-                startActivityForResult(new Intent(getApplicationContext(), LoginActivity.class), REQUEST_CODE_LOGINACTIVITY);
+            } else {
+                startActivityForResult(new Intent(getApplicationContext(), LoginActivity.class),
+                    REQUEST_CODE_LOGINACTIVITY);
             }
 
         } else if (requestCode == REQUEST_CODE_XWIKI_PAGEVIEWER) {
@@ -89,10 +88,17 @@ public class Main extends Activity
 
     private void startXWikiNavigator()
     {
-        Intent intent = new Intent(this, XWikiNavigatorActivity.class);
-        intent.putExtra("username", username);
-        intent.putExtra("password", password);
-        intent.putExtra("url", url);
+        // Tree based XWiki Navigator
+        // Intent intent = new Intent(this, XWikiNavigatorActivity.class);
+        // intent.putExtra("username", username);
+        // intent.putExtra("password", password);
+        // intent.putExtra("url", url);
+        
+        // List based XWiki Navigator
+        Intent intent = new Intent(this, XWikiListNavigatorActivity.class);
+        intent.putExtra(XWikiListNavigatorActivity.INTENT_EXTRA_PUT_USERNAME, username);
+        intent.putExtra(XWikiListNavigatorActivity.INTENT_EXTRA_PUT_PASSWORD, password);
+        intent.putExtra(XWikiListNavigatorActivity.INTENT_EXTRA_PUT_URL, url);
 
         startActivityForResult(intent, REQUEST_CODE_XWIKI_NAVIGATOR);
     }

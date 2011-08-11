@@ -16,7 +16,7 @@ public class LoginActivityTests extends ActivityInstrumentationTestCase2<LoginAc
 
     public void testSomething() throws Throwable
     {
-        super.setUp();
+        
         loginActivity = this.getActivity();
     }
 
