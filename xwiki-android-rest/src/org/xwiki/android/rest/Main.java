@@ -47,7 +47,7 @@ public class Main extends Activity
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.main);
+        // setContentView(R.layout.main);
     }
 
     public void searchButtonClick(View v)
@@ -83,6 +83,7 @@ public class Main extends Activity
         // Log.d("Final result:", "result=" + result);
         // tv_result.setText("Space Results\n" + result);
 
+        // [ok]
         // Test all pages implementation
         // Pages ps = request.requestAllPages("xwiki", "Blog");
         // for (int i = 0; i < ps.pageSummaries.size(); i++) {
@@ -91,6 +92,7 @@ public class Main extends Activity
         // Log.d("Info", "worked");
         // tv_result.setText("All Pages Results\n" + result);
 
+        // [ok]
         // Test one page implementation
         // Page p = request.requestPage("xwiki", "Blog", "test");
         // Log.d("page", "page details=" + p.name + "," + p.title + "," +
@@ -99,17 +101,20 @@ public class Main extends Activity
         // Log.d("Final result:", "result=" + result);
         // tv_result.setText("Page Results\n" + result);
 
+        // [ok]
         // Test one page adding
         // Page p = request.requestPage("xwiki", "Blog", "test");
         // p.setContent("Content is changed by android client");
         // String s= request.addPage("xwiki", "Blog", "test", p);
         // Log.d("Info", "worked");
+        
         // Test one page delete implementation
         // request.setAuthentication("Admin", "admin");
         // String result = request.deletePage("xwiki", "Blog", "This is test");
         // Log.d("Final result:", "result=" + result);
         // tv_result.setText("Page Results\n" + result);
 
+        // [ok]
         // Test one page history implementation
         // History h = request.requestPageHistory("xwiki", "Blog",
         // "test");
@@ -117,6 +122,7 @@ public class Main extends Activity
         // Log.d("Final result:", "result=" + result);
         // tv_result.setText("Page Results\n" + result);
 
+        // [ok]
         // Test page children implementation
         // Pages ps=request.requestPageChildren("xwiki", "Blog",
         // "This is test 2");
@@ -124,6 +130,7 @@ public class Main extends Activity
         // Log.d("Final result:", "result=" + result);
         // tv_result.setText("Page Results\n" + result);
 
+        
         // Test page tags implementation
         // Tags ts= request.requestPageTags("xwiki", "Blog", "test");
         // Log.d("Info","worked");
@@ -142,6 +149,7 @@ public class Main extends Activity
         // String rep = request.addPageTag("xwiki", "Blog", "test", tag);
         // Log.d("Info","worked");
 
+        // [ok]
         // Test page comments implementation
         // Comments cs = request.requestPageComments("xwiki", "Blog",
         // "test");
@@ -149,18 +157,21 @@ public class Main extends Activity
         // Log.d("Final result:", "result=" + result);
         // tv_result.setText("Page Results\n" + result);
 
-        // Test page comments implementation with id
+        // [ok]
+        // Test page comment implementation with id
         // Comment c = request.requestPageComments("xwiki", "Blog",
         // "This is test 2","0");
         // Log.d("Info","worked");
         // Log.d("Final result:", "result=" + result);
         // tv_result.setText("Page Results\n" + result);
 
+        // [ok]
         // Test page comments implementation in history
         // Comments cs= request.requestPageCommentsInHistory("xwiki", "Blog",
         // "This is test 2", "6.2");
         // Log.d("Info","worked");
 
+        // [ok]
         // Test page comments implementation in history and version
         // Comments cs= request.requestPageCommentsInHistory("xwiki", "Blog",
         // "This is test 2", "6.2","0");
@@ -216,6 +227,7 @@ public class Main extends Activity
         // "This is test 2","null");
         // Log.d("Info","worked");
 
+        // [ok]
         // Test one page history implementation in language
         // History h = request.requestPageHistoryInLanguage("xwiki", "Blog",
         // "This is test 2", "null");
@@ -226,10 +238,12 @@ public class Main extends Activity
         // "This is test 2","null","6.1");
         // Log.d("Info","worked");
 
+        // [ok]
         // Test page objects in a page
         // Objects os = request.requestAllObjects("xwiki", "Blog", "test");
         // Log.d("Info", "worked");
 
+        // [ok]
         // Test page object put
         // org.xwiki.android.resources.Object obj=new org.xwiki.android.resources.Object();
         //
@@ -248,21 +262,25 @@ public class Main extends Activity
         // String s= request.addObject("xwiki", "Blog", "test", obj);
         // Log.d("Info", "worked");
 
+        // [ok]
         // Test page objects in a specific class in a page
         // Objects os = request.requestObjectsInClass("xwiki", "Blog", "test",
         // "Blog.BlogPostClass");
         // Log.d("Info", "worked");
 
+        // [ok]
         // Test object in a specific obejct number in a objects
         // Object o = request.requestObject("xwiki", "Blog", "test",
         // "Blog.BlogPostClass", "0");
         // Log.d("Info", "worked");
 
+        // [ok]
         // Test properties of a object in a specific obejct number in a objects
         // Properties ps = request.requestObjectAllProperties("xwiki", "Blog",
         // "test", "Blog.BlogPostClass", "0");
         // Log.d("Info", "worked");
 
+        // [ok]
         // Test property of a object in a specific obejct number in a objects
         // Property p = request.requestObjectProperty("xwiki", "Blog", "test",
         // "Blog.BlogPostClass", "0", "content");
@@ -272,6 +290,7 @@ public class Main extends Activity
         // HttpConnector hc=new HttpConnector();
         // Log.d("Reply", String.valueOf(hc.checkLogin("chamika", "chamikaya", domain)));
 
+        // [ok]
         // Test for adding page comment
         // Comment comment = new Comment();
         // comment.setText("This is tesing comment in android rest");

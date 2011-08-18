@@ -16,6 +16,7 @@
         </activity>
         <uses-library android:name="android.test.runner"></uses-library>
         <activity android:name="org.xwiki.android.components.login.LoginActivity"></activity>
+        <activity android:name="org.xwiki.android.components.attachments.AttachmentActivity"></activity>
 
     </application>
 </manifest>
