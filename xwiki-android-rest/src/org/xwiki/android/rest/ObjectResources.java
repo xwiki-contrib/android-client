@@ -193,7 +193,7 @@ public class ObjectResources extends HttpConnector
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
-                + "/objects/" + objectClassname + "/" + objectNumber + "/properties";
+                + "/objects/" + objectClassname + "/" + objectNumber + "/properties/" + property.getName();
 
         return super.putRequest(Uri, buildXmlProperty(property));
     }

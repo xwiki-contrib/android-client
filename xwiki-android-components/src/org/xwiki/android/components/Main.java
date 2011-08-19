@@ -80,7 +80,7 @@ public class Main extends Activity
     
     private Intent testIntent()
     {
-        Intent intent = new Intent(this, XWikiPageViewerActivity.class);
+        Intent intent = new Intent(this, ObjectNavigatorActivity.class);
 
         intent.putExtra(IntentExtra.USERNAME, "Admin");
         intent.putExtra(IntentExtra.PASSWORD, "admin");
@@ -88,7 +88,10 @@ public class Main extends Activity
 
         intent.putExtra(IntentExtra.WIKI_NAME, "xwiki");
         intent.putExtra(IntentExtra.SPACE_NAME, "Blog");
-        intent.putExtra(IntentExtra.PAGE_NAME, "test");
+        intent.putExtra(IntentExtra.PAGE_NAME, "test3");
+        
+        intent.putExtra(IntentExtra.CLASS_NAME, "Blog.BlogPostClass");
+        intent.putExtra(IntentExtra.OBJECT_ID, "0");
 
         return intent;
     }

@@ -1,7 +1,10 @@
 package org.xwiki.android.components.objecteditor;
 
+import java.util.ArrayList;
+
 import org.xwiki.android.components.IntentExtra;
 import org.xwiki.android.resources.Object;
+import org.xwiki.android.resources.Property;
 import org.xwiki.android.rest.Requests;
 
 import android.app.Activity;
@@ -29,10 +32,12 @@ public class ObjectEditorActivity extends Activity
     private String url, wikiName, spaceName, pageName, username, password, className, objectID;
 
     private boolean isSecured;
-    
-    private Object object;
-    
+
+    private Object object, serverObject;
+
     private Requests request;
+
+    private ObjectEditor objectEditor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -53,7 +58,10 @@ public class ObjectEditorActivity extends Activity
             isSecured = true;
         }
 
-        setContentView(new ObjectEditor(this, setupObject()));
+        object = setupObject();
+        objectEditor = new ObjectEditor(this, object);
+
+        setContentView(objectEditor);
     }
 
     private Object setupObject()
@@ -64,20 +72,46 @@ public class ObjectEditorActivity extends Activity
             request.setAuthentication(username, password);
         }
 
-        object = request.requestObject(wikiName, spaceName, pageName, className, objectID);
+        Object temp_object = request.requestObject(wikiName, spaceName, pageName, className, objectID);
 
-        return object;
+        return temp_object;
     }
-    
+
     @Override
     protected void onDestroy()
     {
         addObjectToXWiki();
         super.onDestroy();
     }
-    
-    private void addObjectToXWiki(){
-        String s = request.addObject(wikiName, spaceName, pageName, object);
-        Log.d("Object edit", s);
+
+    private void addObjectToXWiki()
+    {
+
+        serverObject = setupObject();
+
+        ArrayList<Property> propertyList = compareObjects(serverObject, object);
+
+        
+        for (int i = 0; i < propertyList.size(); i++) {
+            String s = request.addProperty(wikiName, spaceName, pageName, className, objectID, propertyList.get(i));
+            Log.d("Property result " + String.valueOf(i), s);
+        }
+    }
+
+    private ArrayList<Property> compareObjects(Object oldObject, Object newObject)
+    {
+        ArrayList<Property> result = new ArrayList<Property>();
+        
+        for(int i=0; i<newObject.getProperties().size(); i++){
+            
+            if(newObject.getProperties().get(i).getValue() != null){
+                if(!newObject.getProperties().get(i).getValue().equals(oldObject.getProperties().get(i).getValue())){
+                    result.add(newObject.getProperties().get(i));
+                }
+            }
+            
+        }
+        
+        return result;
     }
 }

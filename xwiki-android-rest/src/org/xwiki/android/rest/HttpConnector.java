@@ -309,6 +309,8 @@ public class HttpConnector
      */
     public String putRequest(String Uri, String content)
     {
+        initialize();
+        
         HttpPut request = new HttpPut();
 
         try {
@@ -396,6 +398,7 @@ public class HttpConnector
      */
     public String putRaw(String Uri, String filePath)
     {
+        initialize();
 
         HttpPut request = new HttpPut();
 

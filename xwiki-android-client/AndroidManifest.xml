@@ -6,6 +6,8 @@
     <uses-sdk android:minSdkVersion="7" />
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
+    <uses-permission android:name="android.permission.READ_OWNER_DATA"></uses-permission>
+    <uses-permission android:name="android.permission.WRITE_OWNER_DATA"></uses-permission>
 
     <application android:icon="@drawable/icon" android:label="@string/app_name">
         <activity android:name=".Main"
@@ -25,6 +27,7 @@
         <activity android:name="org.xwiki.android.components.attachments.AttachmentActivity"></activity>
         <activity android:name="org.xwiki.android.components.search.SearchActivity"></activity>
         <activity android:name="org.xwiki.android.components.search.SearchResultsActivity"></activity>
+        <activity android:name="org.xwiki.android.components.objecteditor.ObjectEditorActivity"></activity>
 
     </application>
 </manifest>

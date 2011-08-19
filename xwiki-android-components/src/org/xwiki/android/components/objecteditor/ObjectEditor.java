@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -17,7 +18,7 @@ public class ObjectEditor extends LinearLayout
 
     Object object;
 
-    private int tag;
+    private Integer tag;
 
     public ObjectEditor(Context context, AttributeSet attrs, Object object)
     {
@@ -40,6 +41,12 @@ public class ObjectEditor extends LinearLayout
         setOrientation(LinearLayout.VERTICAL);
         setScrollBarStyle(LinearLayout.SCROLLBARS_INSIDE_OVERLAY);
         
+        LinearLayout innerLayout = new LinearLayout(context);
+        innerLayout.setOrientation(LinearLayout.VERTICAL);
+        innerLayout.setScrollBarStyle(LinearLayout.SCROLLBARS_INSIDE_OVERLAY);
+        
+        ScrollView scrollView = new ScrollView(context);
+        
 
         for (int i = 0; i < object.properties.size(); i++) {
 
@@ -48,16 +55,20 @@ public class ObjectEditor extends LinearLayout
             TextView textViewName = new TextView(context);
             textViewName.setText(object.properties.get(i).getName());
             textViewName.setTextSize(textViewName.getTextSize() + 2.0f);
-            addView(textViewName);
+            innerLayout.addView(textViewName);
 
-            EditText editTextValue = new EditText(context);
+            final EditText editTextValue = new EditText(context);
+            editTextValue.setTag(tag);
             editTextValue.setText(object.properties.get(i).getValue());
             editTextValue.addTextChangedListener(new TextWatcher()
             {
 
                 public void afterTextChanged(Editable s)
                 {
-                    object.properties.get(tag).setValue(s.toString());
+                    int currentTag = (Integer)editTextValue.getTag();
+                    object.properties.get(currentTag).setValue(s.toString());
+                    Log.d("current Tag", String.valueOf(currentTag));
+                    Log.d("value changed", object.properties.get(currentTag).getValue());
                 }
 
                 public void beforeTextChanged(CharSequence s, int start, int count, int after)
@@ -68,9 +79,11 @@ public class ObjectEditor extends LinearLayout
                 {
                 }
             });
-            addView(editTextValue);
+            innerLayout.addView(editTextValue);
         }
-
+        
+        scrollView.addView(innerLayout);
+        addView(scrollView);
         
     }
 

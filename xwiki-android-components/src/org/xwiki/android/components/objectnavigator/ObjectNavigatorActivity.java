@@ -6,11 +6,16 @@ import java.util.List;
 
 import org.xwiki.android.components.IntentExtra;
 import org.xwiki.android.components.R;
+import org.xwiki.android.components.objecteditor.ObjectEditorActivity;
 import org.xwiki.android.resources.Objects;
 import org.xwiki.android.rest.Requests;
 
 import android.app.ExpandableListActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.ExpandableListView;
 import android.widget.SimpleExpandableListAdapter;
 
 public class ObjectNavigatorActivity extends ExpandableListActivity
@@ -48,6 +53,31 @@ public class ObjectNavigatorActivity extends ExpandableListActivity
                 new int[] {R.id.groupname}, createChildList(), R.layout.objectnavigator_child_row,
                 new String[] {"objectName"}, new int[] {R.id.childname});
         setListAdapter(expListAdapter);
+    }
+
+    @Override
+    public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id)
+    {
+
+        // return super.onChildClick(parent, v, groupPosition, childPosition, id);
+        
+        String selectedClassname = allClassNames.get(groupPosition);
+        String selectedObjectNo = String.valueOf(childPosition);
+        Log.d("selection", "classname=" + selectedClassname + " object no=" + selectedObjectNo );
+        
+        Intent objectEditorIntent = new Intent(getApplicationContext(), ObjectEditorActivity.class);
+        
+        objectEditorIntent.putExtra(ObjectEditorActivity.INTENT_EXTRA_PUT_WIKI_NAME, wikiName);
+        objectEditorIntent.putExtra(ObjectEditorActivity.INTENT_EXTRA_PUT_SPACE_NAME, spaceName);
+        objectEditorIntent.putExtra(ObjectEditorActivity.INTENT_EXTRA_PUT_PAGE_NAME, pageName);
+        objectEditorIntent.putExtra(ObjectEditorActivity.INTENT_EXTRA_PUT_URL, url);
+        objectEditorIntent.putExtra(ObjectEditorActivity.INTENT_EXTRA_PUT_USERNAME, username);
+        objectEditorIntent.putExtra(ObjectEditorActivity.INTENT_EXTRA_PUT_PASSWORD, password);
+        objectEditorIntent.putExtra(ObjectEditorActivity.INTENT_EXTRA_PUT_CLASS_NAME, selectedClassname);
+        objectEditorIntent.putExtra(ObjectEditorActivity.INTENT_EXTRA_PUT_OBJECT_ID, selectedObjectNo);
+        
+        startActivity(objectEditorIntent);
+        return true;
     }
 
     private List createGroupList()

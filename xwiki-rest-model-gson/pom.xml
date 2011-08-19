@@ -33,7 +33,10 @@
 
 	<groupId>org.xwiki.android</groupId>
 	<artifactId>xwiki-rest-model-gson</artifactId>
-	<name>XWikiGsonModel</name>
+	<name>XWiki GSON Model</name>
 
-	
+	<build>
+		<sourceDirectory>src</sourceDirectory>
+	</build>
+
 </project>

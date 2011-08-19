@@ -27,6 +27,8 @@ import java.util.List;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
+import org.simpleframework.xml.Namespace;
+import org.simpleframework.xml.Root;
 
 /**
  * <p>
@@ -50,7 +52,8 @@ import org.simpleframework.xml.ElementList;
  * </pre>
  */
 
-@Element(required = false)
+@Root
+@Namespace(reference = "http://www.xwiki.org")
 public class Property extends LinkCollection
 {
 

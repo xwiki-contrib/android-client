@@ -1,7 +1,5 @@
 package org.xwiki.android.test.rest;
 
-import java.io.InputStream;
-
 import org.xwiki.android.resources.Attachments;
 import org.xwiki.android.rest.Requests;
 
@@ -47,18 +45,17 @@ public class AttachmentTest extends AndroidTestCase
         assertNotNull(attachments);
     }
 
-    public void testRequestPageAttachment() throws Throwable
-    {
-        InputStream inputStream = request.requestPageAttachment(wikiName, spaceName, pageName, attachmentName);
-        assertNotNull(inputStream);
-    }
+//    public void testRequestPageAttachment() throws Throwable
+//    {
+//        InputStream inputStream = request.requestPageAttachment(wikiName, spaceName, pageName, attachmentName);
+//        assertNotNull(inputStream);
+//    }
 
-    //Need to add file to the device "filpath + attachmentName" to work
-    // public void testAddPageAttachment() throws Throwable
-    // {
-    // String s = request.addPageAttachment(wikiName, spaceName, pageName, filePath, attachmentName);
-    // assertNotNull(s);
-    // }
+    public void testAddPageAttachment() throws Throwable
+    {
+        String s = request.addPageAttachment(wikiName, spaceName, pageName, filePath, attachmentName);
+        assertNotNull(s);
+    }
 
     public void testDeletePageAttachment() throws Throwable
     {
@@ -72,12 +69,13 @@ public class AttachmentTest extends AndroidTestCase
         assertNotNull(attachments);
     }
 
-    public void testRequestPageAttachmentInHistory() throws Throwable
-    {
-        InputStream inputStream =
-            request.requestPageAttachmentsInHistory(wikiName, spaceName, pageName, version, attachmentName);
-        assertNotNull(inputStream);
-    }
+    
+//    public void testRequestPageAttachmentInHistory() throws Throwable
+//    {
+//        InputStream inputStream =
+//            request.requestPageAttachmentsInHistory(wikiName, spaceName, pageName, version, attachmentName);
+//        assertNotNull(inputStream);
+//    }
 
     public void testRequestPageAttchmentsInAttachmentHistory() throws Throwable
     {
@@ -86,12 +84,12 @@ public class AttachmentTest extends AndroidTestCase
         assertNotNull(attachments);
     }
 
-    public void testRequestPageAttachmentInAttachmentHistory() throws Throwable
-    {
-        InputStream inputStream =
-            request.requestPageAttachmentsInAttachmentHistory(wikiName, spaceName, pageName, attachmentName,
-                attachmentVersion);
-        assertNotNull(inputStream);
-    }
+//    public void testRequestPageAttachmentInAttachmentHistory() throws Throwable
+//    {
+//        InputStream inputStream =
+//            request.requestPageAttachmentsInAttachmentHistory(wikiName, spaceName, pageName, attachmentName,
+//                attachmentVersion);
+//        assertNotNull(inputStream);
+//    }
 
 }

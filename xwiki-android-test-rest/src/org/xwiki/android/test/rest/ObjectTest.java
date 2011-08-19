@@ -92,22 +92,21 @@ public class ObjectTest extends AndroidTestCase
         assertNotNull(property);
     }
 
-    // Object should be exist for adding property
-    // public void testAddObjectProperty() throws Throwable
-    // {
-    // Attribute att = new Attribute();
-    // att.setName("name");
-    // att.setValue("category");
-    //
-    // Property prop = new Property();
-    // prop.setType("com.xpn.xwiki.objects.classes.TextAreaClass");
-    // prop.setName("content");
-    // prop.setValue("Blog.Other");
-    // prop.getAttributes().add(att);
-    //
-    // String s = request.addProperty(wikiName, spaceName, pageName, classname, objectNo, prop);
-    // assertNotNull(s);
-    // }
+    public void testAddObjectProperty() throws Throwable
+    {
+        Attribute att = new Attribute();
+        att.setName("name");
+        att.setValue("category");
+
+        Property prop = new Property();
+        prop.setType("com.xpn.xwiki.objects.classes.TextAreaClass");
+        prop.setName("content");
+        prop.setValue("Blog.Other");
+        prop.getAttributes().add(att);
+
+        String s = request.addProperty(wikiName, spaceName, pageName, classname, objectNo, prop);
+        assertNotNull(s);
+    }
 
     public void testDeleteObject() throws Throwable
     {

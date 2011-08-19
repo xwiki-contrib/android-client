@@ -38,7 +38,7 @@ public class Main extends Activity
 
     // IP of the development machine in Android emulator 10.0.2.2
     // These variables are uses for testing
-    String domain = "10.0.2.2";
+    String domain = "10.0.2.2:8080";
 
     String searchKeyword = "test";
 
@@ -47,7 +47,7 @@ public class Main extends Activity
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        // setContentView(R.layout.main);
+        //setContentView(R.layout.main);
     }
 
     public void searchButtonClick(View v)
@@ -61,8 +61,15 @@ public class Main extends Activity
         // searchKeyword = et_searchText.getText().toString();
         //
         // Log.d("Info", "domain=" + domain + " text=" + searchKeyword);
-        // Requests request = new Requests(domain);
-        // request.setAuthentication("Admin", "admin");
+//         Requests request = new Requests(domain);
+//         request.setAuthentication("Admin", "admin");
+         
+         //Add Property
+         //http://localhost:8080/xwiki/rest/wikis/xwiki/spaces/Blog/pages/test3/objects/Blog.BlogPostClass/0/properties/content?media=xml
+//         Property property = request.requestObjectProperty("xwiki", "Blog", "test3", "Blog.BlogPostClass", "0", "content");
+//         Log.d("prop value", property.value);
+//         property.setValue("This is the new Content");
+//         request.addProperty("xwiki", "Blog", "test3", "Blog.BlogPostClass", "0", property);
 
         // Test wiki search implementation
         // SearchResults sr = request.requestSearch("xwiki",searchKeyword);

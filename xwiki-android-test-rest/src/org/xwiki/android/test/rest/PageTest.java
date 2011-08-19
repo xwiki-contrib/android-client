@@ -49,16 +49,14 @@ public class PageTest extends AndroidTestCase
         assertNotNull(page);
     }
 
-    // All properties of the page should be supplied
-    // public void testAddPage() throws Throwable
-    // {
-    // //Page page = request.requestPage(wikiName, spaceName, pageName);
-    // Page page = new Page();
-    // page.setContent("Content is changed by android client");
-    // page.setTitle("new page");
-    // String s = request.addPage(wikiName, spaceName, page.getTitle(), page);
-    // assertNotNull(s);
-    // }
+    public void testAddPage() throws Throwable
+    {
+        Page page = new Page();
+        page.setContent("Content is changed by android client");
+        page.setTitle("new page");
+        String s = request.addPage(wikiName, spaceName, page.getTitle(), page);
+        assertNotNull(s);
+    }
 
     public void testRequestPageChildren() throws Throwable
     {
