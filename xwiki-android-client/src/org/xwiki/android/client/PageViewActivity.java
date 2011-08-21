@@ -3,9 +3,12 @@ package org.xwiki.android.client;
 import org.xwiki.android.components.IntentExtra;
 import org.xwiki.android.components.R;
 import org.xwiki.android.components.attachments.AttachmentActivity;
+import org.xwiki.android.components.classviewer.ClassListActivity;
+import org.xwiki.android.components.classviewer.ClassViewerActivity;
 import org.xwiki.android.components.commenteditor.CommentEditorActivity;
 import org.xwiki.android.components.objectnavigator.ObjectNavigatorActivity;
 import org.xwiki.android.components.pageviewer.XWikiPageViewerActivity;
+import org.xwiki.android.rest.ClassResources;
 
 import android.app.TabActivity;
 import android.content.Intent;
@@ -58,15 +61,15 @@ public class PageViewActivity extends TabActivity
 
         TabSpec TabSpecView = tabHost.newTabSpec("view");
         TabSpec TabSpecObjects = tabHost.newTabSpec("objects");
-        // TabSpec TabSpecClasses = tabHost.newTabSpec("tid1");
+        TabSpec TabSpecClasses = tabHost.newTabSpec("classes");
 
         TabSpecView.setIndicator("View").setContent(setupPageViewerIntent());
         TabSpecObjects.setIndicator("Objects").setContent(setupObjectsViewerIntent());
-        // TabSpecObjects.setIndicator("Classes").setContent(new Intent(this,XWikiPageViewerActivity.class));
+        TabSpecClasses.setIndicator("Classes").setContent(setupClassViewerIntent());
 
         tabHost.addTab(TabSpecView);
         tabHost.addTab(TabSpecObjects);
-        // tabHost.addTab(TabSpecClasses);
+        tabHost.addTab(TabSpecClasses);
     }
 
     @Override
@@ -159,4 +162,20 @@ public class PageViewActivity extends TabActivity
         return intent;
     }
 
+    private Intent setupClassViewerIntent()
+    {
+        Intent intent = new Intent(this, ClassListActivity.class);
+
+        if (isSecured) {
+            intent.putExtra(ClassListActivity.INTENT_EXTRA_PUT_USERNAME, username);
+            intent.putExtra(ClassListActivity.INTENT_EXTRA_PUT_PASSWORD, password);
+        }
+
+        intent.putExtra(ClassListActivity.INTENT_EXTRA_PUT_URL, url);
+        intent.putExtra(ClassListActivity.INTENT_EXTRA_PUT_WIKI_NAME, wikiName);
+        intent.putExtra(ClassListActivity.INTENT_EXTRA_PUT_SPACE_NAME, spaceName);
+        intent.putExtra(ClassListActivity.INTENT_EXTRA_PUT_PAGE_NAME, pageName);
+
+        return intent;
+    }
 }

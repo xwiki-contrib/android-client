@@ -26,17 +26,19 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>org.xwiki.android</groupId>
-		<artifactId>xwiki-android</artifactId>
-		<version>1.0-SNAPSHOT</version>
+		<groupId>org.xwiki.commons</groupId>
+		<artifactId>xwiki-commons</artifactId>
+		<version>3.2-SNAPSHOT</version>
 	</parent>
-
 	<groupId>org.xwiki.android</groupId>
-	<artifactId>xwiki-rest-model-gson</artifactId>
-	<name>XWiki GSON Model</name>
-
-	<build>
-		<sourceDirectory>src</sourceDirectory>
-	</build>
-
+	<artifactId>xwiki-rest-model</artifactId>
+	<packaging>pom</packaging>
+	<version>1.0-SNAPSHOT</version>
+	<name>XWiki REST Model</name>
+	<description>XWiki REST models</description>
+	
+	<modules>
+		<module>xwiki-rest-model-simplexml</module>
+		<module>xwiki-rest-model-gson</module>
+	</modules>
 </project>

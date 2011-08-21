@@ -47,7 +47,7 @@ public class Main extends Activity
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.main);
+        setContentView(R.layout.main);
     }
 
     public void searchButtonClick(View v)
@@ -61,8 +61,8 @@ public class Main extends Activity
         // searchKeyword = et_searchText.getText().toString();
         //
         // Log.d("Info", "domain=" + domain + " text=" + searchKeyword);
-//         Requests request = new Requests(domain);
-//         request.setAuthentication("Admin", "admin");
+         Requests request = new Requests(domain);
+         request.setAuthentication("Admin", "admin");
          
          //Add Property
          //http://localhost:8080/xwiki/rest/wikis/xwiki/spaces/Blog/pages/test3/objects/Blog.BlogPostClass/0/properties/content?media=xml
@@ -305,11 +305,11 @@ public class Main extends Activity
         // Log.d("Info","It works");
 
         // Test for classes in wiki
-        // Classes cs = request.requestWikiClasses("xwiki");
-        // Log.d("Info","It works");
+         Classes cs = request.requestWikiClasses("xwiki");
+         Log.d("Info","It works");
 
         // Test for classes in wiki with classname
-        // org.xwiki.android.resources.Class c = request.requestWikiClasses("xwiki", "Blog.BlogPostClass");
-        // Log.d("Info","It works");
+//         org.xwiki.android.resources.Class c = request.requestWikiClasses("xwiki", "Blog.test3");
+//         Log.d("Info","It works" + c.getName());
     }
 }

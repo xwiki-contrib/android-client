@@ -28,6 +28,8 @@
         <activity android:name="org.xwiki.android.components.search.SearchActivity"></activity>
         <activity android:name="org.xwiki.android.components.search.SearchResultsActivity"></activity>
         <activity android:name="org.xwiki.android.components.objecteditor.ObjectEditorActivity"></activity>
+        <activity android:name="org.xwiki.android.components.classviewer.ClassListActivity"></activity>
+        <activity android:name="org.xwiki.android.components.classviewer.ClassViewerActivity"></activity>
 
     </application>
 </manifest>

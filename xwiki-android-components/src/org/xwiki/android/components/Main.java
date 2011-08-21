@@ -21,6 +21,8 @@
 package org.xwiki.android.components;
 
 import org.xwiki.android.components.attachments.AttachmentActivity;
+import org.xwiki.android.components.classviewer.ClassListActivity;
+import org.xwiki.android.components.classviewer.ClassViewerActivity;
 import org.xwiki.android.components.commenteditor.CommentEditorActivity;
 import org.xwiki.android.components.listnavigator.XWikiListNavigatorActivity;
 import org.xwiki.android.components.login.LoginActivity;
@@ -80,7 +82,7 @@ public class Main extends Activity
     
     private Intent testIntent()
     {
-        Intent intent = new Intent(this, ObjectNavigatorActivity.class);
+        Intent intent = new Intent(this, ClassListActivity.class);
 
         intent.putExtra(IntentExtra.USERNAME, "Admin");
         intent.putExtra(IntentExtra.PASSWORD, "admin");
@@ -88,10 +90,10 @@ public class Main extends Activity
 
         intent.putExtra(IntentExtra.WIKI_NAME, "xwiki");
         intent.putExtra(IntentExtra.SPACE_NAME, "Blog");
-        intent.putExtra(IntentExtra.PAGE_NAME, "test3");
+        intent.putExtra(IntentExtra.PAGE_NAME, "sample");
         
-        intent.putExtra(IntentExtra.CLASS_NAME, "Blog.BlogPostClass");
-        intent.putExtra(IntentExtra.OBJECT_ID, "0");
+        //intent.putExtra(IntentExtra.CLASS_NAME, "Blog.BlogPostClass");
+        //intent.putExtra(IntentExtra.OBJECT_ID, "0");
 
         return intent;
     }

@@ -33,7 +33,7 @@
 
 	<groupId>org.xwiki.android</groupId>
 	<artifactId>xwiki-rest-model-simplexml</artifactId>
-	<name>XWikiSimpleXmlModel</name>
+	<name>XWiki REST Simple-Xml Model</name>
 
 	
 

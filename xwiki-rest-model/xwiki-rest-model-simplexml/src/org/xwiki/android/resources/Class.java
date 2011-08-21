@@ -25,6 +25,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.simpleframework.xml.Element;
+import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Namespace;
 import org.simpleframework.xml.Root;
 
@@ -60,7 +61,7 @@ public class Class extends LinkCollection
     @Element(required = false)
     public String name;
 
-    @Element(name = "property", required = false)
+    @ElementList(name = "property", inline = true)
     public List<Property> properties;
 
     /**

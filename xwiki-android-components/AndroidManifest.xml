@@ -28,7 +28,9 @@
         <activity android:name=".commenteditor.CommentEditorActivity"></activity>
         <activity android:name=".search.SearchActivity"></activity>
         <activity android:name=".search.SearchResultsActivity"></activity>
-        <activity android:name=".listnavigator.XWikiListNavigatorActivity"></activity>
+        <activity android:name="listnavigator.XWikiListNavigatorActivity"></activity>
+        <activity android:name=".classviewer.ClassViewerActivity"></activity>
+        <activity android:name=".classviewer.ClassListActivity"></activity>
 
     </application>
 </manifest>

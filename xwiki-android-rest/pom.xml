@@ -33,7 +33,7 @@
 
 	<artifactId>xwiki-android-rest</artifactId>
 	<packaging>apklib</packaging>
-	<name>AndroidREST</name>
+	<name>XWiki Android REST</name>
 
 	<dependencies>
 		<dependency>
