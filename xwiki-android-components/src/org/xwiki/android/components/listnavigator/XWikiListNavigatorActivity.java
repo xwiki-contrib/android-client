@@ -1,8 +1,27 @@
+/*
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ */
+
 package org.xwiki.android.components.listnavigator;
 
 import org.xwiki.android.components.IntentExtra;
 import org.xwiki.android.components.R;
-import org.xwiki.android.components.pageviewer.XWikiPageViewerActivity;
 import org.xwiki.android.components.search.SearchActivity;
 import org.xwiki.android.resources.Pages;
 import org.xwiki.android.resources.Spaces;
@@ -26,6 +45,9 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+/**
+ * XWiki List Navigator Activity to select a page.
+ */
 public class XWikiListNavigatorActivity extends Activity
 {
     public static final String INTENT_EXTRA_PUT_URL = IntentExtra.URL;
@@ -41,7 +63,7 @@ public class XWikiListNavigatorActivity extends Activity
     public static final String INTENT_EXTRA_GET_PAGE_NAME = IntentExtra.PAGE_NAME;
 
     private static final int SEARCH_ACTIVITY_REQUEST_CODE = 100;
-    
+
     private String url, wikiName, spaceName, pageName, username, password, cachedWikiName, cachedSpaceName;
 
     private Requests request;
@@ -111,7 +133,7 @@ public class XWikiListNavigatorActivity extends Activity
         addItemsToList(state, null);
 
     }
-    
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
@@ -119,7 +141,7 @@ public class XWikiListNavigatorActivity extends Activity
         inflater.inflate(R.layout.xwikilistnavigator_menu, menu);
         return true;
     }
-    
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
@@ -132,12 +154,12 @@ public class XWikiListNavigatorActivity extends Activity
                 return super.onOptionsItemSelected(item);
         }
     }
-    
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        if(requestCode == SEARCH_ACTIVITY_REQUEST_CODE){
-            if(resultCode == Activity.RESULT_OK){
+        if (requestCode == SEARCH_ACTIVITY_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
                 wikiName = data.getExtras().getString(SearchActivity.INTENT_EXTRA_GET_WIKI_NAME);
                 spaceName = data.getExtras().getString(SearchActivity.INTENT_EXTRA_GET_SPACE_NAME);
                 pageName = data.getExtras().getString(SearchActivity.INTENT_EXTRA_GET_PAGE_NAME);
@@ -145,8 +167,9 @@ public class XWikiListNavigatorActivity extends Activity
             }
         }
     }
-    
-    private void showSearch(){
+
+    private void showSearch()
+    {
         Intent intent = new Intent(this, SearchActivity.class);
 
         if (isSecured) {
@@ -155,7 +178,7 @@ public class XWikiListNavigatorActivity extends Activity
         }
 
         intent.putExtra(SearchActivity.INTENT_EXTRA_PUT_URL, url);
-        
+
         startActivityForResult(intent, SEARCH_ACTIVITY_REQUEST_CODE);
     }
 

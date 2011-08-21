@@ -1,3 +1,23 @@
+/*
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ */
+
 package org.xwiki.android.components.tests;
 
 import org.xwiki.android.components.login.LoginActivity;
@@ -13,7 +33,7 @@ public class LoginActivityTests extends ActivityInstrumentationTestCase2<LoginAc
     private Activity loginActivity;
 
     private EditText editTextUsername, editTextPassword, editTextURL;
-    
+
     private Button buttonLogin;
 
     public LoginActivityTests()
@@ -64,10 +84,10 @@ public class LoginActivityTests extends ActivityInstrumentationTestCase2<LoginAc
         this.sendKeys(KeyEvent.KEYCODE_M);
         this.sendKeys(KeyEvent.KEYCODE_I);
         this.sendKeys(KeyEvent.KEYCODE_N);
-        
+
         assertEquals("admin", editTextUsername.getText().toString());
     }
-    
+
     public void testInputPassword() throws Throwable
     {
         loginActivity.runOnUiThread(new Runnable()
@@ -88,10 +108,10 @@ public class LoginActivityTests extends ActivityInstrumentationTestCase2<LoginAc
         this.sendKeys(KeyEvent.KEYCODE_M);
         this.sendKeys(KeyEvent.KEYCODE_I);
         this.sendKeys(KeyEvent.KEYCODE_N);
-        
+
         assertEquals("admin", editTextPassword.getText().toString());
     }
-    
+
     public void testInputUrl() throws Throwable
     {
         loginActivity.runOnUiThread(new Runnable()
@@ -120,10 +140,10 @@ public class LoginActivityTests extends ActivityInstrumentationTestCase2<LoginAc
         this.sendKeys(KeyEvent.KEYCODE_O);
         this.sendKeys(KeyEvent.KEYCODE_R);
         this.sendKeys(KeyEvent.KEYCODE_G);
-        
+
         assertEquals("www.xwiki.org", editTextURL.getText().toString());
     }
-    
+
     public void testLoginButton() throws Throwable
     {
         loginActivity.runOnUiThread(new Runnable()

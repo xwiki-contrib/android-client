@@ -1,3 +1,23 @@
+/*
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ */
+
 package org.xwiki.android.test.rest;
 
 import org.xwiki.android.resources.SearchResults;
@@ -21,7 +41,7 @@ public class SearchTest extends AndroidTestCase
         spaceName = TestResources.SPACE_NAME;
         url = TestResources.URL;
         keyword = TestResources.SEARCH_KEWORD;
-        
+
         if (isSecured) {
             username = TestResources.USERNAME;
             password = TestResources.PASSWORD;
@@ -36,13 +56,13 @@ public class SearchTest extends AndroidTestCase
 
     public void testWikiSearch() throws Throwable
     {
-        SearchResults sr= request.requestSearch(wikiName, keyword);
+        SearchResults sr = request.requestSearch(wikiName, keyword);
         assertNotNull(sr);
     }
 
     public void testSpaceSearch() throws Throwable
     {
-        SearchResults sr= request.requestSearch(wikiName, spaceName, keyword);
+        SearchResults sr = request.requestSearch(wikiName, spaceName, keyword);
         assertNotNull(sr);
     }
 

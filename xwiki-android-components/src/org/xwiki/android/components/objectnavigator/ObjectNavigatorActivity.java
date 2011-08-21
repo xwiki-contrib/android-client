@@ -1,3 +1,23 @@
+/*
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ */
+
 package org.xwiki.android.components.objectnavigator;
 
 import java.util.ArrayList;
@@ -18,6 +38,9 @@ import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.SimpleExpandableListAdapter;
 
+/**
+ * UI Component of object navigator. Shows Expandable List View for object selecting
+ * */
 public class ObjectNavigatorActivity extends ExpandableListActivity
 {
     public static final String INTENT_EXTRA_PUT_URL = IntentExtra.URL;
@@ -60,13 +83,13 @@ public class ObjectNavigatorActivity extends ExpandableListActivity
     {
 
         // return super.onChildClick(parent, v, groupPosition, childPosition, id);
-        
+
         String selectedClassname = allClassNames.get(groupPosition);
         String selectedObjectNo = String.valueOf(childPosition);
-        Log.d("selection", "classname=" + selectedClassname + " object no=" + selectedObjectNo );
-        
+        Log.d("selection", "classname=" + selectedClassname + " object no=" + selectedObjectNo);
+
         Intent objectEditorIntent = new Intent(getApplicationContext(), ObjectEditorActivity.class);
-        
+
         objectEditorIntent.putExtra(ObjectEditorActivity.INTENT_EXTRA_PUT_WIKI_NAME, wikiName);
         objectEditorIntent.putExtra(ObjectEditorActivity.INTENT_EXTRA_PUT_SPACE_NAME, spaceName);
         objectEditorIntent.putExtra(ObjectEditorActivity.INTENT_EXTRA_PUT_PAGE_NAME, pageName);
@@ -75,7 +98,7 @@ public class ObjectNavigatorActivity extends ExpandableListActivity
         objectEditorIntent.putExtra(ObjectEditorActivity.INTENT_EXTRA_PUT_PASSWORD, password);
         objectEditorIntent.putExtra(ObjectEditorActivity.INTENT_EXTRA_PUT_CLASS_NAME, selectedClassname);
         objectEditorIntent.putExtra(ObjectEditorActivity.INTENT_EXTRA_PUT_OBJECT_ID, selectedObjectNo);
-        
+
         startActivity(objectEditorIntent);
         return true;
     }

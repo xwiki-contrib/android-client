@@ -1,3 +1,23 @@
+/*
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ */
+
 package org.xwiki.android.components.classviewer;
 
 import java.util.List;
@@ -9,7 +29,6 @@ import org.xwiki.android.components.commenteditor.CommentEditorActivity;
 import org.xwiki.android.resources.Class;
 import org.xwiki.android.resources.Classes;
 import org.xwiki.android.resources.Objects;
-import org.xwiki.android.resources.Object;
 import org.xwiki.android.rest.Requests;
 
 import android.app.ListActivity;
@@ -23,6 +42,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+/**
+ * UI Component which shows the list of classes of the wiki or in the page.F
+ */
 public class ClassListActivity extends ListActivity
 {
     public static final String INTENT_EXTRA_PUT_WIKI_NAME = IntentExtra.WIKI_NAME;
@@ -76,8 +98,6 @@ public class ClassListActivity extends ListActivity
             request.setAuthentication(username, password);
         }
 
-        
-
         if (isWiki) {
             Classes classes = request.requestWikiClasses(wikiName);
             List<Class> classList = classes.getClazzs();
@@ -88,19 +108,19 @@ public class ClassListActivity extends ListActivity
             }
         } else {
             Objects pageObjects = request.requestAllObjects(wikiName, spaceName, pageName);
-            
+
             Vector<String> temp_classNames = new Vector<String>();
-            
-            for(int i=0; i < pageObjects.getObjectSummaries().size(); i++ ){
+
+            for (int i = 0; i < pageObjects.getObjectSummaries().size(); i++) {
                 String currentClassName = pageObjects.getObjectSummaries().get(i).getClassName();
-                
-                if(!temp_classNames.contains(currentClassName)){
+
+                if (!temp_classNames.contains(currentClassName)) {
                     temp_classNames.add(currentClassName);
                 }
             }
-            
+
             data = new String[temp_classNames.size()];
-            
+
             for (int i = 0; i < data.length; i++) {
                 data[i] = temp_classNames.get(i);
             }

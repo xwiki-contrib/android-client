@@ -1,3 +1,23 @@
+/*
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ */
+
 package org.xwiki.android.components.search;
 
 import org.xwiki.android.components.IntentExtra;
@@ -19,6 +39,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+/**
+ * Search Activity UI Component which provides facility to select wiki/ space and do a search
+ * */
 public class SearchActivity extends Activity
 {
     public static final String INTENT_EXTRA_PUT_URL = IntentExtra.URL;
@@ -114,8 +137,7 @@ public class SearchActivity extends Activity
                 getIntent().putExtra(INTENT_EXTRA_GET_PAGE_NAME, pageName);
                 setResult(Activity.RESULT_OK, getIntent());
                 finish();
-                
-                
+
             }
         }
     }

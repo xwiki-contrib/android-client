@@ -1,8 +1,27 @@
+/*
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ */
+
 package org.xwiki.android.components.navigator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.List;
 
 import org.xwiki.android.components.R;
@@ -25,6 +44,9 @@ import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.TextView;
 
+/**
+ * Data Handler of the 3 level Expandable List component
+ * */
 public class XWikiExpandListAdapter extends BaseExpandableListAdapter
 {
 
@@ -59,19 +81,19 @@ public class XWikiExpandListAdapter extends BaseExpandableListAdapter
     public String wikiName, spaceName, pageName;
 
     public Handler handler;
-    
-    //For reducing requests
+
+    // For reducing requests
     private Spaces temp_spaces;
-    
+
     private Pages temp_pages;
-    
+
     private HashMap<String, Pages> cachePages;
-    
-    private String recentWikiName="", recentSpaceName="";
+
+    private String recentWikiName = "", recentSpaceName = "";
 
     public XWikiExpandListAdapter(Context context, ExpandableListView topExpList, String wikiURL)
     {
-    	cachePages = new HashMap<String, Pages>();
+        cachePages = new HashMap<String, Pages>();
         isAuthenticated = false;
         isSelected = false;
         this.wikiURL = wikiURL;
@@ -85,7 +107,7 @@ public class XWikiExpandListAdapter extends BaseExpandableListAdapter
     public XWikiExpandListAdapter(Context context, ExpandableListView topExpList, String wikiURL, String username,
         String password)
     {
-    	cachePages = new HashMap<String, Pages>();
+        cachePages = new HashMap<String, Pages>();
         this.wikiURL = wikiURL;
         this.username = username;
         this.password = password;
@@ -270,56 +292,54 @@ public class XWikiExpandListAdapter extends BaseExpandableListAdapter
 
     private Spaces getSpacesList(String wikiName)
     {
-    	Log.d("request", "request spaces from:" + wikiName);
-    	
-        if(recentWikiName.equals(wikiName)){
-        	Log.d("optimize", "optimized spaces");
-        	return temp_spaces;
-        }
-        else{
-        	Log.d("Loading","pages loading started");
-        	Requests requests = new Requests(wikiURL);
+        Log.d("request", "request spaces from:" + wikiName);
+
+        if (recentWikiName.equals(wikiName)) {
+            Log.d("optimize", "optimized spaces");
+            return temp_spaces;
+        } else {
+            Log.d("Loading", "pages loading started");
+            Requests requests = new Requests(wikiURL);
             if (isAuthenticated) {
                 requests.setAuthentication(username, password);
             }
             temp_spaces = requests.requestSpaces(wikiName);
             recentWikiName = wikiName;
-            Log.d("Loading","pages loading stopped");
+            Log.d("Loading", "pages loading stopped");
             return temp_spaces;
         }
-        
+
     }
 
     private Pages getPagesList(String wikiName, String spaceName)
     {
-    	String key = wikiName + "," + spaceName ;
-    	
-    	Log.d("request", "request pages from:" + wikiName + "," + spaceName);
-    	
-    	if(recentWikiName.equals(wikiName) && recentSpaceName.equals(spaceName)){
-    		Log.d("optimize", "optimized pages");
-    		return temp_pages;
-    	}else{
-    		
-    		if(cachePages.containsKey(key)){
-    			Log.d("optimize", "optimized level 2 pages");
-    			return cachePages.get(key);
-    		}else{
-    			Log.d("Loading","pages loading started");
-    			Requests requests = new Requests(wikiURL);
+        String key = wikiName + "," + spaceName;
+
+        Log.d("request", "request pages from:" + wikiName + "," + spaceName);
+
+        if (recentWikiName.equals(wikiName) && recentSpaceName.equals(spaceName)) {
+            Log.d("optimize", "optimized pages");
+            return temp_pages;
+        } else {
+
+            if (cachePages.containsKey(key)) {
+                Log.d("optimize", "optimized level 2 pages");
+                return cachePages.get(key);
+            } else {
+                Log.d("Loading", "pages loading started");
+                Requests requests = new Requests(wikiURL);
                 if (isAuthenticated) {
                     requests.setAuthentication(username, password);
                 }
-                
+
                 temp_pages = requests.requestAllPages(wikiName, spaceName);
                 recentWikiName = wikiName;
                 recentSpaceName = spaceName;
                 cachePages.put(key, temp_pages);
-                Log.d("Loading","pages loading started");
+                Log.d("Loading", "pages loading started");
                 return temp_pages;
-    		}
-    		
-    		
+            }
+
         }
     }
 
