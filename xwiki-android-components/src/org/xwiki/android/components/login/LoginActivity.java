@@ -19,7 +19,6 @@
  */
 
 package org.xwiki.android.components.login;
-
 import org.xwiki.android.components.IntentExtra;
 import org.xwiki.android.components.R;
 import org.xwiki.android.rest.HttpConnector;
@@ -78,29 +77,17 @@ public class LoginActivity extends Activity
                 {
                     @Override
                     public void handleMessage(Message msg)
-                    {
-
-                        if (msg.arg1 == 0) {
+                    {                       
                             AlertDialog.Builder alertbox = new AlertDialog.Builder(LoginActivity.this);
-                            alertbox.setMessage("Authentication failed");
+                            alertbox.setMessage(msg.getData().getString("msg"));
                             alertbox.setNeutralButton("Ok", new DialogInterface.OnClickListener()
                             {
                                 public void onClick(DialogInterface arg0, int arg1)
                                 {
                                 }
                             });
-                            alertbox.show();
-
-                        } else if (msg.arg1 == 1) {
-                            AlertDialog.Builder alertbox = new AlertDialog.Builder(LoginActivity.this);
-                            alertbox.setMessage("Unable to connect");
-                            alertbox.setNeutralButton("Ok", new DialogInterface.OnClickListener()
-                            {
-                                public void onClick(DialogInterface arg0, int arg1)
-                                {
-                                }
-                            });
-                        }
+                            alertbox.show();                       
+                        
                     }
                 };
 
@@ -124,7 +111,7 @@ public class LoginActivity extends Activity
                 t.start();
             }
 
-        });
+        });       
     }
 
     private void login(int loginStatus)
@@ -141,11 +128,25 @@ public class LoginActivity extends Activity
             Log.d("Login", "wrong username or password");
             Message ms = new Message();
             ms.arg1 = 0;
+            Bundle data=new Bundle();
+            //"msg" is an internally used key.So not defined as a constant
+            data.putString("msg", "Authentication failed \n check username password");
+            ms.setData(data);
             handler.sendMessage(ms);
 
-        } else {
+        }else if(loginStatus ==HttpConnector.RESP_CODE_CLIENT_CON_TIMEOUT){
+        	Message ms=Message.obtain();
+        	Bundle data=new Bundle();
+        	data.putString("msg", "Cannot establish Connection with server. \n Client Connection Timed out");
+            ms.setData(data);
+        	ms.arg1=HttpConnector.RESP_CODE_CLIENT_CON_TIMEOUT;
+        	handler.sendMessage(ms);
+        }else {
             Log.d("Login", "unable to connect");
             Message ms = new Message();
+            Bundle data=new Bundle();
+        	data.putString("msg", "Unable to connect \n Resp Code: "+ loginStatus);
+            ms.setData(data);
             ms.arg1 = 1;
             handler.sendMessage(ms);
         }

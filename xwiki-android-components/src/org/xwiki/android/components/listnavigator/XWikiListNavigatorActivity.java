@@ -141,18 +141,15 @@ public class XWikiListNavigatorActivity extends Activity
         inflater.inflate(R.layout.xwikilistnavigator_menu, menu);
         return true;
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        switch (item.getItemId()) {
-            case R.id.do_search:
-                showSearch();
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+        if (item.getItemId() == R.id.do_search) {
+			showSearch();
+			return true;
+		} else {
+			return super.onOptionsItemSelected(item);
+		}
     }
 
     @Override

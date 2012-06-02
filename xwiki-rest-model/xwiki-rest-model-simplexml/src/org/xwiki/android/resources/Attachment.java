@@ -21,7 +21,6 @@
 package org.xwiki.android.resources;
 
 import java.util.Collection;
-
 import org.simpleframework.xml.Element;
 
 /**

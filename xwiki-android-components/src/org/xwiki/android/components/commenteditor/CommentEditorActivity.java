@@ -102,14 +102,12 @@ public class CommentEditorActivity extends ListActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        switch (item.getItemId()) {
-            case R.id.add_comment:
-                addComment();
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+        if (item.getItemId() == R.id.add_comment) {
+			addComment();
+			return true;
+		} else {
+			return super.onOptionsItemSelected(item);
+		}
     }
 
     // shows add comment dialog and do update

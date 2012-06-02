@@ -25,6 +25,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -48,6 +50,9 @@ import org.apache.http.entity.FileEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.ExecutionContext;
 import org.apache.http.protocol.HttpContext;
 
@@ -60,7 +65,14 @@ import android.util.Log;
  */
 public class HttpConnector
 {
-
+	/*
+	 * public static constants
+	 */
+	/*
+	 * custom response code for client connection timeout
+	 */
+	 public static final int RESP_CODE_CLIENT_CON_TIMEOUT=21408;
+	 
     /**
      * URI of the Remote XWiki instance
      */
@@ -210,7 +222,11 @@ public class HttpConnector
      * @param password password of the XWiki user account
      * @param Url URL of the XWiki instance
      * @return HTTP response code of the connection
+     * 		   or 
+     * 		   21408(RESP_CODE_CLIENT_CON_TIMEOUT) when client connection timed out, 
+     *  	   
      */
+   
     public int checkLogin(String username, String password, String Url)
     {
 
@@ -244,7 +260,11 @@ public class HttpConnector
 
         } catch (ClientProtocolException e) {
             e.printStackTrace();
-        } catch (IOException e) {
+        }catch (SocketTimeoutException e){
+        	Log.d(this.getClass().getSimpleName(), "Connection timeout", e);
+        	//set custom response code for timeouts.        	
+        	responseCode=RESP_CODE_CLIENT_CON_TIMEOUT;
+        }catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -442,8 +462,12 @@ public class HttpConnector
     private void initialize()
     {
         client = new DefaultHttpClient();
-
-    }
+        //set http params
+        HttpParams params= new BasicHttpParams();
+        HttpConnectionParams.setConnectionTimeout(params, 10000);// try 10 seconds to get a socket connection
+        HttpConnectionParams.setSoTimeout(params, 20000);// wait 30 seconds waiting for data. then break connection.
+        client.setParams(params);
+     }
 
     /**
      * set user credentials with manually developed preemtive Auth

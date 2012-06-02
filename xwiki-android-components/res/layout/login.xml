@@ -7,11 +7,24 @@
     <TableLayout android:layout_width="fill_parent" android:id="@+id/tableLayout1" android:layout_height="wrap_content">
         <TableRow android:id="@+id/tableRow1" android:layout_height="wrap_content" android:layout_width="fill_parent">
             <TextView android:text="Username : " android:id="@+id/textView_login_username" android:layout_height="wrap_content" android:layout_width="wrap_content"></TextView>
-            <EditText android:id="@+id/editText_login_username" android:layout_height="wrap_content" android:layout_width="fill_parent" android:text="Admin"></EditText>
+
+            <EditText
+                android:id="@+id/editText_login_username"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="superadmin" >
+</EditText>
         </TableRow>
         <TableRow android:id="@+id/tableRow2" android:layout_height="wrap_content" android:layout_width="fill_parent">
             <TextView android:text="Password : " android:id="@+id/textView_login_password" android:layout_height="wrap_content" android:layout_width="wrap_content"></TextView>
-            <EditText android:id="@+id/editText_login_password" android:layout_height="wrap_content" android:layout_width="fill_parent" android:text="admin" android:inputType="textPassword"></EditText>
+
+            <EditText
+                android:id="@+id/editText_login_password"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:text="admin" >
+</EditText>
         </TableRow>
         <TableRow android:id="@+id/tableRow3" android:layout_height="wrap_content" android:layout_width="fill_parent">
             <TextView android:text="URL :" android:id="@+id/textView_login_Url" android:layout_height="wrap_content" android:layout_width="wrap_content"></TextView>
