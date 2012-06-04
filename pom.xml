@@ -44,8 +44,8 @@
 	<modules>
 		<module>xwiki-rest-model</module>
 		<module>xwiki-android-rest</module>
-		<module>xwiki-android-components</module>
 		<module>xwiki-android-core</module>
+		<module>xwiki-android-components</module>		
 		<module>xwiki-android-client</module>
 		<module>xwiki-android-test-rest</module>
 		<module>xwiki-android-tests-instrumentation</module>		
