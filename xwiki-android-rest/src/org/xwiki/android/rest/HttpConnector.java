@@ -245,7 +245,9 @@ public class HttpConnector
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
-
+        if(username!=""&&username!=null&&password!=""&&password!=null){//we cannot have empty password in xwiki.So empty pwd means login as guest
+        	setAuthenticaion(username, password); //call set authentication otherwise logins without username pwd.
+        }
         setCredentials();
 
         request.setURI(requestUri);
