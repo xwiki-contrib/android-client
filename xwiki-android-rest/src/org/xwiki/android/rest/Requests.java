@@ -111,7 +111,7 @@ public class Requests
 
     /**
      * Converts strings to UCS Transformation Format - 8-bit(UTF-8) for calling XWiki RESTful API
-     * 
+     * Does URL encoding of the keyword.
      * @param keyword text to convert
      * @return converted text
      */

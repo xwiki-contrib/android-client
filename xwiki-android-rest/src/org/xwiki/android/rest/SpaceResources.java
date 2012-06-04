@@ -45,7 +45,7 @@ public class SpaceResources extends HttpConnector
     /**
      * URL of the XWiki domain
      */
-    private String URLprefix;
+    private String uRLprefix;
 
     /**
      * Name of Wiki for acquiring pages
@@ -58,7 +58,7 @@ public class SpaceResources extends HttpConnector
      */
     public SpaceResources(String URLprefix, String wikiName)
     {
-        this.URLprefix = URLprefix;
+        this.uRLprefix = URLprefix;
         this.wikiName = wikiName;
     }
 
@@ -68,7 +68,7 @@ public class SpaceResources extends HttpConnector
     public Spaces getSpaces()
     {
 
-        String Uri = "http://" + URLprefix + SPACE_URL_PREFIX + wikiName + SPACE_URL_SUFFIX;
+        String Uri = "http://" + uRLprefix + SPACE_URL_PREFIX + wikiName + SPACE_URL_SUFFIX;
 
         return buildSpaces(super.getResponse(Uri));
     }
