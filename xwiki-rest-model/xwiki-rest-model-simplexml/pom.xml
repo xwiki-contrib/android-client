@@ -23,18 +23,25 @@
 -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>org.xwiki.android</groupId>
-		<artifactId>xwiki-android</artifactId>
-		<version>1.0-SNAPSHOT</version>
-	</parent>
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.xwiki.android</groupId>
+    <artifactId>xwiki-rest-model</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
 
-	<groupId>org.xwiki.android</groupId>
-	<artifactId>xwiki-rest-model-simplexml</artifactId>
-	<name>XWiki REST Simple-Xml Model</name>
+  <groupId>org.xwiki.android</groupId>
+  <artifactId>xwiki-rest-model-simplexml</artifactId>
+  <name>XWiki REST Simple-Xml Model</name>
 
-	
-
+  <dependencies>
+    <dependency>
+      <groupId>org.simpleframework</groupId>
+      <artifactId>simple-xml</artifactId>
+      <version>2.6</version>
+      <type>jar</type>
+      <scope>compile</scope>
+    </dependency>
+  </dependencies>
 </project>
