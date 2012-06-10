@@ -20,6 +20,7 @@
 
 package org.xwiki.android.components.login;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.xwiki.android.components.IntentExtra;
@@ -49,6 +50,8 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.Checkable;
 import android.widget.EditText;
 
 /**
@@ -63,11 +66,12 @@ public class LoginActivity extends Activity implements OnItemSelectedListener,On
     public static final String INTENT_EXTRA_GET_PASSWORD = IntentExtra.PASSWORD;
 
     private String username, password, url;
+    private boolean  remPwd;
     
     AutoCompleteTextView actvUn;
     AutoCompleteTextView actvPwd;
     AutoCompleteTextView actvUrl;
-
+    CheckBox cbPwdRem;
     Handler handler;
     
     @Override
@@ -78,7 +82,7 @@ public class LoginActivity extends Activity implements OnItemSelectedListener,On
         actvUn = (AutoCompleteTextView) findViewById(R.id.actv_login_username);
         actvPwd = (AutoCompleteTextView) findViewById(R.id.actv_login_password);
         actvUrl = (AutoCompleteTextView) findViewById(R.id.actv_login_url);
-        
+        cbPwdRem=(CheckBox)findViewById(R.id.cb_login_pwdRem);
         Button loginButton = (Button) findViewById(R.id.button_login_login);
         loginButton.setOnClickListener(new OnClickListener()
         {
@@ -88,6 +92,7 @@ public class LoginActivity extends Activity implements OnItemSelectedListener,On
             	username = actvUn.getText().toString();
                 password = actvPwd.getText().toString();
                 url = actvUrl.getText().toString();
+                remPwd=cbPwdRem.isChecked();
                 handler = new Handler()
                 {
                     @Override
@@ -116,9 +121,12 @@ public class LoginActivity extends Activity implements OnItemSelectedListener,On
                     @Override
                     public void run()
                     {
-                    	int code=new LoginFacade().login(username, password, url,getApplicationContext()) ; 
-                    	myProgressDialog.dismiss();
+                    	if(remPwd)Log.d(getClass().getSimpleName(),"pwd rem activated");
+                    	int code=new LoginFacade().login(username, password, url,remPwd,getApplicationContext()) ; 
+                    	myProgressDialog.dismiss();                    	
                     	login(code);
+                    	
+                    	
                     }
 
                 });
@@ -129,21 +137,21 @@ public class LoginActivity extends Activity implements OnItemSelectedListener,On
         
         //TODO:suggest: If slow move following to an async task
         XORMOpenHelper helper=new XORMOpenHelper(this);
-        List<User> suggestions=null;
+        List<User> suggestions=new ArrayList();//empty array list
         try {
 			Dao<User,Integer> udao=helper.getDao(User.class);
 			suggestions=udao.queryForAll();//to add known users			
 		} catch (SQLException e) {			
 			e.printStackTrace();
 		}
-        if(null!=suggestions && !suggestions.isEmpty()){
+        if(!suggestions.isEmpty()){
         	String[] userNames=new String[suggestions.size()];
         	String[] pwds=new String[suggestions.size()];
         	String[] urls=new String[suggestions.size()];
         	for(int i=0; i<suggestions.size();i++){
         		User u=suggestions.get(i);
         		userNames[i]=u.getUserName();
-        		pwds[i]=u.getEncryptedPassword();// TODO:decrypt
+        		pwds[i]=u.getPassword();
         		urls[i]=u.getWikiRealm();
         	}
         	  	
@@ -156,10 +164,8 @@ public class LoginActivity extends Activity implements OnItemSelectedListener,On
         	actvUrl.setAdapter(adapterUrls);
         	//disable autocomplete dropdown for pwds
         	actvPwd.setDropDownHeight(0);
-        	actvPwd.setThreshold(-1);        	
-        	 
-        	actvUn.setOnItemSelectedListener(this);
-        
+        	actvPwd.setThreshold(-1); 
+        	actvUn.setOnItemSelectedListener(this);        
         }
         Log.i(this.getClass().getSimpleName(),"size of suggestions list"+suggestions.size());        
     }

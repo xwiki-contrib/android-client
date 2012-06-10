@@ -16,7 +16,7 @@ import android.content.SharedPreferences;
  */
 //TODO: Consider revisioning. Is a singleton needed. What happens when multiple threads share same pref.
 public class ConfigSourceProvider  implements SharedPreferences,SharedPreferences.Editor{
-	public static final String FILE_CONFIG="/data/config";
+	public static final String FILE_CONFIG="config";
 	
 	private SharedPreferences pref;
 	private SharedPreferences.Editor editor;

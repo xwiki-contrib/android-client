@@ -31,7 +31,7 @@
 		<version>1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>xwiki-android-core</artifactId>
+	<artifactId>xwiki-android-core</artifactId>	
 	<packaging>apklib</packaging>
 	<name>XWiki android core lib</name>
 
@@ -45,7 +45,7 @@
 		<dependency>
 			<groupId>com.j256.ormlite</groupId>
 			<artifactId>ormlite-core</artifactId>
-			<version>4.40</version>
+			<version>4.40</version>			
 	    </dependency>
 	    <dependency>
 			<groupId>com.j256.ormlite</groupId>

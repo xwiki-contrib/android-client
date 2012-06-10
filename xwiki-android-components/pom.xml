@@ -35,19 +35,14 @@
 	<packaging>apklib</packaging>
 	<name>Xwiki Android Components</name>
 
-	<dependencies>
-		<dependency>
-			<groupId>org.xwiki.android</groupId>
-			<artifactId>xwiki-android-rest</artifactId>
-			<type>apklib</type>
-			<version>${project.version}</version>
-		</dependency>
+	<dependencies>		
 		<dependency>
 			<groupId>org.xwiki.android</groupId>
 			<artifactId>xwiki-android-core</artifactId>
 			<type>apklib</type>
 			<version>${project.version}</version>
 		</dependency>
+		
 	</dependencies>
 
 	<build>

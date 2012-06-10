@@ -79,6 +79,14 @@
         </TableRow>
     </TableLayout>
 
+    <CheckBox
+        android:id="@+id/cb_login_pwdRem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"        
+        android:text="remember password" 
+        android:checked="true"
+        />
+		
     <Button
         android:id="@+id/button_login_login"
         android:layout_width="wrap_content"

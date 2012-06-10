@@ -19,7 +19,7 @@ public class User {
 	@DatabaseField(canBeNull=false, uniqueCombo=true,useGetSet=true)
 	private String userName;	
 	@DatabaseField(useGetSet=true)
-	private String encryptedPassword;
+	private String password;//todo: when enc enable. Use pers field encPwd instead of pwd and make getPassword() decrypt and store val in pwd field
 	@DatabaseField(useGetSet=true)
 	private String email;	
 	@DatabaseField( uniqueCombo=true,useGetSet=true)
@@ -60,21 +60,18 @@ public class User {
 	}
 	/**
 	 * use security utils to decrypt the pwd.
-	 * returns empty string if password is not stored.
+	 *return null if not stored
 	 * @return encrypted Password
 	 */
-	public String getEncryptedPassword() {
-		if (encryptedPassword==null){
-			encryptedPassword="";
-		}
-		return encryptedPassword;
+	public String getPassword() {		
+		return password;
 	}
 	/**
-	 * do not store plain text pwd
+	 * 
 	 * @param password
 	 */
-	public void setEncryptedPassword(String password) {
-		this.encryptedPassword = password;
+	public void setPassword(String password) {		
+		this.password = password;
 	}
 	public String getEmail() {
 		return email;
@@ -85,8 +82,15 @@ public class User {
 	
 	//constructors
 	public User(){}
-	public User(String firstName, String lastName, String userName, String password, String email){
-		//TODO SET VARS
+	
+	public User(String firstName, String lastName, String userName,String password,String wikiRealm, String email) {
+		super();
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.userName = userName;
+		this.password = password;
+		this.email = email;
+		this.wikiRealm = wikiRealm;
 	}
-
+	
 }

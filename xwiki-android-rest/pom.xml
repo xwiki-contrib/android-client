@@ -34,7 +34,8 @@
 	<artifactId>xwiki-android-rest</artifactId>
 	<packaging>apklib</packaging>
 	<name>XWiki Android REST Connector</name>
-
+	
+	
 	<dependencies>
 		<dependency>
 			<groupId>org.xwiki.android</groupId>

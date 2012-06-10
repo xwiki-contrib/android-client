@@ -23,18 +23,41 @@
 -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>org.xwiki.android</groupId>
-		<artifactId>xwiki-rest-model</artifactId>
-		<version>1.0-SNAPSHOT</version>
-	</parent>
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.xwiki.android</groupId>
+    <artifactId>xwiki-rest-model</artifactId>
+    <version>1.0-SNAPSHOT</version>    
+  </parent>
 
-	<groupId>org.xwiki.android</groupId>
-	<artifactId>xwiki-rest-model-simplexml</artifactId>
-	<name>XWiki REST Simple-Xml Model</name>
+  <groupId>org.xwiki.android</groupId>
+  <artifactId>xwiki-rest-model-simplexml</artifactId>
+  <name>XWiki REST Simple-Xml Model</name>
 
-	
-
+  <dependencies>
+    <dependency>
+	    <groupId>org.simpleframework</groupId>
+	    <artifactId>simple-xml</artifactId>
+	    <version>2.6</version>
+	    <exclusions>
+	        <!-- StAX is not available on Android -->
+	        <exclusion>
+	            <artifactId>stax</artifactId>
+	            <groupId>stax</groupId>
+	        </exclusion>
+	        <exclusion>
+	            <artifactId>stax-api</artifactId>
+	            <groupId>stax</groupId>
+	        </exclusion>
+	        <!-- Provided by Android -->
+	        <exclusion>
+	            <artifactId>xpp3</artifactId>
+	            <groupId>xpp3</groupId>
+	        </exclusion>
+	    </exclusions>
+	</dependency>
+    
+    
+  </dependencies>
 </project>

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import org.xwiki.android.context.GlobalConstants;
 import org.xwiki.android.core.*;
 import org.xwiki.android.entity.LoginAttempt;
 import org.xwiki.android.entity.User;
@@ -15,7 +16,7 @@ import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
 public class XORMOpenHelper extends OrmLiteSqliteOpenHelper {
-	private static final String DATABASE_NAME="XWikiDB.db";
+	private static final String DATABASE_NAME=GlobalConstants.FILE_CORE_DATABASE;
 	private static final int DATABASE_VERSION = 1;
 	
 	/**
