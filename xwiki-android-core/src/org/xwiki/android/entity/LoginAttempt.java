@@ -4,7 +4,7 @@ import java.util.Date;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
-
+@Deprecated
 @DatabaseTable(tableName="C_LoginAttempt_LOG")
 public class LoginAttempt {
 	@DatabaseField

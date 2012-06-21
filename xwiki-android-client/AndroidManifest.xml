@@ -17,10 +17,55 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".launcher.IconLaunchPad"
+                  android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        
+        <activity android:name=".nav.PageViewActivity"></activity>
+        
+        <!-- launchable activities -->
+        <activity android:name=".blog.Blogger" android:label="Blog Application" android:icon="@drawable/blog">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="xwiki.android.action.MAIN"/>
+                <action android:name="xwiki.android.action.BLOG"/>
+                <category android:name="android.intent.category.LAUNCHER" />                
+                <category android:name="xwiki.android.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        
+        <activity android:name=".nav.XwikiNavigator" android:icon="@drawable/navigator">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="xwiki.android.action.MAIN"/>
+                <action android:name="xwiki.android.action.NAVIGATOR"/>
+                <category android:name="android.intent.category.LAUNCHER" />                
+                <category android:name="xwiki.android.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".dev.ConfigurationActivity" android:icon="@drawable/devtools">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="xwiki.android.action.MAIN"/>
+                <action android:name="xwiki.android.action.CONFIGURATION"/>
+                <category android:name="android.intent.category.LAUNCHER" />                
+                <category android:name="xwiki.android.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <!--  sub activities 
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+        <!--  blog -->
+        <activity android:name=".blog.BlogPrefernces" android:label="Blog App Preferences"/>
+        
+        
+        <!-- activities from UI comp lib  -->
         <activity android:name="org.xwiki.android.components.login.LoginActivity"></activity>
         <activity android:name="org.xwiki.android.components.objectnavigator.ObjectNavigatorActivity"></activity>
-        <activity android:name="org.xwiki.android.components.navigator.XWikiNavigatorActivity"></activity>
-        <activity android:name="PageViewActivity"></activity>
+        <activity android:name="org.xwiki.android.components.navigator.XWikiNavigatorActivity"></activity>        
         <activity android:name="org.xwiki.android.components.pageviewer.XWikiPageViewerActivity"></activity>
         <activity android:name="org.xwiki.android.components.listnavigator.XWikiListNavigatorActivity"></activity>
         <activity android:name="org.xwiki.android.components.commenteditor.CommentEditorActivity"></activity>

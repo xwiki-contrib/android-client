@@ -20,11 +20,15 @@
 
 package org.xwiki.android.client;
 
+import org.xwiki.android.client.launcher.IconLaunchPad;
+import org.xwiki.android.client.nav.PageViewActivity;
 import org.xwiki.android.components.listnavigator.XWikiListNavigatorActivity;
 import org.xwiki.android.components.login.LoginActivity;
+import org.xwiki.android.context.XAContextInitializer;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -38,6 +42,7 @@ public class Main extends Activity
     private final int REQUEST_CODE_XWIKI_PAGEVIEWER = 102;
 
     private final int REQUEST_CODE_OBJECTNAVIGATOR = 110;
+    private final int REQUEST_CODE_LAUNCHPAD=90;
 
     private String username;
 
@@ -57,15 +62,25 @@ public class Main extends Activity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        //initialize the platform context
+        new Thread(new Runnable() {			
+			@Override
+			public void run() {
+				XAContextInitializer.initialize(getApplicationContext());				
+			}
+		}).start();
+        
+        //start the login activity.
         startActivityForResult(new Intent(getApplicationContext(), LoginActivity.class), REQUEST_CODE_LOGINACTIVITY);
-    }
+        
+   }    
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         // TODO Auto-generated method stub
         super.onActivityResult(requestCode, resultCode, data);
-
+        //if login success start LaunchPad.
         if (requestCode == REQUEST_CODE_LOGINACTIVITY) {
             if (resultCode == Activity.RESULT_OK) {
                 Log.d("Activity Result", "OK");
@@ -73,7 +88,9 @@ public class Main extends Activity
                 password = data.getExtras().getString(LoginActivity.INTENT_EXTRA_GET_PASSWORD);
                 url = data.getExtras().getString(LoginActivity.INTENT_EXTRA_GET_URL);
                 Log.d("data", "username=" + username + " password=" + password + " url=" + url);
-                startXWikiNavigator();
+                //start xwiki launch pad
+                Intent intent=new Intent(this.getApplicationContext(),IconLaunchPad.class);
+                startActivityForResult(intent, REQUEST_CODE_LAUNCHPAD);
             } else {
                 finish();
             }
@@ -101,6 +118,8 @@ public class Main extends Activity
             startXWikiNavigator();
         } else if (requestCode == REQUEST_CODE_OBJECTNAVIGATOR) {
 
+        }else{
+        	startActivityForResult(new Intent(getApplicationContext(), LoginActivity.class), REQUEST_CODE_LOGINACTIVITY);
         }
     }
 
@@ -120,4 +139,6 @@ public class Main extends Activity
 
         startActivityForResult(intent, REQUEST_CODE_XWIKI_NAVIGATOR);
     }
+    
+    
 }
