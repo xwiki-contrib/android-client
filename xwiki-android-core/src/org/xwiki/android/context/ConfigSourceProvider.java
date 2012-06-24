@@ -1,8 +1,15 @@
 package org.xwiki.android.context;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.AssetManager;
+import android.util.Log;
 
 /**
  * Provides Application wise configuration data
@@ -14,31 +21,47 @@ import android.content.SharedPreferences;
  * @author sasinda
  *
  */
-//TODO: Consider revisioning. Is a singleton needed. What happens when multiple threads share same pref.
+//TODO:  What happens when multiple threads share same pref.
 public class ConfigSourceProvider  implements SharedPreferences,SharedPreferences.Editor{
 	public static final String FILE_CONFIG="config";
 	
 	private SharedPreferences pref;
 	private SharedPreferences.Editor editor;
-	private static ConfigSourceProvider singleton;
 	
-	private ConfigSourceProvider(){}
-	private ConfigSourceProvider(Context ctx){
-		//init			
-		pref=ctx.getSharedPreferences(FILE_CONFIG, android.content.Context.MODE_WORLD_READABLE);
-		editor=pref.edit();	
-		//clean up context obj		
-	}	
 	/*
 	 * package lvl method
-	 * Use XwikiContext.getConfigSourceProvider to get an instance.
+	 * Use XWikiApplicationContext.getConfigSourceProvider to get an instance.
 	 */
-	static ConfigSourceProvider getInstance(Context appCtx){
-		if(singleton==null){
-			singleton=new ConfigSourceProvider(appCtx);			
+	ConfigSourceProvider(Context ctx){
+		//init		
+		pref=ctx.getSharedPreferences(FILE_CONFIG, android.content.Context.MODE_WORLD_READABLE);
+		editor=pref.edit();			
+		
+		//copy the file assets/config.xml in applications's local file directory.(data/data/<pkg  name/shared_prefs
+		if(pref.getInt("version", -1)<0){
+			try {
+				InputStream is=ctx.getAssets().open("config.xml", AssetManager.ACCESS_BUFFER);
+				FileOutputStream fo=ctx.openFileOutput("shared_prefs/"+FILE_CONFIG, Context.MODE_WORLD_READABLE);
+				byte[] buffer=new byte[1024];
+				int len=0;
+				while(len!=-1){
+					len=is.read(buffer);
+					fo.write(buffer);
+				}
+				fo.flush();
+				fo.close();
+				is.close();				
+			} catch (IOException e) {
+				Log.e(this.getClass().getSimpleName(),"cannot copy config file exception is:\n"+e.getMessage());
+				e.printStackTrace();
+			}
+			
+			
+			
 		}
-		return singleton;
-	}
+		
+	}		
+	
 	
 	/**
 	 * Handy reInitialize method if the stream to the config file is lost.
@@ -46,7 +69,7 @@ public class ConfigSourceProvider  implements SharedPreferences,SharedPreference
 	 */
 	public void reInitialize(Context ctx){
 		//init			
-		pref=ctx.getSharedPreferences("/data/config", android.content.Context.MODE_WORLD_READABLE);
+		pref=ctx.getSharedPreferences(FILE_CONFIG, android.content.Context.MODE_WORLD_READABLE);
 		editor=pref.edit();			
 	}
 	@Override
@@ -112,7 +135,7 @@ public class ConfigSourceProvider  implements SharedPreferences,SharedPreference
 	}
 	
 	/*
-	 * not used. You can get the same methods in the Config Class
+	 * not used. The Editor's methods are implemented in this class itself.
 	 * @see android.content.SharedPreferences#edit()
 	 */
 	@Override

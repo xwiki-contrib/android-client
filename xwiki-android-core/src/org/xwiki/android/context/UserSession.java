@@ -11,7 +11,14 @@ public class UserSession extends Hashtable {
 	private String realm;
 	private User user;
 	
-	UserSession(){}//make constructing a new UserSession() prohibited outside package.
+	//constructing a new UserSession() prohibited outside package.
+	UserSession(User u){
+		user=u;
+		//TODO:have logic to decrypt when encryption is enabled.
+		password=u.getPassword();	
+		userName=u.getUserName();
+		realm=u.getWikiRealm();	
+	}
 	
 	public String getUserName(){
 		return userName;
@@ -36,12 +43,5 @@ public class UserSession extends Hashtable {
 		return realm;
 	}
 	
-	//package level set methods	
-	void initilize(User u){
-		user=u;
-		//TODO:have logic to decrypt when encryption is enabled.
-		password=u.getPassword();	
-		userName=u.getUserName();
-		realm=u.getWikiRealm();		
-	}
+	
 }

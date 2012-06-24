@@ -2,7 +2,7 @@ package org.xwiki.android.fileStore;
 
 import java.io.File;
 
-public interface FileAccessObject<T> {
+public interface FAO<T> {
 	/**
 	 * 
 	 * @param entity The Entity to save

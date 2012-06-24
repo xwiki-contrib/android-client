@@ -3,7 +3,7 @@ package org.xwiki.android.client.nav;
 import org.xwiki.android.components.listnavigator.XWikiListNavigatorActivity;
 import org.xwiki.android.components.login.LoginActivity;
 import org.xwiki.android.context.UserSession;
-import org.xwiki.android.context.XAContext;
+import org.xwiki.android.context.XWikiApplicationContext;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -23,7 +23,7 @@ public class XwikiNavigator extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {		
 		 super.onCreate(savedInstanceState);
-		 XAContext ctx=XAContext.getInstance();
+		 XWikiApplicationContext ctx=(XWikiApplicationContext)getApplication();
 		 UserSession session=ctx.getUserSession();
 		 username=session.getUserName();
 		 password=session.getPassword();

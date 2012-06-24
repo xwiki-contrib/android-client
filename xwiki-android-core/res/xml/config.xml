@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- to navigate content of the shared_pref file config.xml. Take care when editing.Make sure to represent the same 
+     key val pairs in assets/config.xml
+ -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
-    <PreferenceCategory android:title="Module Configuration">
-        <CheckBoxPreference android:key="blogActive" android:title="Blog App Module Active"/>
-        <EditTextPreference android:key="etprefSample" android:title="user hidden config entry" android:shouldDisableView="true" android:enabled="false"></EditTextPreference>
-    </PreferenceCategory>
-    
+   
 
 </PreferenceScreen>

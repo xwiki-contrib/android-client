@@ -1,4 +1,4 @@
-package org.xwiki.android.blog;
+package org.xwiki.android.blogObj;
 
 import org.xwiki.android.xmodel.xobjects.XObjectBase;
 /**

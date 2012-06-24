@@ -1,13 +1,5 @@
 package org.xwiki.android.fileStore;
 
-import android.content.Context;
+public interface FileStoreManager {
 
-public class FileStoreManager {
-	private Context ctx;
-	
-	FileStoreManager(Context appCtx){
-		this.ctx=appCtx;
-	}
-	
-	
 }

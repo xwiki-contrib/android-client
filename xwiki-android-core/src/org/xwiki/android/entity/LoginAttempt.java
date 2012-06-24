@@ -5,6 +5,8 @@ import java.util.Date;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 @Deprecated
+//TODO: generalize to an android style log.  These are for user logs for security and auditing reasons.
+//rename to AuditEntry, to stop confusion with logging framework.Make Auditor for handling business logic.
 @DatabaseTable(tableName="C_LoginAttempt_LOG")
 public class LoginAttempt {
 	@DatabaseField

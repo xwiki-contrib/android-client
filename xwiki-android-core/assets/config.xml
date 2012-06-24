@@ -1,0 +1,18 @@
+<!-- content of this file is copied to /data/data/[org.xwiki.android.client//<client pkg wich uses this lib]/shared_prefs -->
+<?xml version='1.0' encoding='utf-8' standalone='yes' ?>
+<map>
+<!--BEGIN for reference only. Enables content assist auto completes also -->
+<boolean name="demoBool_key" value="false" />
+<long name="demoLong_key" value="122000" />
+<string name="demoString_key">sas</string>
+<float name="demoFloat_key" value="1.11" />
+<int name="demoInt_key" value="1" />
+<!--END for reference only -->
+
+<!--BEGIN configuration data -->
+<int name="version" value=1/>
+<string name="persistenManager">org.xwiki.android.dal.XORMOpenHelper</string>
+<string name="fileStoreManager">org.xwiki.android.fileStore.FileStoreManagerImpl</string>
+<string name="restFulManager">org.xwiki.android.dal.XORMOpenHelper</string>
+
+</map>

@@ -24,9 +24,10 @@ import org.xwiki.android.client.launcher.IconLaunchPad;
 import org.xwiki.android.client.nav.PageViewActivity;
 import org.xwiki.android.components.listnavigator.XWikiListNavigatorActivity;
 import org.xwiki.android.components.login.LoginActivity;
-import org.xwiki.android.context.XAContextInitializer;
+
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -61,18 +62,9 @@ public class Main extends Activity
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
-        //initialize the platform context
-        new Thread(new Runnable() {			
-			@Override
-			public void run() {
-				XAContextInitializer.initialize(getApplicationContext());				
-			}
-		}).start();
-        
+        setContentView(R.layout.main); 
         //start the login activity.
-        startActivityForResult(new Intent(getApplicationContext(), LoginActivity.class), REQUEST_CODE_LOGINACTIVITY);
-        
+        startActivityForResult(new Intent(getApplicationContext(), LoginActivity.class), REQUEST_CODE_LOGINACTIVITY);         
    }    
 
     @Override

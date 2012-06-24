@@ -7,7 +7,7 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
-import org.xwiki.android.xmodel.reference.RelationLink;
+import org.xwiki.android.xmodel.uri.Link;
 /**
  * 
  * @author sasindap
@@ -16,9 +16,9 @@ import org.xwiki.android.xmodel.reference.RelationLink;
  */
 public abstract class XElement<T> implements Serializable,Cloneable {
 	protected Map<String, T> fields;
-	protected List<RelationLink> links;
+	protected List<Link> links;
 	XElement() {
 		fields = new Hashtable<String, T>(30);
-		links = new ArrayList<RelationLink>();		
+		links = new ArrayList<Link>();		
 	}
 }

@@ -4,7 +4,7 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
-import org.xwiki.android.context.XAContextInitializer;
+import org.xwiki.android.context.XWikiApplicationContext;
 import org.xwiki.android.dal.XORMOpenHelper;
 import org.xwiki.android.entity.LoginAttempt;
 import org.xwiki.android.entity.User;
@@ -44,7 +44,7 @@ public class LoginFacade {
 	 * 
 	 * @author sasinda
 	 *
-	 *runnable. Update the XAContext,(initialize user session)
+	 *runnable. Update the XWikiApplicationContext,(initialize user session)
 	 *Update database if new username, xwiki  server realm combination
 	 *Log the login attempt.
 	 */
@@ -80,7 +80,7 @@ public class LoginFacade {
 						udao.create(search);
 						Log.i(LoginFacade.class.getSimpleName(),"created new user db entry "+search.getUserName()+" "+search.get_id());
 						//ctx update						
-						XAContextInitializer.updateToAuthenticatedState(search);
+						((XWikiApplicationContext)ctx.getApplicationContext()).updateToAuthenticatedState(search);
 					}else{
 						User u=matches.get(0);
 						//if pwd was not saved earlier save it now. If remPwd is false delete existing remembered pwd entry
@@ -88,7 +88,7 @@ public class LoginFacade {
 							u.setPassword(pwd);
 							udao.update(u);
 						}							
-						XAContextInitializer.updateToAuthenticatedState(u);
+						((XWikiApplicationContext)ctx.getApplicationContext()).updateToAuthenticatedState(u);
 					}
 					//log the attempt
 					Dao<LoginAttempt,Integer> logins=helper.getDao(LoginAttempt.class);
@@ -97,7 +97,7 @@ public class LoginFacade {
 				} catch (SQLException e) {					
 					Log.e(this.getClass().getSimpleName(),"cannot create/update entry of user",e);
 					//if db fail update the ctx yet with new val
-					XAContextInitializer.updateToAuthenticatedState(new User(null,null,usrname,pwd,url,null));
+					((XWikiApplicationContext)ctx.getApplicationContext()).updateToAuthenticatedState(new User(null,null,usrname,pwd,url,null));
 				}
 				
 				

@@ -1,31 +1,25 @@
 package org.xwiki.android.xmodel.xobjects;
-
 /**
  * 
  * @author xwiki
  * 
- *         attribute imple special: value general: size,picker
+ * attribute implimentation: special: value
+ * general: displayFormType, displayType, defaultValue
  */
-public class XStringProperty extends XPropertyBase<String> {
-	String value;
+public class XBooleanProperty extends XPropertyBase<Boolean> {
 
-	public XStringProperty() {
-		type = "com.xpn.xwiki.objects.classes.StringClass";
-	}
-
-	// special attr
 	@Override
-	public void setValue(String val) {
-		value = val;
+	public void setValue(Boolean val) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
-	public String getValue() {
-		return value;
+	public Boolean getValue() {
+		// TODO Auto-generated method stub
+		return null;
 	}
-
-	// general attr
-
+	
 	public Integer setSize(int size) {
 		return (Integer) fields.put("size", size);
 	}
@@ -41,7 +35,5 @@ public class XStringProperty extends XPropertyBase<String> {
 	public Boolean isPicker() {
 		return (Boolean) fields.get("picker");
 	}
-
-	
 
 }
