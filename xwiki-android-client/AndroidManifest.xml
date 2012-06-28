@@ -21,7 +21,6 @@
                   android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         
@@ -34,7 +33,6 @@
                 <action android:name="xwiki.android.action.MAIN"/>
                 <action android:name="xwiki.android.action.BLOG"/>
                 <category android:name="android.intent.category.LAUNCHER" />                
-                <category android:name="xwiki.android.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         
@@ -44,7 +42,6 @@
                 <action android:name="xwiki.android.action.MAIN"/>
                 <action android:name="xwiki.android.action.NAVIGATOR"/>
                 <category android:name="android.intent.category.LAUNCHER" />                
-                <category android:name="xwiki.android.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity android:name=".dev.ConfigurationActivity" android:icon="@drawable/devtools">
@@ -52,8 +49,15 @@
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="xwiki.android.action.MAIN"/>
                 <action android:name="xwiki.android.action.CONFIGURATION"/>
-                <category android:name="android.intent.category.LAUNCHER" />                
-                <category android:name="xwiki.android.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />           
+            </intent-filter>
+        </activity>
+        <activity android:name=".dev.QuickTest" android:icon="@drawable/quicktest">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="xwiki.android.action.MAIN"/>
+                <action android:name="xwiki.android.action.QuickTests"/>
+                <category android:name="android.intent.category.LAUNCHER" />                      
             </intent-filter>
         </activity>
         <!--  sub activities 

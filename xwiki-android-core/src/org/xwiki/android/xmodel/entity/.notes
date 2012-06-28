@@ -1,0 +1,9 @@
+All first Class Entities in XWikiReSTful API
+
+[http://maven.xwiki.org/site/xwiki-core-parent/xwiki-core-model/apidocs/org/xwiki/model/reference/EntityReference.html]
+all model entities noted above. Except Object,ObjectProperty.
+
+
+"Some objects might be directly exposed as first class entities, such as comments and tags." 
+[http://platform.xwiki.org/xwiki/bin/view/Features/XWikiRESTfulAPI]
+

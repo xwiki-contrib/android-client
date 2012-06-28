@@ -1,0 +1,3 @@
+XClass extend XObject.
+This is similler to 
+java.lang.Class extends java.lang.Object
