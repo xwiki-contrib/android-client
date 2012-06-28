@@ -25,8 +25,8 @@ public interface XWikiApplicationContextInterface {
 
 	ConfigSourceProvider getConfigSourceProvider();
 
-	FileStoreManager getFileStoreManager();
+	FileStoreManager newFileStoreManager();
 
-	RESTfulManager getRESTfulManager();
+	RESTfulManager newRESTfulManager();
 
 }

@@ -26,7 +26,7 @@ import java.util.List;
 import org.xwiki.android.cmnSvc.LoginFacade;
 import org.xwiki.android.components.IntentExtra;
 import org.xwiki.android.components.R;
-import org.xwiki.android.dal.XORMOpenHelper;
+import org.xwiki.android.dal.EntityManager;
 import org.xwiki.android.rest.HttpConnector;
 import org.xwiki.android.entity.*;
 
@@ -136,7 +136,7 @@ public class LoginActivity extends Activity implements OnItemSelectedListener,On
         });
         
         //TODO:suggest: If slow move following to an async task
-        XORMOpenHelper helper=new XORMOpenHelper(this);
+        EntityManager helper=new EntityManager(this);
         List<User> suggestions=new ArrayList();//empty array list
         try {
 			Dao<User,Integer> udao=helper.getDao(User.class);

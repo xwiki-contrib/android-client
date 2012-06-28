@@ -4,6 +4,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Hashtable;
 
+import org.xwiki.android.dal.EntityManager;
 import org.xwiki.android.entity.User;
 import org.xwiki.android.fileStore.FileStoreManager;
 import org.xwiki.android.fileStore.FileStoreManagerImpl;
@@ -97,7 +98,7 @@ public class XWikiApplicationContext extends Application implements XWikiApplica
 	
 	//getters	
 	
-	public static XWikiApplicationContext getXWikiApplicationContext(){
+	public static XWikiApplicationContext getInstance(){
 		return currContext;
 	}	
 	
@@ -121,7 +122,7 @@ public class XWikiApplicationContext extends Application implements XWikiApplica
 	 * @see org.xwiki.android.context.XWikiApplicationContext2#getFileStoreManager()
 	 */
 	@Override
-	public FileStoreManager getFileStoreManager(){
+	public FileStoreManager newFileStoreManager(){
 		FileStoreManager fsm=null;
 		/**   activate this code when we have more than one FileStoreManager Implementations.To get impl from config file
 		Class<FileStoreManager> fsmcls;
@@ -185,7 +186,12 @@ public class XWikiApplicationContext extends Application implements XWikiApplica
 	 * @see org.xwiki.android.context.XWikiApplicationContext2#getRESTfulManager()
 	 */
 	@Override
-	public RESTfulManager getRESTfulManager(){
+	public RESTfulManager newRESTfulManager(){
 		return null;
 	}
+	
+	public EntityManager newEntityManager(){
+		return new EntityManager(this);
+	}
+	
 }

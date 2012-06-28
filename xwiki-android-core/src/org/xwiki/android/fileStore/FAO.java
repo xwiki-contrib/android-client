@@ -1,6 +1,7 @@
 package org.xwiki.android.fileStore;
 
 import java.io.File;
+import java.util.List;
 
 public interface FAO<T> {
 	/**
@@ -12,4 +13,6 @@ public interface FAO<T> {
 	File save(T entity,File f,int mode); //todo: throw file IOException
 	
 	T load(File file);
+	
+	List<T> search();
 }

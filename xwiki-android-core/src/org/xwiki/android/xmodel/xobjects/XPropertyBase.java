@@ -12,7 +12,7 @@ import java.util.Map;
  * general:prettyName, number, tooltip, customDisplay, disabled, unmodifiable,validationMessage, validationRegExp,
  * 
  */
-public abstract class XPropertyBase<T> extends XElement<Object> implements XProperty<T> {
+public abstract class XPropertyBase<T> extends XObject<Object> implements XProperty<T> {
 
 	protected String name;
 	protected String type;	

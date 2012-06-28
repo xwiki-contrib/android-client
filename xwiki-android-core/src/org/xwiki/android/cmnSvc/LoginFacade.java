@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.xwiki.android.context.XWikiApplicationContext;
-import org.xwiki.android.dal.XORMOpenHelper;
+import org.xwiki.android.dal.EntityManager;
 import org.xwiki.android.entity.LoginAttempt;
 import org.xwiki.android.entity.User;
 import org.xwiki.android.rest.HttpConnector;
@@ -63,13 +63,13 @@ public class LoginFacade {
 		}
 		@Override
 		public void run() {
-			XORMOpenHelper helper=new XORMOpenHelper(ctx);
+			EntityManager eman=XWikiApplicationContext.getInstance().newEntityManager();
 			Log.i(LoginFacade.class.getSimpleName(),"updating state "+usrname+" "+pwd+" "+url+" "+code);
 			if(code==200){//success
 				//update context to authenticated state. if new user add to db;
 				
 				try {
-					Dao<User,Integer> udao=helper.getDao(User.class);
+					Dao<User,Integer> udao=eman.getDao(User.class);
 					User search=new User();
 					search.setUserName(usrname);
 					search.setWikiRealm(url);					
@@ -91,7 +91,7 @@ public class LoginFacade {
 						((XWikiApplicationContext)ctx.getApplicationContext()).updateToAuthenticatedState(u);
 					}
 					//log the attempt
-					Dao<LoginAttempt,Integer> logins=helper.getDao(LoginAttempt.class);
+					Dao<LoginAttempt,Integer> logins=eman.getDao(LoginAttempt.class);
 					LoginAttempt la=new LoginAttempt(usrname,url,new Date(),LoginAttempt.STATUS_SUCCEED,code);
 					logins.create(la);					
 				} catch (SQLException e) {					
@@ -105,14 +105,14 @@ public class LoginFacade {
 			}else {
 				Dao<LoginAttempt, Integer> logins;
 				try {
-					logins = helper.getDao(LoginAttempt.class);
+					logins = eman.getDao(LoginAttempt.class);
 					LoginAttempt la=new LoginAttempt(usrname,url,new Date(),LoginAttempt.STATUS_FAILURE,code);
 					logins.create(la);
 				} catch (SQLException e) {					
 					e.printStackTrace();
 				}				
 			}
-			helper.close();			
+			eman.close();			
 		}		
 		
 	}

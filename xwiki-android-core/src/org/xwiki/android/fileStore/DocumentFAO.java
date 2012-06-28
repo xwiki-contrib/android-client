@@ -1,6 +1,7 @@
 package org.xwiki.android.fileStore;
 
 import java.io.File;
+import java.util.List;
 
 import org.xwiki.android.xmodel.entity.Document;
 
@@ -13,6 +14,11 @@ public class DocumentFAO implements FAO<Document>{
 	}
 	@Override
 	public Document load(File file) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public List<Document> search() {
 		// TODO Auto-generated method stub
 		return null;
 	}	
