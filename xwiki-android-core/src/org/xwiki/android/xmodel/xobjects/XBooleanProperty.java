@@ -8,13 +8,13 @@ package org.xwiki.android.xmodel.xobjects;
  */
 public class XBooleanProperty extends XPropertyBase<Boolean> {
 
-	@Override
+	
 	public void setValue(Boolean val) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
+	
 	public Boolean getValue() {
 		// TODO Auto-generated method stub
 		return null;

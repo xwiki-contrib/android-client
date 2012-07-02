@@ -64,7 +64,7 @@
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
         <!--  blog -->
         <activity android:name=".blog.BlogPrefernces" android:label="Blog App Preferences"/>
-        
+         <activity android:name=".blog.EditPostActivity" android:label="Blog App Preferences"/>
         
         <!-- activities from UI comp lib  -->
         <activity android:name="org.xwiki.android.components.login.LoginActivity"></activity>

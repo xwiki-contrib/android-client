@@ -148,7 +148,7 @@ public class AttachmentActivity extends ListActivity
         lv.setOnItemClickListener(new OnItemClickListener()
         {
 
-            @Override
+            
             public void onItemClick(AdapterView< ? > arg0, View view, int arg2, long arg3)
             {
                 downloadAndOpenFile(((TextView) view).getText().toString());

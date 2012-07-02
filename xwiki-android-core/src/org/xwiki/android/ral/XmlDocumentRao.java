@@ -33,7 +33,7 @@ class XmlDocumentRao implements Rao<Document> {
 		this.mycallback=callback;
 	}
 	
-	@Override
+	
 	/**
 	 * create the doc on server.
 	 */
@@ -82,22 +82,22 @@ class XmlDocumentRao implements Rao<Document> {
 		
 	}
 
-	@Override
+	
 	public void retreive(EntityReference<Document> docRef) {		
 		
 	}
 
-	@Override
+	
 	public void querry() {
 		
 	}
 
-	@Override
+	
 	public void update(Document res) {
 		
 	}
 
-	@Override
+	
 	public void delete(EntityReference<Document> docRef) {
 		// TODO Auto-generated method stub
 		

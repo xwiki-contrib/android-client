@@ -86,7 +86,7 @@ public class SearchResultsActivity extends ListActivity
 
         listView.setOnItemClickListener(new OnItemClickListener()
         {
-            @Override
+            
             public void onItemClick(AdapterView< ? > arg0, View view, int arg2, long arg3)
             {
                 completeProcess(((TextView) view).getText().toString());

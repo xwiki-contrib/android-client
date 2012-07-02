@@ -72,64 +72,64 @@ public class ConfigSourceProvider  implements SharedPreferences,SharedPreference
 		pref=ctx.getSharedPreferences(FILE_CONFIG, android.content.Context.MODE_WORLD_READABLE);
 		editor=pref.edit();			
 	}
-	@Override
+	
 	public Editor putString(String key, String value) {
 		return editor.putString(key, value);		
 	}
-	@Override
+	
 	public Editor putInt(String key, int value) {
 		return editor.putInt(key, value);		
 	}
-	@Override
+	
 	public Editor putLong(String key, long value) {
 		return editor.putLong(key, value);
 		
 	}
-	@Override
+	
 	public Editor putFloat(String key, float value) {
 		return editor.putFloat(key, value);
 	}
-	@Override
+	
 	public Editor putBoolean(String key, boolean value) {
 		return editor.putBoolean(key, value);
 	}
-	@Override
+	
 	public Editor remove(String key) {
 		return editor.remove(key);
 	}
-	@Override
+	
 	public Editor clear() {
 		return editor.clear();
 	}
-	@Override
+	
 	public boolean commit() {
 		return editor.commit();
 	}
-	@Override
+	
 	public Map<String, ?> getAll() {
 		return pref.getAll();		
 	}
-	@Override
+	
 	public String getString(String key, String defValue) {
 		return pref.getString(key, defValue);		
 	}
-	@Override
+	
 	public int getInt(String key, int defValue) {
 		return pref.getInt(key, defValue);		
 	}
-	@Override
+	
 	public long getLong(String key, long defValue) {
 		return pref.getLong(key, defValue);		
 	}
-	@Override
+	
 	public float getFloat(String key, float defValue) {
 		return pref.getFloat(key, defValue);		
 	}
-	@Override
+	
 	public boolean getBoolean(String key, boolean defValue) {
 		return pref.getBoolean(key, defValue);
 	}
-	@Override
+	
 	public boolean contains(String key) {
 		return pref.contains(key);
 	}
@@ -138,17 +138,17 @@ public class ConfigSourceProvider  implements SharedPreferences,SharedPreference
 	 * not used. The Editor's methods are implemented in this class itself.
 	 * @see android.content.SharedPreferences#edit()
 	 */
-	@Override
+	
 	public Editor edit() {
 		return pref.edit();
 	}
-	@Override
+	
 	public void registerOnSharedPreferenceChangeListener(
 			OnSharedPreferenceChangeListener listener) {
 		pref.registerOnSharedPreferenceChangeListener(listener);
 		
 	}
-	@Override
+	
 	public void unregisterOnSharedPreferenceChangeListener(
 			OnSharedPreferenceChangeListener listener) {
 		pref.unregisterOnSharedPreferenceChangeListener(listener);

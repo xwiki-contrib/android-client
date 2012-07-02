@@ -118,7 +118,7 @@ public class XWikiListNavigatorActivity extends Activity
         backButton.setOnClickListener(new OnClickListener()
         {
 
-            @Override
+            
             public void onClick(View arg0)
             {
                 state--;
@@ -291,7 +291,6 @@ public class XWikiListNavigatorActivity extends Activity
         lv.setOnItemClickListener(new OnItemClickListener()
         {
 
-            @Override
             public void onItemClick(AdapterView< ? > arg0, View view, int arg2, long arg3)
             {
                 state++;

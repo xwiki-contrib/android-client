@@ -5,7 +5,6 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-import org.simpleframework.xml.Element;
 import org.xwiki.android.ral.RestAPIUsageException;
 import org.xwiki.android.xmodel.reference.DocumentReference;
 import org.xwiki.android.xmodel.reference.Link;

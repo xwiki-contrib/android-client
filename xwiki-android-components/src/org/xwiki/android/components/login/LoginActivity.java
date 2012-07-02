@@ -86,7 +86,7 @@ public class LoginActivity extends Activity implements OnItemSelectedListener,On
         Button loginButton = (Button) findViewById(R.id.button_login_login);
         loginButton.setOnClickListener(new OnClickListener()
         {
-            @Override
+            
             public void onClick(View arg0)
             {   
             	username = actvUn.getText().toString();
@@ -118,11 +118,11 @@ public class LoginActivity extends Activity implements OnItemSelectedListener,On
                 Thread t = new Thread(new Runnable()
                 {
 
-                    @Override
+                    
                     public void run()
                     {
                     	if(remPwd)Log.d(getClass().getSimpleName(),"pwd rem activated");
-                    	int code=new LoginFacade().login(username, password, url,remPwd,getApplicationContext()) ; 
+                    	int code=new LoginFacade().login(username, password, url,remPwd) ; 
                     	myProgressDialog.dismiss();                    	
                     	login(code);
                     	
@@ -213,7 +213,6 @@ public class LoginActivity extends Activity implements OnItemSelectedListener,On
 
 
 
-	@Override
 	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {	
 			ArrayAdapter<String>adapterPwd=(ArrayAdapter<String>) actvPwd.getAdapter();
 			ArrayAdapter<String>adapterUrls=(ArrayAdapter<String>) actvUrl.getAdapter();
@@ -226,13 +225,11 @@ public class LoginActivity extends Activity implements OnItemSelectedListener,On
 	}
 
 
-	@Override
 	public void onNothingSelected(AdapterView<?> parent) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,long id) {
 		onItemSelected(parent, view, position, id);
 	}

@@ -22,25 +22,25 @@ public class ImgBtnAdapter extends BaseAdapter implements ListAdapter {
 		btns=btnList.toArray(btns);		
 	}
 	
-	@Override
+	
 	public int getCount() {		
 		return btns.length;
 	}
 
-	@Override
+	
 	public Object getItem(int position) {		
 		return btns[position];
 	}
 	/**
 	 * @return 0
 	 */
-	@Override
+	
 	public long getItemId(int position) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
-	@Override
+	
 	public View getView(int position, View convertView, ViewGroup parent) {	
 		ImageButton btn;
 		if(convertView==null){

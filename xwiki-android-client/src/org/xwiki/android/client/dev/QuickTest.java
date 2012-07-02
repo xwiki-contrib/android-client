@@ -2,6 +2,7 @@ package org.xwiki.android.client.dev;
 
 import java.sql.SQLException;
 
+import org.xwiki.android.client.R;
 import org.xwiki.android.components.login.LoginActivity;
 import org.xwiki.android.context.XWikiApplicationContext;
 import org.xwiki.android.dal.EntityManager;
@@ -13,6 +14,7 @@ import org.xwiki.android.xmodel.entity.SimpleDocument;
 import org.xwiki.android.xmodel.reference.DocumentReference;
 
 import com.j256.ormlite.dao.Dao;
+
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -28,6 +30,7 @@ public class QuickTest extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.quicktest);
 		AlertDialog.Builder alertbox = new AlertDialog.Builder(this);
         alertbox.setMessage("Only a code testing/exploration activity.remove this from production");
         alertbox.setNeutralButton("Ok", new DialogInterface.OnClickListener()

@@ -185,7 +185,7 @@ public class CommentEditorActivity extends ListActivity
         lv.setOnItemClickListener(new OnItemClickListener()
         {
 
-            @Override
+            
             public void onItemClick(AdapterView< ? > arg0, View view, int arg2, long arg3)
             {
                 Toast.makeText(getApplicationContext(), ((TextView) view).getText(), Toast.LENGTH_SHORT).show();

@@ -97,7 +97,7 @@ public class SearchActivity extends Activity
         searchButton.setOnClickListener(new OnClickListener()
         {
 
-            @Override
+            
             public void onClick(View arg0)
             {
                 // TODO Auto-generated method stub
@@ -160,14 +160,14 @@ public class SearchActivity extends Activity
         spinner.setOnItemSelectedListener(new OnItemSelectedListener()
         {
 
-            @Override
+            
             public void onItemSelected(AdapterView< ? > parent, View view, int pos, long id)
             {
                 wikiName = parent.getItemAtPosition(pos).toString();
                 loadSpaceList(wikiName);
             }
 
-            @Override
+            
             public void onNothingSelected(AdapterView< ? > arg0)
             {
 
@@ -196,13 +196,13 @@ public class SearchActivity extends Activity
         spinner.setOnItemSelectedListener(new OnItemSelectedListener()
         {
 
-            @Override
+            
             public void onItemSelected(AdapterView< ? > parent, View view, int pos, long id)
             {
                 spaceName = parent.getItemAtPosition(pos).toString();
             }
 
-            @Override
+            
             public void onNothingSelected(AdapterView< ? > arg0)
             {
 

@@ -13,6 +13,7 @@ import org.xwiki.android.ral.XmlRESTFulManager;
 
 import android.app.Application;
 import android.content.Context;
+import android.util.Log;
 /**
  * 
  * @author xwiki
@@ -53,7 +54,7 @@ import android.content.Context;
  */
 public class XWikiApplicationContext extends Application implements XWikiApplicationContextAPI{	
 	
-	
+	private static String tag="XwikiAppCtx";
 	//private static singleton vars	
 	private static boolean initialized=false;
 	private static UserSession currSession;
@@ -91,9 +92,10 @@ public class XWikiApplicationContext extends Application implements XWikiApplica
 	/* (non-Javadoc)
 	 * @see org.xwiki.android.context.XWikiApplicationContext2#updateToAuthenticatedState(org.xwiki.android.entity.User)
 	 */
-	@Override
+	
 	public void updateToAuthenticatedState(User user){
-		currSession=new UserSession(user);		
+		currSession=new UserSession(user);	
+		Log.d(tag, "updateToAuthstate("+user+")");
 	}
 	//simple setters	
 	
@@ -106,7 +108,7 @@ public class XWikiApplicationContext extends Application implements XWikiApplica
 	/* (non-Javadoc)
 	 * @see org.xwiki.android.context.XWikiApplicationContext2#getUserSession()
 	 */
-	@Override
+	
 	public UserSession getUserSession(){
 		return currSession;		
 	}	
@@ -114,7 +116,7 @@ public class XWikiApplicationContext extends Application implements XWikiApplica
 	/* (non-Javadoc)
 	 * @see org.xwiki.android.context.XWikiApplicationContext2#getConfigSourceProvider()
 	 */
-	@Override
+	
 	public ConfigSourceProvider getConfigSourceProvider(){
 		return config;
 	}
@@ -122,7 +124,7 @@ public class XWikiApplicationContext extends Application implements XWikiApplica
 	/* (non-Javadoc)
 	 * @see org.xwiki.android.context.XWikiApplicationContext2#getFileStoreManager()
 	 */
-	@Override
+	
 	public FileStoreManager newFileStoreManager(){
 		FileStoreManager fsm=null;
 		/**   activate this code when we have more than one FileStoreManager Implementations.To get impl from config file
@@ -186,7 +188,7 @@ public class XWikiApplicationContext extends Application implements XWikiApplica
 	/* (non-Javadoc)
 	 * @see org.xwiki.android.context.XWikiApplicationContext2#getRESTfulManager()
 	 */
-	@Override
+	
 	public RESTfulManager newRESTfulManager(){
 		return new XmlRESTFulManager();
 	}

@@ -18,12 +18,12 @@ public class XTextAreaProperty extends XPropertyBase<String> {
 	}
 
 	// special attr
-	@Override
+	
 	public void setValue(String val) {
 		value = val;
 	}
 
-	@Override
+	
 	public String getValue() {
 		return value;
 	}

@@ -8,7 +8,7 @@ import com.j256.ormlite.table.DatabaseTable;
  *
  */
 @DatabaseTable(tableName="C_USER")
-public class User {
+public class User implements Cloneable{
 	//public vars
 	@DatabaseField(generatedId=true,useGetSet=true)
 	private int _id;	
@@ -60,7 +60,7 @@ public class User {
 	}
 	/**
 	 * use security utils to decrypt the pwd.
-	 *return null if not stored
+	 *return The decrypted pwd. null if not stored
 	 * @return encrypted Password
 	 */
 	public String getPassword() {		
@@ -79,6 +79,20 @@ public class User {
 	public void setEmail(String email) {
 		this.email = email;
 	}	
+	
+	   
+	public User clone(){	
+		User u;
+		try {
+			u = (User)super.clone();
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+			throw new RuntimeException();			
+		}
+		return u;
+	}
+	
+	
 	
 	//constructors
 	public User(){}

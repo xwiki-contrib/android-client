@@ -51,7 +51,7 @@ public class IconLaunchPad extends Activity implements OnClickListener {
 		
 	}
 
-	@Override
+	
 	public void onClick(View v) {
 		String classname = (String) v.getTag();
 		try {

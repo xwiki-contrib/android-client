@@ -168,7 +168,7 @@ public class XWikiExpandListAdapter extends BaseExpandableListAdapter
             dev.setOnChildClickListener(new OnChildClickListener()
             {
 
-                @Override
+                
                 public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition,
                     long id)
                 {

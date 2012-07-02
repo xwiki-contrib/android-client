@@ -19,7 +19,7 @@ public abstract class EntityReference<T> {
 	//do not mark this class as @DatabaseTable, table inheritance is not yet supported in ORMLite.
 	//make inheriting class mark @DatabaseTable
 	
-	//@DatabaseField(id=true)
+	@DatabaseField(id=true)
 	int _id;//local id for persistence. "_" to comply with android adapters. No need to set. Set by ORMlite
 		
 	/**
@@ -27,20 +27,20 @@ public abstract class EntityReference<T> {
 	 * 
 	 */
 	File file;
-	//@DatabaseField()
+	@DatabaseField()
 	String filePath;
 	/**
 	 * http:// scheme. host section 
 	 * sample:- http://username:password@host:8080/directory/file?querryparam #fragment
 	 */
-	//@DatabaseField
+	@DatabaseField
 	String host;
-	//@DatabaseField
+	@DatabaseField
 	String port;	
 	/**
 	 * http:// scheme. user info section:  the  username:password  part
 	 */	
-	//@DatabaseField(foreign=true)
+	@DatabaseField(foreign=true)
 	User authInfo;
 	
 	public EntityReference() {

@@ -134,7 +134,6 @@ public class ClassListActivity extends ListActivity
         lv.setOnItemClickListener(new OnItemClickListener()
         {
 
-            @Override
             public void onItemClick(AdapterView< ? > arg0, View view, int arg2, long arg3)
             {
 

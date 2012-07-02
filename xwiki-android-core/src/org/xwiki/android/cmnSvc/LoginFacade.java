@@ -27,14 +27,11 @@ public class LoginFacade {
 	 * @param ctx  the activity context or application context
 	 * @return  response Code.
 	 */
-	public int login(String username,String password,String url,boolean remPwd, Context ctx){		
+	public int login(String username,String password,String url,boolean remPwd){	
 		HttpConnector httpConnector = new HttpConnector();
         int code = httpConnector.checkLogin(username, password, url); 
-        //start seperate thread to add login attempt to DB. (update LoginAttempt , update User if new user data combination )
-        if(remPwd==false){
-        	password=null;
-        }        
-        Thread statusUpdater=new Thread(new statusUpdater(username,password,url,code,ctx));
+        //start seperate thread to add login attempt to DB. (update LoginAttempt , update User if new user data combination )              
+        Thread statusUpdater=new Thread(new statusUpdater(username,password,url,code,remPwd));
         statusUpdater.start();        
         return code;
 	}
@@ -53,17 +50,20 @@ public class LoginFacade {
 		private String usrname,pwd,url;
 		private String realm;//url can be anything, realm identifies the part of the url where the user is authenticated
 		private int code;
-		private Context ctx;
-		statusUpdater(String usrname, String pwd, String url,int code, Context ctx){
+		private boolean remPwd;
+		
+		
+		statusUpdater(String usrname, String pwd, String url,int code, boolean remPwd){
 			this.usrname=usrname;
 			this.pwd=pwd;
 			this.url=url;
 			this.code=code;
-			this.ctx=ctx;
+			this.remPwd=remPwd;			
 		}
-		@Override
+		
 		public void run() {
-			EntityManager eman=XWikiApplicationContext.getInstance().newEntityManager();
+			XWikiApplicationContext ctx=XWikiApplicationContext.getInstance();
+			EntityManager eman=ctx.newEntityManager();
 			Log.i(LoginFacade.class.getSimpleName(),"updating state "+usrname+" "+pwd+" "+url+" "+code);
 			if(code==200){//success
 				//update context to authenticated state. if new user add to db;
@@ -77,16 +77,23 @@ public class LoginFacade {
 					if(matches.isEmpty()){
 						//this is a new user -->create new entry
 						search.setPassword(pwd);//User object should manage if pwd is null
-						udao.create(search);
-						Log.i(LoginFacade.class.getSimpleName(),"created new user db entry "+search.getUserName()+" "+search.get_id());
+						
 						//ctx update						
 						((XWikiApplicationContext)ctx.getApplicationContext()).updateToAuthenticatedState(search);
+						//db
+						User dbuser=search.clone();
+						if(remPwd==false){							
+							dbuser.setPassword(null);
+						}
+						udao.create(dbuser);
+						Log.i(LoginFacade.class.getSimpleName(),"created new user db entry "+dbuser.getUserName()+" "+dbuser.get_id());
 					}else{
 						User u=matches.get(0);
+						User ucpy=u.clone();
 						//if pwd was not saved earlier save it now. If remPwd is false delete existing remembered pwd entry
 						if(u.getPassword()==null&pwd!=null || pwd==null & u.getPassword()!=null){
-							u.setPassword(pwd);
-							udao.update(u);
+							ucpy.setPassword(pwd);
+							udao.update(ucpy);
 						}							
 						((XWikiApplicationContext)ctx.getApplicationContext()).updateToAuthenticatedState(u);
 					}

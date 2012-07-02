@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.simpleframework.xml.Element;
+
 import org.xwiki.android.resources.Attribute;
 import org.xwiki.android.resources.Object;
 import org.xwiki.android.resources.Page;
