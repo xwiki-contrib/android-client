@@ -2,20 +2,23 @@ package org.xwiki.android.ral;
 
 import java.util.List;
 
+import org.xwiki.android.xmodel.reference.EntityReference;
+
 /**
  * 
  * @author xwiki gsoc 2012
- *
+ * @version 1.0
  * RESTful Access Object Interface
+ * [1]Behavior is unspecified for multiple concurrent requests for the same Rao.
  * @param <T> : type of the RAO.<Document | Space | Wiki >
  */
-
-public interface RAO<T> {
-	T create(T resrc);
-	T retreive(T resrc);
-	List<T> querry();
-	T update(T resrc);
-	void delete();
+//TODO: rectify [1] above.
+public interface Rao<T> {
+    void create(T resrc);
+	void retreive(EntityReference<T> ref);
+	void querry();
+	void update(T resrc);//TODO: not yet specified.
+	void delete(EntityReference<T> ref);
 }
 
 

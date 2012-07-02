@@ -1,6 +1,8 @@
 package org.xwiki.android.xmodel.entity;
 
-public class Resource {
+import java.io.Serializable;
+
+public class Resource implements Serializable {
 	
 	private boolean isNew;
 	private boolean altered;

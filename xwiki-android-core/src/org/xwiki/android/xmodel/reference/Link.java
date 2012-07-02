@@ -1,4 +1,4 @@
-package org.xwiki.android.xmodel.uri;
+package org.xwiki.android.xmodel.reference;
 /**
  * 
  * @author xwiki gsoc 2012

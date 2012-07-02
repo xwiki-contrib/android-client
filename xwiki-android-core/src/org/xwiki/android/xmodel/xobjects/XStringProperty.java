@@ -11,6 +11,7 @@ public class XStringProperty extends XPropertyBase<String> {
 
 	public XStringProperty() {
 		type = "com.xpn.xwiki.objects.classes.StringClass";
+		
 	}
 
 	// special attr

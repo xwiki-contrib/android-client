@@ -1,9 +1,15 @@
 package org.xwiki.android.xmodel.entity;
 
+import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+
+import org.xwiki.android.xmodel.reference.DocumentReference;
 import org.xwiki.android.xmodel.xobjects.XObject;
 import org.xwiki.android.xmodel.xobjects.XSimpleObject;
+
+import android.text.AlteredCharSequence;
 /**
  * 
  * @author xwiki gsoc 2012
@@ -35,10 +41,25 @@ public class SimpleDocument extends Document {
 		private List<Tag> editedTags; //search by key not needed
 		
 		//resources to delete
-		private Map<String,XSimpleObject> deletedObjects; //key= ClassName/number
+		private List<String> deletedObjects; //value= of the deleted obj. ClassName/number
 		private List<Comment> deletedComments; //key = int index in the list
-		private Map<String,Attachment> deletedAttachments;//key = resource id. ex: xwiki:Blog.BlogPost1@mypic can have space.png
+		private List<String> deletedAttachments;//key = resource id. ex: xwiki:Blog.BlogPost1@mypic can have space.png
 		private List<Tag> deletedTags; //search by key not needed
+		
+		
+		public SimpleDocument(String wikiName, String spaceName, String pageName){
+			super(wikiName, spaceName, pageName);
+			
+			objects=new Hashtable<String, XSimpleObject>();
+			newObjects=new ArrayList<XSimpleObject>();
+			editedObjects=new Hashtable<String, XSimpleObject>();
+			deletedObjects=new ArrayList<String>();
+			
+			//TODO: implement
+			comments=new ArrayList<Comment>();
+			newComments=new ArrayList<Comment>();			
+						
+		}
 		
 		
 		/**
@@ -60,13 +81,14 @@ public class SimpleDocument extends Document {
 
 
 		/**
-		 * Update a existing object in the doc.
+		 * Update a existing object in the doc. The update is done if the Object.isAltered returns true.
+		 * This  property is set by defalut, when the object is retrieved using getObject(key) 
 		 * @param key
 		 * @param object
 		 */
 		public void setObject(String key, XSimpleObject object) {
 			if(!objects.containsKey(key)){
-				throw new IllegalArgumentException("you can only set objects for an existing key");
+				throw new IllegalArgumentException("you can only set objects which already exist in the map");
 			}
 			if(object.isAltered()){
 				editedObjects.put(key, object);
@@ -74,23 +96,137 @@ public class SimpleDocument extends Document {
 			objects.put(key, object);	
 		}
 
-
+		private int _addNum=0;
 		
 		public void addObject(XSimpleObject obj) {	
-			String key="objclass/x";			
-			//TODO: implement
+			String key=obj.getType()+"/new/"+_addNum++;	
+			obj.setNew(true);
 			objects.put(key, obj);
 			newObjects.add(obj);
-		}
-
-
-		
+		}	
+				
 		public void deleteObject(String key) {
-			// TODO Auto-generated method stub
+			XSimpleObject obj=objects.get(key);
+			if(obj.isNew()){
+				newObjects.remove(obj);
+			}else{
+				deletedObjects.add(key);
+			}
+			if(obj.isAltered()){
+				editedObjects.remove(key);
+			}
+			objects.remove(key);
 			
 		}
 		
+		public Map<String,XSimpleObject> getAllObjects(){
+			return objects;
+		}
+
+
+		public Document getParentDocument() {
+			return parent;
+		}
+
+
+		public List<Document> getChildrenDocuments() {
+			return children;
+		}
+
+
+		public List<Comment> getAllComments() {
+			return comments;
+		}
+
+
+		public Map<String, Attachment> getAllAttatchments() {
+			return attatchments;
+		}
+
+
+		public List<Tag> getAllTags() {
+			return tags;
+		}
+
+
+		public List<XSimpleObject> getAllNewObjects() {
+			return newObjects;
+		}
+
+
+		public List<Comment> getAllNewComments() {
+			return newComments;
+		}
+
+
+		public List<Attachment> getAllNewAttachments() {
+			return newAttachments;
+		}
+
+
+		public List<Tag> getAllNewTags() {
+			return newTags;
+		}
+
+
+		public Map<String, XSimpleObject> getAllEditedObjects() {
+			return editedObjects;
+		}
+
+
+		public List<Comment> getAllEditedComments() {
+			return editedComments;
+		}
+
+
+		public Map<String, Attachment> getAllEditedAttachments() {
+			return editedAttachments;
+		}
+
+
+		public List<Tag> getAllEditedTags() {
+			return editedTags;
+		}
+
+
+		public List<String> getAllDeletedObjects() {
+			return deletedObjects;
+		}
+
+
+		public List<Comment> getAllDeletedComments() {
+			return deletedComments;
+		}
+
+
+		public List<String> getAllDeletedAttachments() {
+			return deletedAttachments;
+		}
+
+
+		public List<Tag> getAllDeletedTags() {
+			return deletedTags;
+		}
+
+
+//setters
 		
+		
+		public void setParent(Document parent) {
+			if(parentFullName==null){
+				parentFullName=parent.fullName;
+			}
+			if(parentId==null){
+				
+			}
+			this.parent = parent;
+		}
+
+
+		public void setChildren(List<Document> children) {
+			this.children = children;
+		}
+
 		
 
 }
@@ -99,4 +235,5 @@ public class SimpleDocument extends Document {
  * NOTE:
  * TODO: extract interface SimpleDocument.l
  * Always use XWikiApplicationContext to create new.
+ * 
  * **/

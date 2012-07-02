@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.xwiki.android.xmodel.entity.Resource;
-import org.xwiki.android.xmodel.uri.Link;
+import org.xwiki.android.xmodel.reference.Link;
 /**
  * 
  * @author sasindap

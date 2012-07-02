@@ -11,6 +11,7 @@ import org.xwiki.android.core.*;
 import org.xwiki.android.entity.LoginAttempt;
 import org.xwiki.android.entity.User;
 import org.xwiki.android.xmodel.entity.Document;
+import org.xwiki.android.xmodel.reference.DocumentReference;
 
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.support.ConnectionSource;
@@ -30,8 +31,8 @@ public class EntityManager extends OrmLiteSqliteOpenHelper {
 		try{
 			Log.i(EntityManager.class.getSimpleName(), "onCreate(): create Database");
 			//add TableUtils.createTable(connectionSource, MyEntity.class); for all your entities
-			 TableUtils.createTable(connectionSource, User.class);
-			 TableUtils.createTable(connectionSource, Document.class);
+			 TableUtils.createTable(connectionSource, User.class);			
+			 TableUtils.createTable(connectionSource, DocumentReference.class);
 			 TableUtils.createTable(connectionSource, LoginAttempt.class);
 			 
 		} catch (SQLException e){

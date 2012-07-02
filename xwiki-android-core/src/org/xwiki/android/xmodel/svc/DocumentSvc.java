@@ -2,8 +2,9 @@ package org.xwiki.android.xmodel.svc;
 
 import java.util.List;
 
-import org.xwiki.android.ral.RestFulException;
+import org.xwiki.android.ral.RestAPIUsageException;
 import org.xwiki.android.xmodel.entity.Document;
+import org.xwiki.android.xmodel.reference.DocumentReference;
 
 public interface DocumentSvc {
 	
@@ -11,7 +12,7 @@ public interface DocumentSvc {
 	 * create the document in remote server.
 	 * @return true if successful.
 	 */
-	boolean create() throws RestFulException;
+	void create(Document d, DocumentSvcCallbackInterface clbk);
 	
 	/**
 	 * retreive the data of this doucment from the remote server.
@@ -22,24 +23,24 @@ public interface DocumentSvc {
 	 * 	else if some of the parts are cached in the Http Cache, fill the doucment with them. 
 	 *  (The http cache normaly does a HEAD request and return cached copy only if the resource was not modified)
 	 *  
-	 *  @throws RestFulException (It is a {@link RuntimeException})
+	 *  @throws RestAPIUsageException (It is a {@link RuntimeException})
 	 *  		If the document is Not in offline mode, and there is a problem with connectivity
 	 *  		If problem in ReSTFul API usage format. ex: create request for already existing document.
 	 */
-	Document retreive(Document ref);
+	void retreive(DocumentReference dref, DocumentSvcCallbackInterface clbk);
 	
 	/**
 	 * 
 	 * @return
 	 */
-	boolean update() throws RestFulException;
+	void update(Document d, DocumentSvcCallbackInterface clbk);
 	
 	/**
 	 * 
 	 * @return
-	 * @throws RestFulException
+	 * @throws RestAPIUsageException
 	 */
-	boolean delete()throws RestFulException;
+	void delete(DocumentReference dref, DocumentSvcCallbackInterface clbk);
 	
 	
 	
@@ -49,13 +50,14 @@ public interface DocumentSvc {
 	//after spring is integrated.Currently extracting the Document from 
 	// the response is not supported.
     
-	boolean save();
-	Document load(Document d);
+	void save(Document doc, DocumentSvcCallbackInterface clbk);
 	
-	/**
-	 *  search methods are for local file store searches.
-	 * @return
-	 */
-	List<Document> search();
+	void load(DocumentReference d, DocumentSvcCallbackInterface clbk);
+	
+//	/**
+//	 *  search methods are for local file store searches.
+//	 * @return
+//	 */
+//	void search(DocumentSvcCallbackInterface clbk);//TODO:not yet defined
 
 }

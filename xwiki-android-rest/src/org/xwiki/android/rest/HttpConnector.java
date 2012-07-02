@@ -315,7 +315,7 @@ public class HttpConnector
             e.printStackTrace();
         } catch (IOException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            e.printStackTrace();            
         }
 
         return "error";
@@ -509,3 +509,8 @@ public class HttpConnector
     }
 
 }
+
+//TODO: sas: Behaviour unspecified when connection error happens, for resource get, requests.
+//TODO: response body should be sent up.So just send the response back. Some times application logic may require the 
+// body of the response for a page put req etc. Rao layer should handle wether the response body should be read and converted or be 
+// discarded.

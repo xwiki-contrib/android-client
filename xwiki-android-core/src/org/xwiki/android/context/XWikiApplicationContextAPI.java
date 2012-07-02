@@ -14,7 +14,7 @@ import org.xwiki.android.ral.RESTfulManager;
  *
  */
 
-public interface XWikiApplicationContextInterface {
+public interface XWikiApplicationContextAPI {
 
 	//state updaters
 	void updateToAuthenticatedState(User user);

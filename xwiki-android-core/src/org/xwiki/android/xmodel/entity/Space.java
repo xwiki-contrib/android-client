@@ -1,6 +1,6 @@
 package org.xwiki.android.xmodel.entity;
 
-import org.xwiki.android.ral.RestFulException;
+import org.xwiki.android.ral.RestAPIUsageException;
 
 import com.j256.ormlite.table.DatabaseTable;
 

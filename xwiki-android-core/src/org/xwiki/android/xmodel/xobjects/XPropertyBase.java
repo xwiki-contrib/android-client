@@ -1,17 +1,22 @@
 package org.xwiki.android.xmodel.xobjects;
 
 import java.util.Map;
+
+import org.xwiki.android.resources.Link;
+import org.xwiki.android.resources.LinkCollection;
 /**
  * 
  * @author sasinda
- *
+ * @version 1.0
  * @param <T> :Type of the special attribute "value". 
  * implemented attributes
+ * Currently attributes does not support their {@link Link} elements in {@link LinkCollection}. * 
  * spcial:
  * name, type
  * general:prettyName, number, tooltip, customDisplay, disabled, unmodifiable,validationMessage, validationRegExp,
  * 
  */
+//TODO: Note: implement seperate map to hold Link(s) when needed. (for performance reasons)
 public abstract class XPropertyBase<T> extends XObject<Object> implements XProperty<T> {
 
 	protected String name;
@@ -129,4 +134,7 @@ public abstract class XPropertyBase<T> extends XObject<Object> implements XPrope
 		return fields.get(attrName);
 	}
 
+	public Map<String,Object> getAllAttributes(){
+		return fields;
+	}
 }

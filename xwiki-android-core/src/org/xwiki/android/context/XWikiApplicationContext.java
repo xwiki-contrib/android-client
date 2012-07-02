@@ -9,6 +9,7 @@ import org.xwiki.android.entity.User;
 import org.xwiki.android.fileStore.FileStoreManager;
 import org.xwiki.android.fileStore.FileStoreManagerImpl;
 import org.xwiki.android.ral.RESTfulManager;
+import org.xwiki.android.ral.XmlRESTFulManager;
 
 import android.app.Application;
 import android.content.Context;
@@ -50,7 +51,7 @@ import android.content.Context;
  *TODO: research needed
  *
  */
-public class XWikiApplicationContext extends Application implements XWikiApplicationContextInterface{	
+public class XWikiApplicationContext extends Application implements XWikiApplicationContextAPI{	
 	
 	
 	//private static singleton vars	
@@ -179,7 +180,7 @@ public class XWikiApplicationContext extends Application implements XWikiApplica
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return fsm;
+		return fsm;//TODO: We can simply return new FileStoreManagerImpl(); this is just to show the capability.s
 	}
 	
 	/* (non-Javadoc)
@@ -187,7 +188,7 @@ public class XWikiApplicationContext extends Application implements XWikiApplica
 	 */
 	@Override
 	public RESTfulManager newRESTfulManager(){
-		return null;
+		return new XmlRESTFulManager();
 	}
 	
 	public EntityManager newEntityManager(){

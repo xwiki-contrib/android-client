@@ -1,12 +1,14 @@
 package org.xwiki.android.xmodel.entity;
 
 import java.io.InputStream;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
 import org.simpleframework.xml.Element;
-import org.xwiki.android.ral.RestFulException;
-import org.xwiki.android.xmodel.uri.Link;
+import org.xwiki.android.ral.RestAPIUsageException;
+import org.xwiki.android.xmodel.reference.DocumentReference;
+import org.xwiki.android.xmodel.reference.Link;
 import org.xwiki.android.xmodel.xobjects.XObject;
 import org.xwiki.android.xmodel.xobjects.XSimpleObject;
 
@@ -17,35 +19,33 @@ import com.j256.ormlite.table.DatabaseTable;
  * +Additional methods for Document.
  * @author xwiki
  *
- *dev:note all DB fields must be kept at package lvl
+ *dev: not saved to DB. Only the DocumentReference is saved.
  */
-@DatabaseTable(tableName = "C_Document")
-public abstract class Document extends Resource{
-	@DatabaseField(id=true)
-	int _id;//local id for persistence. "_" to comply with android adapters
-	@DatabaseField()
-	String filePath;
+
+public abstract class Document extends Resource {
+	
 	
 	//Resource fields	
 	//
 	protected List<Link> links;
 	protected String remoteId;//id field in the resource representation. Mobile apps normally use ReSTful URL to identify a resource.Not this.
 	protected String fullName;
-	protected String wiki;
-	protected String space;
-	protected String name;
+	protected String wikiName;//wiki in page element
+	protected String spaceName;//space in page element
+	protected String name; // name in page element (same)
 	protected String title;
 	protected String parentFullName;//parent in resoruce repr.
 	protected String parentId;
 	protected String xwikiRelativeUrl;
 	protected String xwikiAbsoluteUrl;
 	protected List<String> translations;
+	protected String defalutTranslation;
 	protected String syntax;	
     protected String language;    
     protected String version;    
     protected int majorVersion;
     protected int minorVersion;    
-    protected String created; //Date string   
+    protected String created; //Date string  //TODO: convert to Type Date. Or introduce another var to hold Date obj. 
     protected String creator;  //user string  
     protected String modified;  //Date string  
     protected String modifier;  //user string  
@@ -53,9 +53,34 @@ public abstract class Document extends Resource{
 	
 	
     //other fields
+    protected DocumentReference docRef;
     protected boolean offlineMode;
     
+    public Document(String wikiName, String spaceName, String pageName){
+    	docRef=new DocumentReference(wikiName, spaceName, pageName);
+    	this.name=pageName;
+    	this.wikiName=wikiName;
+    	this.spaceName=spaceName;
+    }
+    
     /**
+	 * @return
+	 */
+	public DocumentReference getDocumentReference() {
+		return docRef;
+	}
+	
+	/**
+	 * @param 
+	 */
+	public void setDocumentReference(DocumentReference docRef) {
+		this.docRef = docRef;
+	}
+
+
+
+
+	/**
      * if in offline mode the create(), update ... methods will use the save method to save a local copy.
      * The delete method will mark the document for deletion.
      * The sync service will take the responsibilities after internet connection is available.     * 
@@ -67,9 +92,15 @@ public abstract class Document extends Resource{
 	public boolean isOfflineMode() {
 		return offlineMode;
 	}
-   
 	
-    
+//	/**
+//	 * valid for only  Documents retreived from server.
+//	 * @return
+//	 */
+//    public boolean isCachedCopy(){
+//    	return offlineMode;
+//    }
+	    
 	
 	/** moved away to SimpleDocument. If XWiki introduces CompoundDocuments with Compound objects defining them here might lead to probs
 	public abstract XObject getObject(String key);
@@ -123,8 +154,8 @@ public abstract class Document extends Resource{
 	 * Gets the value of the wiki property. 
 	 * @return possible object is {@link String }
 	 */
-	public String getWiki() {
-		return wiki;
+	public String getWikiName() {
+		return wikiName;
 	}
 
 	/**
@@ -132,16 +163,16 @@ public abstract class Document extends Resource{
 	 * @param value
 	 *            allowed object is {@link String }
 	 */
-	public void setWiki(String value) {
-		this.wiki = value;
+	public void setWikiName(String value) {
+		this.wikiName = value;
 	}
 
 	/**
 	 * Gets the value of the space property.
 	 * @return possible object is {@link String }
 	 */
-	public String getSpace() {
-		return space;
+	public String getSpaceName() {
+		return spaceName;
 	}
 
 	/**
@@ -150,8 +181,8 @@ public abstract class Document extends Resource{
 	 * @param value
 	 *            allowed object is {@link String }
 	 */
-	public void setSpace(String value) {
-		this.space = value;
+	public void setSpaceName(String value) {
+		this.spaceName = value;
 	}
 
 	/**
@@ -159,7 +190,7 @@ public abstract class Document extends Resource{
 	 * 
 	 * @return possible object is {@link String }
 	 */
-	public String getName() {
+	public String getSimpleName() {
 		return name;
 	}
 
@@ -169,7 +200,7 @@ public abstract class Document extends Resource{
 	 * @param value
 	 *            allowed object is {@link String }
 	 */
-	public void setName(String value) {
+	public void setSimpleName(String value) {
 		this.name = value;
 	}
 
@@ -197,7 +228,7 @@ public abstract class Document extends Resource{
 	 * 
 	 * @return possible object is {@link String }
 	 */
-	public String getParent() {
+	public String getParentFullName() {
 		return parentFullName;
 	}
 
@@ -207,7 +238,7 @@ public abstract class Document extends Resource{
 	 * @param value
 	 *            allowed object is {@link String }
 	 */
-	public void setParent(String value) {
+	public void setParentFullName(String value) {
 		this.parentFullName = value;
 	}
 
@@ -287,6 +318,12 @@ public abstract class Document extends Resource{
 		this.translations = translations;
 	}
 
+	public String getDefalutTranslation() {
+		return defalutTranslation;
+	}
+	public void setDefalutTranslation(String defalutTranslation) {
+		this.defalutTranslation = defalutTranslation;
+	}
 	/**
 	 * Gets the value of the syntax property.
 	 * 

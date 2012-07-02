@@ -1,4 +1,7 @@
 package org.xwiki.android.xmodel.xobjects;
+
+import java.util.Map;
+
 /**
  * 
  * @author xwiki gsoc 2012
@@ -21,11 +24,96 @@ public abstract class XSimpleObject extends XObject<XProperty>{
 	protected String wiki;
 	protected String pageName;
 	protected String className;
-	protected String number;
+	protected int number;
 	protected String headline;
 	
     @Override
+    /**
+     * same as get className
+     */
 	public String getType(){
-    	return "xwiki.lang.XSimpleObject";
+    	return className;
     }
+    
+    /**
+     * 
+     * @return  the map of XProperties keyed by property name.
+     */
+    public Map<String,XProperty> getProperties(){
+    	return fields;
+    }
+
+	public String getId() {
+		return id;
+	}
+
+	public String getGuid() {
+		return guid;
+	}
+
+	public String getPageid() {
+		return pageid;
+	}
+
+	public String getSpace() {
+		return space;
+	}
+
+	public String getWiki() {
+		return wiki;
+	}
+
+	public String getPageName() {
+		return pageName;
+	}
+
+	public String getClassName() {
+		return className;
+	}
+
+	public int getNumber() {
+		return number;
+	}
+
+	public String getHeadline() {
+		return headline;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public void setGuid(String guid) {
+		this.guid = guid;
+	}
+
+	public void setPageid(String pageid) {
+		this.pageid = pageid;
+	}
+
+	public void setSpace(String space) {
+		this.space = space;
+	}
+
+	public void setWiki(String wiki) {
+		this.wiki = wiki;
+	}
+
+	public void setPageName(String pageName) {
+		this.pageName = pageName;
+	}
+
+	public void setClassName(String className) {
+		this.className = className;
+	}
+
+	public void setNumber(int number) {
+		this.number = number;
+	}
+
+	public void setHeadline(String headline) {
+		this.headline = headline;
+	}
+    
+    
 }
