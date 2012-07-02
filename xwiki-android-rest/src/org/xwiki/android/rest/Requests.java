@@ -99,8 +99,7 @@ public class Requests implements XWikiRestfulAPI
     /* (non-Javadoc)
 	 * @see org.xwiki.android.rest.XWikiRestfulAPI#setAuthentication(java.lang.String, java.lang.String)
 	 */
-    @Override
-	public void setAuthentication(String username, String password)
+    public void setAuthentication(String username, String password)
     {
         this.username = username;
         this.password = password;
@@ -132,8 +131,7 @@ public class Requests implements XWikiRestfulAPI
     /* (non-Javadoc)
 	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestSearch(java.lang.String, java.lang.String)
 	 */
-    @Override
-	public SearchResults requestSearch(String wikiName, String keyword)
+    public SearchResults requestSearch(String wikiName, String keyword)
     {
 
         wikiName = convertToUTF(wikiName);
@@ -151,8 +149,7 @@ public class Requests implements XWikiRestfulAPI
     /* (non-Javadoc)
 	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestSearch(java.lang.String, java.lang.String, java.lang.String)
 	 */
-    @Override
-	public SearchResults requestSearch(String wikiName, String spaceName, String keyword)
+    public SearchResults requestSearch(String wikiName, String spaceName, String keyword)
     {
 
         wikiName = convertToUTF(wikiName);
@@ -169,8 +166,7 @@ public class Requests implements XWikiRestfulAPI
     /* (non-Javadoc)
 	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestWikis()
 	 */
-    @Override
-	public Wikis requestWikis()
+    public Wikis requestWikis()
     {
 
         WikiResources wikiresources = new WikiResources(URLprefix);
@@ -184,8 +180,7 @@ public class Requests implements XWikiRestfulAPI
     /* (non-Javadoc)
 	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestSpaces(java.lang.String)
 	 */
-    @Override
-	public Spaces requestSpaces(String wikiName)
+    public Spaces requestSpaces(String wikiName)
     {
         wikiName = convertToUTF(wikiName);
         SpaceResources spacesresources = new SpaceResources(URLprefix, wikiName);
@@ -198,8 +193,7 @@ public class Requests implements XWikiRestfulAPI
     /* (non-Javadoc)
 	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestAllPages(java.lang.String, java.lang.String)
 	 */
-    @Override
-	public Pages requestAllPages(String wikiName, String spaceName)
+    public Pages requestAllPages(String wikiName, String spaceName)
     {
         wikiName = convertToUTF(wikiName);
         spaceName = convertToUTF(spaceName);
@@ -213,8 +207,7 @@ public class Requests implements XWikiRestfulAPI
     /* (non-Javadoc)
 	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestPage(java.lang.String, java.lang.String, java.lang.String)
 	 */
-    @Override
-	public Page requestPage(String wikiName, String spaceName, String pageName)
+    public Page requestPage(String wikiName, String spaceName, String pageName)
     {
         wikiName = convertToUTF(wikiName);
         spaceName = convertToUTF(spaceName);
@@ -230,8 +223,7 @@ public class Requests implements XWikiRestfulAPI
     /* (non-Javadoc)
 	 * @see org.xwiki.android.rest.XWikiRestfulAPI#addPage(java.lang.String, java.lang.String, java.lang.String, org.xwiki.android.resources.Page)
 	 */
-    @Override
-	public String addPage(String wikiName, String spaceName, String pageName, Page page)
+    public String addPage(String wikiName, String spaceName, String pageName, Page page)
     {
         wikiName = convertToUTF(wikiName);
         spaceName = convertToUTF(spaceName);
@@ -247,8 +239,7 @@ public class Requests implements XWikiRestfulAPI
     /* (non-Javadoc)
 	 * @see org.xwiki.android.rest.XWikiRestfulAPI#deletePage(java.lang.String, java.lang.String, java.lang.String)
 	 */
-    @Override
-	public String deletePage(String wikiName, String spaceName, String pageName)
+    public String deletePage(String wikiName, String spaceName, String pageName)
     {
         wikiName = convertToUTF(wikiName);
         spaceName = convertToUTF(spaceName);
@@ -264,8 +255,7 @@ public class Requests implements XWikiRestfulAPI
     /* (non-Javadoc)
 	 * @see org.xwiki.android.rest.XWikiRestfulAPI#deletePage(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
-    @Override
-	public String deletePage(String wikiName, String spaceName, String pageName, String language)
+    public String deletePage(String wikiName, String spaceName, String pageName, String language)
 
     {
         wikiName = convertToUTF(wikiName);
@@ -282,7 +272,7 @@ public class Requests implements XWikiRestfulAPI
     /* (non-Javadoc)
 	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestPageHistory(java.lang.String, java.lang.String, java.lang.String)
 	 */
-    @Override
+    
 	public History requestPageHistory(String wikiName, String spaceName, String pageName)
     {
         wikiName = convertToUTF(wikiName);
@@ -299,7 +289,7 @@ public class Requests implements XWikiRestfulAPI
     /* (non-Javadoc)
 	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestPageInVersionHistory(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
-    @Override
+    
 	public Page requestPageInVersionHistory(String wikiName, String spaceName, String pageName, String version)
     {
         wikiName = convertToUTF(wikiName);
@@ -316,7 +306,7 @@ public class Requests implements XWikiRestfulAPI
     /* (non-Javadoc)
 	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestPageChildren(java.lang.String, java.lang.String, java.lang.String)
 	 */
-    @Override
+    
 	public Pages requestPageChildren(String wikiName, String spaceName, String pageName)
     {
         wikiName = convertToUTF(wikiName);
@@ -334,7 +324,7 @@ public class Requests implements XWikiRestfulAPI
     /* (non-Javadoc)
 	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestPageTags(java.lang.String, java.lang.String, java.lang.String)
 	 */
-    @Override
+    
 	public Tags requestPageTags(String wikiName, String spaceName, String pageName)
     {
         wikiName = convertToUTF(wikiName);
@@ -351,7 +341,7 @@ public class Requests implements XWikiRestfulAPI
     /* (non-Javadoc)
 	 * @see org.xwiki.android.rest.XWikiRestfulAPI#addPageTag(java.lang.String, java.lang.String, java.lang.String, org.xwiki.android.resources.Tag)
 	 */
-    @Override
+    
 	public String addPageTag(String wikiName, String spaceName, String pageName, Tag tag)
     {
         wikiName = convertToUTF(wikiName);
@@ -369,7 +359,7 @@ public class Requests implements XWikiRestfulAPI
     /* (non-Javadoc)
 	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestWikiTags(java.lang.String)
 	 */
-    @Override
+    
 	public Tags requestWikiTags(String wikiName)
     {
         wikiName = convertToUTF(wikiName);
@@ -384,7 +374,7 @@ public class Requests implements XWikiRestfulAPI
     /* (non-Javadoc)
 	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestPageComments(java.lang.String, java.lang.String, java.lang.String)
 	 */
-    @Override
+    
 	public Comments requestPageComments(String wikiName, String spaceName, String pageName)
     {
         wikiName = convertToUTF(wikiName);
@@ -401,7 +391,7 @@ public class Requests implements XWikiRestfulAPI
     /* (non-Javadoc)
 	 * @see org.xwiki.android.rest.XWikiRestfulAPI#addPageComment(java.lang.String, java.lang.String, java.lang.String, org.xwiki.android.resources.Comment)
 	 */
-    @Override
+    
 	public String addPageComment(String wikiName, String spaceName, String pageName, Comment comment)
     {
         wikiName = convertToUTF(wikiName);
@@ -420,7 +410,7 @@ public class Requests implements XWikiRestfulAPI
     /* (non-Javadoc)
 	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestPageComments(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
-    @Override
+    
 	public Comment requestPageComments(String wikiName, String spaceName, String pageName, String commentId)
     {
         wikiName = convertToUTF(wikiName);
@@ -437,7 +427,7 @@ public class Requests implements XWikiRestfulAPI
     /* (non-Javadoc)
 	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestPageCommentsInHistory(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
-    @Override
+    
 	public Comments requestPageCommentsInHistory(String wikiName, String spaceName, String pageName, String version)
     {
         wikiName = convertToUTF(wikiName);
@@ -454,7 +444,7 @@ public class Requests implements XWikiRestfulAPI
     /* (non-Javadoc)
 	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestPageCommentsInHistory(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
-    @Override
+    
 	public Comments requestPageCommentsInHistory(String wikiName, String spaceName, String pageName, String version,
         String commentId)
     {
@@ -472,7 +462,7 @@ public class Requests implements XWikiRestfulAPI
     /* (non-Javadoc)
 	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestAllPageAttachments(java.lang.String, java.lang.String, java.lang.String)
 	 */
-    @Override
+    
 	public Attachments requestAllPageAttachments(String wikiName, String spaceName, String pageName)
     {
         wikiName = convertToUTF(wikiName);
@@ -490,7 +480,7 @@ public class Requests implements XWikiRestfulAPI
     /* (non-Javadoc)
 	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestPageAttachment(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
-    @Override
+    
 	public InputStream requestPageAttachment(String wikiName, String spaceName, String pageName, String attachmentName)
     {
         wikiName = convertToUTF(wikiName);
@@ -508,7 +498,7 @@ public class Requests implements XWikiRestfulAPI
     /* (non-Javadoc)
 	 * @see org.xwiki.android.rest.XWikiRestfulAPI#addPageAttachment(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
-    @Override
+    
 	public String addPageAttachment(String wikiName, String spaceName, String pageName, String filePath,
         String attachmentName)
     {
@@ -527,7 +517,7 @@ public class Requests implements XWikiRestfulAPI
     /* (non-Javadoc)
 	 * @see org.xwiki.android.rest.XWikiRestfulAPI#deletePageAttachment(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
-    @Override
+    
 	public String deletePageAttachment(String wikiName, String spaceName, String pageName, String attachmentName)
     {
         wikiName = convertToUTF(wikiName);
@@ -545,7 +535,7 @@ public class Requests implements XWikiRestfulAPI
     /* (non-Javadoc)
 	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestPageAttachmentsInHistory(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
-    @Override
+    
 	public Attachments requestPageAttachmentsInHistory(String wikiName, String spaceName, String pageName,
         String pageVersion)
     {
@@ -563,7 +553,7 @@ public class Requests implements XWikiRestfulAPI
     /* (non-Javadoc)
 	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestPageAttachmentsInHistory(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
-    @Override
+    
 	public InputStream requestPageAttachmentsInHistory(String wikiName, String spaceName, String pageName,
         String pageVersion, String attachmentName)
     {
@@ -582,7 +572,7 @@ public class Requests implements XWikiRestfulAPI
     /* (non-Javadoc)
 	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestPageAttachmentsInAttachmentHistory(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
-    @Override
+    
 	public Attachments requestPageAttachmentsInAttachmentHistory(String wikiName, String spaceName, String pageName,
         String attachmentName)
     {
@@ -601,7 +591,7 @@ public class Requests implements XWikiRestfulAPI
     /* (non-Javadoc)
 	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestPageAttachmentsInAttachmentHistory(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
-    @Override
+    
 	public InputStream requestPageAttachmentsInAttachmentHistory(String wikiName, String spaceName, String pageName,
         String attachmentName, String attachmentVersion)
     {
@@ -620,7 +610,7 @@ public class Requests implements XWikiRestfulAPI
     /* (non-Javadoc)
 	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestWikiClasses(java.lang.String)
 	 */
-    @Override
+    
 	public Classes requestWikiClasses(String wikiName)
     {
         wikiName = convertToUTF(wikiName);
@@ -635,7 +625,7 @@ public class Requests implements XWikiRestfulAPI
     /* (non-Javadoc)
 	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestWikiClasses(java.lang.String, java.lang.String)
 	 */
-    @Override
+    
 	public Class requestWikiClasses(String wikiName, String classname)
     {
         wikiName = convertToUTF(wikiName);
@@ -651,7 +641,7 @@ public class Requests implements XWikiRestfulAPI
     /* (non-Javadoc)
 	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestAllPageTranslations(java.lang.String, java.lang.String, java.lang.String)
 	 */
-    @Override
+    
 	public Translations requestAllPageTranslations(String wikiName, String spaceName, String pageName)
     {
         wikiName = convertToUTF(wikiName);
@@ -668,7 +658,7 @@ public class Requests implements XWikiRestfulAPI
     /* (non-Javadoc)
 	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestPageTranslation(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
-    @Override
+    
 	public Page requestPageTranslation(String wikiName, String spaceName, String pageName, String language)
     {
         wikiName = convertToUTF(wikiName);
@@ -685,7 +675,7 @@ public class Requests implements XWikiRestfulAPI
     /* (non-Javadoc)
 	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestPageHistoryInLanguage(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
-    @Override
+    
 	public History requestPageHistoryInLanguage(String wikiName, String spaceName, String pageName, String language)
     {
         wikiName = convertToUTF(wikiName);
@@ -702,7 +692,7 @@ public class Requests implements XWikiRestfulAPI
     /* (non-Javadoc)
 	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestPageTranslationInHistory(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
-    @Override
+    
 	public Page requestPageTranslationInHistory(String wikiName, String spaceName, String pageName, String language,
         String version)
     {
@@ -720,7 +710,7 @@ public class Requests implements XWikiRestfulAPI
     /* (non-Javadoc)
 	 * @see org.xwiki.android.rest.XWikiRestfulAPI#addObject(java.lang.String, java.lang.String, java.lang.String, org.xwiki.android.resources.Object)
 	 */
-    @Override
+    
 	public String addObject(String wikiName, String spaceName, String pageName, Object object)
     {
         wikiName = convertToUTF(wikiName);
@@ -737,7 +727,7 @@ public class Requests implements XWikiRestfulAPI
     /* (non-Javadoc)
 	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestAllObjects(java.lang.String, java.lang.String, java.lang.String)
 	 */
-    @Override
+    
 	public Objects requestAllObjects(String wikiName, String spaceName, String pageName)
     {
         wikiName = convertToUTF(wikiName);
@@ -754,7 +744,7 @@ public class Requests implements XWikiRestfulAPI
     /* (non-Javadoc)
 	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestObjectsInClass(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
-    @Override
+    
 	public Objects requestObjectsInClass(String wikiName, String spaceName, String pageName, String objectClassname)
     {
         wikiName = convertToUTF(wikiName);
@@ -772,7 +762,7 @@ public class Requests implements XWikiRestfulAPI
     /* (non-Javadoc)
 	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestObject(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
-    @Override
+    
 	public Object requestObject(String wikiName, String spaceName, String pageName, String objectClassname,
         String objectNumber)
     {
@@ -792,7 +782,7 @@ public class Requests implements XWikiRestfulAPI
     /* (non-Javadoc)
 	 * @see org.xwiki.android.rest.XWikiRestfulAPI#deleteObject(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
-    @Override
+    
 	public String deleteObject(String wikiName, String spaceName, String pageName, String objectClassname,
         String objectNumber)
     {
@@ -812,7 +802,7 @@ public class Requests implements XWikiRestfulAPI
     /* (non-Javadoc)
 	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestObjectAllProperties(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
-    @Override
+    
 	public Properties requestObjectAllProperties(String wikiName, String spaceName, String pageName,
         String objectClassname, String objectNumber)
     {
@@ -832,7 +822,7 @@ public class Requests implements XWikiRestfulAPI
     /* (non-Javadoc)
 	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestObjectProperty(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
-    @Override
+    
 	public Property requestObjectProperty(String wikiName, String spaceName, String pageName, String objectClassname,
         String objectNumber, String propertyName)
     {
@@ -853,7 +843,7 @@ public class Requests implements XWikiRestfulAPI
     /* (non-Javadoc)
 	 * @see org.xwiki.android.rest.XWikiRestfulAPI#addProperty(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, org.xwiki.android.resources.Property)
 	 */
-    @Override
+    
 	public String addProperty(String wikiName, String spaceName, String pageName, String objectClassname,
         String objectNumber, Property property)
     {

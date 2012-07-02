@@ -481,7 +481,6 @@ public class HttpConnector
             preemptiveAuth = new HttpRequestInterceptor()
             {
 
-                @Override
                 public void process(HttpRequest request, HttpContext context) throws HttpException, IOException
                 {
                     AuthState authState = (AuthState) context.getAttribute(ClientContext.TARGET_AUTH_STATE);
