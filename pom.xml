@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!--
  *
  * See the NOTICE file distributed with this work for additional
@@ -47,8 +46,8 @@
     <module>xwiki-rest-model</module>
     <module>xwiki-android-rest</module>
     <module>xwiki-android-core</module>
-    <module>xwiki-android-components</module>
-    <module>xwiki-android-client</module>
+    <module>xwiki-android-components</module>    
+    <module>xwiki-android-client</module>    
     <module>xwiki-android-test-rest</module>
     <module>xwiki-android-tests-instrumentation</module>
   </modules>

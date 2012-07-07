@@ -1,61 +1,173 @@
 package org.xwiki.android.xmodel.svc;
 
+import java.io.File;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
+
 import org.xwiki.android.context.XWikiApplicationContext;
+import org.xwiki.android.fileStore.DocumentFao;
+import org.xwiki.android.fileStore.FSDocumentReference;
 import org.xwiki.android.fileStore.FileStoreManager;
 import org.xwiki.android.ral.RESTfulManager;
 import org.xwiki.android.ral.Rao;
 import org.xwiki.android.ral.RaoCallbackForDocument;
+import org.xwiki.android.ral.reference.DocumentReference;
 import org.xwiki.android.xmodel.entity.Document;
-import org.xwiki.android.xmodel.reference.DocumentReference;
-/**
- * 
- * @author xwiki gsoc 2012
- * version 1.0
- */
-public class DocumentSvcImpl implements DocumentSvc {	
-	
-	XWikiApplicationContext ctx;
-	RESTfulManager rMngr;
-	FileStoreManager fMngr;
-	public DocumentSvcImpl() {
-		ctx=XWikiApplicationContext.getInstance();
-		rMngr=ctx.newRESTfulManager();
-		fMngr=ctx.newFileStoreManager();
-	}
-	
-	public void create(Document d, DocumentSvcCallbackInterface callback) {
-		Rao<Document> rao=rMngr.newDocumentRao(callback);
-		rao.create(d);		
-	}
-	
-	public void retreive(DocumentReference dref,DocumentSvcCallbackInterface clbk) {
-		Rao<Document> rao=rMngr.newDocumentRao(clbk);
-		rao.retreive(dref);	
-		
-	}
-	
-	public void update(Document d, DocumentSvcCallbackInterface clbk) {
-		Rao<Document> rao=rMngr.newDocumentRao(clbk);
-		rao.update(d);		
-	}
-	
-	public void delete(DocumentReference dref, DocumentSvcCallbackInterface clbk) {
-		Rao<Document> rao=rMngr.newDocumentRao(clbk);
-		rao.delete(dref);			
-	}
-	
-	public void save(Document doc, DocumentSvcCallbackInterface clbk) {
-		// TODO Auto-generated method stub
-		//fMngr.
-		
-	}
-	
-	public void load(DocumentReference d, DocumentSvcCallbackInterface clbk) {
-		// TODO Auto-generated method stub
-		//fMngr.
-	}
-	
-	
 
+/**
+ * @author xwiki gsoc 2012 version 1.0
+ */
+public class DocumentSvcImpl implements DocumentSvc
+{
+
+	XWikiApplicationContext ctx;
+
+	RESTfulManager rMngr;
+
+	FileStoreManager fMngr;
+
+	public DocumentSvcImpl()
+	{
+		ctx = XWikiApplicationContext.getInstance();
+		rMngr = ctx.newRESTfulManager();
+		fMngr = ctx.getFileStoreManager();
+	}
+
+	//
+	// Rest
+	//
+
+	public void create(Document d, DocumentRemoteSvcCallbacks callback)
+	{
+		Rao<Document> rao = rMngr.newDocumentRao(callback);
+		rao.create(d);
+	}
+
+	public void retreive(DocumentReference dref, DocumentRemoteSvcCallbacks clbk)
+	{
+		Rao<Document> rao = rMngr.newDocumentRao(clbk);
+		rao.retreive(dref);
+
+	}
+
+	public void update(Document d, DocumentRemoteSvcCallbacks clbk)
+	{
+		Rao<Document> rao = rMngr.newDocumentRao(clbk);
+		rao.update(d);
+	}
+
+	public void delete(DocumentReference dref, DocumentRemoteSvcCallbacks clbk)
+	{
+		Rao<Document> rao = rMngr.newDocumentRao(clbk);
+		rao.delete(dref);
+	}
+
+	// Local File Store functions. Document Local Services.
+	//
+	//
+
+	public void save(Document doc, String tag, DocumentLocalSvcCallbacks clbk)
+	{
+		Thread t = new Worker(doc, tag, clbk)
+		{
+			public void run()
+			{
+				Document doc = (Document) args[0];
+				String tag = (String) args[1];
+				DocumentLocalSvcCallbacks clbk = (DocumentLocalSvcCallbacks) args[2];
+
+				DocumentFao fao = fMngr.getDocumentFao();
+				File f = fao.save(doc, tag);
+				if (clbk != null) {
+					clbk.invokeSaveComplete(f);
+				}
+
+			};
+		};
+		t.start();
+	}
+
+	public void load(FSDocumentReference fsref, DocumentLocalSvcCallbacks clbk)
+	{
+		Thread t = new Worker(fsref, clbk)
+		{
+			public void run()
+			{
+				FSDocumentReference fsref = (FSDocumentReference) args[0];
+				DocumentLocalSvcCallbacks clbk = (DocumentLocalSvcCallbacks) args[1];
+
+				DocumentFao fao = fMngr.getDocumentFao();
+				Document doc = fao.load(fsref);
+				if (clbk != null) {
+					clbk.invokeLoadComplete(doc);
+				}
+
+			};
+		};
+		t.start();
+
+	}
+
+	@Override
+	public void listBySpace(String spaceName, DocumentLocalSvcCallbacks clbk)
+	{
+		Thread t = new Worker(spaceName, clbk)
+		{
+			public void run()
+			{
+				String spaceName = (String) args[0];
+				DocumentLocalSvcCallbacks clbk = (DocumentLocalSvcCallbacks) args[1];
+
+				DocumentFao fao = fMngr.getDocumentFao();
+				List<FSDocumentReference> list = fao.listBySpace(spaceName);
+				if (clbk != null) {
+					Map<String, Object> matchedby = new Hashtable<String, Object>(1);
+					matchedby.put("spaceName", spaceName);
+					clbk.invokeListingComplete(list, matchedby);
+				}
+
+			};
+		};
+		t.start();
+	}
+
+	@Override
+	public void listByTag(String tag, DocumentLocalSvcCallbacks clbk)
+	{
+		Thread t = new Worker(tag, clbk)
+		{
+			public void run()
+			{
+				String tag = (String) args[0];
+				DocumentLocalSvcCallbacks clbk = (DocumentLocalSvcCallbacks) args[1];
+
+				DocumentFao fao = fMngr.getDocumentFao();
+				List<FSDocumentReference> list = fao.listByTag(tag);
+				if (clbk != null) {
+					Map<String, Object> matchedby = new Hashtable<String, Object>(1);
+					matchedby.put("tag", tag);
+					clbk.invokeListingComplete(list, matchedby);
+				}
+
+			};
+		};
+		t.start();
+	}
+
+	//public void listByFieldValues(Map<String,Object> fld_val)
 	
+	private abstract class Worker extends Thread
+	{
+		Object[] args;
+
+		public Worker(Object... args)
+		{
+			this.args = args;
+		}
+
+		public abstract void run();
+
+	}
+
 }

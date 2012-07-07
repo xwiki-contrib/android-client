@@ -11,7 +11,6 @@ import org.xwiki.android.ral.RESTfulManager;
 import org.xwiki.android.ral.XmlRESTFulManager;
 import org.xwiki.android.xmodel.entity.Document;
 import org.xwiki.android.xmodel.entity.SimpleDocument;
-import org.xwiki.android.xmodel.reference.DocumentReference;
 
 import com.j256.ormlite.dao.Dao;
 
@@ -41,14 +40,14 @@ public class QuickTest extends Activity {
         
         XWikiApplicationContext ctx=(XWikiApplicationContext)getApplicationContext();
         EntityManager em=ctx.newEntityManager();
-        try {
-			Dao<DocumentReference,Integer> docdao=em.getDao(DocumentReference.class);
-			docdao.create(new DocumentReference("xwiki","blog","myBlogPage"));
-			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//        try {
+//			Dao<F,Integer> docdao=em.getDao(DocumentReference.class);
+//			docdao.create(new DocumentReference("xwiki","blog","myBlogPage"));
+//			
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		
        // RESTfulManager mngr=new XmlRESTFulManager();
        // mngr.getDocumentRao(new DocumentRaoCallback(){});

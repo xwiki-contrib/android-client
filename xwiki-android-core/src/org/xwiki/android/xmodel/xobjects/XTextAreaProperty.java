@@ -3,72 +3,87 @@ package org.xwiki.android.xmodel.xobjects;
 //TODO: change to value=StringBuilder if needed.The UI component will have a StringBuilder so no need maybe.
 
 /**
- * 
- * @author sasinda
- * 
- * attribute implimentation: special: value
- * general: size,rows,picker,contenttype,editor
+ * @author sasinda attribute implimentation: special: value general: size,rows,picker,contenttype,editor
  */
-public class XTextAreaProperty extends XPropertyBase<String> {
+public class XTextAreaProperty extends XPropertyBase<String>
+{
 
-	String value;
+    String value;
 
-	public XTextAreaProperty() {
-		type = "com.xpn.xwiki.objects.classes.TextAreaClass";
-	}
+    public XTextAreaProperty()
+    {
+        type = "com.xpn.xwiki.objects.classes.TextAreaClass";
+    }
 
-	// special attr
-	
-	public void setValue(String val) {
-		value = val;
-	}
+    @Override
+    public String toString()
+    {
+        return value;
+    }
 
-	
-	public String getValue() {
-		return value;
-	}
+    // special attr
 
-	// general attr
-	public Integer setSize(int size) {
-		return (Integer) fields.put("size", size);
-	}
+    public void setValue(String val)
+    {
+        value = val;
+    }
 
-	public Integer setRows(int numrows) {
-		return (Integer) fields.put("rows", numrows);
-	}
+    public String getValue()
+    {
+        return value;
+    }
 
-	public Boolean setPicker(boolean picker) {
-		return (Boolean) fields.put("picker", picker);
-	}
+    // general attr
+    public Integer setSize(int size)
+    {
+        return (Integer) fields.put("size", size);
+    }
 
-	public String setContenttype(String cntype) {
-		return (String) fields.put("contenttype", cntype);
-	}
+    public Integer setRows(int numrows)
+    {
+        return (Integer) fields.put("rows", numrows);
+    }
 
-	public String setEditor(int numrows) {
-		return (String) fields.put("editor", numrows);
-	}
+    public Boolean setPicker(boolean picker)
+    {
+        return (Boolean) fields.put("picker", picker);
+    }
 
-	// ------getters
+    public String setContenttype(String cntype)
+    {
+        return (String) fields.put("contenttype", cntype);
+    }
 
-	public Integer getSize() {
-		return (Integer) fields.get("size");
-	}
+    public String setEditor(int numrows)
+    {
+        return (String) fields.put("editor", numrows);
+    }
 
-	public Integer getRows() {
-		return (Integer) fields.get("rows");
-	}
+    // ------getters
 
-	public Boolean isPicker() {
-		return (Boolean) fields.get("picker");
-	}
+    public Integer getSize()
+    {
+        return (Integer) fields.get("size");
+    }
 
-	public String getContenttype() {
-		return (String) fields.get("contenttype");
-	}
+    public Integer getRows()
+    {
+        return (Integer) fields.get("rows");
+    }
 
-	public String getEditor() {
-		return (String) fields.get("editor");
-	}
+    public Boolean isPicker()
+    {
+        return (Boolean) fields.get("picker");
+    }
+
+    public String getContenttype()
+    {
+        return (String) fields.get("contenttype");
+    }
+
+    public String getEditor()
+    {
+        return (String) fields.get("editor");
+    }
 
 }

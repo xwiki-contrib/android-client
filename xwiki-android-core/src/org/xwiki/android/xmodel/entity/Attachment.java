@@ -1,5 +1,6 @@
 package org.xwiki.android.xmodel.entity;
 
-public class Attachment {
+public class Attachment
+{
 
 }

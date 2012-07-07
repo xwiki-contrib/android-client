@@ -81,7 +81,7 @@ public class Main extends Activity
                 url = data.getExtras().getString(LoginActivity.INTENT_EXTRA_GET_URL);
                 Log.d("data", "username=" + username + " password=" + password + " url=" + url);
                 //start xwiki launch pad
-                Intent intent=new Intent(this.getApplicationContext(),IconLaunchPad.class);
+                Intent intent=new Intent(this,IconLaunchPad.class);
                 startActivityForResult(intent, REQUEST_CODE_LAUNCHPAD);
             } else {
                 finish();
