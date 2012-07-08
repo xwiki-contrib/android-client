@@ -13,7 +13,7 @@ import org.xwiki.android.resources.Page;
 import org.xwiki.android.resources.Property;
 import org.xwiki.android.resources.Translation;
 import org.xwiki.android.resources.Translations;
-import org.xwiki.android.xmodel.entity.SimpleDocument;
+import org.xwiki.android.xmodel.entity.Document;
 import org.xwiki.android.xmodel.xobjects.XProperty;
 import org.xwiki.android.xmodel.xobjects.XSimpleObject;
 
@@ -53,7 +53,7 @@ public class XMdlToSmplConverter
         parts = PAGE + OBJECTS;
     }
 
-    public SimpleXmlDocpad convertDocument(SimpleDocument doc)
+    public SimpleXmlDocpad convertDocument(Document doc)
     {
         SimpleXmlDocpad pad = new SimpleXmlDocpad();
         // save coordinates

@@ -3,7 +3,7 @@ package org.xwiki.android.ral;
 import java.io.IOException;
 import java.util.List;
 
-import org.xwiki.android.xmodel.entity.Document;
+import org.xwiki.android.xmodel.entity.DocumentBase;
 
 public interface RaoCallback<T>
 {

@@ -10,7 +10,7 @@ import org.xwiki.android.blog.xobj.XBlogPost;
 import org.xwiki.android.fileStore.FSDocumentReference;
 import org.xwiki.android.ral.RaoException;
 import org.xwiki.android.xmodel.entity.Document;
-import org.xwiki.android.xmodel.entity.SimpleDocument;
+import org.xwiki.android.xmodel.entity.Document;
 import org.xwiki.android.xmodel.svc.DocumentLocalSvcCallbacks;
 import org.xwiki.android.xmodel.svc.DocumentSvc;
 import org.xwiki.android.xmodel.svc.DocumentRemoteSvcCallbacks;
@@ -24,19 +24,23 @@ import org.xwiki.android.xmodel.svc.DocumentSvcImpl;
 public class BlogDocument implements Serializable
 {
     public static final String SAVE_TAG="svdBlgPst";
-    SimpleDocument doc;
+    Document doc;
 
     XBlogPost blgPost;
-    String xBlogPostType="Blog.BlogPostClass";
-
-    boolean docInitialized;
-
+    String xBlogPostType="Blog.BlogPostClass"; 
     DocumentSvc docsvc;
 
-    public BlogDocument(String wikiName, String spaceName, String pageName)
+    public BlogDocument(String wikiName, String spaceName, String pageName, String category)
     {
-        doc = new SimpleDocument(wikiName, spaceName, pageName);
-        docInitialized = false;
+        doc = new Document(wikiName, spaceName, pageName);
+        blgPost = new XBlogPost();
+        doc.addObject(blgPost);
+        doc.setTitle(doc.getSimpleName());
+        blgPost.setTitle(doc.getTitle());
+        blgPost.setCategory(category);
+        blgPost.setHidden(false);
+        
+               
         docsvc = new DocumentSvcImpl();
         // DocumentSvc construction code was not sent to XWikiApplication Context. Rationale: We will eventually go to
         // Android native Bind Services.
@@ -48,10 +52,7 @@ public class BlogDocument implements Serializable
     // It is the blog svc layers knowledge that the content should go to a XBlogPost(-->BlogPostClass in Xwiki
     // Enterprise) object.
     public void setContent(String content)
-    {
-        if (!docInitialized) {
-            initializeDoc();
-        }
+    {        
         blgPost.setContent(content);// blgPost is the XBlogPost obj in the doc.
     }
     
@@ -100,12 +101,7 @@ public class BlogDocument implements Serializable
      */
     private void initializeDoc()
     {
-        blgPost = new XBlogPost();
-        doc.addObject(blgPost);
-        doc.setTitle(doc.getSimpleName());
-        blgPost.setTitle(doc.getTitle());
-        blgPost.setCategory("Blog.Personal");
-        blgPost.setHidden(false);
+       
     }
     
     /**
@@ -171,7 +167,7 @@ public class BlogDocument implements Serializable
         
         @Override
         public void onLoadComplete(Document entity){
-            doc=(SimpleDocument)entity;
+            doc=(Document)entity;
             String blgPostKey="";
             Set<String> keys= doc.getAllObjects().keySet();
             for(String key:keys){

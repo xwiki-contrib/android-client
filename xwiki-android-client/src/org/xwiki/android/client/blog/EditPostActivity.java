@@ -20,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -35,7 +36,10 @@ public class EditPostActivity extends Activity implements OnClickListener {
 	private EditText etPost;
 	private String title;
 	private String category;
-	
+	ProgressDialog progressDialog;
+	Dialog dialog;
+	EditText etTitle;
+	AutoCompleteTextView actvCategory;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {		
 		super.onCreate(savedInstanceState);
@@ -54,14 +58,14 @@ public class EditPostActivity extends Activity implements OnClickListener {
 		//show dialog to get page name, category
 		
 		showDialog();
-		mydoc=new BlogDocument("xwiki", "Blog", title);
+		
 		
 		
 	}
 	
 	
 	private void showDialog(){
-	    final Dialog dialog = new Dialog(this); 
+	    dialog = new Dialog(this); 
 	    dialog.getWindow().setFlags( 
 	    WindowManager.LayoutParams.FLAG_BLUR_BEHIND, 
 	    WindowManager.LayoutParams.FLAG_BLUR_BEHIND); 
@@ -72,22 +76,27 @@ public class EditPostActivity extends Activity implements OnClickListener {
 	    dialog.show(); 
 
 	    Button okBtn = (Button) dialogView.findViewById(R.id.btn_blog_ok); 
-	    final EditText etTitle=(EditText) dialogView.findViewById(R.id.et_blog_title);
-	    final AutoCompleteTextView actvCategory=(AutoCompleteTextView) dialogView.findViewById(R.id.actv_blog_category);
-
+	    etTitle=(EditText) dialogView.findViewById(R.id.et_blog_title);
+	    actvCategory=(AutoCompleteTextView) dialogView.findViewById(R.id.actv_blog_category);
+	    
+	    String[] categories={"Blog.Personal","Blog.News","Blog.Other"};
+	    ArrayAdapter<String> adapterCts=new ArrayAdapter<String>(this, R.layout.searchresults_list_item, categories);
+	    actvCategory.setAdapter(adapterCts);
+	    
 	    okBtn.setOnClickListener(new OnClickListener() {
-	        @Override
-    	    public void onClick(View v) {	        
-	            title=etTitle.getText().toString();
-	            category=actvCategory.getText().toString();
-	            if(title==null || category==null || title.equals("") || category.equals("")){
-	                Toast.makeText(getBaseContext(), "Please fill data", 
-	                    Toast.LENGTH_LONG).show(); 
-	            }else{
-	              dialog.dismiss();  
-	            }
-    	    }	
-	    });
+            @Override
+            public void onClick(View v) {           
+                title=etTitle.getText().toString();
+                category=actvCategory.getText().toString();
+                if(title==null || category==null || title.equals("") || category.equals("")){
+                    Toast.makeText(getBaseContext(), "Please fill data", 
+                        Toast.LENGTH_LONG).show(); 
+                }else{
+                  mydoc=new BlogDocument("xwiki", "Blog", title, category);
+                  dialog.dismiss();  
+                }
+            }   
+        }); 
 	}
 	
 	@Override
@@ -113,26 +122,24 @@ public class EditPostActivity extends Activity implements OnClickListener {
 			ctx.put("blgDoc", mydoc);
 			startActivityForResult(i,REQUEST_CODE_LOADSAVEDPOSTS);
 		
-		}else if(v.getId()==R.id.btnPost){
-			final ProgressDialog myProgressDialog;
-            myProgressDialog =ProgressDialog.show(this, "Posting", "Please wait...", true);
+		}else if(v.getId()==R.id.btnPost){			
+            progressDialog =progressDialog.show(this, "Posting", "Please wait...", true);
 			myRmtClbks=mydoc.new BlogDocumentRemoteCallbacks() {			
 				@Override
 				public void onBlogPostSent(boolean success) {
-					myProgressDialog.dismiss();
+					progressDialog.dismiss();
 					finish();
 				}
 			};
 			mydoc.setContent(etPost.getText().toString());
 			mydoc.post(myRmtClbks);
 			
-		}else if(v.getId()==R.id.btnPublish){
-			final ProgressDialog myProgressDialog;
-            myProgressDialog =ProgressDialog.show(this, "Publishing", "Please wait...", true);
+		}else if(v.getId()==R.id.btnPublish){			
+            progressDialog =progressDialog.show(this, "Publishing", "Please wait...", true);
 			myRmtClbks=mydoc.new BlogDocumentRemoteCallbacks(){			
 				@Override
 				public void onBlogPostSent(boolean success) {
-					myProgressDialog.dismiss();
+					progressDialog.dismiss();
 					finish();
 				}
 			};

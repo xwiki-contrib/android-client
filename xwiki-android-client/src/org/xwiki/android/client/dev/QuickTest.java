@@ -10,7 +10,6 @@ import org.xwiki.android.dal.EntityManager;
 import org.xwiki.android.ral.RESTfulManager;
 import org.xwiki.android.ral.XmlRESTFulManager;
 import org.xwiki.android.xmodel.entity.Document;
-import org.xwiki.android.xmodel.entity.SimpleDocument;
 
 import com.j256.ormlite.dao.Dao;
 

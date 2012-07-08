@@ -1,561 +1,257 @@
 package org.xwiki.android.xmodel.entity;
 
-import java.io.InputStream;
-import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
-import org.xwiki.android.ral.RestAPIUsageException;
 import org.xwiki.android.ral.reference.DocumentReference;
-import org.xwiki.android.ral.reference.Link;
 import org.xwiki.android.xmodel.xobjects.XObject;
 import org.xwiki.android.xmodel.xobjects.XSimpleObject;
 
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
+import android.text.AlteredCharSequence;
 
 /**
- * Contains the properties of a Page +Additional methods for Document.
- * 
- * @author xwiki dev: not saved to DB. Only the DocumentReference is saved.
+ * @author xwiki gsoc 2012 A document that supports only SimpleObjects. Simple Objects are shallow objects that can have
+ *         only XProperties for property fields.
  */
-
-public abstract class Document extends Resource
+public class Document extends DocumentBase
 {
 
-    // Resource fields
-    //
-    protected List<Link> links;
+    // things in a retreived document.
+    private DocumentBase parent;
 
-    protected String remoteId;// id field in the resource representation. Mobile apps normally use ReSTful URL to
-                              // identify a resource.Not this.
+    private List<DocumentBase> children;
 
-    protected String fullName;
+    private Map<String, XSimpleObject> objects; // key= ClassName/number
 
-    protected String wikiName;// wiki in page element
+    private List<Comment> comments; // key = int index in the list
 
-    protected String spaceName;// space in page element
+    private Map<String, Attachment> attatchments;// key = resource id. ex: xwiki:Blog.BlogPost1@mypic can have space.png
 
-    protected String name; // name in page element (same)
+    private List<Tag> tags; // search by key not needed
 
-    protected String title;
+    // resources that get newly added.
+    // no keys. These are to be posted to server.Server will define the keys after these resources are posted.
+    private List<XSimpleObject> newObjects;
 
-    protected String parentFullName;// parent in resoruce repr.
+    private List<Comment> newComments;
 
-    protected String parentId;
+    private List<Attachment> newAttachments;
 
-    protected String xwikiRelativeUrl;
+    private List<Tag> newTags;
 
-    protected String xwikiAbsoluteUrl;
+    // resources to update
 
-    protected List<String> translations;
+    private Map<String, XSimpleObject> editedObjects; // key= ClassName/number
 
-    protected String defalutTranslation;
+    private List<Comment> editedComments; // key = int index in the list
 
-    protected String syntax;
+    private Map<String, Attachment> editedAttachments;// key = resource id. ex: xwiki:Blog.BlogPost1@mypic can have
+                                                      // space.png
 
-    protected String language;
+    private List<Tag> editedTags; // search by key not needed
 
-    protected String version;
+    // resources to delete
+    private List<String> deletedObjects; // value= of the deleted obj. ClassName/number
 
-    protected int majorVersion;
+    private List<Comment> deletedComments; // key = int index in the list
 
-    protected int minorVersion;
+    private List<String> deletedAttachments;// key = resource id. ex: xwiki:Blog.BlogPost1@mypic can have space.png
 
-    protected String created; // Date string //TODO: convert to Type Date. Or introduce another var to hold Date obj.
-
-    protected String creator; // user string
-
-    protected String modified; // Date string
-
-    protected String modifier; // user string
-
-    protected String content;
-
-    // other fields
-    protected DocumentReference docRef;
-
-    protected boolean offlineMode;
-    
-   
+    private List<Tag> deletedTags; // search by key not needed
 
     public Document(String wikiName, String spaceName, String pageName)
     {
-        docRef = new DocumentReference(wikiName, spaceName, pageName);
-        this.name = pageName;
-        this.wikiName = wikiName;
-        this.spaceName = spaceName;
+        super(wikiName, spaceName, pageName);
+
+        objects = new Hashtable<String, XSimpleObject>();
+        newObjects = new ArrayList<XSimpleObject>();
+        editedObjects = new Hashtable<String, XSimpleObject>();
+        deletedObjects = new ArrayList<String>();
+
+        // TODO: implement
+        comments = new ArrayList<Comment>();
+        newComments = new ArrayList<Comment>();
+
     }
 
     /**
+     * When retrieving the object through get it will return the reference to the object in the list. Warning! For the
+     * current implementation, alterations done to the object will not get affected in the server unless the edited
+     * object is reset explicitly through setObject(String key, XSimpleObject object).
+     * 
+     * @param key
      * @return
      */
-    public DocumentReference getDocumentReference()
+    public XSimpleObject getObject(String key)
     {
-        return docRef;
+        // TODO: When retreived by a RAL layer obj::- use isAltered method in Resource. use this to automatically
+        // identify altered objects
+        // and add them to editedObjects Map at the "ral.transformation" package.
+        XSimpleObject obj = objects.get(key);
+        obj.setAltered(true);
+        return obj;
     }
 
     /**
-     * @param
-     */
-    public void setDocumentReference(DocumentReference docRef)
-    {
-        this.docRef = docRef;
-    }
-
-    /**
-     * if in offline mode the create(), update ... methods will use the save method to save a local copy. The delete
-     * method will mark the document for deletion. The sync service will take the responsibilities after internet
-     * connection is available. *
+     * Update a existing object in the doc. The update is done if the Object.isAltered returns true. This property is
+     * set by defalut, when the object is retrieved using getObject(key)
      * 
-     * @param val
+     * @param key
+     * @param object
      */
-    public void setOfflineMode(boolean val)
+    public void setObject(String key, XSimpleObject object)
     {
-        this.offlineMode = val;
+        if (!objects.containsKey(key)) {
+            throw new IllegalArgumentException("you can only set objects which already exist in the map");
+        }
+        if (object.isAltered()) {
+            editedObjects.put(key, object);
+        }
+        objects.put(key, object);
     }
 
-    public boolean isOfflineMode()
-    {
-        return offlineMode;
-    }
-
-    // /**
-    // * valid for only Documents retreived from server.
-    // * @return
-    // */
-    // public boolean isCachedCopy(){
-    // return offlineMode;
-    // }
+    private int _addNum = 0;
 
     /**
-     * moved away to SimpleDocument. If XWiki introduces CompoundDocuments with Compound objects defining them here
-     * might lead to probs public abstract XObject getObject(String key); public abstract void setObject(String key,
-     * XObject object); public abstract void addObject(XObject obj); public abstract void deleteObject(String key);
-     **/
-    // TODO: Implement similar methods for Comments...
-
-    // TODO: public abstract InputStream getAttachmentData(Attachment a);
-    // TODO: public abstract ... setAttachmentData(byte[]);
-
-    // resource value getter setters
-    // -----------------------------
-
-    /**
-     * Gets the value of the id property.
-     * 
-     * @return possible object is {@link String }
+     * @param obj
+     * @return the auto generated key for this object. key is  <classType>/new/<number>
      */
-    public String getRemoteId()
+    public String addObject(XSimpleObject obj)
     {
-        return remoteId;
+        String key = obj.getType() + "/new/" + _addNum++;
+        obj.setNew(true);
+        objects.put(key, obj);
+        newObjects.add(obj);
+        return key;
     }
 
-    /**
-     * Sets the value of the id property.
-     * 
-     * @param value allowed object is {@link String }
-     */
-    public void setRemoteId(String value)
+    public void deleteObject(String key)
     {
-        this.remoteId = value;
-    }
-
-    /**
-     * Gets the value of the fullName property. *
-     * 
-     * @return possible object is {@link String }
-     */
-    public String getFullName()
-    {
-        return fullName;
-    }
-
-    /**
-     * Sets the value of the fullName property. *
-     * 
-     * @param value allowed object is {@link String }
-     */
-    public void setFullName(String value)
-    {
-        this.fullName = value;
-    }
-
-    /**
-     * Gets the value of the wiki property.
-     * 
-     * @return possible object is {@link String }
-     */
-    public String getWikiName()
-    {
-        return wikiName;
-    }
-
-    /**
-     * Sets the value of the wiki property.
-     * 
-     * @param value allowed object is {@link String }
-     */
-    public void setWikiName(String value)
-    {
-        this.wikiName = value;
-    }
-
-    /**
-     * Gets the value of the space property.
-     * 
-     * @return possible object is {@link String }
-     */
-    public String getSpaceName()
-    {
-        return spaceName;
-    }
-
-    /**
-     * Sets the value of the space property.
-     * 
-     * @param value allowed object is {@link String }
-     */
-    public void setSpaceName(String value)
-    {
-        this.spaceName = value;
-    }
-
-    // TODO:Consider refactor rename back to getName() ? confuse with name,fullName ?
-    /**
-     * @return the value of the name property in the Rest model "Page" element..
-     */
-    public String getSimpleName()
-    {
-        return name;
-    }
-
-    /**
-     * Sets the value of the name property.
-     * 
-     * @param value allowed object is {@link String }
-     */
-    public void setSimpleName(String value)
-    {
-        this.name = value;
-    }
-
-    /**
-     * Gets the value of the title property.
-     * 
-     * @return possible object is {@link String }
-     */
-    public String getTitle()
-    {
-        return title;
-    }
-
-    /**
-     * Sets the value of the title property.
-     * 
-     * @param value allowed object is {@link String }
-     */
-    public void setTitle(String value)
-    {
-        this.title = value;
-    }
-
-    /**
-     * Gets the value of the parent property.
-     * 
-     * @return possible object is {@link String }
-     */
-    public String getParentFullName()
-    {
-        return parentFullName;
-    }
-
-    /**
-     * Sets the value of the parent property.
-     * 
-     * @param value allowed object is {@link String }
-     */
-    public void setParentFullName(String value)
-    {
-        this.parentFullName = value;
-    }
-
-    /**
-     * Gets the value of the parentId property.
-     * 
-     * @return possible object is {@link String }
-     */
-    public String getParentId()
-    {
-        return parentId;
-    }
-
-    /**
-     * Sets the value of the parentId property.
-     * 
-     * @param value allowed object is {@link String }
-     */
-    public void setParentId(String value)
-    {
-        this.parentId = value;
-    }
-
-    /**
-     * Gets the value of the xwikiRelativeUrl property.
-     * 
-     * @return possible object is {@link String }
-     */
-    public String getXwikiRelativeUrl()
-    {
-        return xwikiRelativeUrl;
-    }
-
-    /**
-     * Sets the value of the xwikiRelativeUrl property.
-     * 
-     * @param value allowed object is {@link String }
-     */
-    public void setXwikiRelativeUrl(String value)
-    {
-        this.xwikiRelativeUrl = value;
-    }
-
-    /**
-     * Gets the value of the xwikiAbsoluteUrl property.
-     * 
-     * @return possible object is {@link String }
-     */
-    public String getXwikiAbsoluteUrl()
-    {
-        return xwikiAbsoluteUrl;
-    }
-
-    /**
-     * Sets the value of the xwikiAbsoluteUrl property.
-     * 
-     * @param value allowed object is {@link String }
-     */
-    public void setXwikiAbsoluteUrl(String value)
-    {
-        this.xwikiAbsoluteUrl = value;
-    }
-
-    /**
-     * Gets the value of the translations property.
-     * 
-     * @return possible object is {@link Translations }
-     */
-    public List<String> getTranslations()
-    {
-        return translations;
-    }
-
-    /**
-     * Sets the value of the translations property.
-     * 
-     * @param value allowed object is {@link Translations }
-     */
-    public void setTranslations(List<String> translations)
-    {
-        this.translations = translations;
-    }
-
-    public String getDefalutTranslation()
-    {
-        return defalutTranslation;
-    }
-
-    public void setDefalutTranslation(String defalutTranslation)
-    {
-        this.defalutTranslation = defalutTranslation;
-    }
-
-    /**
-     * Gets the value of the syntax property.
-     * 
-     * @return possible object is {@link String }
-     */
-    public String getSyntax()
-    {
-        return syntax;
-    }
-
-    /**
-     * Sets the value of the syntax property.
-     * 
-     * @param value allowed object is {@link String }
-     */
-    public void setSyntax(String value)
-    {
-        this.syntax = value;
-    }
-
-    public String getLanguage()
-    {
-        return language;
-    }
-
-    /**
-     * Sets the value of the language property.
-     * 
-     * @param value allowed object is {@link String }
-     */
-    public void setLanguage(String value)
-    {
-        this.language = value;
+        XSimpleObject obj = objects.get(key);
+        if (obj.isNew()) {
+            newObjects.remove(obj);
+        } else {
+            deletedObjects.add(key);
+        }
+        if (obj.isAltered()) {
+            editedObjects.remove(key);
+        }
+        objects.remove(key);
 
     }
 
-    /**
-     * Gets the value of the version property.
-     * 
-     * @return possible object is {@link String }
-     */
-    public String getVersion()
+    public Map<String, XSimpleObject> getAllObjects()
     {
-        return version;
+        return objects;
     }
 
-    /**
-     * Sets the value of the version property.
-     * 
-     * @param value allowed object is {@link String }
-     */
-    public void setVersion(String value)
+    public DocumentBase getParentDocument()
     {
-        this.version = value;
+        return parent;
     }
 
-    /**
-     * Gets the value of the majorVersion property.
-     */
-    public int getMajorVersion()
+    public List<DocumentBase> getChildrenDocuments()
     {
-        return majorVersion;
+        return children;
     }
 
-    /**
-     * Sets the value of the majorVersion property.
-     */
-    public void setMajorVersion(int value)
+    public List<Comment> getAllComments()
     {
-        this.majorVersion = value;
+        return comments;
     }
 
-    /**
-     * Gets the value of the minorVersion property.
-     */
-    public int getMinorVersion()
+    public Map<String, Attachment> getAllAttatchments()
     {
-        return minorVersion;
+        return attatchments;
     }
 
-    /**
-     * Sets the value of the minorVersion property.
-     */
-    public void setMinorVersion(int value)
+    public List<Tag> getAllTags()
     {
-        this.minorVersion = value;
+        return tags;
     }
 
-    /**
-     * Gets the value of the created property.
-     * 
-     * @return possible object is {@link String }
-     */
-    public String getCreated()
+    public List<XSimpleObject> getAllNewObjects()
     {
-        return created;
+        return newObjects;
     }
 
-    /**
-     * Sets the value of the created property.
-     * 
-     * @param value allowed object is {@link String }
-     */
-    public void setCreated(String value)
+    public List<Comment> getAllNewComments()
     {
-        this.created = value;
+        return newComments;
     }
 
-    /**
-     * Gets the value of the creator property.
-     * 
-     * @return possible object is {@link String }
-     */
-    public String getCreator()
+    public List<Attachment> getAllNewAttachments()
     {
-        return creator;
+        return newAttachments;
     }
 
-    /**
-     * Sets the value of the creator property.
-     * 
-     * @param value allowed object is {@link String }
-     */
-    public void setCreator(String value)
+    public List<Tag> getAllNewTags()
     {
-        this.creator = value;
+        return newTags;
     }
 
-    /**
-     * Gets the value of the modified property.
-     * 
-     * @return possible object is {@link String }
-     */
-    public String getModified()
+    public Map<String, XSimpleObject> getAllEditedObjects()
     {
-        return modified;
+        return editedObjects;
     }
 
-    /**
-     * Sets the value of the modified property.
-     * 
-     * @param value allowed object is {@link String }
-     */
-    public void setModified(String value)
+    public List<Comment> getAllEditedComments()
     {
-        this.modified = value;
+        return editedComments;
     }
 
-    /**
-     * Gets the value of the modifier property.
-     * 
-     * @return possible object is {@link String }
-     */
-    public String getModifier()
+    public Map<String, Attachment> getAllEditedAttachments()
     {
-        return modifier;
+        return editedAttachments;
     }
 
-    /**
-     * Sets the value of the modifier property.
-     * 
-     * @param value allowed object is {@link String }
-     */
-    public void setModifier(String value)
+    public List<Tag> getAllEditedTags()
     {
-        this.modifier = value;
+        return editedTags;
     }
 
-    /**
-     * Gets the value of the content property.
-     * 
-     * @return possible object is {@link String }
-     */
-    public String getContent()
+    public List<String> getAllDeletedObjects()
     {
-        return content;
+        return deletedObjects;
     }
 
-    /**
-     * Sets the value of the content property.
-     * 
-     * @param value allowed object is {@link String }
-     */
-    public void setContent(String value)
+    public List<Comment> getAllDeletedComments()
     {
-        this.content = value;
+        return deletedComments;
+    }
+
+    public List<String> getAllDeletedAttachments()
+    {
+        return deletedAttachments;
+    }
+
+    public List<Tag> getAllDeletedTags()
+    {
+        return deletedTags;
+    }
+
+    // setters
+
+    public void setParent(DocumentBase parent)
+    {
+        if (parentFullName == null) {
+            parentFullName = parent.fullName;
+        }
+        if (parentId == null) {
+
+        }
+        this.parent = parent;
+    }
+
+    public void setChildren(List<DocumentBase> children)
+    {
+        this.children = children;
     }
 
 }
+
+/**
+ * NOTE: TODO: extract interface Document.l Always use XWikiApplicationContext to create new.
+ **/

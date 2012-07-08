@@ -10,7 +10,7 @@ import com.j256.ormlite.table.DatabaseTable;
 @DatabaseTable(tableName = "FS_DOC_REF")
 public class FSDocumentReference extends DocumentReference
 {
-    @DatabaseField(id = true)
+    @DatabaseField(generatedId=true)
     private int _id;// local id for persistence. "_" to comply with android adapters. No need to set. Set by ORMlite
 
     /**
@@ -18,7 +18,7 @@ public class FSDocumentReference extends DocumentReference
      */
     protected File file;
 
-    @DatabaseField()
+    @DatabaseField(unique=true)
     protected String filePath;
 
     @DatabaseField

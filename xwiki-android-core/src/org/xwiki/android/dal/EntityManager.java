@@ -12,7 +12,7 @@ import org.xwiki.android.entity.LoginAttempt;
 import org.xwiki.android.entity.User;
 import org.xwiki.android.fileStore.FSDocumentReference;
 import org.xwiki.android.ral.reference.DocumentReference;
-import org.xwiki.android.xmodel.entity.Document;
+import org.xwiki.android.xmodel.entity.DocumentBase;
 
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.support.ConnectionSource;

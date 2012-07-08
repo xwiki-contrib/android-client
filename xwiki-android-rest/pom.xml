@@ -41,31 +41,8 @@
 			<groupId>org.xwiki.android</groupId>
 			<artifactId>xwiki-rest-simplexml-model</artifactId>
 			<version>${project.version}</version> 
-		</dependency>
-		
-		<dependency>
-		    <groupId>org.simpleframework</groupId>
-		    <artifactId>simple-xml</artifactId>
-		    <type>jar</type>
-		    <version>2.6</version>
-		    <exclusions>
-		        <!-- StAX is not available on Android -->
-		        <exclusion>
-		            <artifactId>stax</artifactId>
-		            <groupId>stax</groupId>
-		        </exclusion>
-		        <exclusion>
-		            <artifactId>stax-api</artifactId>
-		            <groupId>stax</groupId>
-		        </exclusion>
-		        <!-- Provided by Android -->
-		        <exclusion>
-		            <artifactId>xpp3</artifactId>
-		            <groupId>xpp3</groupId>
-		        </exclusion>
-		   	 </exclusions>
-		</dependency>
-		
+            <scope>compile</scope>
+		</dependency>			
 	</dependencies>
 
 	<build>

@@ -41,8 +41,7 @@
 			<artifactId>xwiki-android-core</artifactId>
 			<type>apklib</type>
 			<version>${project.version}</version>
-		</dependency>
-		
+		</dependency>		
 	</dependencies>
 
 	<build>

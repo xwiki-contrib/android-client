@@ -3,7 +3,7 @@ package org.xwiki.android.fileStore;
 import java.io.File;
 
 import org.xwiki.android.context.XWikiApplicationContext;
-import org.xwiki.android.xmodel.entity.Document;
+import org.xwiki.android.xmodel.entity.DocumentBase;
 
 import android.content.Context;
 

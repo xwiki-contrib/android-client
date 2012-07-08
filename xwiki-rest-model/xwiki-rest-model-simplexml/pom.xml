@@ -38,9 +38,10 @@
   <dependencies>
     <dependency>
 	    <groupId>org.simpleframework</groupId>
-	    <artifactId>simple-xml</artifactId>
+	    <artifactId>simple-xml</artifactId>	    
+	    <version>2.6.4</version>
 	    <type>jar</type>
-	    <version>2.6</version>
+	    <scope>compile</scope>
 	    <exclusions>
 	        <!-- StAX is not available on Android -->
 	        <exclusion>

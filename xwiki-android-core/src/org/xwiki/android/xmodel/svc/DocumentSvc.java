@@ -5,7 +5,7 @@ import java.util.List;
 import org.xwiki.android.fileStore.FSDocumentReference;
 import org.xwiki.android.ral.RestAPIUsageException;
 import org.xwiki.android.ral.reference.DocumentReference;
-import org.xwiki.android.xmodel.entity.Document;
+import org.xwiki.android.xmodel.entity.DocumentBase;
 /**
  * 
  * Combines remote,local services.

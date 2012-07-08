@@ -16,7 +16,7 @@ import org.xwiki.android.rest.PageResources;
 import org.xwiki.android.rest.Requests;
 import org.xwiki.android.rest.XWikiRestfulAPI;
 import org.xwiki.android.xmodel.entity.Document;
-import org.xwiki.android.xmodel.entity.SimpleDocument;
+import org.xwiki.android.xmodel.entity.Document;
 
 /**
  * @author xwiki gsoc 2012
@@ -48,7 +48,7 @@ class XmlDocumentRao implements Rao<Document>
     public void create(Document res)
     {// Only simpleDocument is supported yet.
         // TODO:multiple connections can be handled at HTTPClient also.Research needed.
-        ConnectionThread con1 = new ConnectionThread((SimpleDocument) res)
+        ConnectionThread con1 = new ConnectionThread(res)
         {
             public void run()
             {
@@ -127,7 +127,7 @@ class XmlDocumentRao implements Rao<Document>
 
     private abstract class ConnectionThread extends Thread
     {
-        SimpleDocument doc;
+        Document doc;
 
         DocumentReference dref;
 
@@ -136,7 +136,7 @@ class XmlDocumentRao implements Rao<Document>
             dref = docref;
         }
 
-        ConnectionThread(SimpleDocument d)
+        ConnectionThread(Document d)
         {
             doc = d;
         }
