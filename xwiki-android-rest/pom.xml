@@ -39,8 +39,9 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.xwiki.android</groupId>
-			<artifactId>xwiki-rest-simplexml-model</artifactId>
+			<artifactId>xwiki-rest-model-simplexml</artifactId>
 			<version>${project.version}</version> 
+			<type>jar</type>
             <scope>compile</scope>
 		</dependency>			
 	</dependencies>

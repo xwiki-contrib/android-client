@@ -1,4 +1,4 @@
-package demo_tutorials;
+package org.xwiki.android.howtos;
 
 import java.util.List;
 import java.util.Map;

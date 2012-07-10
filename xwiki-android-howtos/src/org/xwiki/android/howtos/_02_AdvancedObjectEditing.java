@@ -1,4 +1,4 @@
-package demo_tutorials;
+package org.xwiki.android.howtos;
 
 import org.xwiki.android.blog.xobj.XBlogPost;
 import org.xwiki.android.xmodel.entity.Document;
