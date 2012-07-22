@@ -7,7 +7,7 @@ public class Resource implements Serializable
 
     private boolean isNew;
 
-    private boolean altered;
+    private boolean edited;
 
     public void setNew(boolean val)
     {
@@ -27,14 +27,17 @@ public class Resource implements Serializable
         return isNew;
     }
 
-    public boolean isAltered()
+    public boolean isEdited()
     {
-        return altered;
+        return edited;
     }
-
-    public void setAltered(boolean altered)
+    /**
+     * 
+     * @param altered true=mark object for update.
+     */
+    public void setEdited(boolean altered)
     {
-        this.altered = altered;
+        this.edited = altered;
     }
 
 }

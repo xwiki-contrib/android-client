@@ -9,6 +9,7 @@ import android.util.Log;
 import org.xwiki.android.context.GlobalConstants;
 import org.xwiki.android.core.*;
 import org.xwiki.android.entity.LoginAttempt;
+import org.xwiki.android.entity.SyncOutEntity;
 import org.xwiki.android.entity.User;
 import org.xwiki.android.fileStore.FSDocumentReference;
 import org.xwiki.android.ral.reference.DocumentReference;
@@ -37,6 +38,7 @@ public class EntityManager extends OrmLiteSqliteOpenHelper
             TableUtils.createTable(connectionSource, User.class);
             TableUtils.createTable(connectionSource, FSDocumentReference.class);
             TableUtils.createTable(connectionSource, LoginAttempt.class);
+            TableUtils.createTable(connectionSource, SyncOutEntity.class);
 
         } catch (SQLException e) {
             Log.e(EntityManager.class.getName(), "Can't create database", e);

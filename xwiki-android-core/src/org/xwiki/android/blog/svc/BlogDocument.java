@@ -9,6 +9,7 @@ import java.util.Set;
 import org.xwiki.android.blog.xobj.XBlogPost;
 import org.xwiki.android.fileStore.FSDocumentReference;
 import org.xwiki.android.ral.RaoException;
+import org.xwiki.android.rest.RestConnectorException;
 import org.xwiki.android.xmodel.entity.Document;
 import org.xwiki.android.xmodel.entity.Document;
 import org.xwiki.android.xmodel.svc.DocumentLocalSvcCallbacks;
@@ -129,7 +130,7 @@ public class BlogDocument implements Serializable
         }
 
         @Override
-        public void handleException(IOException e)
+        public void handleException(RestConnectorException e)
         {
             // SyncServic.syncLater(doc)
             docsvc.save(doc, null, null);// !!! unending loop if file saving is not successful, and u pass 'this' as

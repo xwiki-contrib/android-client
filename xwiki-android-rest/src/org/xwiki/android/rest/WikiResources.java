@@ -49,8 +49,9 @@ public class WikiResources extends HttpConnector
 
     /**
      * @return list of all the Wikis in the provided XWiki server hosted in XWiki URL
+     * @throws RestConnectorException 
      */
-    public Wikis getWikis()
+    public Wikis getWikis() throws RestConnectorException
     {
 
         String Uri = "http://" + URLprefix + WIKI_URL;

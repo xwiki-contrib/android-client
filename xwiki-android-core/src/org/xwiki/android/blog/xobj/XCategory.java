@@ -1,7 +1,11 @@
 package org.xwiki.android.blog.xobj;
 
-public class XCategory
+import org.xwiki.android.xmodel.xobjects.XSimpleObject;
+
+public class XCategory extends XSimpleObject
 {
-    // todo: text area class desc
-    // stringclass name
+   public XCategory()
+   {
+        super("");
+   }
 }

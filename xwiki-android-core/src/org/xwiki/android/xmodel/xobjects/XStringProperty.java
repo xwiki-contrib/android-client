@@ -9,7 +9,7 @@ public class XStringProperty extends XPropertyBase<String>
 
     public XStringProperty()
     {
-        type = "com.xpn.xwiki.objects.classes.StringClass";
+       super("com.xpn.xwiki.objects.classes.StringClass");
 
     }
 
@@ -25,6 +25,16 @@ public class XStringProperty extends XPropertyBase<String>
         return value;
     }
 
+    /**
+     * same as setValue here.
+     */
+    @Override
+    public void setValueFromString(String val)
+    {
+        value=val;
+    }
+    //toString() is the corresponding get method
+    
     // general attr
 
     public Integer setSize(int size)

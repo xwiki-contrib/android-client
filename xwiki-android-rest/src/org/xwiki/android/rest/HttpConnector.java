@@ -129,7 +129,7 @@ public class HttpConnector
      * @param Uri URL of XWiki RESTful API
      * @return Response data of the HTTP connection as a String
      */
-    public String getResponse(String Uri)
+    public String getResponse(String Uri) throws RestConnectorException
     {
         initialize();
 
@@ -169,6 +169,7 @@ public class HttpConnector
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            throw new RestConnectorException(e);
         }
 
         return responseText;
@@ -179,8 +180,9 @@ public class HttpConnector
      * 
      * @param Uri URL of XWiki RESTful API
      * @return status of the HTTP method execution
+     * @throws RestConnectorException 
      */
-    public String deleteRequest(String Uri)
+    public String deleteRequest(String Uri) throws RestConnectorException
     {
         initialize();
 
@@ -209,6 +211,7 @@ public class HttpConnector
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            throw new RestConnectorException(e);
         }
 
         return "error";
@@ -223,10 +226,11 @@ public class HttpConnector
      * @return HTTP response code of the connection
      * 		   or 
      * 		   21408(RESP_CODE_CLIENT_CON_TIMEOUT) when client connection timed out, 
+     * @throws RestConnectorException 
      *  	   
      */
    
-    public int checkLogin(String username, String password, String Url)
+    public int checkLogin(String username, String password, String Url) throws RestConnectorException
     {
 
         initialize();
@@ -267,6 +271,7 @@ public class HttpConnector
         	responseCode=RESP_CODE_CLIENT_CON_TIMEOUT;
         }catch (IOException e) {
             e.printStackTrace();
+            throw new RestConnectorException(e);
         }
 
         Log.d("response code", String.valueOf(responseCode));
@@ -279,8 +284,9 @@ public class HttpConnector
      * @param Uri URL of XWiki RESTful API
      * @param content content to be posted to the server
      * @return status code of the Post method execution
+     * @throws RestConnectorException 
      */
-    public String postRequest(String Uri, String content)
+    public String postRequest(String Uri, String content) throws RestConnectorException
     {
         initialize();
 
@@ -315,7 +321,8 @@ public class HttpConnector
             e.printStackTrace();
         } catch (IOException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();            
+            e.printStackTrace();   
+            throw new RestConnectorException(e);
         }
 
         return "error";
@@ -327,8 +334,9 @@ public class HttpConnector
      * @param Uri URL of XWiki RESTful API
      * @param content content to be posted to the server
      * @return status code of the Put method execution
+     * @throws RestConnectorException 
      */
-    public String putRequest(String Uri, String content)
+    public String putRequest(String Uri, String content) throws RestConnectorException
     {
         initialize();
         
@@ -364,6 +372,7 @@ public class HttpConnector
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            throw new RestConnectorException(e);
         }
 
         return "error";
@@ -374,8 +383,9 @@ public class HttpConnector
      * 
      * @param Uri URL of XWiki RESTful API
      * @return InputStream of the HTTP Get method execution
+     * @throws RestConnectorException 
      */
-    public InputStream getResponseAttachment(String Uri)
+    public InputStream getResponseAttachment(String Uri) throws RestConnectorException
     {
         initialize();
 
@@ -405,6 +415,7 @@ public class HttpConnector
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            throw new RestConnectorException(e);
         }
 
         return null;
@@ -416,8 +427,9 @@ public class HttpConnector
      * @param Uri URL of XWiki RESTful API
      * @param filePath path of the file name which to be sent over the HTTP connection
      * @return status of the HTTP Put method execution
+     * @throws RestConnectorException 
      */
-    public String putRaw(String Uri, String filePath)
+    public String putRaw(String Uri, String filePath) throws RestConnectorException
     {
         initialize();
 
@@ -452,6 +464,7 @@ public class HttpConnector
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            throw new RestConnectorException(e);
         }
 
         return "error";

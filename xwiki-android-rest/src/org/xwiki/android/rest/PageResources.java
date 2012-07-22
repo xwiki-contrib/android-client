@@ -72,8 +72,9 @@ public class PageResources extends HttpConnector
 
     /**
      * @return all the pages as a Pages object in the specified space
+     * @throws RestConnectorException 
      */
-    public Pages getAllPages()
+    public Pages getAllPages() throws RestConnectorException
     {
         String Uri = "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + PAGE_URL_SUFFIX;
 
@@ -83,8 +84,9 @@ public class PageResources extends HttpConnector
     /**
      * @param pageName name of the page
      * @return requested page as a Page object
+     * @throws RestConnectorException 
      */
-    public Page getPage(String pageName)
+    public Page getPage(String pageName) throws RestConnectorException
     {
         String Uri = "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName;
 
@@ -96,8 +98,9 @@ public class PageResources extends HttpConnector
      * 
      * @param page Page object to be added if not existing in the space or modified if it existing in the space
      * @return status of the HTTP put request
+     * @throws RestConnectorException 
      */
-    public String addPage(Page page)
+    public String addPage(Page page) throws RestConnectorException
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + page.getName();
@@ -110,8 +113,9 @@ public class PageResources extends HttpConnector
      * 
      * @param pageName name of the page
      * @return status of the HTTP delete request
+     * @throws RestConnectorException 
      */
-    public String deletePage(String pageName)
+    public String deletePage(String pageName) throws RestConnectorException
     {
         String Uri = "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName;
 
@@ -127,8 +131,9 @@ public class PageResources extends HttpConnector
      * @param pageName name of the page
      * @param version history version of the page
      * @return requested version of the page
+     * @throws RestConnectorException 
      */
-    public Page getPageHistoryOnVersion(String pageName, String version)
+    public Page getPageHistoryOnVersion(String pageName, String version) throws RestConnectorException
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
@@ -140,8 +145,9 @@ public class PageResources extends HttpConnector
     /**
      * @param pageName name of the page
      * @return children of the page as a Pages object
+     * @throws RestConnectorException 
      */
-    public Pages getPageChildren(String pageName)
+    public Pages getPageChildren(String pageName) throws RestConnectorException
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
@@ -154,8 +160,9 @@ public class PageResources extends HttpConnector
      * @param pageName name of the page
      * @param language language name of the page
      * @return Translated page of the provided language
+     * @throws RestConnectorException 
      */
-    public Page getPageTranslation(String pageName, String language)
+    public Page getPageTranslation(String pageName, String language) throws RestConnectorException
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
@@ -170,8 +177,9 @@ public class PageResources extends HttpConnector
      * @param page Page object of the new translation
      * @param language translated language name of the page
      * @return status of the HTTP put request
+     * @throws RestConnectorException 
      */
-    public String addPageTranslation(Page page, String language)
+    public String addPageTranslation(Page page, String language) throws RestConnectorException
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + page
@@ -188,8 +196,9 @@ public class PageResources extends HttpConnector
      * @param pageName name of the page
      * @param language translated language name of the page
      * @return status of the HTTP delete request
+     * @throws RestConnectorException 
      */
-    public String deletePageTranslation(String pageName, String language)
+    public String deletePageTranslation(String pageName, String language) throws RestConnectorException
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
@@ -203,8 +212,9 @@ public class PageResources extends HttpConnector
      * @param language translated language name of the page
      * @param version version of the page
      * @return translated page of the spcific page history version
+     * @throws RestConnectorException 
      */
-    public Page getPageTranslation(String pageName, String language, String version)
+    public Page getPageTranslation(String pageName, String language, String version) throws RestConnectorException
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName

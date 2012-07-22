@@ -1,102 +1,212 @@
 package org.xwiki.android.xmodel.svc;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
-import org.xwiki.android.fileStore.FSDocumentReference;
-import org.xwiki.android.ral.RaoCallbackForDocument;
 import org.xwiki.android.ral.RaoException;
+import org.xwiki.android.rest.RestConnectorException;
 import org.xwiki.android.xmodel.entity.Document;
+
+import android.os.Handler;
+import android.os.Looper;
 
 
 /**
  * @author xwiki gsoc 2012
  */
-public abstract class DocumentRemoteSvcCallbacks extends RaoCallbackForDocument
+public abstract class DocumentRemoteSvcCallbacks
 {
-
-    //
-    // -------------------------------client should override the needed call
-    // backs.
-    //
-    // RAO methods.
-
-    /*
-     * (non-Javadoc)
-     * @see org.xwiki.android.ral.RaoCallback#onProgressUpdate(int)
+	protected final Handler mhandle;
+	/**
+     * binds the Callback with the UI threads looper.
      */
-    @Override
+    public DocumentRemoteSvcCallbacks()
+    {
+        Looper mainLooper = Looper.getMainLooper(); // reference to the main
+                                                    // threads looper in
+                                                    // MainThread's Thread Local
+                                                    // Storage.
+        mhandle = new Handler(mainLooper);
+    }
+
+    /**
+     * Binds the callback with the given looper. You will not be able to update UI from the call back if not bound to
+     * the UI threads looper.
+     * 
+     * @param looper
+     */
+    public DocumentRemoteSvcCallbacks(Looper looper)
+    {
+        mhandle = new Handler(looper);
+    }
+
+    
+	
+	
+    //
+    // -------------------------------client should override the needed call backs.
+    //
+    // for RAO .
+
+    
     public void onProgressUpdate(int progress)
     {
 
     }
 
-    /*
-     * (non-Javadoc)
-     * @see org.xwiki.android.ral.RaoCallback#onCreated(java.lang.Object, boolean, int)
+    /**
+     * @param doc The document constructed from server responses. Should configure the Rao to construct the Document
+     *            entity before calling create(). //TODO: currently not supported by underlying ReSTful Connector.
+     * @param success whether the document was successfully created on the server.
+     * @param ex reasons: doc does not exist in server.
+     * 
      */
-    @Override
     public void onCreated(Document res, boolean success, RaoException ex)
     {
 
     }
 
-    /*
-     * (non-Javadoc)
-     * @see org.xwiki.android.ral.RaoCallback#ontFullyRetreived(java.lang.Object)
-     */
-    @Override
+    
     public void onFullyRetreived(Document res, boolean success, RaoException ex)
     {
 
     }
 
-    /*
-     * (non-Javadoc)
-     * @see org.xwiki.android.ral.RaoCallback#onPartiallyRetreived(java.lang.Object, java.lang.String[])
+    /**
+     * This method returns a EntityWrapper.(For automatic lazy fetching)
+     * 
+     * @param res The partially retrieved Resource.If the resouce is a document calling for an object that is not yet
+     *            retreived inside the document will throw a runtime RESTfulLazyFetchException. The object will be
+     *            automatically loaded and onDocumentFull/PartiallyRetreived() will be called accordingly.Please make
+     *            sure to catch the exception if you call a Object or first class entity inside the document which
+     *            haven't loaded yet.
+     * @param success 
+     * @param ex reasons: this doc does not exist in the server.
+     * @param args List of newly loaded components of the document. Ex: Blog.BlogPostClass/* means all BlogPostClass
+     *            objs have been loaded.
      */
-    @Override
     public void onPartiallyRetreived(Document res, boolean success, RaoException ex, String... args)
     {
 
     }
 
-    /*
-     * (non-Javadoc)
-     * @see org.xwiki.android.ral.RaoCallback#onQuerryComplete(java.util.List, java.lang.String[])
+    /**
+     * @param rslts
+     * @param success TODO
+     * @param ex reasons:Interanl querry engine discovered the querry to be wrong, Unauthorized, ...
+     * @param args The list of components already loaded into the documents.
      */
-    @Override
     public void onQuerryComplete(List<Document> rslts, boolean success, RaoException ex, String... args)
     {
 
     }
 
-    @Override
+    /**
+     * @param res The updated resource. May be the original or a clone filled with response data from server
+     * @param success Whether update operation was successful
+     * @param ex If not successful what the exception is. reasons 1) The document to be updated is not yet created.
+     */
     public void onUpdated(Document res, boolean success, RaoException ex)
     {
 
     }
 
-    /*
-     * (non-Javadoc)
-     * @see org.xwiki.android.ral.RaoCallback#onDeleted(boolean)
+    /**
+     * @param success
+     * @param ex TODO
      */
-    @Override
     public void onDeleted(boolean success, RaoException ex)
     {
 
     }
 
-    /*
-     * (non-Javadoc)
-     * @see org.xwiki.android.ral.RaoCallback#handleOffline(java.lang.Object)
+    /**
+     * Call back when IO error occures(ex: the Internet connectivity is not available). The client should handle this
+     * situation and choose whether to sync later,retry, or ignore.
+     * 
+     * @param e the exception passed back asynchronously to be handled by the client.
      */
-    @Override
-    public void handleException(IOException e)
+    public void handleException(RestConnectorException e)
     {
 
+    }
+    
+    
+
+    
+
+    /*
+     * following are methods implementing an invoker pattern. These methods transfer control of the event handling to
+     * the UI thread. i.e. UI thread is a pipeline thread which has a queue of messages which it waits on(Looper). These
+     * methods transfer a Runnable to be run by the UI thread. (Or the thread of the looper in
+     * RaoCallbackForDocument(Looper looper), which this Callback was constructed with.)
+     */
+
+    void invokeProgressUpdate(int progress)
+    {
+        mhandle.post(new RunnableWiP(progress)
+        {
+            public void run()
+            {
+                onProgressUpdate((Integer) args[0]);
+            }
+        });
+    }
+
+    void invokeCreated(Document res, boolean success, RaoException rex)
+    {
+        mhandle.post(new RunnableWiP(res,success,rex)
+        {
+            public void run()
+            {
+            	boolean success=(Boolean) args[1];
+            	RaoException ex=(RaoException) args[2];
+                onCreated((Document) args[0], success, ex);
+            }
+        });
+    }
+
+    void invoketFullyRetreived(Document res)
+    {
+        // TODO Auto-generated method stub
+
+    }
+
+    void invokePartiallyRetreived(Document res, String... args)
+    {
+        // TODO Auto-generated method stub
+
+    }
+
+    void invokeQuerryComplete(List<Document> rslts, String... args)
+    {
+        // TODO Auto-generated method stub
+
+    }
+
+    void invokeDeleted(boolean success,RaoException ex)
+    {
+        // TODO Auto-generated method stub
+
+    }
+
+    void invokeHandleException(IOException e)
+    {
+        // TODO Auto-generated method stub
+
+    }
+
+    /**
+     * Runnable with parameters.
+     */
+    protected abstract class RunnableWiP implements Runnable
+    {
+        public Object[] args;
+
+        public RunnableWiP(Object... args)
+        {
+            this.args = args;
+        }
     }
     
    

@@ -8,15 +8,19 @@ import org.xwiki.android.context.XWikiApplicationContext;
 import org.xwiki.android.context.XWikiApplicationContextAPI;
 import org.xwiki.android.ral.reference.DocumentReference;
 import org.xwiki.android.ral.reference.EntityReference;
-import org.xwiki.android.ral.transformation.SimpleXmlDocpad;
-import org.xwiki.android.ral.transformation.XMdlToSmplConverter;
+import org.xwiki.android.ral.transformation.DocLaunchPadForXML;
+import org.xwiki.android.ral.transformation.DocumentDismantler_XML;
 import org.xwiki.android.resources.Object;
 import org.xwiki.android.resources.Page;
 import org.xwiki.android.rest.PageResources;
 import org.xwiki.android.rest.Requests;
+import org.xwiki.android.rest.IllegalRestUsageException;
+import org.xwiki.android.rest.RestConnectorException;
+import org.xwiki.android.rest.XWikiRestConnector;
 import org.xwiki.android.rest.XWikiRestfulAPI;
 import org.xwiki.android.xmodel.entity.Document;
 import org.xwiki.android.xmodel.entity.Document;
+import org.xwiki.android.xmodel.xobjects.XUtils;
 
 /**
  * @author xwiki gsoc 2012
@@ -25,123 +29,122 @@ import org.xwiki.android.xmodel.entity.Document;
  */
 // TODO: current impl only support single http connection through Requests
 // class. Implement for multiple parallel connections to reduce latency.
-class XmlDocumentRao implements Rao<Document>
+class XmlDocumentRao implements DocumentRao
 {
-    private static int PAGE = XMdlToSmplConverter.PAGE;
-
-    private static int OBJECTS = XMdlToSmplConverter.OBJECTS;
-
-    private RaoCallbackForDocument mycallback;
-
+    private static int PAGE = DocumentDismantler_XML.PAGE;
+    private static int OBJECTS = DocumentDismantler_XML.OBJECTS;
+    private static int ALL = DocumentDismantler_XML.ALL;
     private XWikiRestfulAPI api;
 
-    public XmlDocumentRao(RaoCallbackForDocument callback)
+    public XmlDocumentRao()
     {
-        this.mycallback = callback;
         UserSession session = XWikiApplicationContext.getInstance().getUserSession();
-        api = new Requests(session.getRealm(), session.getUserName(), session.getPassword());
+        api = new XWikiRestConnector(session.getRealm(), session.getUserName(), session.getPassword());
+        // consider IoC to app context
     }
 
     /**
      * create the doc on server.
      */
-    public void create(Document res)
-    {// Only simpleDocument is supported yet.
-        // TODO:multiple connections can be handled at HTTPClient also.Research needed.
-        ConnectionThread con1 = new ConnectionThread(res)
-        {
-            public void run()
-            {
-                XMdlToSmplConverter con = new XMdlToSmplConverter(PAGE + OBJECTS);
-                SimpleXmlDocpad pad = con.convertDocument(doc);
+    @Override
+    public Document create(Document doc) throws RestConnectorException, RaoException
+    {
+        DocumentDismantler_XML con = new DocumentDismantler_XML(ALL);
+        DocLaunchPadForXML pad = con.convertDocument(doc);
 
-                Page page = pad.getPage();
-                String wikiName = pad.getWikiName();
-                String spaceName = pad.getSpaceName();
-                String pageName = pad.getPageName();
-                String statusLine = api.addPage(wikiName, spaceName, pageName, page);
-                if (statusLine.contains("20")) { // TODO: knowledge of XWikiRestful API should be transfered to Request.
-                                                 // Intuitively the throwing of RestAPIUsageException also should be
-                                                 // moved.
-                                                 // current approach will rslt in status line checking all over the
-                                                 // code!
-                                                 // suitable exception hierarchy should be implemented. checked
-                                                 // exceptions for
-                                                 // client side connection errors. Unchecked ones for bad api
-                                                 // usage.(because they
-                                                 // cannot be rectified even if caught)
-                    for (Object object : pad.getNewObjects()) {// TODO: these can be done in parallel
-                        if (statusLine.equals("error"))
-                            break;
-                        statusLine = api.addObject(wikiName, spaceName, pageName, object);
-                    }
+        Page page = pad.getPage();
+        String wikiName = pad.getWikiName();
+        String spaceName = pad.getSpaceName();
+        String pageName = pad.getPageName();
+        String statusLine;
+
+        statusLine = api.addPage(wikiName, spaceName, pageName, page);
+        int statusCode = RALUtils.getStatusCode(statusLine);
+
+        if (200 <= statusCode & statusCode < 300) {
+            for (Object object : pad.getNewObjects()) {// TODO: these can be
+                                                       // done in parallel
+                if (statusLine.equals("error")) {// TODO:returning error should be totally removed from underlying
+                                                 // layer.
+                    break;
                 }
-                // there are no altered objects to be updated since the doc is new.
-                // TODO:current impl of Request does not return response body. So null for doc.
-                if (!statusLine.equals("error")) {
-                    // 304 if there was error in page representation.
-                    // 201 created.
-                    if (statusLine.contains("201")) {
-                        mycallback.invokeCreated(null);
-                    } else {
-                        throw new RestAPIUsageException("status line is:" + statusLine);
-                    }
-                } else {
-                    mycallback.handleException(new IOException(
-                        "Don't know why ;-)//TODO: refactor lower layer to return the exception"));
-                }
+                statusLine = api.addObject(wikiName, spaceName, pageName, object);
             }
-        };
-        con1.start();
-    }
-
-    public void retreive(EntityReference<Document> docRef)
-    {
-
-    }
-
-    public void querry()
-    {
-
-    }
-
-    public void update(Document res)
-    {
-
-    }
-
-    public void delete(EntityReference<Document> docRef)
-    {
-        ConnectionThread con1 = new ConnectionThread((DocumentReference) docRef)
-        {
-            public void run()
-            {
-                String wikiName = dref.getWikiName();
-                String spaceName = dref.getSpaceName();
-                String pageName = dref.getPageName();
-                api.deletePage(wikiName, spaceName, pageName);
-            };
-        };
-        con1.start();
-    }
-
-    private abstract class ConnectionThread extends Thread
-    {
-        Document doc;
-
-        DocumentReference dref;
-
-        ConnectionThread(DocumentReference docref)
-        {
-            dref = docref;
+        }
+        // there are no altered objects to be updated since the doc is new.
+        // TODO:current impl of Request does not return response body. So null
+        // for doc.
+        // 304 if there was error in page representation.
+        // 201 created.
+        int code = RALUtils.getStatusCode(statusLine);
+        if (200 <= code & code < 300) {
+            return null;
+        } else {
+            throw new IllegalRestUsageException("status line is:" + statusLine);
         }
 
-        ConnectionThread(Document d)
-        {
-            doc = d;
-        }
-
-        public abstract void run();
     }
+
+    @Override
+    public Document retreive(Document doc) throws RestConnectorException, RaoException
+    {
+        throw new UnsupportedOperationException();
+    }
+    
+    @Override
+    public Document retreive(DocumentReference dref) throws RestConnectorException, RaoException
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    
+    @Override
+    public Document retreive(DocumentReference dref, int flags)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Document retreive(DocumentReference dref, int flags, String... objTypeArgs)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<Document> querry() throws RestConnectorException, RaoException
+    {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Document update(Document res) throws RestConnectorException, RaoException
+    {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void delete(DocumentReference dRef) throws RestConnectorException, RaoException
+    {
+        DocumentReference docRef = dRef;
+        String wikiName = docRef.getWikiName();
+        String spaceName = docRef.getSpaceName();
+        String pageName = docRef.getPageName();
+        api.deletePage(wikiName, spaceName, pageName);
+
+    }
+
+    
+
+    @Override
+    public void delete(Document resrc) throws RestConnectorException, RaoException
+    {
+        delete(resrc.getDocumentReference());        
+    }
+
+   
+
+    
 
 }

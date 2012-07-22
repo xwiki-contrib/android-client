@@ -21,7 +21,7 @@ public class Document extends DocumentBase
     // things in a retreived document.
     private DocumentBase parent;
 
-    private List<DocumentBase> children;
+    private List<Document> children;
 
     private Map<String, XSimpleObject> objects; // key= ClassName/number
 
@@ -34,33 +34,24 @@ public class Document extends DocumentBase
     // resources that get newly added.
     // no keys. These are to be posted to server.Server will define the keys after these resources are posted.
     private List<XSimpleObject> newObjects;
-
-    private List<Comment> newComments;
-
     private List<Attachment> newAttachments;
-
-    private List<Tag> newTags;
+    private List<Comment> newComments;
+    private List<Tag> newTags; // just a ref to tags. We always have to send the whole set in Rest.
+    
 
     // resources to update
 
-    private Map<String, XSimpleObject> editedObjects; // key= ClassName/number
-
-    private List<Comment> editedComments; // key = int index in the list
-
-    private Map<String, Attachment> editedAttachments;// key = resource id. ex: xwiki:Blog.BlogPost1@mypic can have
-                                                      // space.png
-
-    private List<Tag> editedTags; // search by key not needed
+    private Map<String, XSimpleObject> editedObjects; // key= ClassName/number 
+    private List<Attachment> editedAttachments;// key = resource id i.e @<name>. ex: xwiki:Blog.BlogPost1@mypic => @mypic
+                                                     // space.png
+    private List<Comment> editedComments;    
 
     // resources to delete
     private List<String> deletedObjects; // value= of the deleted obj. ClassName/number
-
-    private List<Comment> deletedComments; // key = int index in the list
-
-    private List<String> deletedAttachments;// key = resource id. ex: xwiki:Blog.BlogPost1@mypic can have space.png
-
-    private List<Tag> deletedTags; // search by key not needed
-
+    private List<String> deletedAttachments; 
+    private List<Integer> deletedCommetns;
+    private List<String> deletedTags;
+    
     public Document(String wikiName, String spaceName, String pageName)
     {
         super(wikiName, spaceName, pageName);
@@ -69,11 +60,20 @@ public class Document extends DocumentBase
         newObjects = new ArrayList<XSimpleObject>();
         editedObjects = new Hashtable<String, XSimpleObject>();
         deletedObjects = new ArrayList<String>();
-
-        // TODO: implement
+        
         comments = new ArrayList<Comment>();
-        newComments = new ArrayList<Comment>();
-
+        newComments=new ArrayList<Comment>();
+        editedComments=new ArrayList<Comment>();
+        deletedCommetns=new ArrayList<Integer>();
+        
+        attatchments=new Hashtable<String, Attachment>();
+        newAttachments=new ArrayList<Attachment>();
+        editedAttachments=new ArrayList<Attachment>();
+        deletedAttachments=new ArrayList<String>();
+        
+        tags=new ArrayList<Tag>();
+        newTags=new ArrayList<Tag>();
+        deletedTags=new ArrayList<String>();
     }
 
     /**
@@ -90,7 +90,7 @@ public class Document extends DocumentBase
         // identify altered objects
         // and add them to editedObjects Map at the "ral.transformation" package.
         XSimpleObject obj = objects.get(key);
-        obj.setAltered(true);
+        obj.setEdited(true);
         return obj;
     }
 
@@ -102,11 +102,21 @@ public class Document extends DocumentBase
      * @param object
      */
     public void setObject(String key, XSimpleObject object)
-    {
-        if (!objects.containsKey(key)) {
-            throw new IllegalArgumentException("you can only set objects which already exist in the map");
+    {    	
+        String keyprefix=object.getType();
+        boolean valid=true;
+        valid=key.startsWith(keyprefix);
+        if(valid){
+        	String[] args=key.split("[/,\\.]");
+        	valid=args[1].matches("[\\d]+");
+        }        
+        if(!valid){
+        	throw new IllegalArgumentException("invalid form of key.\n" +
+        			" Key should be of the form <class>/<number>. " +
+        			" \nIdeally you shold retreive these objects from server before editing.");
         }
-        if (object.isAltered()) {
+        
+    	if (object.isEdited()) {//may remove this line. Since set is done because XObj is edited.
             editedObjects.put(key, object);
         }
         objects.put(key, object);
@@ -135,12 +145,65 @@ public class Document extends DocumentBase
         } else {
             deletedObjects.add(key);
         }
-        if (obj.isAltered()) {
+        if (obj.isEdited()) {
             editedObjects.remove(key);
         }
         objects.remove(key);
 
     }
+    
+    
+    public Comment getComment(int id){
+    	return comments.get(id);
+    }
+    /**
+     * 
+     * @param cmnt
+     * @return id of the new comment.
+     */
+    public int addComment(Comment cmnt){
+    	comments.add(cmnt);
+    	cmnt.setId(comments.size()-1);
+    	newComments.add(cmnt);
+    	return comments.size()-1;
+    }
+    public void setComment(int id, Comment cmnt){
+    	comments.set(id, cmnt);
+    	if(!editedComments.contains(cmnt)){
+    		editedComments.add(cmnt);
+    	}    	
+    }
+    public void deleteComment(int id){
+    	comments.remove(id);
+    	Comment cmnt=new Comment();
+    	cmnt.setId(id);
+    	int i=newComments.indexOf(cmnt);
+    	int j=editedComments.indexOf(cmnt);
+    	if(i>0){
+    		newComments.remove(i);
+    	}
+    	if(j>0){
+    		editedComments.remove(j);
+    	}
+    	deletedCommetns.add(id);
+    }
+    
+    public List<Tag> getTags(){
+    	return tags;
+    }
+    
+    public void addTag(Tag tag){
+    	tags.add(tag);
+    	newTags=tags;
+    }
+    
+    public void clearTags(){
+        for(Tag t:tags){
+            deletedTags.add(t.getName());
+        }        
+    	tags.clear();
+    }
+    
 
     public Map<String, XSimpleObject> getAllObjects()
     {
@@ -152,7 +215,7 @@ public class Document extends DocumentBase
         return parent;
     }
 
-    public List<DocumentBase> getChildrenDocuments()
+    public List<Document> getChildrenDocuments()
     {
         return children;
     }
@@ -176,21 +239,24 @@ public class Document extends DocumentBase
     {
         return newObjects;
     }
+    
 
     public List<Comment> getAllNewComments()
-    {
-        return newComments;
-    }
-
+	{
+		return newComments;
+	}
+    
+    
     public List<Attachment> getAllNewAttachments()
     {
         return newAttachments;
     }
-
+    
     public List<Tag> getAllNewTags()
-    {
-        return newTags;
-    }
+	{
+		return newTags;
+	}
+    
 
     public Map<String, XSimpleObject> getAllEditedObjects()
     {
@@ -198,43 +264,38 @@ public class Document extends DocumentBase
     }
 
     public List<Comment> getAllEditedComments()
-    {
-        return editedComments;
-    }
-
-    public Map<String, Attachment> getAllEditedAttachments()
+	{
+		return editedComments;
+	}
+  
+    public List<Attachment> getAllEditedAttachments()
     {
         return editedAttachments;
     }
 
-    public List<Tag> getAllEditedTags()
-    {
-        return editedTags;
-    }
+   
 
     public List<String> getAllDeletedObjects()
     {
         return deletedObjects;
     }
-
-    public List<Comment> getAllDeletedComments()
+    
+    public List<Integer> getAllDeletedComments()
     {
-        return deletedComments;
+        return deletedCommetns;
     }
+    
 
-    public List<String> getAllDeletedAttachments()
-    {
-        return deletedAttachments;
-    }
+    public List<String> getAllDeletedAttachments(){
+    	return deletedAttachments;
+    }     
 
-    public List<Tag> getAllDeletedTags()
-    {
-        return deletedTags;
-    }
+	public List<String> getAllDeletedTags(){
+	    return deletedTags;
+	}
+	
 
-    // setters
-
-    public void setParent(DocumentBase parent)
+	public void setParent(DocumentBase parent)
     {
         if (parentFullName == null) {
             parentFullName = parent.fullName;
@@ -245,7 +306,7 @@ public class Document extends DocumentBase
         this.parent = parent;
     }
 
-    public void setChildren(List<DocumentBase> children)
+    public void setChildren(List<Document> children)
     {
         this.children = children;
     }

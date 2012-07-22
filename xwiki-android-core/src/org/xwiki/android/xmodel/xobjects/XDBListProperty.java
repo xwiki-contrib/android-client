@@ -12,13 +12,24 @@ import java.util.ListIterator;
 // TODO:Currently the list of values are Strings(for performance.). The value list may be in need for Refactor to
 // support other data types.
 
-public class XDBListProperty extends XListProperty
+public class XDBListProperty extends XListProperty<String>
 {
     private List<String> value;
 
     public XDBListProperty()
     {
-        type = "com.xpn.xwiki.objects.classes.DBListClass";
+        super("com.xpn.xwiki.objects.classes.DBListClass");
+        init();
+    }
+
+    XDBListProperty(String type)
+    {
+        super(type);
+        init();
+    }
+
+    private void init()
+    {
         value = new ArrayList<String>()
         {// extending the value>ArrayList is redundant. We can use XDBListProperty.toString()
                 @Override
@@ -26,8 +37,8 @@ public class XDBListProperty extends XListProperty
                 {
                     String str = "";
                     String sep = getSeparator();
-                    if (sep == null || sep.equals(" "))
-                        sep = "|";
+                    if (sep == null || sep.equals(""))
+                        sep = "|";                        
                     Iterator<String> itr = this.iterator();
                     while (itr.hasNext()) {
                         str += sep + itr.next();
@@ -52,6 +63,31 @@ public class XDBListProperty extends XListProperty
     public String setAllowedValues(String allowedValues)
     {
         return (String) fields.put("allowedValues", allowedValues);
+    }
+    
+    
+   
+
+    @Override
+    public void setValueFromString(String val)
+    {
+       String sep= getSeparator();
+//       if(sep==null){
+//           sep=", ;:/";
+//       }
+       this.value=XUtils.toStringList(val, sep);       
+    }
+    
+    public String toString()
+    {
+        String str = "";
+        String sep = getSeparator();
+        if (sep == null || sep.equals(""))
+            sep = "|";
+        for (String item : value) {
+            str += sep + value.toString();
+        }
+        return str.substring(1);
     }
 
     // delegate methods.
@@ -118,17 +154,7 @@ public class XDBListProperty extends XListProperty
         return value;
     }
 
-    public String toString()
-    {
-        String str = "";
-        String sep = getSeparator();
-        if (sep == null || sep.equals(""))
-            sep = "|";
-        for (String item : value) {
-            str += sep + value.toString();
-        }
-        return str.substring(1);
-    }
+   
 }
 
 // TODO: Consider whether the Size of the list need to be updated in the attribute field.

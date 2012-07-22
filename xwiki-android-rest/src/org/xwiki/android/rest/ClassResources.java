@@ -58,8 +58,9 @@ public class ClassResources extends HttpConnector
 
     /**
      * @return list of all the Classes in the Wiki
+     * @throws RestConnectorException 
      */
-    public Classes getWikiClasses()
+    public Classes getWikiClasses() throws RestConnectorException
     {
         String Uri = "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/classes";
 
@@ -69,8 +70,9 @@ public class ClassResources extends HttpConnector
     /**
      * @param classname name of the Class
      * @return Specific class with the provided class name
+     * @throws RestConnectorException 
      */
-    public Class getWikiClasses(String classname)
+    public Class getWikiClasses(String classname) throws RestConnectorException
     {
         String Uri = "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/classes/" + classname;
 

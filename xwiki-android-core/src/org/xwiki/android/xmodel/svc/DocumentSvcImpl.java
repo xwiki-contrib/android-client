@@ -1,6 +1,7 @@
 package org.xwiki.android.xmodel.svc;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -9,10 +10,11 @@ import org.xwiki.android.context.XWikiApplicationContext;
 import org.xwiki.android.fileStore.DocumentFao;
 import org.xwiki.android.fileStore.FSDocumentReference;
 import org.xwiki.android.fileStore.FileStoreManager;
+import org.xwiki.android.ral.DocumentRao;
 import org.xwiki.android.ral.RESTfulManager;
-import org.xwiki.android.ral.Rao;
-import org.xwiki.android.ral.RaoCallbackForDocument;
+import org.xwiki.android.ral.RaoException;
 import org.xwiki.android.ral.reference.DocumentReference;
+import org.xwiki.android.rest.RestConnectorException;
 import org.xwiki.android.xmodel.entity.Document;
 
 /**
@@ -40,27 +42,62 @@ public class DocumentSvcImpl implements DocumentSvc
 
 	public void create(Document d, DocumentRemoteSvcCallbacks callback)
 	{
-		Rao<Document> rao = rMngr.newDocumentRao(callback);
-		rao.create(d);
+		Thread t = new Worker(d,callback)
+		{
+			public void run()
+			{
+				Document doc = (Document) args[0];
+				DocumentRao rao = rMngr.newDocumentRao();
+				DocumentRemoteSvcCallbacks clbk =(DocumentRemoteSvcCallbacks) args[1];
+				Document d;
+				try {
+					d = rao.create(doc);
+					clbk.invokeCreated(d,true,null);
+				} catch (RestConnectorException e) {
+					clbk.handleException(e);
+				} catch (RaoException e) {
+					clbk.invokeCreated(doc,false,e);
+				}				
+			}
+		};
+		t.start();		
 	}
 
 	public void retreive(DocumentReference dref, DocumentRemoteSvcCallbacks clbk)
 	{
-		Rao<Document> rao = rMngr.newDocumentRao(clbk);
-		rao.retreive(dref);
+		DocumentRao rao= rMngr.newDocumentRao();
+		//rao.retreive(dref);
 
 	}
 
 	public void update(Document d, DocumentRemoteSvcCallbacks clbk)
 	{
-		Rao<Document> rao = rMngr.newDocumentRao(clbk);
-		rao.update(d);
+		DocumentRao rao = rMngr.newDocumentRao();
+		//rao.update(d);
 	}
 
 	public void delete(DocumentReference dref, DocumentRemoteSvcCallbacks clbk)
 	{
-		Rao<Document> rao = rMngr.newDocumentRao(clbk);
-		rao.delete(dref);
+		Thread t = new Worker(dref,clbk)
+		{
+			public void run()
+			{
+				DocumentReference dref = (DocumentReference) args[0];
+				DocumentRao rao = rMngr.newDocumentRao();
+				DocumentRemoteSvcCallbacks clbk =(DocumentRemoteSvcCallbacks) args[1];
+				Document d;
+				try {
+					rao.delete(dref);
+					clbk.invokeDeleted(true,null);
+				} catch (RestConnectorException e) {
+					clbk.handleException(e);
+				} catch (RaoException e) {
+					clbk.invokeDeleted(false, e);
+				}				
+			}
+		};
+		t.start();		
+		
 	}
 
 	// Local File Store functions. Document Local Services.
@@ -78,7 +115,8 @@ public class DocumentSvcImpl implements DocumentSvc
 				DocumentLocalSvcCallbacks clbk = (DocumentLocalSvcCallbacks) args[2];
 
 				DocumentFao fao = fMngr.getDocumentFao();
-				File f = fao.save(doc, tag);
+				FSDocumentReference fref = fao.save(doc, tag);
+				File f=fref.getFile();
 				if (clbk != null) {
 					clbk.invokeSaveComplete(f);
 				}

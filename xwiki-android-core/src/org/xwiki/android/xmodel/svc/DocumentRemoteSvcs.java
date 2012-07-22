@@ -1,7 +1,7 @@
 package org.xwiki.android.xmodel.svc;
 
-import org.xwiki.android.ral.RestAPIUsageException;
 import org.xwiki.android.ral.reference.DocumentReference;
+import org.xwiki.android.rest.IllegalRestUsageException;
 import org.xwiki.android.xmodel.entity.Document;
 
 public interface DocumentRemoteSvcs
@@ -22,7 +22,7 @@ public interface DocumentRemoteSvcs
      *         offline mode and if document was previously saved: will load the document and return saved doc else if
      *         some of the parts are cached in the Http Cache, fill the document with them. (The http cache normally
      *         does a HEAD request and return cached copy only if the resource was not modified)
-     * @throws RestAPIUsageException (It is a {@link RuntimeException}) If the document is Not in offline mode, and
+     * @throws IllegalRestUsageException (It is a {@link RuntimeException}) If the document is Not in offline mode, and
      *             there is a problem with connectivity If problem in ReSTFul API usage format. ex: create request for
      *             already existing document.
      */
@@ -35,7 +35,7 @@ public interface DocumentRemoteSvcs
 
     /**
      * @return
-     * @throws RestAPIUsageException
+     * @throws IllegalRestUsageException
      */
     void delete(DocumentReference dref, DocumentRemoteSvcCallbacks clbk);
 }

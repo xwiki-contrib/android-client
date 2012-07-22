@@ -1,11 +1,11 @@
 package org.xwiki.android.xmodel.xobjects;
-
+//TODO;NO special features yet.
 public class XDBTreeListProperty extends XDBListProperty
 {
 
     public XDBTreeListProperty()
     {
-        type = "com.xpn.xwiki.objects.classes.DBTreeListClass";
+        super("com.xpn.xwiki.objects.classes.DBTreeListClass");
     }
 
     // private Value;

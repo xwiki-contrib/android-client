@@ -74,8 +74,9 @@ public class TranslationResources extends HttpConnector
 
     /**
      * @return list of all the translations are included in Translations object
+     * @throws RestConnectorException 
      */
-    public Translations getAllTranslations()
+    public Translations getAllTranslations() throws RestConnectorException
     {
 
         String Uri =

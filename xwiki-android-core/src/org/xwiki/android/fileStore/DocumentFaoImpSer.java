@@ -32,7 +32,7 @@ class DocumentFaoImpSer implements DocumentFao
 	private XWikiApplicationContext ctx;
 	private final File FSDIR;
 	
-	private static final String tag="DocumentFao";
+	private static final String tag="DocumentFao";//loggin tag
 
 	public DocumentFaoImpSer(XWikiApplicationContext ctx, FileStoreManager mngr)
 	{
@@ -41,7 +41,7 @@ class DocumentFaoImpSer implements DocumentFao
 	}
 
 	@Override
-	public File save(Document doc, String tag)
+	public FSDocumentReference save(Document doc, String tag)
 	{
 		File f;
 		String wikiName = doc.getWikiName();
@@ -50,6 +50,7 @@ class DocumentFaoImpSer implements DocumentFao
 		String dirPath = FSDIR.getAbsolutePath() + wikiName + "/" + spaceName + "/" + pageName;
 		String filePath=dirPath+"/doc.ser";
 		f = new File(filePath);
+		boolean success=true;
 
 		FSDocumentReference fsref = new FSDocumentReference();
 		// doc ref data
@@ -66,7 +67,7 @@ class DocumentFaoImpSer implements DocumentFao
 			Dao<FSDocumentReference, Integer> dao = em.getDao(FSDocumentReference.class);
 			dao.create(fsref);
 			em.close();
-		} catch (SQLException e) {
+		} catch (SQLException e) {//thrown for duplicate saves. Just ignore file is allowed to be overwritten.			
 			e.printStackTrace();
 		}
 
@@ -77,12 +78,23 @@ class DocumentFaoImpSer implements DocumentFao
 			f.createNewFile();
 			oos = new ObjectOutputStream(new FileOutputStream(f));
 			oos.writeObject(doc);
+			
+			//default location should always be available. So catch the exceptions.
+			//Only for a save(Document doc,String tag, File f) type save m() you should throw the IOException.
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
+			success=false;
 		} catch (IOException e) {
 			e.printStackTrace();
+			success=false;
 		}
-		return f;
+		
+		if(success){
+			return fsref;
+		}
+		else{
+			return null;
+		}
 	}
 
 	@Override

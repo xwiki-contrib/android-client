@@ -5,11 +5,13 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * @author xwiki gsoc 2012 These objects are for saving entities in the FileStore. This is a combination of Database,
+ * @author xwiki gsoc 2012 
+ * 		Marker interface only.(package lvl)
+ * 		These objects are for saving entities in the FileStore. This is a combination of Database,
  *         simple File saving. ! If you just want to save a file to the device this is not the API you should use.
  * @param <T>
  */
-public interface Fao<T>
+interface Fao<T>
 {
 
     /**
@@ -17,9 +19,9 @@ public interface Fao<T>
      * 
      * @param entity
      * @param mode
-     * @return f where the entity was saved. Null if unsuccessful.
+     * @return an FSEntity reference.
      */
-    File save(T entity, String tag);
+    <R> R save(T entity, String tag);
 
     // /**
     // *

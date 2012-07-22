@@ -5,29 +5,43 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
+import org.xwiki.android.resources.Attachment;
+import org.xwiki.android.resources.Comment;
 import org.xwiki.android.resources.Page;
 import org.xwiki.android.resources.Object;
+import org.xwiki.android.resources.Tags;
 
 /**
  * @author xwiki gsoc 2012 A scratch pad for converting. !!! Public but for ral package use only.
  */
-public class SimpleXmlDocpad
+public class DocLaunchPadForXML
 {
     Page page;
 
     String wikiName, spaceName, pageName;
 
     List<Object> newObjects; // new local objs
-
     Map<String, Object> editedObjects; // locally
-
     List<String> deletedObjects; // locally
-
-    public SimpleXmlDocpad()
+    
+    List<Comment> newComments;
+    List<Object> editedComments;//modification of comments sup for obj only.
+    List<String> deletedComments;
+    
+    Tags tgsres;
+    
+    
+    List<org.xwiki.android.xmodel.entity.Attachment> attachmentEntityList;//new and update both. Same rest method.
+    List<String> deletedAttachments;
+    
+    public DocLaunchPadForXML()
     {
         newObjects = new ArrayList<Object>();
         editedObjects = new Hashtable<String, Object>();
         deletedObjects = new ArrayList<String>();
+        newComments=new ArrayList<Comment>();
+        editedComments=new ArrayList<Object>();
+        deletedComments=new ArrayList<String>();
     }
 
     /**

@@ -9,6 +9,7 @@ import org.xwiki.android.dal.EntityManager;
 import org.xwiki.android.entity.LoginAttempt;
 import org.xwiki.android.entity.User;
 import org.xwiki.android.rest.HttpConnector;
+import org.xwiki.android.rest.RestConnectorException;
 
 import com.j256.ormlite.dao.Dao;
 
@@ -30,7 +31,13 @@ public class LoginFacade
     public int login(String username, String password, String url, boolean remPwd)
     {
         HttpConnector httpConnector = new HttpConnector();
-        int code = httpConnector.checkLogin(username, password, url);
+        int code=0;
+        try {
+            code = httpConnector.checkLogin(username, password, url);
+        } catch (RestConnectorException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         // start seperate thread to add login attempt to DB. (update LoginAttempt , update User if new user data
         // combination )
         Thread statusUpdater = new Thread(new statusUpdater(username, password, url, code, remPwd));

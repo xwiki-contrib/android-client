@@ -1,32 +1,43 @@
 package org.xwiki.android.xmodel.xobjects;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class XStaticListProperty extends XListProperty
+public class XStaticListProperty<E> extends XListProperty<E>
 {
+    
+    private List<E> value;
+    
+   
     public XStaticListProperty()
     {
-        type = "com.xpn.xwiki.objects.classes.StaticListClass";
+        super("com.xpn.xwiki.objects.classes.StaticListClass");
+        value=new ArrayList<E>();
     }
 
     @Override
-    public void setValue(List<String> val)
+    public void setValue(List<E> val)
     {
-        // TODO Auto-generated method stub
-
+        value=val;
     }
 
-    @Override
-    public List<String> getValue()
+  
+    public List<E> getValue()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return value;
     }
 
     @Override
     public String toString()
     {
-        // TODO Auto-generated method stub
         return super.toString();
     }
+
+    @Override
+    public void setValueFromString(String val)
+    {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException();
+    }
+    
 }

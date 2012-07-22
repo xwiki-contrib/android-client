@@ -1,8 +1,10 @@
 package org.xwiki.android.ral;
 
+
 import java.util.List;
 
 import org.xwiki.android.ral.reference.EntityReference;
+import org.xwiki.android.rest.RestConnectorException;
 
 /**
  * @author xwiki gsoc 2012
@@ -11,17 +13,17 @@ import org.xwiki.android.ral.reference.EntityReference;
  * @param <T> : type of the RAO.<Document | Space | Wiki >
  */
 // TODO: rectify [1] above.
-public interface Rao<T>
+interface Rao<T>
 {
-    void create(T resrc);
+    T create(T resrc) throws RestConnectorException,RaoException;
 
-    void retreive(EntityReference<T> ref);
+    T retreive(T resrc) throws RestConnectorException,RaoException;
 
-    void querry();
+    List<T> querry()throws RestConnectorException,RaoException;
 
-    void update(T resrc);// TODO: not yet specified.
+    T update(T resrc)throws RestConnectorException,RaoException;// TODO: not yet specified.
 
-    void delete(EntityReference<T> ref);
+    void delete(T resrc)throws RestConnectorException,RaoException;
 
 }
 

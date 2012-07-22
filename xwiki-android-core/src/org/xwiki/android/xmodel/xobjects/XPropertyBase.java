@@ -9,7 +9,9 @@ import org.xwiki.android.resources.LinkCollection;
  * @author sasinda
  * @version 1.0
  * @param <T> :Type of the special attribute "value". implemented attributes Currently attributes does not support their
- *            {@link Link} elements in {@link LinkCollection}. * spcial: name, type general:prettyName, number, tooltip,
+ *            {@link Link} elements in {@link LinkCollection}.
+ *            spcial: name, type
+ *            general:prettyName, number, tooltip,
  *            customDisplay, disabled, unmodifiable,validationMessage, validationRegExp,
  */
 // TODO: Note: implement seperate map to hold Link(s) when needed. (for performance reasons)
@@ -23,13 +25,20 @@ public abstract class XPropertyBase<T> extends XObject<Object> implements XPrope
     //
     // special fields
     //
+    
+    public XPropertyBase(String type)
+    {
+       this.type=type;
+    }
 
     public void setName(String name)
     {
         this.name = name;
         setAttribute("name", name);
     }
-
+    /**
+     * @param type: type of the property.
+     */
     public void setType(String type)
     {
         this.type = type;
@@ -39,7 +48,9 @@ public abstract class XPropertyBase<T> extends XObject<Object> implements XPrope
     {
         return name;
     }
-
+    /**
+     * @return type of the property.
+     */
     public String getType()
     {
         return type;
@@ -101,7 +112,12 @@ public abstract class XPropertyBase<T> extends XObject<Object> implements XPrope
 
     public Integer getNumber()
     {
-        return (Integer) fields.get("number");
+       try{
+           return (Integer) fields.get("number");
+       }catch(ClassCastException e){
+           String val=(String)fields.get("number");
+           return Integer.parseInt(val);
+       }
     }
 
     public String getTooltip()
@@ -134,26 +150,50 @@ public abstract class XPropertyBase<T> extends XObject<Object> implements XPrope
         return (String) fields.get("validationRegExp");
     }
 
-    /**
-     * puts the toString() value of the attrValue to fields Map.
-     * 
-     * @param attrName
-     * @param attrValue
-     * @return the toString value of the attrValue
-     */
-    protected Object setAttribute(String attrName, Object attrValue)
-    {
-        return fields.put(attrName, attrValue);
+    
+    @Override
+    public void setAttribute(String name, Object val) throws IllegalArgumentException
+    {                
+        if(name.equals("number")){
+            if(!(val instanceof Integer)){
+              //now it should be string. Other wise class  cast exception.                
+              try{
+                  val=Integer.parseInt((String)val);
+              }catch(ClassCastException e){
+                  throw new IllegalArgumentException("cannot convert 'number' attribute to int");
+              }
+            }           
+        }else if(name.equals("disabled")){
+            if(!(val instanceof Boolean)){
+                try{
+                    val=Boolean.parseBoolean((String)val);
+                }catch(ClassCastException e){
+                    throw new IllegalArgumentException("cannot convert 'disabled' attribute to boolean");
+                }  
+            }
+        }else if(name.equals("unmodifiable")){
+            if(!(val instanceof Boolean)){
+                try{
+                    val=Boolean.parseBoolean((String)val);
+                }catch(ClassCastException e){
+                    throw new IllegalArgumentException("cannot convert 'unmodifiable' attribute to boolean");
+                }  
+            }
+        }        
+        fields.put(name, val);                
     }
+    
 
+    @Override
     /**
      * @return attrValue
      */
-    protected Object getAttribue(String attrName)
+    public Object getAttribute(String attrName)
     {
         return fields.get(attrName);
     }
 
+    @Override
     public Map<String, Object> getAllAttributes()
     {
         return fields;

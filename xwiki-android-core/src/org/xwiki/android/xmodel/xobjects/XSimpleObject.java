@@ -33,6 +33,12 @@ public abstract class XSimpleObject extends XObject<XProperty>
 
     protected String headline;
 
+   
+    public XSimpleObject(String className)
+    {
+        this.className=className;
+    }
+    
     @Override
     /**
      * same as get className
@@ -41,58 +47,12 @@ public abstract class XSimpleObject extends XObject<XProperty>
     {
         return className;
     }
-
-    /**
-     * @return the map of XProperties keyed by property name.
-     */
-    public Map<String, XProperty> getProperties()
-    {
-        return fields;
-    }
+    
+//get set pairs.    
 
     public String getId()
     {
         return id;
-    }
-
-    public String getGuid()
-    {
-        return guid;
-    }
-
-    public String getPageid()
-    {
-        return pageid;
-    }
-
-    public String getSpace()
-    {
-        return space;
-    }
-
-    public String getWiki()
-    {
-        return wiki;
-    }
-
-    public String getPageName()
-    {
-        return pageName;
-    }
-
-    public String getClassName()
-    {
-        return className;
-    }
-
-    public int getNumber()
-    {
-        return number;
-    }
-
-    public String getHeadline()
-    {
-        return headline;
     }
 
     public void setId(String id)
@@ -100,9 +60,19 @@ public abstract class XSimpleObject extends XObject<XProperty>
         this.id = id;
     }
 
+    public String getGuid()
+    {
+        return guid;
+    }
+
     public void setGuid(String guid)
     {
         this.guid = guid;
+    }
+
+    public String getPageid()
+    {
+        return pageid;
     }
 
     public void setPageid(String pageid)
@@ -110,9 +80,19 @@ public abstract class XSimpleObject extends XObject<XProperty>
         this.pageid = pageid;
     }
 
+    public String getSpace()
+    {
+        return space;
+    }
+
     public void setSpace(String space)
     {
         this.space = space;
+    }
+
+    public String getWiki()
+    {
+        return wiki;
     }
 
     public void setWiki(String wiki)
@@ -120,9 +100,19 @@ public abstract class XSimpleObject extends XObject<XProperty>
         this.wiki = wiki;
     }
 
+    public String getPageName()
+    {
+        return pageName;
+    }
+
     public void setPageName(String pageName)
     {
         this.pageName = pageName;
+    }
+
+    public String getClassName()
+    {
+        return className;
     }
 
     public void setClassName(String className)
@@ -130,14 +120,52 @@ public abstract class XSimpleObject extends XObject<XProperty>
         this.className = className;
     }
 
+    public int getNumber()
+    {
+        return number;
+    }
+
     public void setNumber(int number)
     {
         this.number = number;
     }
 
+    public String getHeadline()
+    {
+        return headline;
+    }
+
     public void setHeadline(String headline)
     {
         this.headline = headline;
+    }
+    
+    /**
+     * @return the map of XProperties keyed by property name.
+     */
+    public Map<String, XProperty> getProperties()
+    {
+        return fields;
+    }
+    
+    public void setProperties(Map<String, XProperty> props){
+        fields=props;
+    }
+    /**
+     * 
+     * @param p
+     *  property to set. Key will be p.getName.
+     */
+    public void setProperty(XProperty p){
+        if(p.getName()==null)throw new NullPointerException();//no need for HashTable. But if we change to HashMap or ...
+        fields.put(p.getName(), p);
+    }
+    public void setProperty(String key,XProperty p){        
+        fields.put(key,p);
+    }
+    
+    public void removeProperty(String pname){
+        fields.remove(pname);
     }
 
 }

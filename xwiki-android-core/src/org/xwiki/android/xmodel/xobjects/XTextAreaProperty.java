@@ -12,7 +12,7 @@ public class XTextAreaProperty extends XPropertyBase<String>
 
     public XTextAreaProperty()
     {
-        type = "com.xpn.xwiki.objects.classes.TextAreaClass";
+        super("com.xpn.xwiki.objects.classes.TextAreaClass");
     }
 
     @Override
@@ -25,6 +25,7 @@ public class XTextAreaProperty extends XPropertyBase<String>
 
     public void setValue(String val)
     {
+        //TODO: change to StringBuffer, or a StringBuilder?
         value = val;
     }
 
@@ -32,6 +33,13 @@ public class XTextAreaProperty extends XPropertyBase<String>
     {
         return value;
     }
+    
+    @Override
+    public void setValueFromString(String val)
+    {
+       value=val;        
+    }
+    //TODO: toString() if val type is changed
 
     // general attr
     public Integer setSize(int size)
@@ -85,5 +93,7 @@ public class XTextAreaProperty extends XPropertyBase<String>
     {
         return (String) fields.get("editor");
     }
+
+    
 
 }

@@ -25,6 +25,7 @@ import org.xwiki.android.components.login.LoginActivity;
 import android.app.Activity;
 import android.test.ActivityInstrumentationTestCase2;
 import android.view.KeyEvent;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -32,7 +33,7 @@ public class LoginActivityTests extends ActivityInstrumentationTestCase2<LoginAc
 {
     private Activity loginActivity;
 
-    private EditText editTextUsername, editTextPassword, editTextURL;
+    private AutoCompleteTextView editTextUsername, editTextPassword, editTextURL;
 
     private Button buttonLogin;
 
@@ -48,10 +49,10 @@ public class LoginActivityTests extends ActivityInstrumentationTestCase2<LoginAc
 
         loginActivity = this.getActivity();
         editTextUsername =
-            (EditText) loginActivity.findViewById(org.xwiki.android.components.R.id.editText_login_username);
+            (AutoCompleteTextView) loginActivity.findViewById(org.xwiki.android.components.R.id.actv_login_username);
         editTextPassword =
-            (EditText) loginActivity.findViewById(org.xwiki.android.components.R.id.editText_login_password);
-        editTextURL = (EditText) loginActivity.findViewById(org.xwiki.android.components.R.id.editText_login_url);
+            (AutoCompleteTextView) loginActivity.findViewById(org.xwiki.android.components.R.id.actv_login_password);
+        editTextURL = (AutoCompleteTextView) loginActivity.findViewById(org.xwiki.android.components.R.id.actv_login_url);
         buttonLogin = (Button) loginActivity.findViewById(org.xwiki.android.components.R.id.button_login_login);
     }
 

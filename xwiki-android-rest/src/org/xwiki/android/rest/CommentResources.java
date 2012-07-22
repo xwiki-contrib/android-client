@@ -74,8 +74,9 @@ public class CommentResources extends HttpConnector
 
     /**
      * @return Comments object of the page
+     * @throws RestConnectorException 
      */
-    public Comments getPageComments()
+    public Comments getPageComments() throws RestConnectorException
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
@@ -87,8 +88,9 @@ public class CommentResources extends HttpConnector
     /**
      * @param commentId ID of the comment in the page
      * @return comment of a page selected using comment ID
+     * @throws RestConnectorException 
      */
-    public Comment getPageComment(String commentId)
+    public Comment getPageComment(String commentId) throws RestConnectorException
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
@@ -100,8 +102,9 @@ public class CommentResources extends HttpConnector
     /**
      * @param version version of the page
      * @return list of comments as a Comments object in a specific page history version
+     * @throws RestConnectorException 
      */
-    public Comments getPageCommentsInHistory(String version)
+    public Comments getPageCommentsInHistory(String version) throws RestConnectorException
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
@@ -114,8 +117,9 @@ public class CommentResources extends HttpConnector
      * @param version version of the page
      * @param commentId ID of the comment in the page
      * @return Comment in a specific page history version
+     * @throws RestConnectorException 
      */
-    public Comments getPageCommentsInHistory(String version, String commentId)
+    public Comments getPageCommentsInHistory(String version, String commentId) throws RestConnectorException
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
@@ -129,8 +133,9 @@ public class CommentResources extends HttpConnector
      * 
      * @param comment Comment object to be added
      * @return status of the HTTP post request
+     * @throws RestConnectorException 
      */
-    public String addPageComment(Comment comment)
+    public String addPageComment(Comment comment) throws RestConnectorException
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName

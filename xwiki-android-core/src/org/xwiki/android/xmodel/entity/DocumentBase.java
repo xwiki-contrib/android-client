@@ -2,12 +2,13 @@ package org.xwiki.android.xmodel.entity;
 
 import java.io.InputStream;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.xwiki.android.ral.RestAPIUsageException;
 import org.xwiki.android.ral.reference.DocumentReference;
 import org.xwiki.android.ral.reference.Link;
+import org.xwiki.android.rest.IllegalRestUsageException;
 import org.xwiki.android.xmodel.xobjects.XObject;
 import org.xwiki.android.xmodel.xobjects.XSimpleObject;
 
@@ -62,11 +63,11 @@ public abstract class DocumentBase extends Resource
 
     protected int minorVersion;
 
-    protected String created; // Date string //TODO: convert to Type Date. Or introduce another var to hold Date obj.
+    protected Date created; // Date created. From date string in page.
 
     protected String creator; // user string
 
-    protected String modified; // Date string
+    protected Date modified; // Date string
 
     protected String modifier; // user string
 
@@ -76,8 +77,6 @@ public abstract class DocumentBase extends Resource
     protected DocumentReference docRef;
 
     protected boolean offlineMode;
-    
-   
 
     public DocumentBase(String wikiName, String spaceName, String pageName)
     {
@@ -128,19 +127,22 @@ public abstract class DocumentBase extends Resource
     // return offlineMode;
     // }
 
-    /**
-     * moved away to Document. If XWiki introduces CompoundDocuments with Compound objects defining them here
-     * might lead to probs public abstract XObject getObject(String key); public abstract void setObject(String key,
-     * XObject object); public abstract void addObject(XObject obj); public abstract void deleteObject(String key);
-     **/
-    // TODO: Implement similar methods for Comments...
-
-    // TODO: public abstract InputStream getAttachmentData(Attachment a);
-    // TODO: public abstract ... setAttachmentData(byte[]);
+   
 
     // resource value getter setters
     // -----------------------------
 
+    public List<Link> getLinks()
+   	{
+   		return links;
+   	}
+
+   	public void setLinks(List<Link> links)
+   	{
+   		this.links = links;
+   	}
+    
+    
     /**
      * Gets the value of the id property.
      * 
@@ -151,7 +153,9 @@ public abstract class DocumentBase extends Resource
         return remoteId;
     }
 
-    /**
+   
+
+	/**
      * Sets the value of the id property.
      * 
      * @param value allowed object is {@link String }
@@ -235,9 +239,9 @@ public abstract class DocumentBase extends Resource
      * 
      * @param value allowed object is {@link String }
      */
-    public void setSimpleName(String value)
+    public void setSimpleName(String name)
     {
-        this.name = value;
+        this.name = name;
     }
 
     /**
@@ -275,9 +279,9 @@ public abstract class DocumentBase extends Resource
      * 
      * @param value allowed object is {@link String }
      */
-    public void setParentFullName(String value)
+    public void setParentFullName(String parent)
     {
-        this.parentFullName = value;
+        this.parentFullName = parent;
     }
 
     /**
@@ -463,7 +467,7 @@ public abstract class DocumentBase extends Resource
      * 
      * @return possible object is {@link String }
      */
-    public String getCreated()
+    public Date getCreated()
     {
         return created;
     }
@@ -473,9 +477,9 @@ public abstract class DocumentBase extends Resource
      * 
      * @param value allowed object is {@link String }
      */
-    public void setCreated(String value)
+    public void setCreated(Date date)
     {
-        this.created = value;
+        this.created = date;
     }
 
     /**
@@ -503,7 +507,7 @@ public abstract class DocumentBase extends Resource
      * 
      * @return possible object is {@link String }
      */
-    public String getModified()
+    public Date getModified()
     {
         return modified;
     }
@@ -513,9 +517,9 @@ public abstract class DocumentBase extends Resource
      * 
      * @param value allowed object is {@link String }
      */
-    public void setModified(String value)
+    public void setModified(Date d)
     {
-        this.modified = value;
+        this.modified = d;
     }
 
     /**

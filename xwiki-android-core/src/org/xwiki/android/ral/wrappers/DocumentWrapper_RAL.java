@@ -1,6 +1,6 @@
 package org.xwiki.android.ral.wrappers;
 
-public interface XObjectWrapper
+public class DocumentWrapper_RAL
 {
 
 }

@@ -5,12 +5,10 @@ import org.xwiki.android.resources.Wiki;
 import org.xwiki.android.xmodel.entity.Document;
 
 public interface RESTfulManager
-{
-    // //generic method , <D extends Rao<T>,T> D getRao(Class<T> raocls, RaoCallback<T> callback);
+{    
+    DocumentRao newDocumentRao();
 
-    Rao<Document> newDocumentRao(RaoCallback<Document> callback);
+    SpaceRao newSpaceRao();
 
-    Rao<Space> newSpaceRao(RaoCallback<Space> callback);
-
-    Rao<Wiki> newWikiRao(RaoCallback<Wiki> callback);
+    WikiRao newWikiRao();
 }

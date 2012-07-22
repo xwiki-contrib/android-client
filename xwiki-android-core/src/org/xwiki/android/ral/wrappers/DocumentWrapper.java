@@ -1,10 +1,23 @@
 package org.xwiki.android.ral.wrappers;
 
+import org.xwiki.android.xmodel.entity.Document;
 import org.xwiki.android.xmodel.entity.DocumentBase;
 
-public interface DocumentWrapper // extends DocumentInterface
+public abstract class DocumentWrapper // extends DocumentInterface
 {
-    DocumentBase unWrap();
+   
+    private Document doc;
+    
+    public DocumentWrapper(Document doc)
+    {
+        this.doc=doc;
+    }
+    
+    public  Document unWrap(){
+        return doc;
+    }
 
-    DocumentWrapper unWrapOnce();
+    public  void wrap(Document d){
+        doc=d;
+    }
 }

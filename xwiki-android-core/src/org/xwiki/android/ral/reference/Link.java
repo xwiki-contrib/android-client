@@ -54,21 +54,21 @@ public class Link implements Serializable
 
     private static final String REL_CLASS = "class";
 
-    private String type;
+    private String rel;
 
     private String href;
 
     /**
-     * truncates the fully qualified type name and sets ex: http://www.xwiki.org/rel/space --> space
+     * truncates the fully qualified rel type name and sets ex: http://www.xwiki.org/rel/space --> space
      * 
      * @param fullTypeid
      */
-    public void setType(String fqtypeName)
+    public void setRelType(String fqRelType)
     {
-        if (fqtypeName.startsWith("http://")) {
-            type = fqtypeName.substring(25);
+        if (fqRelType.startsWith("http://")) {
+            rel = fqRelType.substring(25);
         } else {
-            this.type = fqtypeName;
+            this.rel = fqRelType;
         }
     }
 
@@ -77,9 +77,9 @@ public class Link implements Serializable
         this.href = href;
     }
 
-    public String getType()
+    public String getRelType()
     {
-        return type;
+        return rel;
     }
 
     public String getHref()

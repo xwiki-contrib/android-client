@@ -3,14 +3,19 @@ package org.xwiki.android.xmodel.xobjects;
 import java.util.List;
 
 /**
- * @author xwiki gsoc 2012 attributes: special: value general:
+ * @author xwiki gsoc 2012 attributes: special:  general:
  *         separators,displayType,sort,size,cache,multiSelect,relationalStorage,picker,separator attributes inherited
  *         from {@link XPropertyBase} spcial: name, type general: prettyName, number, tooltip, customDisplay, disabled,
  *         unmodifiable,validationMessage, validationRegExp
  */
-public abstract class XListProperty extends XPropertyBase<List<String>>
+public abstract class XListProperty<E> extends XPropertyBase<List<E>>
 {
 
+    public XListProperty(String type)
+    {
+        super(type);
+    }
+    
     public String getSeparators()
     {
         String separators = (String) fields.get("separators");
@@ -103,6 +108,66 @@ public abstract class XListProperty extends XPropertyBase<List<String>>
     protected int setSize(int size)
     {
         return (Integer) fields.put("size", size);
+    }
+    
+    @Override
+    public void setAttribute(String name, Object val) throws IllegalArgumentException
+    {       
+        super.setAttribute(name, val);
+        //if type convertion needed , convert and put again. Check for this class's atr only. super.setAtt.. will convert known atr types by base class.
+        boolean overridePut=false;
+        
+        if(name.equals("cache")){
+            overridePut=true;
+            if(!(val instanceof Boolean)){
+                try{
+                    val=Boolean.parseBoolean((String)val);
+                }catch(ClassCastException e){
+                    throw new IllegalArgumentException("cannot convert 'cache' attribute to boolean");
+                }  
+            }
+        }else if(name.equals("multiSelect")){
+            overridePut=true;
+            if(!(val instanceof Boolean)){
+                try{
+                    val=Boolean.parseBoolean((String)val);
+                }catch(ClassCastException e){
+                    throw new IllegalArgumentException("cannot convert 'multiSelect' attribute to boolean");
+                }  
+            }
+        }else if(name.equals("relationalStorage")){
+            overridePut=true;
+            if(!(val instanceof Boolean)){
+                try{
+                    val=Boolean.parseBoolean((String)val);
+                }catch(ClassCastException e){
+                    throw new IllegalArgumentException("cannot convert 'relationalStorage' attribute to boolean");
+                }  
+            }
+        }else if(name.equals("picker")){
+            overridePut=true;
+            if(!(val instanceof Boolean)){
+                try{
+                    val=Boolean.parseBoolean((String)val);
+                }catch(ClassCastException e){
+                    throw new IllegalArgumentException("cannot convert 'picker' attribute to boolean");
+                }  
+            }
+        }else if(name.equals("size")){
+            overridePut=true;
+            if(!(val instanceof Integer)){
+              //now it should be string. Other wise class  cast exception.                
+              try{
+                  val=Integer.parseInt((String)val);
+              }catch(ClassCastException e){
+                  throw new IllegalArgumentException("cannot convert 'size' attribute to int");
+              }
+            }           
+       }        
+        
+        if(overridePut==true){
+            fields.put(name, val);
+        }
     }
 
 }

@@ -18,7 +18,7 @@ public class XBlogPost extends XSimpleObject
 
     public XBlogPost()
     {
-        className = "Blog.BlogPostClass";// set Type.
+       super("Blog.BlogPostClass");// set Type.
     }
 
     public String getCategory()
