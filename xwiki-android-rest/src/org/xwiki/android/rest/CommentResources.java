@@ -74,9 +74,10 @@ public class CommentResources extends HttpConnector
 
     /**
      * @return Comments object of the page
-     * @throws RestConnectorException 
+     * @throws RestConnectionException 
+     * @throws RestException 
      */
-    public Comments getPageComments() throws RestConnectorException
+    public Comments getPageComments() throws RestConnectionException, RestException
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
@@ -88,9 +89,10 @@ public class CommentResources extends HttpConnector
     /**
      * @param commentId ID of the comment in the page
      * @return comment of a page selected using comment ID
-     * @throws RestConnectorException 
+     * @throws RestConnectionException 
+     * @throws RestException 
      */
-    public Comment getPageComment(String commentId) throws RestConnectorException
+    public Comment getPageComment(String commentId) throws RestConnectionException, RestException
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
@@ -102,9 +104,10 @@ public class CommentResources extends HttpConnector
     /**
      * @param version version of the page
      * @return list of comments as a Comments object in a specific page history version
-     * @throws RestConnectorException 
+     * @throws RestConnectionException 
+     * @throws RestException 
      */
-    public Comments getPageCommentsInHistory(String version) throws RestConnectorException
+    public Comments getPageCommentsInHistory(String version) throws RestConnectionException, RestException
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
@@ -117,9 +120,10 @@ public class CommentResources extends HttpConnector
      * @param version version of the page
      * @param commentId ID of the comment in the page
      * @return Comment in a specific page history version
-     * @throws RestConnectorException 
+     * @throws RestConnectionException 
+     * @throws RestException 
      */
-    public Comments getPageCommentsInHistory(String version, String commentId) throws RestConnectorException
+    public Comments getPageCommentsInHistory(String version, String commentId) throws RestConnectionException, RestException
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
@@ -133,9 +137,10 @@ public class CommentResources extends HttpConnector
      * 
      * @param comment Comment object to be added
      * @return status of the HTTP post request
-     * @throws RestConnectorException 
+     * @throws RestConnectionException 
+     * @throws RestException 
      */
-    public String addPageComment(Comment comment) throws RestConnectorException
+    public String addPageComment(Comment comment) throws RestConnectionException, RestException
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName

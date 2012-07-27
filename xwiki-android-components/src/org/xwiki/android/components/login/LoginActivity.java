@@ -23,11 +23,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.xwiki.android.cmnSvc.LoginFacade;
+
 import org.xwiki.android.components.IntentExtra;
 import org.xwiki.android.components.R;
 import org.xwiki.android.dal.EntityManager;
 import org.xwiki.android.rest.HttpConnector;
+import org.xwiki.android.svc.cmn.LoginFacade;
 import org.xwiki.android.entity.*;
 
 import com.j256.ormlite.dao.Dao;

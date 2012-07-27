@@ -36,13 +36,7 @@ public abstract class XPropertyBase<T> extends XObject<Object> implements XPrope
         this.name = name;
         setAttribute("name", name);
     }
-    /**
-     * @param type: type of the property.
-     */
-    public void setType(String type)
-    {
-        this.type = type;
-    }
+    
 
     public String getName()
     {
@@ -52,8 +46,8 @@ public abstract class XPropertyBase<T> extends XObject<Object> implements XPrope
      * @return type of the property.
      */
     public String getType()
-    {
-        return type;
+    {     
+        return null;
     }
 
     //

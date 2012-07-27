@@ -3,10 +3,10 @@ package org.xwiki.android.xmodel.entity;
 import java.util.Date;
 import java.util.List;
 
-import org.xwiki.android.ral.reference.Link;
+import org.xwiki.android.rest.reference.Link;
 import org.xwiki.android.xmodel.xobjects.XComment;
 
-public class Comment
+public class Comment extends Resource
 {
 	List<Link> links;
 	int id;

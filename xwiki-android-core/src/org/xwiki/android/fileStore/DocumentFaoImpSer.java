@@ -15,7 +15,7 @@ import java.util.Map;
 
 import org.xwiki.android.context.XWikiApplicationContext;
 import org.xwiki.android.dal.EntityManager;
-import org.xwiki.android.ral.reference.DocumentReference;
+import org.xwiki.android.rest.reference.DocumentReference;
 import org.xwiki.android.xmodel.entity.Document;
 
 import android.util.Log;

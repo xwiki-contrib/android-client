@@ -92,9 +92,10 @@ public class TagResources extends HttpConnector
      * will return wiki tags and if space name and page name is provided it will return page tags
      * 
      * @return list of all tags as a Tags object
-     * @throws RestConnectorException 
+     * @throws RestConnectionException 
+     * @throws RestException 
      */
-    public Tags getTags() throws RestConnectorException
+    public Tags getTags() throws RestConnectionException, RestException
     {
 
         String Uri;
@@ -117,9 +118,10 @@ public class TagResources extends HttpConnector
      * 
      * @param tag Tag object to be added
      * @return statsu of the HTTP put request
-     * @throws RestConnectorException 
+     * @throws RestConnectionException 
+     * @throws RestException 
      */
-    public String addTag(Tag tag) throws RestConnectorException
+    public String addTag(Tag tag) throws RestConnectionException, RestException
     {
 
         String Uri = null;

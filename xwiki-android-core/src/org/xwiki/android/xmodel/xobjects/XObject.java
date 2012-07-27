@@ -7,7 +7,7 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
-import org.xwiki.android.ral.reference.Link;
+import org.xwiki.android.rest.reference.Link;
 import org.xwiki.android.xmodel.entity.Resource;
 
 /**
@@ -25,9 +25,5 @@ public abstract class XObject<T> extends Resource implements Serializable, Clone
         fields = new Hashtable<String, T>(30);
         links = new ArrayList<Link>();
     }
-
-    public String getType()
-    {
-        return "xwiki.lang.XObject";
-    }
+    
 }

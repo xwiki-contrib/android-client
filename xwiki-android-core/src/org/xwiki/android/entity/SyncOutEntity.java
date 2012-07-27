@@ -7,107 +7,112 @@ import org.xwiki.android.fileStore.FSDocumentReference;
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+
 /**
- * 
  * @author xwiki gsoc 2012
- * @version 1.0
- * Marker to sync documents (out)to the server. * 
- * Sync out= sync direction: device to server.
- * Sync in = sync direction: server to device.
+ * @version 1.0 Marker to sync documents (out)to the server. * Sync out= sync direction: device to server. Sync in =
+ *          sync direction: server to device.
  */
 
-
-@DatabaseTable(tableName="C_SyncOut")
+@DatabaseTable(tableName = "C_SyncOut")
 public class SyncOutEntity
 {
-	@DatabaseField(generatedId=true)
-	int _id;
-	
-	@DatabaseField(foreign=true, unique=true)
-	private FSDocumentReference docref;
-	
-	@DatabaseField
-	private boolean delAftrSync;
-	
-	@DatabaseField
-	private StratergyType stratery;//not used yet.For advanced use. Things like do Create doc, abort if already created.
-	
-	@DatabaseField 
-	private StatusType status;
-	
-	@DatabaseField
-	private Date lastTried;
-	
-	private SyncOutEntity()
-	{
-		//for ORMlite
-	}
-	
-	public SyncOutEntity(FSDocumentReference ref)
-	{
-		this.docref=ref;
-		stratery=StratergyType.DEFALUT;
-		delAftrSync=true;		
-	}
-	
-	public enum StratergyType{
-		DEFALUT, CREATE , UPDATE	
-	}
-	public enum StatusType{
-		SUCCESS, PARTIALLYCOMPLETE, FAILED	
-	}
+    @DatabaseField(generatedId = true)
+    int _id;
 
-	
-	public FSDocumentReference getDocref()
-	{
-		return docref;
-	}
+    @DatabaseField(foreign = true, unique = true)
+    private FSDocumentReference docref;
 
-	public void setDocref(FSDocumentReference docref)
-	{
-		this.docref = docref;
-	}
+    @DatabaseField
+    private boolean delAftrSync;
 
-	public boolean isDelAftrSync()
-	{
-		return delAftrSync;
-	}
+    @DatabaseField
+    private StratergyType stratery;// not used yet.For advanced use. Things like do Create doc, abort if already
+                                   // created.
 
-	public void setDelAftrSync(boolean delAftrSync)
-	{
-		this.delAftrSync = delAftrSync;
-	}
+    @DatabaseField
+    private StatusType status;
 
-	public StratergyType getStratery()
-	{
-		return stratery;
-	}
+    @DatabaseField
+    private Date lastTried;
 
-	public void setStratery(StratergyType stratery)
-	{
-		this.stratery = stratery;
-	}
+    private SyncOutEntity()
+    {
+        // for ORMlite
+    }
 
-	public StatusType getStatus()
-	{
-		return status;
-	}
+    public SyncOutEntity(FSDocumentReference ref)
+    {
+        this.docref = ref;
+        stratery = StratergyType.DEFALUT;
+        delAftrSync = true;
+        status = StatusType.PENDING;
+    }
 
-	public void setStatus(StatusType status)
-	{
-		this.status = status;
-	}
+    public enum StratergyType
+    {
+        DEFALUT,
+        CREATE,
+        UPDATE
+    }
 
-	public Date getLastTried()
-	{
-		return lastTried;
-	}
+    public enum StatusType
+    {
+        SUCCESS,
+        PARTIALLYCOMPLETE,
+        FAILED, //last try failed
+        ABORTED, //completely aborted retry
+        PENDING
+    }
 
-	public void setLastTried(Date lastTried)
-	{
-		this.lastTried = lastTried;
-	}
+    public FSDocumentReference getDocref()
+    {
+        return docref;
+    }
 
-		
-	
+    public void setDocref(FSDocumentReference docref)
+    {
+        this.docref = docref;
+    }
+
+    public boolean isDelAftrSync()
+    {
+        return delAftrSync;
+    }
+
+    public void setDelAftrSync(boolean delAftrSync)
+    {
+        this.delAftrSync = delAftrSync;
+    }
+
+    public StratergyType getStratery()
+    {
+        return stratery;
+    }
+
+    public void setStratery(StratergyType stratery)
+    {
+        this.stratery = stratery;
+    }
+
+    public StatusType getStatus()
+    {
+        return status;
+    }
+
+    public void setStatus(StatusType status)
+    {
+        this.status = status;
+    }
+
+    public Date getLastTried()
+    {
+        return lastTried;
+    }
+
+    public void setLastTried(Date lastTried)
+    {
+        this.lastTried = lastTried;
+    }
+
 }

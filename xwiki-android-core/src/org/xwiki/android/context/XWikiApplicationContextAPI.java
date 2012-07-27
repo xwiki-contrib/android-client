@@ -2,7 +2,7 @@ package org.xwiki.android.context;
 
 import org.xwiki.android.entity.User;
 import org.xwiki.android.fileStore.FileStoreManager;
-import org.xwiki.android.ral.RESTfulManager;
+import org.xwiki.android.rest.ral.RESTfulManager;
 
 /**
  * @author xwiki Cast the activity/service.getApplicationContext to this interface if only XWiki specific methods are

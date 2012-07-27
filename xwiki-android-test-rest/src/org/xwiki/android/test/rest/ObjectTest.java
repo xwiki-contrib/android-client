@@ -132,6 +132,6 @@ public class ObjectTest extends AndroidTestCase
     {
         Property property =
             request.requestObjectProperty(wikiName, spaceName, pageName, classname, objectNo, propertyName);
-        assertNotNull(property);
+            assertNotNull(property);
     }
 }

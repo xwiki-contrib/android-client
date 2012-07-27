@@ -40,7 +40,7 @@ public interface XWikiRestfulAPI {
 	 * @param keyword text to search
 	 * @return Search results of the searched keyword within Wiki contents
 	 */
-	SearchResults searchInWiki(String wikiName, String keyword) throws RestConnectorException;
+	SearchResults searchInWiki(String wikiName, String keyword) throws RestConnectionException, RestException, RestException;
 
 	/**
 	 * @param wikiName name of the Wiki
@@ -49,44 +49,44 @@ public interface XWikiRestfulAPI {
 	 * @return Search results of the searched keyword in provided space
 	 */
 	SearchResults searchInSpace(String wikiName,
-			String spaceName, String keyword)throws RestConnectorException;
+			String spaceName, String keyword)throws RestConnectionException, RestException, RestException;
 
 	/**
 	 * @return list of wikis in the provided XWiki URL domain
 	 */
-	Wikis getWikis()throws RestConnectorException;
+	Wikis getWikis()throws RestConnectionException, RestException, RestException;
 
 	/**
      * @param wikiName name of the Wiki
      * @return all the tags used in the wiki
      */
-    Tags getWikiTags(String wikiName)throws RestConnectorException;
+    Tags getWikiTags(String wikiName)throws RestConnectionException, RestException, RestException;
 
     /**
      * @param wikiName name of the Wiki
      * @return lists all the classes in the specified Wiki
      */
-    Classes getWikiClasses(String wikiName)throws RestConnectorException;
+    Classes getWikiClasses(String wikiName)throws RestConnectionException, RestException, RestException;
 
     /**
      * @param wikiName name of the Wiki
      * @param classname name of the class
      * @return Class of the provided classname in the specified Wiki
      */
-    Class getWikiClasses(String wikiName, String classname)throws RestConnectorException;
+    Class getWikiClasses(String wikiName, String classname)throws RestConnectionException, RestException, RestException;
 
     /**
 	 * @param wikiName name of the wiki
 	 * @return list of spaces in the provided Wiki
 	 */
-	Spaces getSpaces(String wikiName)throws RestConnectorException;
+	Spaces getSpaces(String wikiName)throws RestConnectionException, RestException;
 
 	/**
 	 * @param wikiName name of the wiki
 	 * @param spaceName name of the space
 	 * @return list of all the pages in specific Wiki and Space
 	 */
-	Pages getAllPages(String wikiName, String spaceName)throws RestConnectorException;
+	Pages getAllPages(String wikiName, String spaceName)throws RestConnectionException, RestException;
 
 	/**
 	 * @param wikiName name of the wiki
@@ -95,7 +95,7 @@ public interface XWikiRestfulAPI {
 	 * @return Page object according to the field values
 	 */
 	Page getPage(String wikiName, String spaceName,
-			String pageName)throws RestConnectorException;
+			String pageName)throws RestConnectionException, RestException;
 
 	/**
 	 * Add page to the server according to the provided field values
@@ -107,7 +107,7 @@ public interface XWikiRestfulAPI {
 	 * @return status of the HTTP response
 	 */
 	String addPage(String wikiName, String spaceName,
-			String pageName, Page page)throws RestConnectorException;
+			String pageName, Page page)throws RestConnectionException, RestException;
 
 	/**
 	 * Delete page in the server
@@ -118,7 +118,7 @@ public interface XWikiRestfulAPI {
 	 * @return status of the HTTP response
 	 */
 	String deletePage(String wikiName, String spaceName,
-			String pageName)throws RestConnectorException;
+			String pageName)throws RestConnectionException, RestException;
 
 	/**
 	 * Delete page translation
@@ -130,7 +130,7 @@ public interface XWikiRestfulAPI {
 	 * @return status of the HTTP response
 	 */
 	String deletePage(String wikiName, String spaceName,
-			String pageName, String language)throws RestConnectorException;
+			String pageName, String language)throws RestConnectionException, RestException;
 
 	/**
 	 * @param wikiName name of the Wiki
@@ -139,7 +139,7 @@ public interface XWikiRestfulAPI {
 	 * @return history of the page according to the field values
 	 */
 	History getPageHistory(String wikiName,
-			String spaceName, String pageName)throws RestConnectorException;
+			String spaceName, String pageName)throws RestConnectionException, RestException;
 
 	/**
 	 * @param wikiName name of the Wiki
@@ -149,7 +149,7 @@ public interface XWikiRestfulAPI {
 	 * @return Page of the specified version
 	 */
 	Page getPageInVersionHistory(String wikiName,
-			String spaceName, String pageName, String version)throws RestConnectorException;
+			String spaceName, String pageName, String version)throws RestConnectionException, RestException;
 
 	/**
 	 * @param wikiName name of the Wiki
@@ -158,7 +158,7 @@ public interface XWikiRestfulAPI {
 	 * @return Children pages of the specific page
 	 */
 	Pages getPageChildren(String wikiName,
-			String spaceName, String pageName)throws RestConnectorException;
+			String spaceName, String pageName)throws RestConnectionException, RestException;
 
 	/**
 	 * @param wikiName name of the Wiki
@@ -167,7 +167,7 @@ public interface XWikiRestfulAPI {
 	 * @return Tags of the page
 	 */
 	Tags getPageTags(String wikiName, String spaceName,
-			String pageName)throws RestConnectorException;
+			String pageName)throws RestConnectionException, RestException;
 
 	/**
 	 * Adds page tag to the provided page
@@ -179,7 +179,7 @@ public interface XWikiRestfulAPI {
 	 * @return status of the HTTP response
 	 */
 	String addPageTag(String wikiName, String spaceName,
-			String pageName, Tag tag)throws RestConnectorException;
+			String pageName, Tag tag)throws RestConnectionException, RestException;
 
 	/**
 	 * @param wikiName name of the Wiki
@@ -188,7 +188,7 @@ public interface XWikiRestfulAPI {
 	 * @return all the comments in the specific page
 	 */
 	Comments getPageComments(String wikiName,
-			String spaceName, String pageName)throws RestConnectorException;
+			String spaceName, String pageName)throws RestConnectionException, RestException;
 
 	/**
 	 * Add comment to the page
@@ -200,7 +200,7 @@ public interface XWikiRestfulAPI {
 	 * @return status of the HTTP response
 	 */
 	String addPageComment(String wikiName, String spaceName,
-			String pageName, Comment comment)throws RestConnectorException;
+			String pageName, Comment comment)throws RestConnectionException, RestException;
 
 	/**
 	 * @param wikiName name of the Wiki
@@ -210,7 +210,7 @@ public interface XWikiRestfulAPI {
 	 * @return page comment according to the comment ID
 	 */
 	Comment getPageComments(String wikiName,
-			String spaceName, String pageName, String commentId)throws RestConnectorException;
+			String spaceName, String pageName, String commentId)throws RestConnectionException, RestException;
 
 	/**
 	 * @param wikiName name of the Wiki
@@ -220,7 +220,7 @@ public interface XWikiRestfulAPI {
 	 * @return All the comments of the page specific version
 	 */
 	Comments getPageCommentsInHistory(String wikiName,
-			String spaceName, String pageName, String version)throws RestConnectorException;
+			String spaceName, String pageName, String version)throws RestConnectionException, RestException;
 
 	/**
 	 * @param wikiName name of the Wiki
@@ -231,7 +231,7 @@ public interface XWikiRestfulAPI {
 	 * @return comments Comments of specific comment ID in specific page history version
 	 */
 	Comments getPageCommentsInHistory(String wikiName,
-			String spaceName, String pageName, String version, String commentId)throws RestConnectorException;
+			String spaceName, String pageName, String version, String commentId)throws RestConnectionException, RestException;
 
 	/**
 	 * @param wikiName name of the Wiki
@@ -240,7 +240,7 @@ public interface XWikiRestfulAPI {
 	 * @return list all the attachments in a specific page
 	 */
 	Attachments getAllPageAttachments(String wikiName,
-			String spaceName, String pageName)throws RestConnectorException;
+			String spaceName, String pageName)throws RestConnectionException, RestException;
 
 	/**
 	 * Gets a stream of data of a attachment
@@ -252,7 +252,7 @@ public interface XWikiRestfulAPI {
 	 * @return InputStream of the attachment raw data
 	 */
 	InputStream getPageAttachment(String wikiName,
-			String spaceName, String pageName, String attachmentName)throws RestConnectorException;
+			String spaceName, String pageName, String attachmentName)throws RestConnectionException, RestException;
 
 	/**
 	 * Add attachment to a page
@@ -265,7 +265,7 @@ public interface XWikiRestfulAPI {
 	 * @return status of the HTTP response
 	 */
 	String addPageAttachment(String wikiName, String spaceName,
-			String pageName, String filePath, String attachmentName)throws RestConnectorException;
+			String pageName, String filePath, String attachmentName)throws RestConnectionException, RestException;
 
 	/**
 	 * Delete the page attachment by its name
@@ -277,7 +277,7 @@ public interface XWikiRestfulAPI {
 	 * @return status of the HTTP response
 	 */
 	String deletePageAttachment(String wikiName,
-			String spaceName, String pageName, String attachmentName)throws RestConnectorException;
+			String spaceName, String pageName, String attachmentName)throws RestConnectionException, RestException;
 
 	/**
 	 * @param wikiName name of the Wiki
@@ -288,7 +288,7 @@ public interface XWikiRestfulAPI {
 	 */
 	Attachments getPageAttachmentsInHistory(
 			String wikiName, String spaceName, String pageName,
-			String pageVersion)throws RestConnectorException;
+			String pageVersion)throws RestConnectionException, RestException;
 
 	/**
 	 * @param wikiName name of the Wiki
@@ -300,7 +300,7 @@ public interface XWikiRestfulAPI {
 	 */
 	InputStream getPageAttachmentsInHistory(
 			String wikiName, String spaceName, String pageName,
-			String pageVersion, String attachmentName)throws RestConnectorException;
+			String pageVersion, String attachmentName)throws RestConnectionException, RestException;
 
 	/**
 	 * @param wikiName name of the Wiki
@@ -311,7 +311,7 @@ public interface XWikiRestfulAPI {
 	 */
 	Attachments getPageAttachmentsInAttachmentHistory(
 			String wikiName, String spaceName, String pageName,
-			String attachmentName)throws RestConnectorException;
+			String attachmentName)throws RestConnectionException, RestException;
 
 	/**
 	 * @param wikiName name of the Wiki
@@ -323,7 +323,7 @@ public interface XWikiRestfulAPI {
 	 */
 	InputStream getPageAttachmentsInAttachmentHistory(
 			String wikiName, String spaceName, String pageName,
-			String attachmentName, String attachmentVersion)throws RestConnectorException;
+			String attachmentName, String attachmentVersion)throws RestConnectionException, RestException;
 
 	/**
 	 * @param wikiName name of the Wiki
@@ -332,7 +332,7 @@ public interface XWikiRestfulAPI {
 	 * @return list all the Translations of a specific page
 	 */
 	Translations getAllPageTranslations(String wikiName,
-			String spaceName, String pageName)throws RestConnectorException;
+			String spaceName, String pageName)throws RestConnectionException, RestException;
 
 	/**
 	 * @param wikiName name of the Wiki
@@ -342,7 +342,7 @@ public interface XWikiRestfulAPI {
 	 * @return Page of the geted language
 	 */
 	Page getPageTranslation(String wikiName,
-			String spaceName, String pageName, String language)throws RestConnectorException;
+			String spaceName, String pageName, String language)throws RestConnectionException, RestException;
 
 	/**
 	 * @param wikiName name of the Wiki
@@ -352,7 +352,7 @@ public interface XWikiRestfulAPI {
 	 * @return Page history versions in a given language
 	 */
 	History getPageHistoryInLanguage(String wikiName,
-			String spaceName, String pageName, String language)throws RestConnectorException;
+			String spaceName, String pageName, String language)throws RestConnectionException, RestException;
 
 	/**
 	 * @param wikiName name of the Wiki
@@ -363,7 +363,7 @@ public interface XWikiRestfulAPI {
 	 * @return Translated page of the given history version
 	 */
 	Page getPageTranslationInHistory(String wikiName,
-			String spaceName, String pageName, String language, String version)throws RestConnectorException;
+			String spaceName, String pageName, String language, String version)throws RestConnectionException, RestException;
 
 	/**
 	 * Adds provided object to the given page
@@ -375,7 +375,7 @@ public interface XWikiRestfulAPI {
 	 * @return status of the HTTP response
 	 */
 	String addObject(String wikiName, String spaceName,
-			String pageName, Object object)throws RestConnectorException;
+			String pageName, Object object)throws RestConnectionException, RestException;
 
 	/**
 	 * @param wikiName name of the Wiki
@@ -384,7 +384,7 @@ public interface XWikiRestfulAPI {
 	 * @return All the objects of the specified page
 	 */
 	Objects getAllObjects(String wikiName,
-			String spaceName, String pageName)throws RestConnectorException;
+			String spaceName, String pageName)throws RestConnectionException, RestException;
 
 	/**
 	 * @param wikiName name of the Wiki
@@ -394,7 +394,7 @@ public interface XWikiRestfulAPI {
 	 * @return All the objects which have given class name of the specified page
 	 */
 	Objects getObjectsInClass(String wikiName,
-			String spaceName, String pageName, String objectClassname)throws RestConnectorException;
+			String spaceName, String pageName, String objectClassname)throws RestConnectionException, RestException;
 
 	/**
 	 * @param wikiName name of the Wiki
@@ -405,7 +405,7 @@ public interface XWikiRestfulAPI {
 	 * @return Object of the given class name and object number of the specified page
 	 */
 	Object getObject(String wikiName, String spaceName,
-			String pageName, String objectClassname, String objectNumber)throws RestConnectorException;
+			String pageName, String objectClassname, int objectNumber)throws RestConnectionException, RestException;
 
 	/**
 	 * Deletes the given object. Object can be selected using class name and the object number
@@ -418,7 +418,7 @@ public interface XWikiRestfulAPI {
 	 * @return status of the HTTP response of the delete operation
 	 */
 	String deleteObject(String wikiName, String spaceName,
-			String pageName, String objectClassname, String objectNumber)throws RestConnectorException;
+			String pageName, String objectClassname, String objectNumber)throws RestConnectionException, RestException;
 
 	/** 
 	 * @param wikiName name of the Wiki
@@ -430,7 +430,7 @@ public interface XWikiRestfulAPI {
 	 */
 	Properties getObjectAllProperties(String wikiName,
 			String spaceName, String pageName, String objectClassname,
-			String objectNumber)throws RestConnectorException;
+			String objectNumber)throws RestConnectionException, RestException;
 
 	/**
 	 * @param wikiName name of the Wiki
@@ -443,7 +443,7 @@ public interface XWikiRestfulAPI {
 	 */
 	Property getObjectProperty(String wikiName,
 			String spaceName, String pageName, String objectClassname,
-			String objectNumber, String propertyName)throws RestConnectorException;
+			String objectNumber, String propertyName)throws RestConnectionException, RestException;
 
 	/**
 	 * Adds the property to the object of a page
@@ -458,6 +458,6 @@ public interface XWikiRestfulAPI {
 	 */
 	String addObjectProperty(String wikiName, String spaceName,
 			String pageName, String objectClassname, String objectNumber,
-			Property property)throws RestConnectorException;
+			Property property)throws RestConnectionException, RestException;
 
 }

@@ -73,9 +73,10 @@ public class HistoryResources extends HttpConnector
 
     /**
      * @return version details of the page as a History object
-     * @throws RestConnectorException 
+     * @throws RestConnectionException 
+     * @throws RestException 
      */
-    public History getPageHistory() throws RestConnectorException
+    public History getPageHistory() throws RestConnectionException, RestException
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
@@ -87,9 +88,10 @@ public class HistoryResources extends HttpConnector
     /**
      * @param language translation language name of the page
      * @return page history of a page translation
-     * @throws RestConnectorException 
+     * @throws RestConnectionException 
+     * @throws RestException 
      */
-    public History getPageHistory(String language) throws RestConnectorException
+    public History getPageHistory(String language) throws RestConnectionException, RestException
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName

@@ -1,19 +1,9 @@
 package org.xwiki.android.xmodel.entity;
 
-import java.io.InputStream;
-import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-
-import org.xwiki.android.ral.reference.DocumentReference;
-import org.xwiki.android.ral.reference.Link;
-import org.xwiki.android.rest.IllegalRestUsageException;
-import org.xwiki.android.xmodel.xobjects.XObject;
-import org.xwiki.android.xmodel.xobjects.XSimpleObject;
-
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
+import org.xwiki.android.rest.reference.DocumentReference;
+import org.xwiki.android.rest.reference.Link;
 
 /**
  * Contains the properties of a Page +Additional methods for Document.

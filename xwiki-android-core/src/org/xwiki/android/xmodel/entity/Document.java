@@ -5,11 +5,13 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
-import org.xwiki.android.ral.reference.DocumentReference;
+import org.xwiki.android.resources.Attachments;
+import org.xwiki.android.rest.reference.DocumentReference;
 import org.xwiki.android.xmodel.xobjects.XObject;
 import org.xwiki.android.xmodel.xobjects.XSimpleObject;
 
 import android.text.AlteredCharSequence;
+import android.util.Log;
 
 /**
  * @author xwiki gsoc 2012 A document that supports only SimpleObjects. Simple Objects are shallow objects that can have
@@ -27,7 +29,7 @@ public class Document extends DocumentBase
 
     private List<Comment> comments; // key = int index in the list
 
-    private Map<String, Attachment> attatchments;// key = resource id. ex: xwiki:Blog.BlogPost1@mypic can have space.png
+    private Map<String, Attachment> attatchments;// key = resource id. ex: xwiki:Blog.BlogPost1@mypic -->key is: mypic
 
     private List<Tag> tags; // search by key not needed
 
@@ -42,7 +44,7 @@ public class Document extends DocumentBase
     // resources to update
 
     private Map<String, XSimpleObject> editedObjects; // key= ClassName/number 
-    private List<Attachment> editedAttachments;// key = resource id i.e @<name>. ex: xwiki:Blog.BlogPost1@mypic => @mypic
+    private List<Attachment> editedAttachments;// key = resource id i.e <name>. ex: xwiki:Blog.BlogPost1@mypic => mypic
                                                      // space.png
     private List<Comment> editedComments;    
 
@@ -90,7 +92,9 @@ public class Document extends DocumentBase
         // identify altered objects
         // and add them to editedObjects Map at the "ral.transformation" package.
         XSimpleObject obj = objects.get(key);
-        obj.setEdited(true);
+        if(obj!=null){
+            obj.setEdited(true);
+        }        
         return obj;
     }
 
@@ -103,11 +107,11 @@ public class Document extends DocumentBase
      */
     public void setObject(String key, XSimpleObject object)
     {    	
-        String keyprefix=object.getType();
+        String keyprefix=object.getClassName();
         boolean valid=true;
         valid=key.startsWith(keyprefix);
         if(valid){
-        	String[] args=key.split("[/,\\.]");
+        	String[] args=key.split("[/,]");
         	valid=args[1].matches("[\\d]+");
         }        
         if(!valid){
@@ -130,7 +134,7 @@ public class Document extends DocumentBase
      */
     public String addObject(XSimpleObject obj)
     {
-        String key = obj.getType() + "/new/" + _addNum++;
+        String key = obj.getClassName() + "/new/" + _addNum++;
         obj.setNew(true);
         objects.put(key, obj);
         newObjects.add(obj);
@@ -203,6 +207,59 @@ public class Document extends DocumentBase
         }        
     	tags.clear();
     }
+    
+    public Attachment getAttachment(String name){
+        Attachment a=attatchments.get(name);
+        a.setEdited(true);
+        return attatchments.get(name);
+    }
+    
+    public String addAttachment(Attachment a){
+        if(a.isNew()==true){
+            newAttachments.add(a);
+        }       
+       attatchments.put(a.getName(), a);
+       return a.getName();
+    }
+    
+    public void setAttachment(String name,Attachment a){
+        if(a.getName()==null){
+            a.setName(name);
+        }
+        
+        if(a.isEdited()==true){
+            int i=editedAttachments.indexOf(a);            
+            if(i>-1){
+                editedAttachments.add(i,a);
+            }else{
+                editedAttachments.add(a);
+            }
+            attatchments.put(name, a); 
+        }
+           
+    }
+    /**
+     * 
+     * @param name
+     * @return true. If the attachment existed locally in the list and was marked for deletion.
+     *         false. Attachement is not in the local list. But the model has marked the attachment for 
+     *         deletion on the server.
+     *               
+     */
+    public boolean deleteAttachment(String name){
+        Attachment a=attatchments.remove(name);
+        if(!deletedAttachments.contains(name)){
+            deletedAttachments.add(a.getName()); 
+        }           
+        if(a==null){
+            Log.w(this.getClass().getSimpleName(), "marking an unknown attachment to be deleted");
+            return false;
+        }else {
+            return true;
+        }
+        
+    }
+    
     
 
     public Map<String, XSimpleObject> getAllObjects()

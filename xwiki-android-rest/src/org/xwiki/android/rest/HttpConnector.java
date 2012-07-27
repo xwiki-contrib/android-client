@@ -129,7 +129,7 @@ public class HttpConnector
      * @param Uri URL of XWiki RESTful API
      * @return Response data of the HTTP connection as a String
      */
-    public String getResponse(String Uri) throws RestConnectorException
+    public String getResponse(String Uri) throws RestConnectionException, RestException
     {
         initialize();
 
@@ -150,7 +150,8 @@ public class HttpConnector
         try {
 
             response = client.execute(request);
-            Log.d("Response status", response.getStatusLine().toString());
+            Log.d("Response status", response.getStatusLine().toString());           
+            
 
             in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
             StringBuffer sb = new StringBuffer("");
@@ -162,6 +163,7 @@ public class HttpConnector
             in.close();
             responseText = sb.toString();
             Log.d("Response", "response: " + responseText);
+            validate(response.getStatusLine().getStatusCode());
 
         } catch (ClientProtocolException e) {
             // TODO Auto-generated catch block
@@ -169,7 +171,7 @@ public class HttpConnector
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            throw new RestConnectorException(e);
+            throw new RestConnectionException(e);
         }
 
         return responseText;
@@ -180,9 +182,10 @@ public class HttpConnector
      * 
      * @param Uri URL of XWiki RESTful API
      * @return status of the HTTP method execution
-     * @throws RestConnectorException 
+     * @throws RestConnectionException 
+     * @throws RestException 
      */
-    public String deleteRequest(String Uri) throws RestConnectorException
+    public String deleteRequest(String Uri) throws RestConnectionException, RestException
     {
         initialize();
 
@@ -203,6 +206,7 @@ public class HttpConnector
 
             response = client.execute(request);
             Log.d("Response status", response.getStatusLine().toString());
+            validate(response.getStatusLine().getStatusCode());
             return response.getStatusLine().toString();
 
         } catch (ClientProtocolException e) {
@@ -211,7 +215,7 @@ public class HttpConnector
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            throw new RestConnectorException(e);
+            throw new RestConnectionException(e);
         }
 
         return "error";
@@ -226,13 +230,13 @@ public class HttpConnector
      * @return HTTP response code of the connection
      * 		   or 
      * 		   21408(RESP_CODE_CLIENT_CON_TIMEOUT) when client connection timed out, 
-     * @throws RestConnectorException 
+     * @throws RestConnectionException 
      *  	   
      */
    
-    public int checkLogin(String username, String password, String Url) throws RestConnectorException
+    public int checkLogin(String username, String password, String Url) throws RestConnectionException
     {
-
+      //TODO : REFACTOR to throw exception
         initialize();
 
         HttpGet request = new HttpGet();
@@ -271,7 +275,7 @@ public class HttpConnector
         	responseCode=RESP_CODE_CLIENT_CON_TIMEOUT;
         }catch (IOException e) {
             e.printStackTrace();
-            throw new RestConnectorException(e);
+            throw new RestConnectionException(e);
         }
 
         Log.d("response code", String.valueOf(responseCode));
@@ -284,9 +288,10 @@ public class HttpConnector
      * @param Uri URL of XWiki RESTful API
      * @param content content to be posted to the server
      * @return status code of the Post method execution
-     * @throws RestConnectorException 
+     * @throws RestConnectionException 
+     * @throws RestException 
      */
-    public String postRequest(String Uri, String content) throws RestConnectorException
+    public String postRequest(String Uri, String content) throws RestConnectionException, RestException
     {
         initialize();
 
@@ -314,6 +319,7 @@ public class HttpConnector
 
             response = client.execute(request);
             Log.d("Response status", response.getStatusLine().toString());
+            validate(response.getStatusLine().getStatusCode());
             return response.getStatusLine().toString();
 
         } catch (ClientProtocolException e) {
@@ -322,7 +328,7 @@ public class HttpConnector
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();   
-            throw new RestConnectorException(e);
+            throw new RestConnectionException(e);
         }
 
         return "error";
@@ -334,9 +340,10 @@ public class HttpConnector
      * @param Uri URL of XWiki RESTful API
      * @param content content to be posted to the server
      * @return status code of the Put method execution
-     * @throws RestConnectorException 
+     * @throws RestConnectionException 
+     * @throws RestException 
      */
-    public String putRequest(String Uri, String content) throws RestConnectorException
+    public String putRequest(String Uri, String content) throws RestConnectionException, RestException
     {
         initialize();
         
@@ -364,6 +371,7 @@ public class HttpConnector
 
             response = client.execute(request);
             Log.d("Response status", response.getStatusLine().toString());
+            validate(response.getStatusLine().getStatusCode());
             return response.getStatusLine().toString();
 
         } catch (ClientProtocolException e) {
@@ -372,7 +380,7 @@ public class HttpConnector
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            throw new RestConnectorException(e);
+            throw new RestConnectionException(e);
         }
 
         return "error";
@@ -383,9 +391,10 @@ public class HttpConnector
      * 
      * @param Uri URL of XWiki RESTful API
      * @return InputStream of the HTTP Get method execution
-     * @throws RestConnectorException 
+     * @throws RestConnectionException 
+     * @throws RestException 
      */
-    public InputStream getResponseAttachment(String Uri) throws RestConnectorException
+    public InputStream getResponseAttachment(String Uri) throws RestConnectionException, RestException
     {
         initialize();
 
@@ -407,7 +416,7 @@ public class HttpConnector
             Log.d("Response status", response.getStatusLine().toString());
 
             // in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-
+            validate(response.getStatusLine().getStatusCode());
             return response.getEntity().getContent();
         } catch (ClientProtocolException e) {
             // TODO Auto-generated catch block
@@ -415,7 +424,7 @@ public class HttpConnector
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            throw new RestConnectorException(e);
+            throw new RestConnectionException(e);
         }
 
         return null;
@@ -427,9 +436,10 @@ public class HttpConnector
      * @param Uri URL of XWiki RESTful API
      * @param filePath path of the file name which to be sent over the HTTP connection
      * @return status of the HTTP Put method execution
-     * @throws RestConnectorException 
+     * @throws RestConnectionException 
+     * @throws RestException 
      */
-    public String putRaw(String Uri, String filePath) throws RestConnectorException
+    public String putRaw(String Uri, String filePath) throws RestConnectionException, RestException
     {
         initialize();
 
@@ -456,6 +466,7 @@ public class HttpConnector
 
             response = client.execute(request);
             Log.d("Response status", response.getStatusLine().toString());
+            validate(response.getStatusLine().getStatusCode());
             return response.getStatusLine().toString();
 
         } catch (ClientProtocolException e) {
@@ -464,7 +475,7 @@ public class HttpConnector
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            throw new RestConnectorException(e);
+            throw new RestConnectionException(e);
         }
 
         return "error";
@@ -519,10 +530,21 @@ public class HttpConnector
             client.getCredentialsProvider().setCredentials(new AuthScope(null, -1, AuthScope.ANY_REALM), defaultcreds);
         }
     }
+    
+    private void validate(int code) throws RestException{
+        if(400<=code & code <500){
+            throw new RestException(code);
+        }else if(500<= code & code< 600){
+            throw new RestBadRequestException();
+        }
+        
+    }
 
 }
 
-//TODO: sas: Behaviour unspecified when connection error happens, for resource get, requests.
+
+
+//TODO: sas: Behaviour unspecified when connection error happens, for API users of Requests class. for resource get, requests.
 //TODO: response body should be sent up.So just send the response back. Some times application logic may require the 
 // body of the response for a page put req etc. Rao layer should handle wether the response body should be read and converted or be 
 // discarded.

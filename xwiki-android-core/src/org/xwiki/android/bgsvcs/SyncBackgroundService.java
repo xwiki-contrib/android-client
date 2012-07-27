@@ -2,6 +2,7 @@ package org.xwiki.android.bgsvcs;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -13,12 +14,12 @@ import org.xwiki.android.entity.SyncOutEntity.StatusType;
 import org.xwiki.android.fileStore.DocumentFao;
 import org.xwiki.android.fileStore.FSDocumentReference;
 import org.xwiki.android.fileStore.FileStoreManager;
-import org.xwiki.android.ral.DocumentRao;
-import org.xwiki.android.ral.RESTfulManager;
-import org.xwiki.android.ral.RaoException;
-import org.xwiki.android.rest.RestConnectorException;
+import org.xwiki.android.rest.RestConnectionException;
+import org.xwiki.android.rest.ral.DocumentRao;
+import org.xwiki.android.rest.ral.RESTfulManager;
+import org.xwiki.android.rest.ral.RaoException;
+import org.xwiki.android.svc.xmodel.DocumentRemoteSvcCallbacks;
 import org.xwiki.android.xmodel.entity.Document;
-import org.xwiki.android.xmodel.svc.DocumentRemoteSvcCallbacks;
 
 import android.app.Service;
 import android.content.Intent;
@@ -59,6 +60,7 @@ public class SyncBackgroundService extends Service
 			{
 				XWikiApplicationContext ctx=XWikiApplicationContext.getInstance();
 				EntityManager em=ctx.newEntityManager();
+				boolean allOk=true;
 				try {
 					Dao<SyncOutEntity, Integer> dao = em.getDao(SyncOutEntity.class);
 					List<SyncOutEntity> list=dao.queryForAll();
@@ -79,20 +81,28 @@ public class SyncBackgroundService extends Service
 							Document doc=fao.load(ref);
 							try {
 								rao.create(doc);
-							} catch (RestConnectorException e) {								
+								dao.delete(s);
+							} catch (RestConnectionException e) {
+							    allOk=false;
+							    s.setLastTried(new Date());
+							    dao.update(s);
 								e.printStackTrace();
 								break;//abort sync. retry after SYNC_PERIOD
 							} catch (RaoException e) {
 								//doc may be already created.
 								try {
 									rao.update(doc);
-								} catch (RestConnectorException e1) {									
+									dao.delete(s);
+								} catch (RestConnectionException e1) {	
+								    allOk=false;
+								    s.setLastTried(new Date());
+	                                dao.update(s);
 									e1.printStackTrace();
 									break;
 								} catch (RaoException e1) {
 									// we cannot do an update also.
 									//donot delete and recreate. Just mark failed.
-									s.setStatus(StatusType.FAILED);
+									s.setStatus(StatusType.ABORTED);
 									dao.update(s);
 									e1.printStackTrace();
 								}

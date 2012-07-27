@@ -2,7 +2,7 @@ package org.xwiki.android.fileStore;
 
 import java.io.File;
 
-import org.xwiki.android.ral.reference.DocumentReference;
+import org.xwiki.android.rest.reference.DocumentReference;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;

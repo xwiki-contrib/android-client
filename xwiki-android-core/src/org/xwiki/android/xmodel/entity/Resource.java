@@ -5,9 +5,9 @@ import java.io.Serializable;
 public class Resource implements Serializable
 {
 
-    private boolean isNew;
+    private boolean isNew=true;
 
-    private boolean edited;
+    private boolean edited=true;
 
     public void setNew(boolean val)
     {

@@ -2,7 +2,7 @@ package org.xwiki.android.xmodel.entity;
 
 import java.util.List;
 
-import org.xwiki.android.ral.reference.Link;
+import org.xwiki.android.rest.reference.Link;
 import org.xwiki.android.xmodel.xobjects.XTag;
 
 import com.j256.ormlite.table.DatabaseTable;

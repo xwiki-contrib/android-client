@@ -7,8 +7,7 @@ import org.xwiki.android.components.login.LoginActivity;
 import org.xwiki.android.context.XWikiApplicationContext;
 import org.xwiki.android.dal.EntityManager;
 
-import org.xwiki.android.ral.RESTfulManager;
-import org.xwiki.android.ral.XmlRESTFulManager;
+
 import org.xwiki.android.xmodel.entity.Document;
 import com.j256.ormlite.dao.Dao;
 

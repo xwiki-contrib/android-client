@@ -5,7 +5,7 @@ import java.util.Date;
 
 import java.net.URL;
 
-public class Attachment
+public class Attachment extends Resource
 {
     // remote
     private String id;
@@ -140,6 +140,14 @@ public class Attachment
     public void setFile(File file)
     {
         this.file = file;
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (!(o instanceof Attachment))
+            return false;
+        return ((Attachment) o).getName().equals(getName());
     }
 
 }

@@ -76,9 +76,10 @@ public class AttachmentResources extends HttpConnector
      * Gets Attachments object according to the provided field values in constructor
      * 
      * @return Attachments object acquired according to the wiki, space & page names
-     * @throws RestConnectorException 
+     * @throws RestConnectionException 
+     * @throws RestException 
      */
-    public Attachments getAllPageAttachments() throws RestConnectorException
+    public Attachments getAllPageAttachments() throws RestConnectionException, RestException
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
@@ -92,9 +93,10 @@ public class AttachmentResources extends HttpConnector
      * 
      * @param attachmentName filename of the attachment in the page
      * @return InputStream of the attachment data
-     * @throws RestConnectorException 
+     * @throws RestConnectionException 
+     * @throws RestException 
      */
-    public InputStream getPageAttachment(String attachmentName) throws RestConnectorException
+    public InputStream getPageAttachment(String attachmentName) throws RestConnectionException, RestException
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
@@ -109,9 +111,10 @@ public class AttachmentResources extends HttpConnector
      * @param filePath absolute path of the file ex: "/sdcard/data/"
      * @param attachmentName name of the file name
      * @return status of the HTTP response
-     * @throws RestConnectorException 
+     * @throws RestConnectionException 
+     * @throws RestException 
      */
-    public String putPageAttachment(String filePath, String attachmentName) throws RestConnectorException
+    public String putPageAttachment(String filePath, String attachmentName) throws RestConnectionException, RestException
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
@@ -125,9 +128,10 @@ public class AttachmentResources extends HttpConnector
      * 
      * @param version version of the page
      * @return Attachments object acquired according to the wiki, space & page names
-     * @throws RestConnectorException 
+     * @throws RestConnectionException 
+     * @throws RestException 
      */
-    public Attachments getPageAttachmentsInHistory(String version) throws RestConnectorException
+    public Attachments getPageAttachmentsInHistory(String version) throws RestConnectionException, RestException
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
@@ -142,9 +146,10 @@ public class AttachmentResources extends HttpConnector
      * @param version version of the page
      * @param attachmentName file name of the attachement
      * @return InputStream of the attachment data in provided page version
-     * @throws RestConnectorException 
+     * @throws RestConnectionException 
+     * @throws RestException 
      */
-    public InputStream getPageAttachmentsInHistory(String version, String attachmentName) throws RestConnectorException
+    public InputStream getPageAttachmentsInHistory(String version, String attachmentName) throws RestConnectionException, RestException
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
@@ -158,9 +163,10 @@ public class AttachmentResources extends HttpConnector
      * 
      * @param attachmentName filename of the attachment
      * @return Attachments object with the version details of the attachment
-     * @throws RestConnectorException 
+     * @throws RestConnectionException 
+     * @throws RestException 
      */
-    public Attachments getPageAttachmentsInAttachmentHistory(String attachmentName) throws RestConnectorException
+    public Attachments getPageAttachmentsInAttachmentHistory(String attachmentName) throws RestConnectionException, RestException
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
@@ -175,9 +181,10 @@ public class AttachmentResources extends HttpConnector
      * @param attachmentName filename of the attachment
      * @param attachmentVersion version of the attachment
      * @return InputStream of the provided attachment version
-     * @throws RestConnectorException 
+     * @throws RestConnectionException 
+     * @throws RestException 
      */
-    public InputStream getPageAttachmentsInAttachmentHistory(String attachmentName, String attachmentVersion) throws RestConnectorException
+    public InputStream getPageAttachmentsInAttachmentHistory(String attachmentName, String attachmentVersion) throws RestConnectionException, RestException
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
@@ -191,9 +198,10 @@ public class AttachmentResources extends HttpConnector
      * 
      * @param attachmentName filename of the attachment
      * @return Status code of the HTTP response
-     * @throws RestConnectorException 
+     * @throws RestConnectionException 
+     * @throws RestException 
      */
-    public String deletePageAttachment(String attachmentName) throws RestConnectorException
+    public String deletePageAttachment(String attachmentName) throws RestConnectionException, RestException
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName

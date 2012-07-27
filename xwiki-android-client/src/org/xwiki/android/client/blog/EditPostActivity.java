@@ -1,21 +1,17 @@
 package org.xwiki.android.client.blog;
 
-import java.io.Serializable;
-import java.util.List;
-
-import org.xwiki.android.blog.svc.BlogDocument;
+import org.xwiki.android.svc.blog.BlogDocument;
+import org.xwiki.android.xmodel.entity.Document;
 import org.xwiki.android.client.R;
-import org.xwiki.android.components.login.LoginActivity;
 import org.xwiki.android.context.XWikiApplicationContext;
 import org.xwiki.android.context.XWikiApplicationContextAPI;
-import org.xwiki.android.fileStore.FSDocumentReference;
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -28,8 +24,12 @@ import android.widget.Toast;
 
 public class EditPostActivity extends Activity implements OnClickListener {
 	
+    public static final String ARG_UPDATE_DOC="UPDATE_DOC";
+    
 	private static final int REQUEST_CODE_LOADSAVEDPOSTS=0;
 	
+	private final String TAG=this.getClass().getSimpleName();
+		
 	private Button btnSave,btnLoad,btnPost,btnPublish;
 	private BlogDocument mydoc;
 	private BlogDocument.BlogDocumentRemoteCallbacks myRmtClbks;
@@ -57,7 +57,16 @@ public class EditPostActivity extends Activity implements OnClickListener {
 		
 		//show dialog to get page name, category
 		
-		showDialog();
+		Document d=(Document) getIntent().getSerializableExtra("UPDATE_DOC");
+        if(d!=null){            
+            mydoc=new BlogDocument(d);
+            etPost.setText(mydoc.getContent());
+            Log.d(TAG,mydoc.getContent());
+        }else{
+            showDialog();
+        }
+		
+		
 		
 		
 		
@@ -104,13 +113,16 @@ public class EditPostActivity extends Activity implements OnClickListener {
 	{
 		if(resultCode==RESULT_OK){
 			if(requestCode==REQUEST_CODE_LOADSAVEDPOSTS){
+			    XWikiApplicationContextAPI ctx=XWikiApplicationContext.getInstance();
+			    mydoc=(BlogDocument) ctx.pop(LoadSavedPostsActivity.RET_BLOGDOC);
 				etPost.setText(mydoc.getContent());			    
 			}
 		}
 		
 	}
 
-	public void onClick(View v) {
+	@Override
+    public void onClick(View v) {
 		
 	    if (v.getId()==R.id.btnSave) {
 		    mydoc.setContent(etPost.getText().toString());
@@ -118,8 +130,6 @@ public class EditPostActivity extends Activity implements OnClickListener {
 		    
 		}else if(v.getId()==R.id.btnLoad){
 			Intent i=new Intent(this,LoadSavedPostsActivity.class);
-			XWikiApplicationContextAPI ctx=(XWikiApplicationContextAPI) getApplication();
-			ctx.put("blgDoc", mydoc);
 			startActivityForResult(i,REQUEST_CODE_LOADSAVEDPOSTS);
 		
 		}else if(v.getId()==R.id.btnPost){			

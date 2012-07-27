@@ -58,9 +58,10 @@ public class Search extends HttpConnector
      * @param spaceName name of the space to search
      * @param keyword searching keyword/text
      * @return list of search results as a SearchResults object
-     * @throws RestConnectorException 
+     * @throws RestConnectionException 
+     * @throws RestException 
      */
-    public SearchResults doSpacesSearch(String wikiName, String spaceName, String keyword) throws RestConnectorException
+    public SearchResults doSpacesSearch(String wikiName, String spaceName, String keyword) throws RestConnectionException, RestException
     {
         String Uri =
             "http://" + URLprefix + SEARCH_REQUEST_PREFIX + wikiName + "/spaces/" + spaceName
@@ -73,9 +74,10 @@ public class Search extends HttpConnector
      * @param wikiName name of the Wik to search
      * @param keyword searching keyword/text to search
      * @return list of search results as a SearchResults object
-     * @throws RestConnectorException 
+     * @throws RestConnectionException 
+     * @throws RestException 
      */
-    public SearchResults doWikiSearch(String wikiName, String keyword) throws RestConnectorException
+    public SearchResults doWikiSearch(String wikiName, String keyword) throws RestConnectionException, RestException
     {
         String Uri = "http://" + URLprefix + SEARCH_REQUEST_PREFIX + wikiName + WIKI_SEARCH_REQUEST_SUFFIX + keyword;
 

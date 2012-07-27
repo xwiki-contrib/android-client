@@ -10,8 +10,8 @@ import org.xwiki.android.dal.EntityManager;
 import org.xwiki.android.entity.User;
 import org.xwiki.android.fileStore.FileStoreManager;
 import org.xwiki.android.fileStore.FileStoreManagerImpl;
-import org.xwiki.android.ral.RESTfulManager;
-import org.xwiki.android.ral.XmlRESTFulManager;
+import org.xwiki.android.rest.ral.RESTfulManager;
+import org.xwiki.android.rest.ral.XmlRESTFulManager;
 
 import android.app.Application;
 import android.content.Context;

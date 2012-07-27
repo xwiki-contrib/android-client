@@ -32,7 +32,7 @@ public class XDateProperty extends XPropertyBase<Date>
     @Override
     public void setValueFromString(String val)
     {
-        Date d=new Date(val);
+        Date d=XUtils.toDate(val);
         value=d;
     }
     

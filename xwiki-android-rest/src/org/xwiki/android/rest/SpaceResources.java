@@ -64,9 +64,10 @@ public class SpaceResources extends HttpConnector
 
     /**
      * @return list of spaces in the specified Wiki
-     * @throws RestConnectorException 
+     * @throws RestConnectionException 
+     * @throws RestException 
      */
-    public Spaces getSpaces() throws RestConnectorException
+    public Spaces getSpaces() throws RestConnectionException, RestException
     {
 
         String Uri = "http://" + uRLprefix + SPACE_URL_PREFIX + wikiName + SPACE_URL_SUFFIX;

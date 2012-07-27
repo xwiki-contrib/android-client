@@ -21,8 +21,7 @@ public abstract class XClass extends XObject<XProperty>
     /**
 	 * 
 	 */
-    @Override
-    public String getType()
+    public static String getType()
     {
         return "XWiki.lang.XClass";
     }

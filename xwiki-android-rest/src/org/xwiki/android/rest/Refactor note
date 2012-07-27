@@ -1,8 +1,8 @@
 //TODO:
 Major refactor needed.
-RestConnector, Requests classes return the status line to upper layers, string "error" at other occations. Suitable 
+1)RestConnector, Requests classes return the status line to upper layers, string "error" at other occations. Suitable 
 exception hierarchy should be introduced. Knowledge of http status lines should be fully handled in the RestConnector implementations
-For error response codes, suitable exceptions should be thrown.
+For error response codes, suitable exceptions should be thrown. [done]
 
-put,... methods should be able to return the response resource objects to upper layers. Upper layers should be able to control 
-wether the connector should deserialize Rest Resource objects and return as result.
+2) put,... methods should be able to return the response resource objects to upper layers. Upper layers should be able to control 
+wether the connector should deserialize Rest Resource objects and return as result. [pending]

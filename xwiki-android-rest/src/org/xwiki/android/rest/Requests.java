@@ -146,7 +146,10 @@ public class Requests
 
         try {
             return search.doWikiSearch(wikiName, keyword);
-        } catch (RestConnectorException e) {
+        } catch (RestConnectionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (RestException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -170,7 +173,10 @@ public class Requests
         }
         try {
             return search.doSpacesSearch(wikiName, spaceName, keyword);
-        } catch (RestConnectorException e) {
+        } catch (RestConnectionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (RestException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -191,7 +197,10 @@ public class Requests
         Wikis wikis=null;
         try {
             wikis = wikiresources.getWikis();
-        } catch (RestConnectorException e) {
+        } catch (RestConnectionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (RestException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -211,7 +220,10 @@ public class Requests
         }
         try {
             return spacesresources.getSpaces();
-        } catch (RestConnectorException e) {
+        } catch (RestConnectionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (RestException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -232,7 +244,10 @@ public class Requests
         }
         try {
             return pagesresources.getAllPages();
-        } catch (RestConnectorException e) {
+        } catch (RestConnectionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (RestException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -255,7 +270,10 @@ public class Requests
         }
         try {
             return pagesresources.getPage(pageName);
-        } catch (RestConnectorException e) {
+        } catch (RestConnectionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (RestException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -278,7 +296,10 @@ public class Requests
         }
         try {
             return pagesresources.addPage(page);
-        } catch (RestConnectorException e) {
+        } catch (RestConnectionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (RestException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -301,7 +322,10 @@ public class Requests
         }
         try {
             return pagesresources.deletePage(pageName);
-        } catch (RestConnectorException e) {
+        } catch (RestConnectionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (RestException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -325,7 +349,10 @@ public class Requests
         }
         try {
             return pagesresources.deletePageTranslation(pageName, language);
-        } catch (RestConnectorException e) {
+        } catch (RestConnectionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (RestException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -349,7 +376,10 @@ public class Requests
         }
         try {
             return historyresources.getPageHistory();
-        } catch (RestConnectorException e) {
+        } catch (RestConnectionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (RestException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -373,7 +403,10 @@ public class Requests
         }
         try {
             return pagesresources.getPageHistoryOnVersion(pageName, version);
-        } catch (RestConnectorException e) {
+        } catch (RestConnectionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (RestException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -397,7 +430,10 @@ public class Requests
         }
         try {
             return pagesresources.getPageChildren(pageName);
-        } catch (RestConnectorException e) {
+        } catch (RestConnectionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (RestException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -422,7 +458,10 @@ public class Requests
         }
         try {
             return tagresources.getTags();
-        } catch (RestConnectorException e) {
+        } catch (RestConnectionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (RestException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -446,7 +485,10 @@ public class Requests
         }
         try {
             return tagresources.addTag(tag);
-        } catch (RestConnectorException e) {
+        } catch (RestConnectionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (RestException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -469,7 +511,10 @@ public class Requests
         }
         try {
             return tagresources.getTags();
-        } catch (RestConnectorException e) {
+        } catch (RestConnectionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (RestException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -493,7 +538,10 @@ public class Requests
         }
         try {
             return commentresources.getPageComments();
-        } catch (RestConnectorException e) {
+        } catch (RestConnectionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (RestException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -516,7 +564,10 @@ public class Requests
             commentresources.setAuthenticaion(username, password);
             try {
                 return commentresources.addPageComment(comment);
-            } catch (RestConnectorException e) {
+            } catch (RestConnectionException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (RestException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
@@ -543,7 +594,10 @@ public class Requests
         }
         try {
             return commentresources.getPageComment(commentId);
-        } catch (RestConnectorException e) {
+        } catch (RestConnectionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (RestException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -567,7 +621,10 @@ public class Requests
         }
         try {
             return commentresources.getPageCommentsInHistory(version);
-        } catch (RestConnectorException e) {
+        } catch (RestConnectionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (RestException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -592,7 +649,10 @@ public class Requests
         }
         try {
             return commentresources.getPageCommentsInHistory(version, commentId);
-        } catch (RestConnectorException e) {
+        } catch (RestConnectionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (RestException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -617,7 +677,10 @@ public class Requests
 
         try {
             return attachmentresources.getAllPageAttachments();
-        } catch (RestConnectorException e) {
+        } catch (RestConnectionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (RestException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -642,7 +705,10 @@ public class Requests
         }
         try {
             return attachmentresources.getPageAttachment(attachmentName);
-        } catch (RestConnectorException e) {
+        } catch (RestConnectionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (RestException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -668,7 +734,10 @@ public class Requests
         }
         try {
             return attachmentresources.putPageAttachment(filePath, attachmentName);
-        } catch (RestConnectorException e) {
+        } catch (RestConnectionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (RestException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -693,7 +762,10 @@ public class Requests
         }
         try {
             return attachmentresources.deletePageAttachment(attachmentName);
-        } catch (RestConnectorException e) {
+        } catch (RestConnectionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (RestException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -718,7 +790,10 @@ public class Requests
         }
         try {
             return attachmentresources.getPageAttachmentsInHistory(pageVersion);
-        } catch (RestConnectorException e) {
+        } catch (RestConnectionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (RestException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -744,7 +819,10 @@ public class Requests
         }
         try {
             return attachmentresources.getPageAttachmentsInHistory(pageVersion, attachmentName);
-        } catch (RestConnectorException e) {
+        } catch (RestConnectionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (RestException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -770,7 +848,10 @@ public class Requests
         }
         try {
             return attachmentresources.getPageAttachmentsInAttachmentHistory(attachmentName);
-        } catch (RestConnectorException e) {
+        } catch (RestConnectionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (RestException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -796,7 +877,10 @@ public class Requests
         }
         try {
             return attachmentresources.getPageAttachmentsInAttachmentHistory(attachmentName, attachmentVersion);
-        } catch (RestConnectorException e) {
+        } catch (RestConnectionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (RestException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -818,7 +902,10 @@ public class Requests
         }
         try {
             return classresources.getWikiClasses();
-        } catch (RestConnectorException e) {
+        } catch (RestConnectionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (RestException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -841,7 +928,10 @@ public class Requests
         }
         try {
             return classresources.getWikiClasses(classname);
-        } catch (RestConnectorException e) {
+        } catch (RestConnectionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (RestException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -865,7 +955,10 @@ public class Requests
         }
         try {
             return translationresources.getAllTranslations();
-        } catch (RestConnectorException e) {
+        } catch (RestConnectionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (RestException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -889,7 +982,10 @@ public class Requests
         }
         try {
             return pageresources.getPageTranslation(pageName, language);
-        } catch (RestConnectorException e) {
+        } catch (RestConnectionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (RestException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -913,7 +1009,10 @@ public class Requests
         }
         try {
             return historyresources.getPageHistory(language);
-        } catch (RestConnectorException e) {
+        } catch (RestConnectionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (RestException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -938,7 +1037,10 @@ public class Requests
         }
         try {
             return pageresources.getPageTranslation(pageName, language, version);
-        } catch (RestConnectorException e) {
+        } catch (RestConnectionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (RestException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -962,7 +1064,10 @@ public class Requests
         }
         try {
             return objectresources.addObject(object);
-        } catch (RestConnectorException e) {
+        } catch (RestConnectionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (RestException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -986,7 +1091,10 @@ public class Requests
         }
         try {
             return objectresources.getAllObjects();
-        } catch (RestConnectorException e) {
+        } catch (RestConnectionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (RestException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -1011,7 +1119,10 @@ public class Requests
         }
         try {
             return objectresources.getObjectsInClassname(objectClassname);
-        } catch (RestConnectorException e) {
+        } catch (RestConnectionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (RestException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -1038,7 +1149,10 @@ public class Requests
         }
         try {
             return objectresources.getObject(objectClassname, objectNumber);
-        } catch (RestConnectorException e) {
+        } catch (RestConnectionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (RestException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -1065,7 +1179,10 @@ public class Requests
         }
         try {
             return objectresources.deleteObject(objectClassname, objectNumber);
-        } catch (RestConnectorException e) {
+        } catch (RestConnectionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (RestException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -1092,7 +1209,10 @@ public class Requests
         }
         try {
             return objectresources.getObjectProperties(objectClassname, objectNumber);
-        } catch (RestConnectorException e) {
+        } catch (RestConnectionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (RestException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -1120,7 +1240,10 @@ public class Requests
         }
         try {
             return objectresources.getObjectProperty(objectClassname, objectNumber, propertyName);
-        } catch (RestConnectorException e) {
+        } catch (RestConnectionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (RestException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -1147,7 +1270,10 @@ public class Requests
         }
         try {
             return objectresources.addObjectProperty(objectClassname, objectNumber, property);
-        } catch (RestConnectorException e) {
+        } catch (RestConnectionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (RestException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }

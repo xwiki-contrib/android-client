@@ -9,5 +9,11 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="New Post" />
+
+    <Button
+        android:id="@+id/blg_btn_retreive"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Retreive" />
 
 </LinearLayout>

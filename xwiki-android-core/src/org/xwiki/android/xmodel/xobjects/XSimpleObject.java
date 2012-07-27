@@ -39,13 +39,13 @@ public abstract class XSimpleObject extends XObject<XProperty>
         this.className=className;
     }
     
-    @Override
+    
     /**
-     * same as get className
+     * same as get className when called from a extended type. Ex: XBlogPost.getType() eq new XblogPost().getClassName();
      */
-    public String getType()
+    public static String getType()
     {
-        return className;
+        return "XSimpleObject";
     }
     
 //get set pairs.    
@@ -114,11 +114,7 @@ public abstract class XSimpleObject extends XObject<XProperty>
     {
         return className;
     }
-
-    public void setClassName(String className)
-    {
-        this.className = className;
-    }
+   
 
     public int getNumber()
     {

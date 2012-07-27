@@ -1,14 +1,24 @@
 package org.xwiki.android.client.blog;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import org.xwiki.android.blog.svc.BlogDocument;
-import org.xwiki.android.blog.svc.BlogDocument.BlogDocumentLocalCallbacks;
+
+
+
 import org.xwiki.android.context.XWikiApplicationContext;
 import org.xwiki.android.context.XWikiApplicationContextAPI;
 import org.xwiki.android.fileStore.FSDocumentReference;
-import org.xwiki.android.xmodel.svc.DocumentSvc;
-import org.xwiki.android.xmodel.svc.DocumentSvcImpl;
+import org.xwiki.android.svc.blog.BlogDocument;
+
+import org.xwiki.android.svc.xmodel.DocumentLocalSvcCallbacks;
+import org.xwiki.android.svc.xmodel.DocumentLocalSvcs;
+import org.xwiki.android.svc.xmodel.DocumentSvc;
+import org.xwiki.android.svc.xmodel.DocumentSvcImpl;
+import org.xwiki.android.xmodel.blog.XBlogPost;
+import org.xwiki.android.xmodel.entity.Document;
+
 
 import android.app.ListActivity;
 import android.app.ProgressDialog;
@@ -17,13 +27,15 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+
+
 public class LoadSavedPostsActivity extends ListActivity
-{
-    private LoadSavedPostsActivity activityCtx;
+{    
+    public static final String RET_BLOGDOC="RET_VALUE_DOC";
+    
+    private DocumentLocalSvcCallbacks clbk;
 
-    private BlogDocumentLocalCallbacks clbk;
-
-    private BlogDocument doc;
+    private BlogDocument rsltDoc;
 
     private List<FSDocumentReference> refList;
 
@@ -34,12 +46,10 @@ public class LoadSavedPostsActivity extends ListActivity
     {
         super.onCreate(savedInstanceState);
         DocumentSvc svc = new DocumentSvcImpl();
-        activityCtx = this;
-        XWikiApplicationContextAPI ctx=(XWikiApplicationContext)getApplicationContext();
-        doc = (BlogDocument) ctx.pop("blgDoc");
         init();
-        doc.listBlogDocuments(clbk);
-
+        svc.listBySpace("Blog", clbk);
+        // svc.listByTag("SavedBlogPost",clbk);     
+       
     }
 
     @Override
@@ -47,16 +57,17 @@ public class LoadSavedPostsActivity extends ListActivity
     {
         FSDocumentReference fsref = refList.get(position);
         myProgressDialog = ProgressDialog.show(this, "loading", "Please wait...", true);
-        doc.load(fsref, clbk);
+        DocumentLocalSvcs svc=new DocumentSvcImpl();
+        svc.load(fsref, clbk);
     }
 
     private void init()
     {
-        clbk = doc.new BlogDocumentLocalCallbacks()
+        clbk = new DocumentLocalSvcCallbacks()
         {
-
+           
             @Override
-            public void onListingComplete(List<FSDocumentReference> rslts)
+            public void onListingComplete(List<FSDocumentReference> rslts, Map<String, Object> matchedby)
             {
                 refList = rslts;
                 String[] list = new String[rslts.size()];
@@ -66,18 +77,23 @@ public class LoadSavedPostsActivity extends ListActivity
                 }
 
                 ArrayAdapter<String> adapter =
-                    new ArrayAdapter<String>(activityCtx, android.R.layout.simple_list_item_1, list);
+                new ArrayAdapter<String>(LoadSavedPostsActivity.this, android.R.layout.simple_list_item_1, list);
                 setListAdapter(adapter);
             }
 
             @Override
-            public void onBlogPostLoaded()
+            public void onLoadComplete(Document entity)
             {
                 myProgressDialog.dismiss();
                 setResult(RESULT_OK);
+                rsltDoc=new BlogDocument(entity);
+                XWikiApplicationContextAPI ctx=XWikiApplicationContext.getInstance();
+                ctx.put(RET_BLOGDOC, rsltDoc);
                 finish();
             }
         };
 
     }
 }
+
+
