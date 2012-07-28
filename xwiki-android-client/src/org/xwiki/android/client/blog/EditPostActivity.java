@@ -30,16 +30,20 @@ public class EditPostActivity extends Activity implements OnClickListener {
 	
 	private final String TAG=this.getClass().getSimpleName();
 		
-	private Button btnSave,btnLoad,btnPost,btnPublish;
+	
 	private BlogDocument mydoc;
 	private BlogDocument.BlogDocumentRemoteCallbacks myRmtClbks;
 	private EditText etPost;
 	private String title;
 	private String category;
-	ProgressDialog progressDialog;
-	Dialog dialog;
-	EditText etTitle;
-	AutoCompleteTextView actvCategory;
+	private boolean update;
+	
+	//View widgets
+	private Button btnSave,btnLoad,btnPost,btnPublish;
+	private ProgressDialog progressDialog;
+	private Dialog dialog;
+	private EditText etTitle;
+	private AutoCompleteTextView actvCategory;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {		
 		super.onCreate(savedInstanceState);
@@ -57,11 +61,12 @@ public class EditPostActivity extends Activity implements OnClickListener {
 		
 		//show dialog to get page name, category
 		
-		Document d=(Document) getIntent().getSerializableExtra("UPDATE_DOC");
+		Document d=(Document) getIntent().getSerializableExtra(ARG_UPDATE_DOC);
         if(d!=null){            
             mydoc=new BlogDocument(d);
             etPost.setText(mydoc.getContent());
             Log.d(TAG,mydoc.getContent());
+            update=true;
         }else{
             showDialog();
         }
@@ -141,8 +146,14 @@ public class EditPostActivity extends Activity implements OnClickListener {
 					finish();
 				}
 			};
-			mydoc.setContent(etPost.getText().toString());
-			mydoc.post(myRmtClbks);
+			if(update){
+				mydoc.setContent(etPost.getText().toString());
+				mydoc.postUpdate(myRmtClbks);
+			}else{
+				mydoc.setContent(etPost.getText().toString());
+				mydoc.post(myRmtClbks);
+			}
+			
 			
 		}else if(v.getId()==R.id.btnPublish){			
             progressDialog =progressDialog.show(this, "Publishing", "Please wait...", true);
@@ -153,6 +164,12 @@ public class EditPostActivity extends Activity implements OnClickListener {
 					finish();
 				}
 			};
+			mydoc.setContent(etPost.getText().toString());
+			if(update){				
+				mydoc.publishUpdate(myRmtClbks);
+			}else{				
+				mydoc.publish(myRmtClbks);
+			}
 			mydoc.setContent(etPost.getText().toString());
 			mydoc.publish(myRmtClbks);
 		}

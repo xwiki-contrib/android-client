@@ -43,10 +43,12 @@ public class XUtils
             // IVR s
             switch (key) {
                 case 0: {
-                    String gmt = ds.substring(20);
-                    gmt = gmt.substring(0, 2) + gmt.substring(3);
-                    System.out.println(gmt);
-                    ds = ds.substring(0, 20) + gmt;
+                	if(ds.length()>21){
+                		String gmt = ds.substring(20);
+                        gmt = gmt.substring(0, 2) + gmt.substring(3);
+                        System.out.println(gmt);
+                        ds = ds.substring(0, 20) + gmt;
+                	}                    
                 }
                     break;
                 default:

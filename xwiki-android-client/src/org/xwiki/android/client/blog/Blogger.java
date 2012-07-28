@@ -75,7 +75,7 @@ public class Blogger extends Activity implements OnClickListener
 
     private void retreiveAndLaunchEditDoc()
     {
-
+    	
     }
 
     private void showRetreiveDialog()

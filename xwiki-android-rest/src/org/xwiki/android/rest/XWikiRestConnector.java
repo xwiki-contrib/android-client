@@ -368,6 +368,18 @@ public class XWikiRestConnector implements XWikiRestfulAPI
         return tagresources.addTag(tag);
 
     }
+    @Override
+    public String setTags(String wikiName, String spaceName, String pageName,Tags tags)throws RestConnectionException, RestException{
+    	wikiName = urlEncode(wikiName);
+        spaceName = urlEncode(spaceName);
+        pageName = urlEncode(pageName);
+
+        TagResources tagresources = new TagResources(URLprefix, wikiName, spaceName, pageName);
+        if (isAuthenticated) {
+            tagresources.setAuthenticaion(username, password);
+        }
+        return tagresources.setTags(tags);
+    }
 
     /*
      * (non-Javadoc)
@@ -542,7 +554,7 @@ public class XWikiRestConnector implements XWikiRestfulAPI
      */
 
     @Override
-    public String addPageAttachment(String wikiName, String spaceName, String pageName, String filePath,
+    public String putPageAttachment(String wikiName, String spaceName, String pageName, String filePath,
         String attachmentName) throws RestConnectionException, RestException
     {
         wikiName = urlEncode(wikiName);
@@ -804,6 +816,31 @@ public class XWikiRestConnector implements XWikiRestfulAPI
             objectresources.setAuthenticaion(username, password);
         }
         return objectresources.addObject(object);
+    }
+    
+    /**
+     * Update object in a page
+     * 
+     * @param objectClassname name of the class of the object
+     * @param objectNumber number of the object in the class
+     * @param object Object object to be updated in the page
+     * @return status of the HTTP put request
+     * @throws RestConnectionException 
+     * @throws RestException 
+     */
+    @Override
+    public String updateObject(String wikiName, String spaceName, String pageName,String objectClassname, String objectNumber, Object object) throws RestConnectionException, RestException
+    {
+        wikiName = urlEncode(wikiName);
+        spaceName = urlEncode(spaceName);
+        pageName = urlEncode(pageName);
+
+        ObjectResources objectresources = new ObjectResources(URLprefix, wikiName, spaceName, pageName);
+        if (isAuthenticated) {
+            objectresources.setAuthenticaion(username, password);
+        }
+        return objectresources.updateObject(objectClassname, objectNumber, object);
+
     }
 
     /*

@@ -46,7 +46,7 @@ class DocumentFaoImpSer implements DocumentFao
 		File f;
 		String wikiName = doc.getWikiName();
 		String spaceName = doc.getSpaceName();
-		String pageName = doc.getSimpleName();
+		String pageName = doc.getPageName();
 		String dirPath = FSDIR.getAbsolutePath() + wikiName + "/" + spaceName + "/" + pageName;
 		String filePath=dirPath+"/doc.ser";
 		f = new File(filePath);

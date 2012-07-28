@@ -217,9 +217,10 @@ public abstract class DocumentBase extends Resource
 
     // TODO:Consider refactor rename back to getName() ? confuse with name,fullName ?
     /**
+     * get Page Name. 
      * @return the value of the name property in the Rest model "Page" element..
      */
-    public String getSimpleName()
+    public String getPageName()
     {
         return name;
     }
@@ -229,7 +230,7 @@ public abstract class DocumentBase extends Resource
      * 
      * @param value allowed object is {@link String }
      */
-    public void setSimpleName(String name)
+    public void setPageName(String name)
     {
         this.name = name;
     }

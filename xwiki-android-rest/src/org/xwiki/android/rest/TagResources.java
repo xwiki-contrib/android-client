@@ -151,10 +151,27 @@ public class TagResources extends HttpConnector
             temp_tags.getTags().add(tag);
 
             return super.putRequest(Uri, buildXml(temp_tags));
-        } else {
-            return null;
-        }
+        } 
+        throw new IllegalStateException("tagType should be =0 or 1");
+    }
+    
+    public String setTags(Tags tags)throws RestConnectionException, RestException
+    {
+    	String Uri = null;
+        
+        if (tagType == 0) {
 
+            Uri = "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/tags"; 
+            
+            return super.putRequest(Uri, buildXml(tags));
+
+        } else {
+            Uri =
+                "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
+                    + "/tags";
+            return super.putRequest(Uri, buildXml(tags));
+        }
+       
     }
 
     /**

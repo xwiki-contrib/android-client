@@ -184,8 +184,12 @@ public class XWikiApplicationContext extends Application implements XWikiApplica
      */
 
     public RESTfulManager newRESTfulManager()
-    {
-        return new XmlRESTFulManager();
+    {        
+        UserSession session = getUserSession();
+        String username = session.getUserName();
+        String password = session.getPassword();
+        String serverUrl = session.getRealm();
+        return new XmlRESTFulManager(serverUrl, username, password);
     }
 
     public EntityManager newEntityManager()
