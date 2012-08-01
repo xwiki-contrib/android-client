@@ -30,7 +30,7 @@ public class TestResources
 
     public static final String URL = "10.0.2.2:8080";
 
-    public static final String USERNAME = "Admin";
+    public static final String USERNAME = "superadmin";
 
     public static final String PASSWORD = "admin";
 

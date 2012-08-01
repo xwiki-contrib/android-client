@@ -18,11 +18,12 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.xwiki.android.test.rest;
+package org.xwiki.android.test.rest.tstProperties;
 
 import org.xwiki.android.resources.Class;
 import org.xwiki.android.resources.Classes;
 import org.xwiki.android.rest.Requests;
+import org.xwiki.android.test.rest.TestResources;
 
 import android.test.AndroidTestCase;
 

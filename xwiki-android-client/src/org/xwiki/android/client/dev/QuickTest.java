@@ -12,6 +12,8 @@ import org.xwiki.android.entity.SyncOutEntity;
 
 
 import org.xwiki.android.rest.reference.DocumentReference;
+import org.xwiki.android.security.Master;
+
 import org.xwiki.android.xmodel.entity.Document;
 import com.j256.ormlite.dao.Dao;
 
@@ -20,13 +22,16 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 /**
  * class for test purposes .
  * @author xwiki gsoc 2012
  *
  */
 public class QuickTest extends Activity {
-	@Override
+	private static final String TAG = "Quikc TEST";
+
+    @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
@@ -39,7 +44,7 @@ public class QuickTest extends Activity {
         });
         alertbox.show();   
         
-        XWikiApplicationContext ctx=(XWikiApplicationContext)getApplicationContext();
+        /*XWikiApplicationContext ctx=(XWikiApplicationContext)getApplicationContext();
         EntityManager em=ctx.newEntityManager();
        try {
 			Dao<SyncOutEntity,Integer> dao=em.getDao(SyncOutEntity.class);
@@ -55,10 +60,14 @@ public class QuickTest extends Activity {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		
-       // RESTfulManager mngr=new XmlRESTFulManager();
-//    }   // mngr.getDocumentRao(new DocumentRaoCallback(){});
+		}*/
+        
+        //test enc
+        Master secMstr=new Master();
+        String cipher=secMstr.encryptPassword("abcdefghijklmnopqrstuvwxyz1234567890!@#$%^&*()");
+        Log.d( TAG, cipher);
+        Log.d(TAG, secMstr.decryptPassword(cipher));
+
 	}
 
 }

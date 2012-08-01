@@ -1,5 +1,7 @@
 package org.xwiki.android.entity;
 
+import org.xwiki.android.security.Master;
+
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
@@ -22,15 +24,34 @@ public class User implements Cloneable
     @DatabaseField(canBeNull = false, uniqueCombo = true, useGetSet = true)
     private String userName;
 
-    @DatabaseField(useGetSet = true)
-    private String password;// todo: when enc enable. Use pers field encPwd instead of pwd and make getPassword()
-                            // decrypt and store val in pwd field
+    @DatabaseField()
+    private String encPassword;
+
+    private String password;
 
     @DatabaseField(useGetSet = true)
     private String email;
 
     @DatabaseField(uniqueCombo = true, useGetSet = true)
     private String wikiRealm;
+    
+ // constructors
+    public User()
+    {
+    }
+
+    public User(String firstName, String lastName, String userName, String password, String wikiRealm, String email)
+    {
+        super();
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.userName = userName;
+        this.password = password;
+        this.email = email;
+        this.wikiRealm = wikiRealm;
+    }
+    
+    
 
     public String getWikiRealm()
     {
@@ -84,12 +105,18 @@ public class User implements Cloneable
     }
 
     /**
-     * use security utils to decrypt the pwd. return The decrypted pwd. null if not stored
+     * uses security utils to decrypt the pwd. return The decrypted pwd. null if not stored
      * 
      * @return encrypted Password
      */
     public String getPassword()
     {
+        if (password == null) {
+            Master m = new Master();
+            if (encPassword != null) {
+                password = m.decryptPassword(encPassword);
+            }
+        }
         return password;
     }
 
@@ -99,6 +126,8 @@ public class User implements Cloneable
     public void setPassword(String password)
     {
         this.password = password;
+        this.encPassword = new Master().encryptPassword(password);
+
     }
 
     public String getEmail()
@@ -123,20 +152,6 @@ public class User implements Cloneable
         return u;
     }
 
-    // constructors
-    public User()
-    {
-    }
-
-    public User(String firstName, String lastName, String userName, String password, String wikiRealm, String email)
-    {
-        super();
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.userName = userName;
-        this.password = password;
-        this.email = email;
-        this.wikiRealm = wikiRealm;
-    }
+    
 
 }
