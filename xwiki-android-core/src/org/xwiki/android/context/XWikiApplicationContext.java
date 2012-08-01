@@ -5,16 +5,15 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Hashtable;
 import java.util.Map;
 
-import org.xwiki.android.bgsvcs.SyncBackgroundService;
-import org.xwiki.android.dal.EntityManager;
+import org.xwiki.android.data.fileStore.FileStoreManager;
+import org.xwiki.android.data.fileStore.FileStoreManagerImpl;
+import org.xwiki.android.data.rdb.EntityManager;
 import org.xwiki.android.entity.User;
-import org.xwiki.android.fileStore.FileStoreManager;
-import org.xwiki.android.fileStore.FileStoreManagerImpl;
 import org.xwiki.android.rest.ral.RESTfulManager;
 import org.xwiki.android.rest.ral.XmlRESTFulManager;
+import org.xwiki.android.svcbg.SyncDaemon;
 
 import android.app.Application;
-import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
@@ -64,7 +63,7 @@ public class XWikiApplicationContext extends Application implements XWikiApplica
             Log.d(tag, "Context Class got loaded. Did your process get killed?");
             store=new Hashtable<String, Object>(10);
         }
-        initBGServices();
+        startBGServices();
     }
 
     @Override
@@ -74,13 +73,13 @@ public class XWikiApplicationContext extends Application implements XWikiApplica
         super.onTerminate();
     }    
     
-    private void initBGServices(){
+    private void startBGServices(){
     	Thread t=new Thread(){
     		@Override
     		public void run()
     		{	
     			Log.d(tag, "initializing background services");
-    			Intent intent=new Intent(XWikiApplicationContext.this,SyncBackgroundService.class);
+    			Intent intent=new Intent(XWikiApplicationContext.this,SyncDaemon.class);
     			startService(intent);    		
     		}
     	};

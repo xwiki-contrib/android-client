@@ -1,13 +1,17 @@
 package org.xwiki.android.client.dev;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import org.xwiki.android.client.R;
 import org.xwiki.android.components.login.LoginActivity;
 import org.xwiki.android.context.XWikiApplicationContext;
-import org.xwiki.android.dal.EntityManager;
+import org.xwiki.android.data.rdb.EntityManager;
+import org.xwiki.android.data.fileStore.FSDocumentReference;
+import org.xwiki.android.entity.SyncOutEntity;
 
 
+import org.xwiki.android.rest.reference.DocumentReference;
 import org.xwiki.android.xmodel.entity.Document;
 import com.j256.ormlite.dao.Dao;
 
@@ -28,7 +32,7 @@ public class QuickTest extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.quicktest);
 		AlertDialog.Builder alertbox = new AlertDialog.Builder(this);
-        alertbox.setMessage("Only a code testing/exploration activity.remove this from production");
+		alertbox.setMessage("Only a code testing/exploration activity.remove this from production");
         alertbox.setNeutralButton("Ok", new DialogInterface.OnClickListener()
         {
             public void onClick(DialogInterface arg0, int arg1){}
@@ -37,14 +41,21 @@ public class QuickTest extends Activity {
         
         XWikiApplicationContext ctx=(XWikiApplicationContext)getApplicationContext();
         EntityManager em=ctx.newEntityManager();
-//        try {
-			//Dao<DocumentReference,Integer> docdao=em.getDao(DocumentReference.class);
-			//docdao.create(new DocumentReference("xwiki","blog","myBlogPage"));
+       try {
+			Dao<SyncOutEntity,Integer> dao=em.getDao(SyncOutEntity.class);
+			List<SyncOutEntity> lst = dao.queryForAll();
 			
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+			SyncOutEntity s=lst.get(0);
+			FSDocumentReference dr=s.getFSDocref();
+			Dao<FSDocumentReference,Integer> fsdao=em.getDao(FSDocumentReference.class);
+			dr=fsdao.queryForSameId(dr);
+			alertbox.setMessage("dr Page Name: "+dr.getPageName()+"  id:"+dr.get_id());
+			alertbox.show();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
        // RESTfulManager mngr=new XmlRESTFulManager();
 //    }   // mngr.getDocumentRao(new DocumentRaoCallback(){});

@@ -69,6 +69,8 @@ public class PageResources extends HttpConnector
         this.wikiName = wikiName;
         this.spaceName = spaceName;
     }
+    
+    
 
     /**
      * @return all the pages as a Pages object in the specified space
@@ -80,6 +82,21 @@ public class PageResources extends HttpConnector
         String Uri = "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + PAGE_URL_SUFFIX;
 
         return buildPages(super.getResponse(Uri));
+    }
+    
+    
+    public boolean exists(String pageName) throws RestConnectionException,RestException{
+        String Uri = "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName;
+        int code=headRequest(Uri);
+        
+        if(code==200){
+            return true;
+        }if(code==404){
+            return false;
+        }else{
+            throw new RestException(code);
+        }        
+       
     }
 
     /**

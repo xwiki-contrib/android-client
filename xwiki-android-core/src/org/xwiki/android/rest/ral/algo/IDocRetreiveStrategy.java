@@ -1,0 +1,27 @@
+package org.xwiki.android.rest.ral.algo;
+
+import org.xwiki.android.rest.RestConnectionException;
+import org.xwiki.android.rest.ral.DocumentRao;
+import org.xwiki.android.rest.ral.RaoException;
+import org.xwiki.android.rest.reference.DocumentReference;
+import org.xwiki.android.xmodel.entity.Document;
+
+public interface IDocRetreiveStrategy
+{
+    Document retreive(Document resrc) throws RestConnectionException,RaoException;    
+    /**
+     * 
+     * @param resrc
+     * @param parts described in {@link DocumentRao}
+     * @return
+     */
+    Document retreive(Document resrc, int parts);
+    
+    Document retreive(Document resrc, int parts, String... objTypeArgs);
+    
+    Document retreive(DocumentReference dref) throws RestConnectionException, RaoException;
+    
+    Document retreive(DocumentReference dref, int parts);
+    
+    Document retreive(DocumentReference dref, int parts, String... objTypeArgs);
+}

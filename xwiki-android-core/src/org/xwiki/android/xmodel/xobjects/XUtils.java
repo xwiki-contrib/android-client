@@ -13,9 +13,18 @@ import java.util.List;
 
 public class XUtils
 {
+    
+    /**
+     * 
+     * @param val
+     * @return false for null vals. true for=1,"true  false for=0,"false"
+     * @throws IllegalArgumentException 
+     */
     public static boolean toBoolean(String val) throws IllegalArgumentException
     {
         boolean value;
+        if(val==null)return false;
+        
         if (val.equals("1")) {
             value = true;
         } else if (val.equals("0")) {

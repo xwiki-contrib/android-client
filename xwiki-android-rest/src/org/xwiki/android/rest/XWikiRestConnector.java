@@ -192,11 +192,23 @@ public class XWikiRestConnector implements XWikiRestfulAPI
         }
         return pagesresources.getAllPages();
     }
+    
+    @Override
+    public boolean existsPage(String wikiName, String spaceName, String pageName) throws RestConnectionException, RestException
+    {
+        wikiName = urlEncode(wikiName);
+        spaceName = urlEncode(spaceName);
+        pageName = urlEncode(pageName);
 
-    /*
-     * (non-Javadoc)
-     * @see org.xwiki.android.rest.XWikiRestfulAPI#getPage(java.lang.String, java.lang.String, java.lang.String)
-     */
+        PageResources pagesresources = new PageResources(URLprefix, wikiName, spaceName);
+        if (isAuthenticated) {
+            pagesresources.setAuthenticaion(username, password);
+        }
+        return pagesresources.exists(pageName);
+        
+    }
+
+   
     @Override
     public Page getPage(String wikiName, String spaceName, String pageName) throws RestConnectionException, RestException
     {
@@ -999,4 +1011,6 @@ public class XWikiRestConnector implements XWikiRestfulAPI
         }
         return objectresources.addObjectProperty(objectClassname, objectNumber, property);
     }
+
+   
 }

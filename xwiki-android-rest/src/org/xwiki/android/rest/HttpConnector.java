@@ -42,6 +42,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpHead;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.protocol.ClientContext;
@@ -121,6 +122,39 @@ public class HttpConnector
     public boolean getIsSecured()
     {
         return isSecured;
+    }
+    
+    
+    public int headRequest(String Uri) throws RestConnectionException{
+        initialize();        
+        
+        HttpHead request=new HttpHead();
+       
+        try {
+            requestUri = new URI(Uri);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+
+        setCredentials();
+
+        request.setURI(requestUri);
+        Log.d("Request URL", Uri);
+
+        try {
+            response = client.execute(request);
+            Log.d("Response status", response.getStatusLine().toString());            
+            return response.getStatusLine().getStatusCode();
+        } catch (ClientProtocolException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            throw new RestConnectionException(e);
+        }
+      
+        return -1;
     }
 
     /**

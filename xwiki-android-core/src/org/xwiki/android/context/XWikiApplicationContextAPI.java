@@ -1,7 +1,8 @@
 package org.xwiki.android.context;
 
+import org.xwiki.android.data.fileStore.FileStoreManager;
+import org.xwiki.android.data.rdb.EntityManager;
 import org.xwiki.android.entity.User;
-import org.xwiki.android.fileStore.FileStoreManager;
 import org.xwiki.android.rest.ral.RESTfulManager;
 
 /**
@@ -25,6 +26,7 @@ public interface XWikiApplicationContextAPI
     ConfigSourceProvider getConfigSourceProvider();
 
     FileStoreManager getFileStoreManager();
+    public EntityManager newEntityManager();
 
     RESTfulManager newRESTfulManager();
     /**

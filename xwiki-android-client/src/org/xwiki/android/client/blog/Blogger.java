@@ -5,7 +5,7 @@ import org.xwiki.android.client.R.layout;
 import org.xwiki.android.components.login.LoginActivity;
 import org.xwiki.android.rest.ral.RaoException;
 import org.xwiki.android.rest.reference.DocumentReference;
-import org.xwiki.android.svc.blog.BlogDocument;
+import org.xwiki.android.svcx.blog.BlogDocument;
 import org.xwiki.android.svc.xmodel.DocumentRemoteSvcCallbacks;
 import org.xwiki.android.svc.xmodel.DocumentSvc;
 import org.xwiki.android.svc.xmodel.DocumentSvcImpl;

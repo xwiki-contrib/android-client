@@ -2,7 +2,7 @@ package org.xwiki.android.entity;
 
 import java.util.Date;
 
-import org.xwiki.android.fileStore.FSDocumentReference;
+import org.xwiki.android.data.fileStore.FSDocumentReference;
 
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
@@ -17,11 +17,11 @@ import com.j256.ormlite.table.DatabaseTable;
 @DatabaseTable(tableName = "C_SyncOut")
 public class SyncOutEntity
 {
-    @DatabaseField(generatedId = true)
+    @DatabaseField( generatedId = true)
     int _id;
 
-    @DatabaseField(foreign = true, unique = true)
-    private FSDocumentReference docref;
+    @DatabaseField(foreign = true,foreignAutoRefresh=true, unique = true)
+    private FSDocumentReference fsdocref;
 
     @DatabaseField
     private boolean delAftrSync;
@@ -43,7 +43,7 @@ public class SyncOutEntity
 
     public SyncOutEntity(FSDocumentReference ref)
     {
-        this.docref = ref;
+        this.fsdocref = ref;
         stratery = StratergyType.DEFALUT;
         delAftrSync = true;
         status = StatusType.PENDING;
@@ -65,14 +65,14 @@ public class SyncOutEntity
         PENDING
     }
 
-    public FSDocumentReference getDocref()
+    public FSDocumentReference getFSDocref()
     {
-        return docref;
+        return fsdocref;
     }
 
-    public void setDocref(FSDocumentReference docref)
+    public void setFSDocref(FSDocumentReference docref)
     {
-        this.docref = docref;
+        this.fsdocref = docref;
     }
 
     public boolean isDelAftrSync()

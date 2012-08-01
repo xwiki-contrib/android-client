@@ -1,4 +1,4 @@
-package org.xwiki.android.bgsvcs;
+package org.xwiki.android.svcbg;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -8,12 +8,12 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import org.xwiki.android.context.XWikiApplicationContext;
-import org.xwiki.android.dal.EntityManager;
+import org.xwiki.android.data.fileStore.DocumentFao;
+import org.xwiki.android.data.fileStore.FSDocumentReference;
+import org.xwiki.android.data.fileStore.FileStoreManager;
+import org.xwiki.android.data.rdb.EntityManager;
 import org.xwiki.android.entity.SyncOutEntity;
 import org.xwiki.android.entity.SyncOutEntity.StatusType;
-import org.xwiki.android.fileStore.DocumentFao;
-import org.xwiki.android.fileStore.FSDocumentReference;
-import org.xwiki.android.fileStore.FileStoreManager;
 import org.xwiki.android.rest.RestConnectionException;
 import org.xwiki.android.rest.ral.DocumentRao;
 import org.xwiki.android.rest.ral.RESTfulManager;
@@ -36,10 +36,11 @@ import com.j256.ormlite.dao.Dao;
  */
 
 // dev note:Other remote syncing functionalities should also be put here.
-public class SyncBackgroundService extends Service
+public class SyncDaemon extends Service
 {
-	private static final String tag="SyncBackgroundService";
-	private static final int SYNC_PERIOD = 60000;// sync every min.
+	private static final String TAG="Sync Daemon";
+	private static final int SYNC_PERIOD = 3000;// sync every min.
+    
 	private Timer timer;
 	private TimerTask task;
 	
@@ -48,7 +49,7 @@ public class SyncBackgroundService extends Service
 	@Override
 	public void onCreate()
 	{
-		Log.d(tag,"bg service created");
+		Log.d(TAG,"bg service created :Sync Daemon");
 		// HandlerThread thread = new HandlerThread("ServiceStartArguments",
 		// Process.THREAD_PRIORITY_BACKGROUND);
 		// thread.start();
@@ -64,6 +65,7 @@ public class SyncBackgroundService extends Service
 				try {
 					Dao<SyncOutEntity, Integer> dao = em.getDao(SyncOutEntity.class);
 					List<SyncOutEntity> list=dao.queryForAll();
+					Log.d(TAG, list.size()+" entries to sync out");
 					if(!list.isEmpty()){
 						RESTfulManager rm=ctx.newRESTfulManager();
 						FileStoreManager fm=ctx.getFileStoreManager();
@@ -77,45 +79,48 @@ public class SyncBackgroundService extends Service
 						DocumentRao rao=rm.newDocumentRao();
 						DocumentFao fao=fm.getDocumentFao();
 						for(SyncOutEntity s:list){
-							FSDocumentReference ref=s.getDocref();
+							FSDocumentReference ref=s.getFSDocref();
 							Document doc=fao.load(ref);
 							try {
 								rao.create(doc);
 								dao.delete(s);
-							} catch (RestConnectionException e) {
+								fao.delete(ref);
+							} catch (RestConnectionException e) {//network failure
 							    allOk=false;
 							    s.setLastTried(new Date());
 							    dao.update(s);
-								e.printStackTrace();
+								Log.i(TAG, "Network connectivity issue. Retry later");
 								break;//abort sync. retry after SYNC_PERIOD
 							} catch (RaoException e) {
-								//doc may be already created.
+							  //doc may be already created.
 								try {
+								    Log.i(TAG, "Try update document as the doc is already in the server");
 									rao.update(doc);
 									dao.delete(s);
-								} catch (RestConnectionException e1) {	
+									fao.delete(ref);
+								} catch (RestConnectionException e1) {//network failure
 								    allOk=false;
 								    s.setLastTried(new Date());
 	                                dao.update(s);
-									e1.printStackTrace();
-									break;
+	                                Log.i(TAG, "Network connectivity issue. Retry later");
+									break;//abort syncing. retry later
 								} catch (RaoException e1) {
 									// we cannot do an update also.
-									//donot delete and recreate. Just mark failed.
+									//donot delete and recreate. Just mark aborted.
 									s.setStatus(StatusType.ABORTED);
 									dao.update(s);
-									e1.printStackTrace();
-								}
-								e.printStackTrace();
+									Log.e("TAG", "cannot sync. Can neither create nor update");
+								}								
 							}
 						}
 					}else{
-						Log.d(tag, "terminating SyncBackgroundService. No docs to sync out");
+						Log.d(TAG, "terminating SyncBackgroundService. No docs to sync out");
 					}
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}				
+				timer.cancel();
 				stopSelf();//stop native service after all sync entries are synced.
 			}
 		};
@@ -125,10 +130,12 @@ public class SyncBackgroundService extends Service
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId)
 	{
-		Toast.makeText(this, "Sync Service Starting", Toast.LENGTH_SHORT).show();
+		Toast.makeText(this, "Sync Daemon Starting", Toast.LENGTH_SHORT).show();
 		timer.schedule(task, 3000, SYNC_PERIOD);
 		return START_NOT_STICKY;
 	}
+	
+	
 
 	@Override
 	public IBinder onBind(Intent intent)

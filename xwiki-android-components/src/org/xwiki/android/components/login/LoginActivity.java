@@ -26,7 +26,7 @@ import java.util.List;
 
 import org.xwiki.android.components.IntentExtra;
 import org.xwiki.android.components.R;
-import org.xwiki.android.dal.EntityManager;
+import org.xwiki.android.data.rdb.EntityManager;
 import org.xwiki.android.rest.HttpConnector;
 import org.xwiki.android.svc.cmn.LoginFacade;
 import org.xwiki.android.entity.*;

@@ -1,4 +1,4 @@
-package org.xwiki.android.fileStore;
+package org.xwiki.android.data.fileStore;
 
 import java.io.File;
 

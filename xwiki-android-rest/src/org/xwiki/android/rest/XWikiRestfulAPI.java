@@ -105,6 +105,8 @@ public interface XWikiRestfulAPI
 	 * @return list of all the pages in specific Wiki and Space
 	 */
 	Pages getAllPages(String wikiName, String spaceName) throws RestConnectionException, RestException;
+	
+	boolean existsPage(String wikiName, String spaceName, String pageName) throws RestConnectionException,RestException;
 
 	/**
 	 * @param wikiName

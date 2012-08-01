@@ -1,4 +1,4 @@
-package org.xwiki.android.dal;
+package org.xwiki.android.data.rdb;
 
 import java.sql.SQLException;
 
@@ -8,10 +8,10 @@ import android.util.Log;
 
 import org.xwiki.android.context.GlobalConstants;
 import org.xwiki.android.core.*;
+import org.xwiki.android.data.fileStore.FSDocumentReference;
 import org.xwiki.android.entity.LoginAttempt;
 import org.xwiki.android.entity.SyncOutEntity;
 import org.xwiki.android.entity.User;
-import org.xwiki.android.fileStore.FSDocumentReference;
 import org.xwiki.android.rest.reference.DocumentReference;
 import org.xwiki.android.xmodel.entity.DocumentBase;
 

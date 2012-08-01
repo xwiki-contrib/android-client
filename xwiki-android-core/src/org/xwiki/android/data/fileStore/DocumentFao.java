@@ -1,4 +1,4 @@
-package org.xwiki.android.fileStore;
+package org.xwiki.android.data.fileStore;
 
 import java.util.List;
 import java.util.Map;
@@ -13,6 +13,7 @@ public interface DocumentFao extends Fao<Document>
 	@Override
 	FSDocumentReference save(Document entity, String tag);
     Document load(FSDocumentReference ref);
+    boolean delete(FSDocumentReference ref);
    
     List<FSDocumentReference> listBySpace(String spaceName);
     List<FSDocumentReference> listByTag(String tag);

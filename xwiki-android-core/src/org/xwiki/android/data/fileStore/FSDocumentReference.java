@@ -1,4 +1,4 @@
-package org.xwiki.android.fileStore;
+package org.xwiki.android.data.fileStore;
 
 import java.io.File;
 
@@ -23,6 +23,12 @@ public class FSDocumentReference extends DocumentReference
 
     @DatabaseField
     protected String tag;
+    
+    
+    public FSDocumentReference()
+    {
+        //for ORMLite.
+    }
 
     public void setFile(File f)
     {
@@ -58,4 +64,9 @@ public class FSDocumentReference extends DocumentReference
         pageName = docref.getPageName();
     }
 
+    public int get_id()
+    {
+        return _id;
+    }
+   
 }
