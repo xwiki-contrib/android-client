@@ -1,8 +1,29 @@
 This is the XWiki Android client repositary
 
+Wiki
+-----
+http://extensions.xwiki.org/xwiki/bin/view/Extension/Google+Android+Client
+
+XWiki Android Platform
+-----------------------
+xwiki-rest-model : XML,JSON Rest model for RESTful Datat Transfer/Communication
 xwiki-android-rest : REST library for android which uses XWiki RESTful API (apklib)
+xwiki-android-core : Platform APIs
+
+XWiki Android Application
+-------------------------
 xwiki-android-component : Includes Android activities which can be used when developing android application (apklib)
 xwiki-android-client : Sample installable XWiki Android Client application (apk)
+
+Test Modules
+------------
+xwiki-android-test-rest
+xwiki-android-tests-instrumentation : test UI components etc.
+
+Others
+------
+xwiki-android-howtos : API usage samples
+
 
 For testing
 -----------
