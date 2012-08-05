@@ -1,6 +1,13 @@
 package org.xwiki.android.rest.ral;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.xwiki.android.context.UserSession;
 import org.xwiki.android.context.XWikiApplicationContext;
@@ -18,12 +25,16 @@ import org.xwiki.android.rest.reference.DocumentReference;
 import org.xwiki.android.rest.transformation.DocLaunchPadForXML;
 import org.xwiki.android.rest.transformation.DocumentDismantler_XML;
 import org.xwiki.android.xmodel.entity.Document;
+import org.xwiki.android.xmodel.xobjects.XSimpleObject;
+
 import android.util.Log;
 
 /**
+ * uses simplexml Rest model. Non public. Use XMLRestfulManager to create new. Very primitive implementation with single
+ * Http Connection for all work.
+ *  
  * @author xwiki gsoc 2012
- * @version 0.8 alpha uses simplexml Rest model. Non public. Use XMLRestfulManager to create new. Very primitive
- *          implementation with single Http Connection for all work. *
+ * @version 0.8 alpha
  */
 // TODO: current impl only support single http connection through Requests
 // class. Implement for multiple parallel connections to reduce latency.
@@ -37,7 +48,8 @@ class XmlDocumentRao implements DocumentRao
     private IDocRetreiveStrategy retStr;
     private IDocUpdateStragegy updStr;
 
-    public XmlDocumentRao(String serverUrl,String username,String password)    {       
+    public XmlDocumentRao(String serverUrl, String username, String password)
+    {
 
         api = new XWikiRestConnector(serverUrl, username, password);
         retStr = new DocRetreiveStrategy(username, password, serverUrl);
@@ -51,7 +63,7 @@ class XmlDocumentRao implements DocumentRao
     @Override
     public Document create(Document doc) throws RestConnectionException, RaoException
     {
-        //TODO: make advanced algo.Put it in  ral.algo package. Here we use simple non parellal way to create doc.
+        // TODO: make advanced algo.Put it in ral.algo package. Here we use simple non parellal way to create doc.
         DocumentDismantler_XML con = new DocumentDismantler_XML(ALL);
         DocLaunchPadForXML pad = con.convertDocument(doc);
 
@@ -59,24 +71,98 @@ class XmlDocumentRao implements DocumentRao
         String wikiName = pad.getWikiName();
         String spaceName = pad.getSpaceName();
         String pageName = pad.getPageName();
-       
 
-        try {         
-            if(api.existsPage(wikiName, spaceName, pageName)){
+        try {
+            if (api.existsPage(wikiName, spaceName, pageName)) {
                 throw new RaoException("document already exists: try updating the doucment");
-            }else{
+            } else {
                 api.addPage(wikiName, spaceName, pageName, page); 
-                for (Object object : pad.getNewObjects()) {                
+                
+                
+                // start Algo . Order objects by number, fill with new
+                LinkedList<Object> obList=new LinkedList<Object>();//'cause we need to add in the middle
+                class Index{                   
+                    public Index(int first, int last)
+                    {                        
+                        this.first = first;
+                        this.last = last;
+                    }
+                    int first;
+                    int last;
+                }
+                Map<String,Index> indexes=new HashMap<String, Index>(10);//for < 10 classes of objs.
+                               
+                Map<String, Object> edObjs = pad.getEditedObjects();
+                
+                A:for(String k: edObjs.keySet()){
+                    String ss[]=k.split("/");
+                    String clsName=ss[0];
+                    Object o=edObjs.get(k);
+                    Index i= indexes.get(clsName);
+                    if(i==null){//new class    
+                        obList.add(o);
+                        int first=obList.size();
+                        int last=first;
+                        indexes.put(clsName, new Index(first,last));
+                    }else{
+                        int last=i.last;
+                        for(int j=i.first; j<=last;j++){
+                            Object curr=obList.get(j);
+                            if(o.getNumber()<curr.getNumber()){
+                                obList.add(j,o);
+                                i.last++;
+                                continue A;
+                            }
+                        }
+                        obList.add(last+1,edObjs.get(k));
+                        i.last++;
+                    }
+                }
+                
+                List<Object> newObjects = pad.getNewObjects();
+                
+                A:for(Object o:newObjects){                    
+                    String clsName=o.getClassName();
+                    Index i=indexes.get(clsName);
+                    if(i==null){//this is new object
+                       obList.add(o); 
+                       int first=obList.size();
+                       int last=first;
+                       indexes.put(clsName, new Index(first, last));
+                    }else{
+                        int first=i.first;
+                        int last=i.last;
+                        
+                        Object prev=obList.get(first);
+                        for(int j=first+1; j<=last; j++){
+                           Object curr=obList.get(j);
+                           if(curr.getNumber()-prev.getNumber()>1){
+                               obList.add(j, o);
+                               last++;
+                               i.last=last;
+                               continue A; //restart from A.
+                           }
+                        }
+                        //if did not get added add to the end.
+                        obList.add(last+1,o);
+                        i.last= ++last;
+                    }
+                    
+                }
+                //end algo
+                
+                //upload objects.                
+                for (Object object : obList) {
                     api.addObject(wikiName, spaceName, pageName, object);
-                }            
-                return null; //TODO RET CREATED DOC. NEED TO ADD CUSTOMIZATION CODE WETHER TO RET OR NOT.
-            }            
+                }                
+                return null; // TODO RET CREATED DOC. NEED TO ADD CUSTOMIZATION CODE WETHER TO RET OR NOT.
+            }
         } catch (RestException e) {
             Log.d(tag, "couldn't create page" + e.getCode());
             e.printStackTrace();
             throw new RaoException(e);
         }
-        
+
     }
 
     @Override
@@ -124,10 +210,10 @@ class XmlDocumentRao implements DocumentRao
         String pageName = docRef.getPageName();
         try {
             api.deletePage(wikiName, spaceName, pageName);
-        } catch (RestException e) {            
+        } catch (RestException e) {
             e.printStackTrace();
-            throw new RaoException("Could not dletete",e);
-            //TODO: Identify reason for unable to delete. Use e.getCode to identify.
+            throw new RaoException("Could not dletete", e);
+            // TODO: Identify reason for unable to delete. Use e.getCode to identify.
         }
 
     }

@@ -21,7 +21,7 @@ public class DocLaunchPadForXML
     String wikiName, spaceName, pageName;
 
     List<Object> newObjects; // new local objs
-    Map<String, Object> editedObjects; // locally
+    Map<String, Object> editedObjects; // key= XObjClass/<num>
     List<String> deletedObjects; // locally
     
     List<Comment> newComments;

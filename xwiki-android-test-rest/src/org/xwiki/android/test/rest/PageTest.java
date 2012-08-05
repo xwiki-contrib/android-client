@@ -102,15 +102,15 @@ public class PageTest extends AndroidTestCase
         assertNotNull(page);
     }
 
-    public void testDeletePage() throws Throwable
-    {
-        String s = request.deletePage(wikiName, spaceName, pageName);
-        assertNotNull(s);
-    }
-
-    public void testDeletePageInLanguage() throws Throwable
-    {
-        String s = request.deletePage(wikiName, spaceName, pageName, language);
-        assertNotNull(s);
-    }
+//    public void testDeletePage() throws Throwable
+//    {
+//        String s = request.deletePage(wikiName, spaceName, pageName);
+//        assertNotNull(s);
+//    }
+//
+//    public void testDeletePageInLanguage() throws Throwable
+//    {
+//        String s = request.deletePage(wikiName, spaceName, pageName, language);
+//        assertNotNull(s);
+//    }
 }

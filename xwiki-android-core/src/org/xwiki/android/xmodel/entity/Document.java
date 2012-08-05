@@ -111,8 +111,11 @@ public class Document extends DocumentBase
         boolean valid=true;
         valid=key.startsWith(keyprefix);
         if(valid){
-        	String[] args=key.split("[/,]");
-        	valid=args[1].matches("[\\d]+");
+        	String[] args=key.split("[/]");
+        	String clsName=args[0];
+        	String number=args[1];
+        	valid=clsName.equals(object.getClassName());// &&number.matches("[\\d]+") ;
+        	object.setNumber(new Integer(number));
         }        
         if(!valid){
         	throw new IllegalArgumentException("invalid form of key.\n" +

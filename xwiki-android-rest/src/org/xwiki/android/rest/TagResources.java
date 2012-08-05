@@ -124,13 +124,11 @@ public class TagResources extends HttpConnector
     public String addTag(Tag tag) throws RestConnectionException, RestException
     {
 
-        String Uri = null;
-
-        String response = super.getResponse(Uri);
+        String Uri = null;        
         if (tagType == 0) {
 
             Uri = "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/tags";
-
+            String response = super.getResponse(Uri);
             Tags temp_tags;
 
             temp_tags = buildTags(response);
@@ -143,7 +141,7 @@ public class TagResources extends HttpConnector
             Uri =
                 "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
                     + "/tags";
-
+            String response = super.getResponse(Uri);
             Tags temp_tags;
 
             temp_tags = buildTags(response);

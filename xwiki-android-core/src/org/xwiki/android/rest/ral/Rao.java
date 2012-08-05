@@ -30,5 +30,5 @@ interface Rao<T>
 /**
  * note: When implementing do not give the responsibilities of off line syncing to components below RAOs. Use seperate
  * android Services to access RAOs from above and use them to sync when online. Those responsibilities go to the
- * seperate sync module.
+ * seperate sync background service.
  **/

@@ -9,7 +9,10 @@ public interface DocumentRao extends Rao<Document>
 {
     //parts of a doc.
     int PAGE = 1;
-    int OBJECTS = 2;//all objects except  comment and tag objects.
+    /**
+     * all Objects except comment and tag objects.
+     */
+    int OBJECTS = 2;
     int COMMENTS = 4;
     int TAGS = 8;
     int ATTACHMENTS = 16;
@@ -17,6 +20,25 @@ public interface DocumentRao extends Rao<Document>
     int TAG_OBJECT=64;
     int ALL = 2147483647;
 
+    /**
+     * semantics: 
+     * XOMyClass o1,o2,o3;
+     * doc.addObject(o1)
+     * doc.setObject("XOMyClass/0",o2)
+     * doc.setObject("XOMyClass/2",o3)
+     * will add o2 , o1, o3 in the create.
+     * It tries to keep the order.
+     * 
+     * !please mind that if you have
+     * XOMyClass o1;
+     * doc.add(o1);
+     * doc.set("XOMyClass/0",o1)
+     * the create method adds the same object twice to the remote page.
+     * @param doc 
+     */
+    @Override
+    public Document create(Document doc) throws RestConnectionException ,RaoException;
+    
     /**
      * default semantics
      * 
