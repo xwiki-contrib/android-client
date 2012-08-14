@@ -1,9 +1,12 @@
 package org.xwiki.android.xmodel.entity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.xwiki.android.resources.Attachments;
 import org.xwiki.android.rest.reference.DocumentReference;
@@ -27,7 +30,7 @@ public class Document extends DocumentBase
 
     private Map<String, XSimpleObject> objects; // key= ClassName/number
 
-    private List<Comment> comments; // key = int index in the list
+    private Map<Integer,Comment> comments; // key = int index in the list
 
     private Map<String, Attachment> attatchments;// key = resource id. ex: xwiki:Blog.BlogPost1@mypic -->key is: mypic
 
@@ -63,7 +66,7 @@ public class Document extends DocumentBase
         editedObjects = new Hashtable<String, XSimpleObject>();
         deletedObjects = new ArrayList<String>();
         
-        comments = new ArrayList<Comment>();
+        comments = new HashMap<Integer, Comment>();
         newComments=new ArrayList<Comment>();
         editedComments=new ArrayList<Comment>();
         deletedCommetns=new ArrayList<Integer>();
@@ -97,6 +100,17 @@ public class Document extends DocumentBase
         }        
         return obj;
     }
+    
+    public XSimpleObject getObject(String className, int number)
+    {
+        String key=className+"/"+number;
+        XSimpleObject obj = objects.get(key);
+        if(obj!=null){
+            obj.setEdited(true);
+        }        
+        return obj;
+    }    
+   
 
     /**
      * Update a existing object in the doc. The update is done if the Object.isAltered returns true. This property is
@@ -105,6 +119,7 @@ public class Document extends DocumentBase
      * @param key
      * @param object
      */
+    @Deprecated
     public void setObject(String key, XSimpleObject object)
     {    	
         String keyprefix=object.getClassName();
@@ -127,6 +142,29 @@ public class Document extends DocumentBase
             editedObjects.put(key, object);
         }
         objects.put(key, object);
+    }    
+    /**
+     * 
+     * @param object
+     * @return key to refer this obj.
+     */
+    public String setObject(XSimpleObject object)
+    {       
+        if(object.getNumber()==-1){
+            throw new IllegalArgumentException("object's number must be set");
+        }
+        if(object.getClassName().equals("")){
+            throw new IllegalArgumentException("object's class name must not be empty");
+        }
+        //end validation
+        
+        String key=object.getClassName()+"/"+object.getNumber();
+        
+        if (object.isEdited()) {//may remove this line. Since set is done because XObj is edited.
+            editedObjects.put(key, object);
+        }
+        objects.put(key, object);
+        return key;
     }
 
     private int _addNum = 0;
@@ -169,29 +207,91 @@ public class Document extends DocumentBase
      * @return id of the new comment.
      */
     public int addComment(Comment cmnt){
-    	comments.add(cmnt);
-    	cmnt.setId(comments.size()-1);
-    	newComments.add(cmnt);
-    	return comments.size()-1;
+        if(!newComments.contains(cmnt)&&!comments.containsKey(cmnt.getId())){
+            newComments.add(cmnt);
+            int id=-newComments.size()-10;
+            comments.put(id,cmnt);
+            cmnt.setId(id); 
+            cmnt.setOwner(this);
+            return id; 
+        }else{
+            return cmnt.getId();
+        }
     }
+    
+    /**
+     * 
+     * @param cmnt
+     * @param cascade if true adds all the reply comments as well to the document.
+     * @return int[0]=parent comments id, int[1] number of comments added
+     */
+    public int[] addComment(Comment prntCmnt, boolean cascade){        
+        int pid=addComment(prntCmnt);
+        int[] rslts=new int[2];
+        rslts[0]=pid;
+        rslts[1]=1;
+        if(cascade){
+            for(Comment rply:prntCmnt.getReplies()){
+                int[] recRslt=addComment(rply,true);
+                rslts[1]+=recRslt[1];
+            } 
+        }      
+       return rslts;      
+    }
+    
+    @Deprecated  //TODO remove soon
     public void setComment(int id, Comment cmnt){
-    	comments.set(id, cmnt);
+        if(id<0){
+            throw new IllegalArgumentException("comment id should be gt or eq to 0, \n If you are seting a comment that was added with add method no need to set again");
+        }
+    	comments.put(id, cmnt);
     	if(!editedComments.contains(cmnt)){
     		editedComments.add(cmnt);
-    	}    	
+    	}
+    	if(cmnt.getDocument()!=null){
+    	   if(this!=cmnt.getDocument())throw new IllegalStateException("comment is already owned by another doc");
+    	}else{
+    	    cmnt.setId(id);
+    	    cmnt.setOwner(this);    	    
+    	}
+    	
     }
+    
+    public void setComment(Comment cmnt){
+        int id=cmnt.getId();
+        if(id<0){
+            throw new IllegalArgumentException("comment id should be gt or eq to 0, \n If you are seting a comment that was added with add method no need to set again");
+        }
+        comments.put(id, cmnt);
+        if(!editedComments.contains(cmnt)){
+            editedComments.add(cmnt);
+        }
+        if(cmnt.getDocument()!=null){
+           if(this!=cmnt.getDocument())throw new IllegalStateException("comment is already owned by another doc");
+        }else{
+            cmnt.setId(id);
+            cmnt.setOwner(this);            
+        }
+        
+    }
+    
+    
     public void deleteComment(int id){
     	comments.remove(id);
     	Comment cmnt=new Comment();
     	cmnt.setId(id);
-    	int i=newComments.indexOf(cmnt);
-    	int j=editedComments.indexOf(cmnt);
-    	if(i>0){
-    		newComments.remove(i);
-    	}
-    	if(j>0){
-    		editedComments.remove(j);
-    	}
+    	if(id<0){
+    	    int i=newComments.indexOf(cmnt);
+    	    if(i>=0){
+    	        newComments.remove(i); 
+    	    }    	    
+    	}else{
+    	    int j=editedComments.indexOf(cmnt);
+    	    if(j>=0){
+    	        editedComments.remove(j);
+    	    }
+    	}  
+    	
     	deletedCommetns.add(id);
     }
     
@@ -280,7 +380,7 @@ public class Document extends DocumentBase
         return children;
     }
 
-    public List<Comment> getAllComments()
+    public Map<Integer,Comment> getAllComments()
     {
         return comments;
     }
@@ -335,22 +435,40 @@ public class Document extends DocumentBase
 
    
 
-    public List<String> getAllDeletedObjects()
+    public List<String> listObjectDeletions()
     {
         return deletedObjects;
     }
     
-    public List<Integer> getAllDeletedComments()
+    public Set<String> getDeletedObjects(){
+        Set<String> s=new HashSet<String>();
+        s.addAll(deletedObjects);
+        return s;
+    }
+    
+    public List<Integer> listCommentDeletions()
     {
         return deletedCommetns;
     }
     
+    public Set<Integer> getDeletedCommentSet(){
+        Set<Integer> s=new HashSet<Integer>();
+        s.addAll(deletedCommetns);
+        return s;
+    }
+    
 
-    public List<String> getAllDeletedAttachments(){
+    public List<String> listAttachmentDeletions(){
     	return deletedAttachments;
-    }     
+    } 
+    
+    public Set<String> getDeletedAttachments(){
+        Set<String> s=new HashSet<String>();
+        s.addAll(deletedObjects);
+        return s;
+    }
 
-	public List<String> getAllDeletedTags(){
+	public List<String> listTagDeletions(){
 	    return deletedTags;
 	}
 	

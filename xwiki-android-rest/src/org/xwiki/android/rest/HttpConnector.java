@@ -139,7 +139,7 @@ public class HttpConnector
         setCredentials();
 
         request.setURI(requestUri);
-        Log.d("Request URL", Uri);
+        Log.d("HEAD Request URL", Uri);
 
         try {
             response = client.execute(request);
@@ -180,7 +180,7 @@ public class HttpConnector
         setCredentials();
 
         request.setURI(requestUri);
-        Log.d("Request URL", Uri);
+        Log.d("GET Request URL", Uri);
         try {
 
             response = client.execute(request);
@@ -234,7 +234,7 @@ public class HttpConnector
         setCredentials();
 
         request.setURI(requestUri);
-        Log.d("Request URL", Uri);
+        Log.d("DELETE Request URL", Uri);
 
         try {
 
@@ -278,7 +278,7 @@ public class HttpConnector
         String Uri;
         int responseCode = 0;
 
-        Uri = "http://" + Url + "/xwiki/rest/";
+        Uri = "http://" + Url + "/xwiki/xmlrpc/";
 
         try {
             requestUri = new URI(Uri);
@@ -292,7 +292,7 @@ public class HttpConnector
         setCredentials();
 
         request.setURI(requestUri);
-        Log.d("Request URL", Uri);
+        Log.d("GET Login Request URL", Uri);
         try {
 
             response = client.execute(request);
@@ -340,7 +340,7 @@ public class HttpConnector
         setCredentials();
 
         request.setURI(requestUri);
-        Log.d("Request URL", Uri);
+        Log.d("POST Request URL", Uri);
 
         try {
             Log.d("Post content", "content=" + content);
@@ -392,7 +392,7 @@ public class HttpConnector
         setCredentials();
 
         request.setURI(requestUri);
-        Log.d("Request URL", Uri);
+        Log.d("PUT Request URL", Uri);
 
         try {
             Log.d("Put content", "content=" + content);
@@ -443,7 +443,7 @@ public class HttpConnector
         setCredentials();
 
         request.setURI(requestUri);
-        Log.d("Request URL", Uri);
+        Log.d("GET Request URL", Uri);
         try {
 
             response = client.execute(request);
@@ -488,7 +488,7 @@ public class HttpConnector
         setCredentials();
 
         request.setURI(requestUri);
-        Log.d("Request URL", Uri);
+        Log.d("PUT Request URL", Uri);
 
         try {
 

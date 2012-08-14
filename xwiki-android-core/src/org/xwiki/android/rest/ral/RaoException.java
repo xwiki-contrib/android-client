@@ -1,11 +1,16 @@
 package org.xwiki.android.rest.ral;
 
+import org.xwiki.android.rest.RestException;
+
 /**
  * @author xwiki gsoc 2012 For exceptional situations where client is doing some thing wrong due to lack of knowledge of
  *         the remote servers state.Ex: Call to create a document that already exsist in the remote server.
  */
 public class RaoException extends Exception
 {
+
+    private RestException cause;
+    private int code;
 
     public RaoException()
     {
@@ -19,6 +24,13 @@ public class RaoException extends Exception
         // TODO Auto-generated constructor stub
     }
 
+    public RaoException(String detailMessage, RestException rex)
+    {
+        super(detailMessage, rex);
+        this.cause = rex;
+        this.code = rex.getCode();
+    }
+
     public RaoException(String detailMessage)
     {
         super(detailMessage);
@@ -30,5 +42,34 @@ public class RaoException extends Exception
         super(throwable);
         // TODO Auto-generated constructor stub
     }
+    
+    public RaoException(RestException rex)
+    {
+        super(rex);
+        this.cause = rex;
+        this.code = rex.getCode();
+    }
+
+    public RestException getCause()
+    {
+        return cause;
+    }
+
+    public void setCause(RestException cause)
+    {
+        this.cause = cause;
+    }
+
+    public int getCode()
+    {
+        return code;
+    }
+
+    public void setCode(int code)
+    {
+        this.code = code;
+    }
+    
+    
 
 }

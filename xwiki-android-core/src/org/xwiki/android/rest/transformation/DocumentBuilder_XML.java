@@ -106,7 +106,7 @@ public class DocumentBuilder_XML implements DocumentBuilder
     }
 
     /* (non-Javadoc)
-     * @see org.xwiki.android.rest.transformation.DocumentBuilder#withObject(org.xwiki.android.resources.Object)
+     * @see org.xwiki.android.xmlrpc.transformation.DocumentBuilder#withObject(org.xwiki.android.resources.Object)
      */
     @Override
     public DocumentBuilder withObject(Object res)
@@ -146,7 +146,7 @@ public class DocumentBuilder_XML implements DocumentBuilder
     }
 
     /* (non-Javadoc)
-     * @see org.xwiki.android.rest.transformation.DocumentBuilder#withObjectSummary(org.xwiki.android.resources.ObjectSummary)
+     * @see org.xwiki.android.xmlrpc.transformation.DocumentBuilder#withObjectSummary(org.xwiki.android.resources.ObjectSummary)
      */
     @Override
     public DocumentBuilder withObjectSummary(ObjectSummary res)
@@ -171,7 +171,7 @@ public class DocumentBuilder_XML implements DocumentBuilder
     }
 
     /* (non-Javadoc)
-     * @see org.xwiki.android.rest.transformation.DocumentBuilder#withComments(org.xwiki.android.resources.Comments)
+     * @see org.xwiki.android.xmlrpc.transformation.DocumentBuilder#withComments(org.xwiki.android.resources.Comments)
      */
     @Override
     public DocumentBuilder withComments(Comments cmnts)
@@ -183,7 +183,7 @@ public class DocumentBuilder_XML implements DocumentBuilder
     }
 
     /* (non-Javadoc)
-     * @see org.xwiki.android.rest.transformation.DocumentBuilder#withComment(org.xwiki.android.resources.Comment)
+     * @see org.xwiki.android.xmlrpc.transformation.DocumentBuilder#withComment(org.xwiki.android.resources.Comment)
      */
     @Override
     public DocumentBuilder withComment(Comment cmntRes)
@@ -201,7 +201,7 @@ public class DocumentBuilder_XML implements DocumentBuilder
     }
 
     /* (non-Javadoc)
-     * @see org.xwiki.android.rest.transformation.DocumentBuilder#withTags(org.xwiki.android.resources.Tags)
+     * @see org.xwiki.android.xmlrpc.transformation.DocumentBuilder#withTags(org.xwiki.android.resources.Tags)
      */
     @Override
     public DocumentBuilder withTags(Tags tags)
@@ -214,7 +214,7 @@ public class DocumentBuilder_XML implements DocumentBuilder
     }
 
     /* (non-Javadoc)
-     * @see org.xwiki.android.rest.transformation.DocumentBuilder#withAttachments(org.xwiki.android.resources.Attachments)
+     * @see org.xwiki.android.xmlrpc.transformation.DocumentBuilder#withAttachments(org.xwiki.android.resources.Attachments)
      */
     @Override
     public DocumentBuilder withAttachments(Attachments attachments)
@@ -226,7 +226,7 @@ public class DocumentBuilder_XML implements DocumentBuilder
     }
 
     /* (non-Javadoc)
-     * @see org.xwiki.android.rest.transformation.DocumentBuilder#withAttachment(org.xwiki.android.resources.Attachment)
+     * @see org.xwiki.android.xmlrpc.transformation.DocumentBuilder#withAttachment(org.xwiki.android.resources.Attachment)
      */
     @Override
     public DocumentBuilder withAttachment(Attachment attachment)
@@ -367,7 +367,7 @@ public class DocumentBuilder_XML implements DocumentBuilder
     // }
     //
     /* (non-Javadoc)
-     * @see org.xwiki.android.rest.transformation.DocumentBuilder#build()
+     * @see org.xwiki.android.xmlrpc.transformation.DocumentBuilder#build()
      */
     @Override
     public Document build()

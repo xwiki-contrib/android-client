@@ -13,8 +13,8 @@ import org.xwiki.android.resources.Page;
 import org.xwiki.android.resources.Tags;
 import org.xwiki.android.rest.RestConnectionException;
 import org.xwiki.android.rest.RestException;
-import org.xwiki.android.rest.XWikiRestConnector;
-import org.xwiki.android.rest.XWikiRestfulAPI;
+import org.xwiki.android.rest.XWikiRestConnecion;
+import org.xwiki.android.rest.XWikiAPI;
 import org.xwiki.android.rest.ral.RaoException;
 import org.xwiki.android.rest.reference.DocumentReference;
 import org.xwiki.android.rest.transformation.DocumentBuilder;
@@ -27,14 +27,14 @@ public class DocRetreiveStrategy implements IDocRetreiveStrategy
     String username;
     String password;
     String url; 
-    XWikiRestfulAPI api;
+    XWikiAPI api;
     
     public DocRetreiveStrategy(String username, String password, String serverUrl)
     {       
         this.username = username;
         this.password = password;
         this.url = serverUrl;
-        api=new XWikiRestConnector(url, username, password);
+        api=new XWikiRestConnecion(url, username, password);
     }
 
     @Override

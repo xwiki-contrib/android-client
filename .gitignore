@@ -1,7 +1,6 @@
 # Build
-target
-*/target
-target-eclipse
+target/
+target-eclipse/
 
 # IDEA
 *.iml

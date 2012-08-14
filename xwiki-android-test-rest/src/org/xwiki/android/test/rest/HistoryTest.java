@@ -22,6 +22,7 @@ package org.xwiki.android.test.rest;
 
 import org.xwiki.android.resources.History;
 import org.xwiki.android.rest.Requests;
+import org.xwiki.android.test.rest.env.TestConstants;
 
 import android.test.AndroidTestCase;
 
@@ -37,15 +38,15 @@ public class HistoryTest extends AndroidTestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-        wikiName = TestResources.WIKI_NAME;
-        spaceName = TestResources.SPACE_NAME;
-        pageName = TestResources.PAGE_NAME;
-        url = TestResources.URL;
-        language = TestResources.LANGUAGE;
+        wikiName = TestConstants.WIKI_NAME;
+        spaceName = TestConstants.SPACE_NAME;
+        pageName = TestConstants.PAGE_NAME;
+        url = TestConstants.SERVER_URL;
+        language = TestConstants.LANGUAGE;
 
         if (isSecured) {
-            username = TestResources.USERNAME;
-            password = TestResources.PASSWORD;
+            username = TestConstants.USERNAME;
+            password = TestConstants.PASSWORD;
         }
 
         request = new Requests(url);

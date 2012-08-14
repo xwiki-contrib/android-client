@@ -49,7 +49,7 @@ import org.simpleframework.xml.Root;
 
 @Root
 @Namespace(reference = "http://www.xwiki.org")
-public class Properties
+public class Properties extends LinkCollection
 {
 
     @ElementList(name = "property", inline = true)

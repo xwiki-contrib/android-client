@@ -21,6 +21,20 @@ public class Attachment extends Resource
     private URL xwikiAbsoluteUrl;
     // local
     private File file;
+    
+    public Attachment()
+    {
+        
+    }
+    
+
+    public Attachment(String name, File file)
+    {
+        super();
+        this.name = name;
+        this.file = file;
+    }
+
 
     public String getId()
     {

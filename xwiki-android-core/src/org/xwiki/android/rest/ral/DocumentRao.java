@@ -35,9 +35,17 @@ public interface DocumentRao extends Rao<Document>
      * doc.set("XOMyClass/0",o1)
      * the create method adds the same object twice to the remote page.
      * @param doc 
+     * @return created document extracted from server.
      */
     @Override
     public Document create(Document doc) throws RestConnectionException ,RaoException;
+    
+    /**
+     * check wether the doc exists on server
+     * @param dref
+     * @return
+     */
+    public boolean exists(DocumentReference dref) throws RestConnectionException,RaoException;;
     
     /**
      * default semantics

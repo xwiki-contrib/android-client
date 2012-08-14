@@ -47,7 +47,7 @@ import android.util.Log;
 
 /**
  * All the XWiki Android RESTful requests for getting, putting and posting are included here. Method names starting from
- * "request" will return objects XWiki Android REST model. Currently using xwiki-rest-model-simplexml. Method names
+ * "request" will return objects XWiki Android REST model. Currently using xwiki-xmlrpc-model-simplexml. Method names
  * starting from "add" will add XWiki Android REST model objects to the XWiki Server.
  */
 @Deprecated
@@ -98,7 +98,7 @@ public class Requests
     }
 
     /* (non-Javadoc)
-	 * @see org.xwiki.android.rest.XWikiRestfulAPI#setAuthentication(java.lang.String, java.lang.String)
+	 * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#setAuthentication(java.lang.String, java.lang.String)
 	 */
     public void setAuthentication(String username, String password)
     {
@@ -130,7 +130,7 @@ public class Requests
     }
 
     /* (non-Javadoc)
-	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestSearch(java.lang.String, java.lang.String)
+	 * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#requestSearch(java.lang.String, java.lang.String)
 	 */
     public SearchResults requestSearch(String wikiName, String keyword)
     {
@@ -157,7 +157,7 @@ public class Requests
     }
 
     /* (non-Javadoc)
-	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestSearch(java.lang.String, java.lang.String, java.lang.String)
+	 * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#requestSearch(java.lang.String, java.lang.String, java.lang.String)
 	 */
     
     public SearchResults requestSearch(String wikiName, String spaceName, String keyword)
@@ -184,7 +184,7 @@ public class Requests
     }
 
     /* (non-Javadoc)
-	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestWikis()
+	 * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#requestWikis()
 	 */
     
     public Wikis requestWikis()
@@ -208,7 +208,7 @@ public class Requests
     }
 
     /* (non-Javadoc)
-	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestSpaces(java.lang.String)
+	 * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#requestSpaces(java.lang.String)
 	 */
     
     public Spaces requestSpaces(String wikiName)
@@ -231,7 +231,7 @@ public class Requests
     }
 
     /* (non-Javadoc)
-	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestAllPages(java.lang.String, java.lang.String)
+	 * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#requestAllPages(java.lang.String, java.lang.String)
 	 */
     
     public Pages requestAllPages(String wikiName, String spaceName)
@@ -255,7 +255,7 @@ public class Requests
     }
 
     /* (non-Javadoc)
-	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestPage(java.lang.String, java.lang.String, java.lang.String)
+	 * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#requestPage(java.lang.String, java.lang.String, java.lang.String)
 	 */
     
     public Page requestPage(String wikiName, String spaceName, String pageName)
@@ -281,7 +281,7 @@ public class Requests
     }
 
     /* (non-Javadoc)
-	 * @see org.xwiki.android.rest.XWikiRestfulAPI#addPage(java.lang.String, java.lang.String, java.lang.String, org.xwiki.android.resources.Page)
+	 * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#addPage(java.lang.String, java.lang.String, java.lang.String, org.xwiki.android.resources.Page)
 	 */
     
     public String addPage(String wikiName, String spaceName, String pageName, Page page)
@@ -307,7 +307,7 @@ public class Requests
     }
 
     /* (non-Javadoc)
-	 * @see org.xwiki.android.rest.XWikiRestfulAPI#deletePage(java.lang.String, java.lang.String, java.lang.String)
+	 * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#deletePage(java.lang.String, java.lang.String, java.lang.String)
 	 */
     
     public String deletePage(String wikiName, String spaceName, String pageName)
@@ -333,7 +333,7 @@ public class Requests
     }
 
     /* (non-Javadoc)
-	 * @see org.xwiki.android.rest.XWikiRestfulAPI#deletePage(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#deletePage(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
     
     public String deletePage(String wikiName, String spaceName, String pageName, String language)
@@ -360,7 +360,7 @@ public class Requests
     }
 
     /* (non-Javadoc)
-	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestPageHistory(java.lang.String, java.lang.String, java.lang.String)
+	 * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#requestPageHistory(java.lang.String, java.lang.String, java.lang.String)
 	 */
     
 	
@@ -387,7 +387,7 @@ public class Requests
     }
 
     /* (non-Javadoc)
-	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestPageInVersionHistory(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#requestPageInVersionHistory(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
     
 	
@@ -414,7 +414,7 @@ public class Requests
     }
 
     /* (non-Javadoc)
-	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestPageChildren(java.lang.String, java.lang.String, java.lang.String)
+	 * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#requestPageChildren(java.lang.String, java.lang.String, java.lang.String)
 	 */
     
 	
@@ -442,7 +442,7 @@ public class Requests
     }
 
     /* (non-Javadoc)
-	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestPageTags(java.lang.String, java.lang.String, java.lang.String)
+	 * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#requestPageTags(java.lang.String, java.lang.String, java.lang.String)
 	 */
     
 	
@@ -469,7 +469,7 @@ public class Requests
     }
 
     /* (non-Javadoc)
-	 * @see org.xwiki.android.rest.XWikiRestfulAPI#addPageTag(java.lang.String, java.lang.String, java.lang.String, org.xwiki.android.resources.Tag)
+	 * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#addPageTag(java.lang.String, java.lang.String, java.lang.String, org.xwiki.android.resources.Tag)
 	 */
     
 	
@@ -497,7 +497,7 @@ public class Requests
     }
 
     /* (non-Javadoc)
-	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestWikiTags(java.lang.String)
+	 * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#requestWikiTags(java.lang.String)
 	 */
     
 	
@@ -522,7 +522,7 @@ public class Requests
     }
 
     /* (non-Javadoc)
-	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestPageComments(java.lang.String, java.lang.String, java.lang.String)
+	 * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#requestPageComments(java.lang.String, java.lang.String, java.lang.String)
 	 */
     
 	
@@ -549,7 +549,7 @@ public class Requests
     }
 
     /* (non-Javadoc)
-	 * @see org.xwiki.android.rest.XWikiRestfulAPI#addPageComment(java.lang.String, java.lang.String, java.lang.String, org.xwiki.android.resources.Comment)
+	 * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#addPageComment(java.lang.String, java.lang.String, java.lang.String, org.xwiki.android.resources.Comment)
 	 */
     
 	
@@ -578,7 +578,7 @@ public class Requests
     }
 
     /* (non-Javadoc)
-	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestPageComments(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#requestPageComments(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
     
 	
@@ -593,7 +593,7 @@ public class Requests
             commentresources.setAuthenticaion(username, password);
         }
         try {
-            return commentresources.getPageComment(commentId);
+            return commentresources.getPageComment(new Integer(commentId));
         } catch (RestConnectionException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -605,7 +605,7 @@ public class Requests
     }
 
     /* (non-Javadoc)
-	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestPageCommentsInHistory(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#requestPageCommentsInHistory(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
     
 	
@@ -632,7 +632,7 @@ public class Requests
     }
 
     /* (non-Javadoc)
-	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestPageCommentsInHistory(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#requestPageCommentsInHistory(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
     
 	
@@ -660,7 +660,7 @@ public class Requests
     }
 
     /* (non-Javadoc)
-	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestAllPageAttachments(java.lang.String, java.lang.String, java.lang.String)
+	 * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#requestAllPageAttachments(java.lang.String, java.lang.String, java.lang.String)
 	 */
     
 	
@@ -688,7 +688,7 @@ public class Requests
     }
 
     /* (non-Javadoc)
-	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestPageAttachment(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#requestPageAttachment(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
     
 	
@@ -716,7 +716,7 @@ public class Requests
     }
 
     /* (non-Javadoc)
-	 * @see org.xwiki.android.rest.XWikiRestfulAPI#addPageAttachment(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#addPageAttachment(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
     
 	
@@ -745,7 +745,7 @@ public class Requests
     }
 
     /* (non-Javadoc)
-	 * @see org.xwiki.android.rest.XWikiRestfulAPI#deletePageAttachment(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#deletePageAttachment(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
     
 	
@@ -773,7 +773,7 @@ public class Requests
     }
 
     /* (non-Javadoc)
-	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestPageAttachmentsInHistory(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#requestPageAttachmentsInHistory(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
     
 	
@@ -801,7 +801,7 @@ public class Requests
     }
 
     /* (non-Javadoc)
-	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestPageAttachmentsInHistory(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#requestPageAttachmentsInHistory(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
     
 	
@@ -830,7 +830,7 @@ public class Requests
     }
 
     /* (non-Javadoc)
-	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestPageAttachmentsInAttachmentHistory(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#requestPageAttachmentsInAttachmentHistory(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
     
 	
@@ -859,7 +859,7 @@ public class Requests
     }
 
     /* (non-Javadoc)
-	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestPageAttachmentsInAttachmentHistory(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#requestPageAttachmentsInAttachmentHistory(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
     
 	
@@ -888,7 +888,7 @@ public class Requests
     }
 
     /* (non-Javadoc)
-	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestWikiClasses(java.lang.String)
+	 * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#requestWikiClasses(java.lang.String)
 	 */
     
 	
@@ -913,7 +913,7 @@ public class Requests
     }
 
     /* (non-Javadoc)
-	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestWikiClasses(java.lang.String, java.lang.String)
+	 * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#requestWikiClasses(java.lang.String, java.lang.String)
 	 */
     
 	
@@ -939,7 +939,7 @@ public class Requests
     }
 
     /* (non-Javadoc)
-	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestAllPageTranslations(java.lang.String, java.lang.String, java.lang.String)
+	 * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#requestAllPageTranslations(java.lang.String, java.lang.String, java.lang.String)
 	 */
     
 	
@@ -966,7 +966,7 @@ public class Requests
     }
 
     /* (non-Javadoc)
-	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestPageTranslation(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#requestPageTranslation(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
     
 	
@@ -993,7 +993,7 @@ public class Requests
     }
 
     /* (non-Javadoc)
-	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestPageHistoryInLanguage(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#requestPageHistoryInLanguage(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
     
 	
@@ -1020,7 +1020,7 @@ public class Requests
     }
 
     /* (non-Javadoc)
-	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestPageTranslationInHistory(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#requestPageTranslationInHistory(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
     
 	
@@ -1048,7 +1048,7 @@ public class Requests
     }
 
     /* (non-Javadoc)
-	 * @see org.xwiki.android.rest.XWikiRestfulAPI#addObject(java.lang.String, java.lang.String, java.lang.String, org.xwiki.android.resources.Object)
+	 * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#addObject(java.lang.String, java.lang.String, java.lang.String, org.xwiki.android.resources.Object)
 	 */
     
 	
@@ -1075,7 +1075,7 @@ public class Requests
     }
 
     /* (non-Javadoc)
-	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestAllObjects(java.lang.String, java.lang.String, java.lang.String)
+	 * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#requestAllObjects(java.lang.String, java.lang.String, java.lang.String)
 	 */
     
 	
@@ -1102,7 +1102,7 @@ public class Requests
     }
 
     /* (non-Javadoc)
-	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestObjectsInClass(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#requestObjectsInClass(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
     
 	
@@ -1130,7 +1130,7 @@ public class Requests
     }
 
     /* (non-Javadoc)
-	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestObject(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#requestObject(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
     
 	
@@ -1160,7 +1160,7 @@ public class Requests
     }
 
     /* (non-Javadoc)
-	 * @see org.xwiki.android.rest.XWikiRestfulAPI#deleteObject(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#deleteObject(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
     
 	
@@ -1190,7 +1190,7 @@ public class Requests
     }
 
     /* (non-Javadoc)
-	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestObjectAllProperties(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#requestObjectAllProperties(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
     
 	
@@ -1220,7 +1220,7 @@ public class Requests
     }
 
     /* (non-Javadoc)
-	 * @see org.xwiki.android.rest.XWikiRestfulAPI#requestObjectProperty(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#requestObjectProperty(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
     
 	
@@ -1251,7 +1251,7 @@ public class Requests
     }
 
     /* (non-Javadoc)
-	 * @see org.xwiki.android.rest.XWikiRestfulAPI#addProperty(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, org.xwiki.android.resources.Property)
+	 * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#addProperty(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, org.xwiki.android.resources.Property)
 	 */
     
 	

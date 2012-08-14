@@ -16,7 +16,7 @@ public class XObjectFactory
     private static Hashtable<String, Class<? extends XSimpleObject>> xobjMap;
     static {
         xobjMap = new Hashtable<String, Class<? extends XSimpleObject>>(20);
-        // Include code here to map XSimple Objects to the rest model objects by className. (keep alphabetic ordering
+        // Include code here to map XSimple Objects to the xmlrpc model objects by className. (keep alphabetic ordering
         // for clarity)
 
         // xobj in app within minutes

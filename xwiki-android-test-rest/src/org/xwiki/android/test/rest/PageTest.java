@@ -23,12 +23,13 @@ package org.xwiki.android.test.rest;
 import org.xwiki.android.resources.Page;
 import org.xwiki.android.resources.Pages;
 import org.xwiki.android.rest.Requests;
+import org.xwiki.android.test.rest.env.TestConstants;
 
 import android.test.AndroidTestCase;
 
 public class PageTest extends AndroidTestCase
 {
-    private String wikiName, spaceName, pageName, url, username, password, language, version;
+    private String wikiName, spaceName, pageName, url, username, password, language, pageVersion,translationVersion;
 
     private boolean isSecured = true;
 
@@ -38,16 +39,17 @@ public class PageTest extends AndroidTestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-        wikiName = TestResources.WIKI_NAME;
-        spaceName = TestResources.SPACE_NAME;
-        pageName = TestResources.PAGE_NAME;
-        url = TestResources.URL;
-        language = TestResources.LANGUAGE;
-        version = TestResources.PAGE_VERSION;
+        wikiName = TestConstants.WIKI_NAME;
+        spaceName = TestConstants.SPACE_NAME;
+        pageName = TestConstants.PAGE_NAME;
+        url = TestConstants.SERVER_URL;
+        language = TestConstants.LANGUAGE;
+        pageVersion = TestConstants.PAGE_VERSION;
+        translationVersion= TestConstants.TRANSLATION_VERSION;
 
         if (isSecured) {
-            username = TestResources.USERNAME;
-            password = TestResources.PASSWORD;
+            username = TestConstants.USERNAME;
+            password = TestConstants.PASSWORD;
         }
 
         request = new Requests(url);
@@ -86,7 +88,7 @@ public class PageTest extends AndroidTestCase
 
     public void testRequestPageInVersionHistory() throws Throwable
     {
-        Page page = request.requestPageInVersionHistory(wikiName, spaceName, pageName, version);
+        Page page = request.requestPageInVersionHistory(wikiName, spaceName, pageName, pageVersion);
         assertNotNull(page);
     }
 
@@ -98,7 +100,7 @@ public class PageTest extends AndroidTestCase
 
     public void testRequestPageTranslationInHistory() throws Throwable
     {
-        Page page = request.requestPageTranslationInHistory(wikiName, spaceName, pageName, language, version);
+        Page page = request.requestPageTranslationInHistory(wikiName, spaceName, pageName, language, translationVersion);
         assertNotNull(page);
     }
 

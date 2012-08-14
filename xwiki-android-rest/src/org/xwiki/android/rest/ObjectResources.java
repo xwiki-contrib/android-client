@@ -73,10 +73,27 @@ public class ObjectResources extends HttpConnector
         this.pageName = pageName;
     }
 
+    public boolean exists(String objectClassname, String objectNumber) throws RestConnectionException, RestException
+    {
+        String Uri =
+            "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
+                + "/objects/"  +objectClassname + "/" + objectNumber;
+
+        int code = headRequest(Uri);
+        if (code == 200) {
+            return true;
+        }
+        if (code == 404) {
+            return false;
+        } else {
+            throw new RestException(code);
+        }
+    }
+
     /**
      * @return list of all the Objects in a page
-     * @throws RestConnectionException 
-     * @throws RestException 
+     * @throws RestConnectionException
+     * @throws RestException
      */
     public Objects getAllObjects() throws RestConnectionException, RestException
     {
@@ -93,8 +110,8 @@ public class ObjectResources extends HttpConnector
      * 
      * @param object Object object to be added to the page
      * @return status of th HTTP post request
-     * @throws RestConnectionException 
-     * @throws RestException 
+     * @throws RestConnectionException
+     * @throws RestException
      */
     public String addObject(Object object) throws RestConnectionException, RestException
     {
@@ -109,8 +126,8 @@ public class ObjectResources extends HttpConnector
     /**
      * @param objectClassname name of the class
      * @return list of objects in a specific class of a page
-     * @throws RestConnectionException 
-     * @throws RestException 
+     * @throws RestConnectionException
+     * @throws RestException
      */
     public Objects getObjectsInClassname(String objectClassname) throws RestConnectionException, RestException
     {
@@ -126,8 +143,8 @@ public class ObjectResources extends HttpConnector
      * @param objectClassname name of the class in the page
      * @param objectNumber number of the object in the specified class
      * @return selected Object object in the page
-     * @throws RestConnectionException 
-     * @throws RestException 
+     * @throws RestConnectionException
+     * @throws RestException
      */
     public Object getObject(String objectClassname, String objectNumber) throws RestConnectionException, RestException
     {
@@ -146,10 +163,11 @@ public class ObjectResources extends HttpConnector
      * @param objectNumber number of the object in the class
      * @param object Object object to be updated in the page
      * @return status of the HTTP put request
-     * @throws RestConnectionException 
-     * @throws RestException 
+     * @throws RestConnectionException
+     * @throws RestException
      */
-    public String updateObject(String objectClassname, String objectNumber, Object object) throws RestConnectionException, RestException
+    public String updateObject(String objectClassname, String objectNumber, Object object)
+        throws RestConnectionException, RestException
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
@@ -165,10 +183,11 @@ public class ObjectResources extends HttpConnector
      * @param objectClassname name of the class in the page
      * @param objectNumber number of the object in the class
      * @return status of HTTP resonce in delete request
-     * @throws RestConnectionException 
-     * @throws RestException 
+     * @throws RestConnectionException
+     * @throws RestException
      */
-    public String deleteObject(String objectClassname, String objectNumber) throws RestConnectionException, RestException
+    public String deleteObject(String objectClassname, String objectNumber) throws RestConnectionException,
+        RestException
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
@@ -182,10 +201,11 @@ public class ObjectResources extends HttpConnector
      * @param objectClassname class name of the object in a page
      * @param objectNumber number of the object in the class
      * @return list of properties as a Properties object in a object
-     * @throws RestConnectionException 
-     * @throws RestException 
+     * @throws RestConnectionException
+     * @throws RestException
      */
-    public Properties getObjectProperties(String objectClassname, String objectNumber) throws RestConnectionException, RestException
+    public Properties getObjectProperties(String objectClassname, String objectNumber) throws RestConnectionException,
+        RestException
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
@@ -202,10 +222,11 @@ public class ObjectResources extends HttpConnector
      * @param objectNumber number of the object in the class
      * @param property Property object to be added to the Object
      * @return status of the HTTP put request
-     * @throws RestConnectionException 
-     * @throws RestException 
+     * @throws RestConnectionException
+     * @throws RestException
      */
-    public String addObjectProperty(String objectClassname, String objectNumber, Property property) throws RestConnectionException, RestException
+    public String addObjectProperty(String objectClassname, String objectNumber, Property property)
+        throws RestConnectionException, RestException
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
@@ -219,10 +240,11 @@ public class ObjectResources extends HttpConnector
      * @param objectNumber number of the object in the class
      * @param propertyName name of the required property
      * @return Specific property of a object in a page
-     * @throws RestConnectionException 
-     * @throws RestException 
+     * @throws RestConnectionException
+     * @throws RestException
      */
-    public Property getObjectProperty(String objectClassname, String objectNumber, String propertyName) throws RestConnectionException, RestException
+    public Property getObjectProperty(String objectClassname, String objectNumber, String propertyName)
+        throws RestConnectionException, RestException
     {
         String Uri =
             "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName

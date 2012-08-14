@@ -22,6 +22,7 @@ package org.xwiki.android.test.rest;
 
 import org.xwiki.android.resources.Spaces;
 import org.xwiki.android.rest.Requests;
+import org.xwiki.android.test.rest.env.TestConstants;
 
 import android.test.AndroidTestCase;
 
@@ -37,12 +38,12 @@ public class SpaceTest extends AndroidTestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-        wikiName = TestResources.WIKI_NAME;
-        url = TestResources.URL;
+        wikiName = TestConstants.WIKI_NAME;
+        url = TestConstants.SERVER_URL;
 
         if (isSecured) {
-            username = TestResources.USERNAME;
-            password = TestResources.PASSWORD;
+            username = TestConstants.USERNAME;
+            password = TestConstants.PASSWORD;
         }
 
         request = new Requests(url);

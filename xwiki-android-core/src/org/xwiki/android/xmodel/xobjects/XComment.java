@@ -106,6 +106,7 @@ public class XComment extends XSimpleObject
     {
         fields.put("author", author);
     }
+    
     public XTextAreaProperty getpComment()
     {
         return (XTextAreaProperty) fields.get("comment");

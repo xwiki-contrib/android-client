@@ -148,7 +148,11 @@ public abstract class XPropertyBase<T> extends XObject<Object> implements XPrope
     @Override
     public void setAttribute(String name, Object val) throws IllegalArgumentException
     {                
-        if(name.equals("number")){
+    	if(val==null){
+        	throw new IllegalArgumentException("cannot set null attribute");
+        }
+    	
+    	if(name.equals("number")){
             if(!(val instanceof Integer)){
               //now it should be string. Other wise class  cast exception.                
               try{

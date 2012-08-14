@@ -11,12 +11,13 @@ import java.util.Set;
 
 import org.xwiki.android.context.UserSession;
 import org.xwiki.android.context.XWikiApplicationContext;
+import org.xwiki.android.resources.Comment;
 import org.xwiki.android.resources.Object;
 import org.xwiki.android.resources.Page;
 import org.xwiki.android.rest.RestConnectionException;
 import org.xwiki.android.rest.RestException;
-import org.xwiki.android.rest.XWikiRestConnector;
-import org.xwiki.android.rest.XWikiRestfulAPI;
+import org.xwiki.android.rest.XWikiRestConnecion;
+import org.xwiki.android.rest.XWikiAPI;
 import org.xwiki.android.rest.ral.algo.DocRetreiveStrategy;
 import org.xwiki.android.rest.ral.algo.DocUpdateStrategy;
 import org.xwiki.android.rest.ral.algo.IDocRetreiveStrategy;
@@ -44,14 +45,14 @@ class XmlDocumentRao implements DocumentRao
     private static int PAGE = DocumentDismantler_XML.PAGE;
     private static int OBJECTS = DocumentDismantler_XML.OBJECTS;
     private static int ALL = DocumentDismantler_XML.ALL;
-    private XWikiRestfulAPI api;
+    private XWikiAPI api;
     private IDocRetreiveStrategy retStr;
     private IDocUpdateStragegy updStr;
 
     public XmlDocumentRao(String serverUrl, String username, String password)
     {
 
-        api = new XWikiRestConnector(serverUrl, username, password);
+        api = new XWikiRestConnecion(serverUrl, username, password);
         retStr = new DocRetreiveStrategy(username, password, serverUrl);
         updStr = new DocUpdateStrategy(serverUrl, username, password);
         // consider IoC to app context
@@ -63,6 +64,9 @@ class XmlDocumentRao implements DocumentRao
     @Override
     public Document create(Document doc) throws RestConnectionException, RaoException
     {
+        Verifier.verifyDocumentForCreate(doc);//just logs warn msgs if verification failed. Runtime exceptions will be thrown
+        //when server responds with errors.
+        
         // TODO: make advanced algo.Put it in ral.algo package. Here we use simple non parellal way to create doc.
         DocumentDismantler_XML con = new DocumentDismantler_XML(ALL);
         DocLaunchPadForXML pad = con.convertDocument(doc);
@@ -92,7 +96,7 @@ class XmlDocumentRao implements DocumentRao
                 }
                 Map<String,Index> indexes=new HashMap<String, Index>(10);//for < 10 classes of objs.
                                
-                Map<String, Object> edObjs = pad.getEditedObjects();
+                Map<String, Object> edObjs = pad.getEditedObjects(); //objects added using set method. explicitly palced at smplObject.number
                 
                 A:for(String k: edObjs.keySet()){
                     String ss[]=k.split("/");
@@ -101,7 +105,7 @@ class XmlDocumentRao implements DocumentRao
                     Index i= indexes.get(clsName);
                     if(i==null){//new class    
                         obList.add(o);
-                        int first=obList.size();
+                        int first=obList.size()-1;
                         int last=first;
                         indexes.put(clsName, new Index(first,last));
                     }else{
@@ -114,7 +118,7 @@ class XmlDocumentRao implements DocumentRao
                                 continue A;
                             }
                         }
-                        obList.add(last+1,edObjs.get(k));
+                        obList.add(last+1,o);
                         i.last++;
                     }
                 }
@@ -126,7 +130,7 @@ class XmlDocumentRao implements DocumentRao
                     Index i=indexes.get(clsName);
                     if(i==null){//this is new object
                        obList.add(o); 
-                       int first=obList.size();
+                       int first=obList.size()-1;
                        int last=first;
                        indexes.put(clsName, new Index(first, last));
                     }else{
@@ -154,7 +158,14 @@ class XmlDocumentRao implements DocumentRao
                 //upload objects.                
                 for (Object object : obList) {
                     api.addObject(wikiName, spaceName, pageName, object);
-                }                
+                } 
+                
+               List<Comment> newCmnts=pad.getNewComments();
+               List<Object> edCmnts=pad.getEditedComments();
+               
+               
+               
+                
                 return null; // TODO RET CREATED DOC. NEED TO ADD CUSTOMIZATION CODE WETHER TO RET OR NOT.
             }
         } catch (RestException e) {
@@ -163,6 +174,28 @@ class XmlDocumentRao implements DocumentRao
             throw new RaoException(e);
         }
 
+    }
+    
+    @Override
+    public boolean exists(Document doc) throws RestConnectionException, RaoException
+    {
+        String wikiName = doc.getWikiName();
+        String spaceName = doc.getSpaceName();
+        String pageName = doc.getPageName();
+        boolean exists;
+        try {
+            exists=api.existsPage(wikiName, spaceName, pageName);
+            return exists;
+        } catch (RestException e) {
+            throw new RaoException(e);
+        }        
+    }
+
+    @Override
+    public boolean exists(DocumentReference dref) throws RestConnectionException, RaoException
+    {
+        // TODO Auto-generated method stub
+        return false;
     }
 
     @Override
@@ -223,5 +256,9 @@ class XmlDocumentRao implements DocumentRao
     {
         delete(resrc.getDocumentReference());
     }
+
+   
+
+   
 
 }

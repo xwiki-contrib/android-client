@@ -22,6 +22,7 @@ package org.xwiki.android.test.rest;
 
 import org.xwiki.android.resources.Wikis;
 import org.xwiki.android.rest.Requests;
+import org.xwiki.android.test.rest.env.TestConstants;
 
 import android.test.AndroidTestCase;
 
@@ -37,11 +38,11 @@ public class WikiTest extends AndroidTestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-        url = TestResources.URL;
+        url = TestConstants.SERVER_URL;
 
         if (isSecured) {
-            username = TestResources.USERNAME;
-            password = TestResources.PASSWORD;
+            username = TestConstants.USERNAME;
+            password = TestConstants.PASSWORD;
         }
 
         request = new Requests(url);

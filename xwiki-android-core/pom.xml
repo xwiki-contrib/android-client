@@ -33,6 +33,7 @@
 
 	<artifactId>xwiki-android-core</artifactId>	
 	<packaging>apklib</packaging>
+    <version>1.0-SNAPSHOT</version>
 	<name>XWiki android core lib</name>
 
 	<dependencies>

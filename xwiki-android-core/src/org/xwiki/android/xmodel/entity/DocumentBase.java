@@ -66,7 +66,7 @@ public abstract class DocumentBase extends Resource
     // other fields
     protected DocumentReference docRef;
 
-    protected boolean offlineMode;
+   
 
     public DocumentBase(String wikiName, String spaceName, String pageName)
     {
@@ -92,22 +92,7 @@ public abstract class DocumentBase extends Resource
         this.docRef = docRef;
     }
 
-    /**
-     * if in offline mode the create(), update ... methods will use the save method to save a local copy. The delete
-     * method will mark the document for deletion. The sync service will take the responsibilities after internet
-     * connection is available. *
-     * 
-     * @param val
-     */
-    public void setOfflineMode(boolean val)
-    {
-        this.offlineMode = val;
-    }
-
-    public boolean isOfflineMode()
-    {
-        return offlineMode;
-    }
+   
 
     // /**
     // * valid for only Documents retreived from server.

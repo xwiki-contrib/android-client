@@ -1,9 +1,11 @@
 package org.xwiki.android.rest.transformation;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.xwiki.android.resources.Attachment;
 import org.xwiki.android.resources.Comment;
@@ -30,8 +32,8 @@ public class DocLaunchPadForXML
     
     Tags tags;    
     
-    List<org.xwiki.android.xmodel.entity.Attachment> attatchmentsToupload;//new and update both. Same rest method.
-    List<String> deletedAttachments;
+    List<org.xwiki.android.xmodel.entity.Attachment> attatchmentsToupload;//new and update both. Same xmlrpc method.
+    Set<String> deletedAttachments;
     
     public DocLaunchPadForXML()
     {
@@ -43,7 +45,7 @@ public class DocLaunchPadForXML
         deletedComments=new ArrayList<String>();
         
         attatchmentsToupload=new ArrayList<org.xwiki.android.xmodel.entity.Attachment>();
-        deletedAttachments=new ArrayList<String>();
+        deletedAttachments=new HashSet<String>();
         
     }
 
@@ -135,7 +137,7 @@ public class DocLaunchPadForXML
 		return attatchmentsToupload;
 	}
 
-    public List<String> getDeletedAttachments()
+    public Set<String> getDeletedAttachments()
 	{
 		return deletedAttachments;
 	}

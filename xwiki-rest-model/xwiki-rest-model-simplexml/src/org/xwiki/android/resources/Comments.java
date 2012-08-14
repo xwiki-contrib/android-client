@@ -51,7 +51,7 @@ import org.simpleframework.xml.Root;
 @Namespace(reference = "http://www.xwiki.org")
 public class Comments // extends LinkCollection
 {
-    @ElementList(name = "comment", inline = true)
+    @ElementList(name = "comment", inline = true , required=false)
     public List<Comment> comments;
 
     /**

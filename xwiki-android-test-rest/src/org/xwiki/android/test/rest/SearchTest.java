@@ -22,6 +22,7 @@ package org.xwiki.android.test.rest;
 
 import org.xwiki.android.resources.SearchResults;
 import org.xwiki.android.rest.Requests;
+import org.xwiki.android.test.rest.env.TestConstants;
 
 import android.test.AndroidTestCase;
 
@@ -37,14 +38,14 @@ public class SearchTest extends AndroidTestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-        wikiName = TestResources.WIKI_NAME;
-        spaceName = TestResources.SPACE_NAME;
-        url = TestResources.URL;
-        keyword = TestResources.SEARCH_KEWORD;
+        wikiName = TestConstants.WIKI_NAME;
+        spaceName = TestConstants.SPACE_NAME;
+        url = TestConstants.SERVER_URL;
+        keyword = TestConstants.SEARCH_KEWORD;
 
         if (isSecured) {
-            username = TestResources.USERNAME;
-            password = TestResources.PASSWORD;
+            username = TestConstants.USERNAME;
+            password = TestConstants.PASSWORD;
         }
 
         request = new Requests(url);

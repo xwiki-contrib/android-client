@@ -26,7 +26,7 @@ import org.xwiki.android.resources.Wikis;
  * @author xwiki gsoc 2012
  * 
  */
-public interface XWikiRestfulAPI
+public interface XWikiAPI
 {
 
 	/**
@@ -242,6 +242,7 @@ public interface XWikiRestfulAPI
 	public String setTags(String wikiName, String spaceName, String pageName,Tags tags) throws RestConnectionException, RestException;
 
 	/**
+	 * get all comments in page
 	 * @param wikiName
 	 *            name of the Wiki
 	 * @param spaceName
@@ -254,6 +255,27 @@ public interface XWikiRestfulAPI
 			RestException;
 
 	/**
+	 * check whether a comment exists for the given page.
+	 * @param wikiName
+	 * @param spaceName
+	 * @param pageName
+	 * @param commentId
+	 * @return
+	 * @throws RestConnectionException
+	 * @throws RestException
+	 */
+	public boolean existsPageComment(String wikiName, String spaceName, String pageName,int commentId) throws RestConnectionException, RestException;
+    
+	/**
+	 * get a comment.
+     * @param commentId ID of the comment in the page
+     * @return comment of a page selected using comment ID
+     * @throws RestConnectionException
+     * @throws RestException
+     */
+    public Comment getPageComment(String wikiName, String spaceName, String pageName, int commentId) throws RestConnectionException, RestException;
+	
+	/**
 	 * Add comment to the page
 	 * 
 	 * @param wikiName
@@ -265,24 +287,12 @@ public interface XWikiRestfulAPI
 	 * @param comment
 	 *            Comment object to be added
 	 * @return status of the HTTP response
-	 */
+	 */	
+	
 	String addPageComment(String wikiName, String spaceName, String pageName, Comment comment)
 			throws RestConnectionException, RestException;
 
-	/**
-	 * @param wikiName
-	 *            name of the Wiki
-	 * @param spaceName
-	 *            name of the space
-	 * @param pageName
-	 *            name of the page
-	 * @param commentId
-	 *            ID of the comment
-	 * @return page comment according to the comment ID
-	 */
-	Comment getPageComments(String wikiName, String spaceName, String pageName, String commentId)
-			throws RestConnectionException, RestException;
-
+	
 	/**
 	 * @param wikiName
 	 *            name of the Wiki
@@ -495,6 +505,9 @@ public interface XWikiRestfulAPI
 	Page getPageTranslationInHistory(String wikiName, String spaceName, String pageName, String language, String version)
 			throws RestConnectionException, RestException;
 
+	
+	boolean existsObject(String wikiName, String spaceName, String pageName, String objectClassname,
+            int objectNumber)throws RestConnectionException,RestException;
 	/**
 	 * Adds provided object to the given page
 	 * 
@@ -525,7 +538,7 @@ public interface XWikiRestfulAPI
 	 * @throws RestException
 	 */
 	public String updateObject(String wikiName, String spaceName, String pageName, String objectClassname,
-			String objectNumber, Object object) throws RestConnectionException, RestException;
+			int objectNumber, Object object) throws RestConnectionException, RestException;
 
 	/**
 	 * @param wikiName
@@ -622,6 +635,7 @@ public interface XWikiRestfulAPI
 	 */
 	Property getObjectProperty(String wikiName, String spaceName, String pageName, String objectClassname,
 			String objectNumber, String propertyName) throws RestConnectionException, RestException;
+	//TODO: refactor number to int
 
 	/**
 	 * Adds the property to the object of a page

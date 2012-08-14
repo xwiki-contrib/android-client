@@ -80,7 +80,7 @@ public class DocumentReference extends EntityReference<Document>
     @Override
     public String getURL()
     {
-        return getAuthority() + "/xwiki/rest/wikis/" + wikiName + "/spaces" + spaceName + "/pages" + pageName;
+        return getAuthority() + "/xwiki/xmlrpc/wikis/" + wikiName + "/spaces" + spaceName + "/pages" + pageName;
     }
 
 }

@@ -105,7 +105,8 @@ public class XWikiApplicationContext extends Application implements XWikiApplica
 
     public static XWikiApplicationContext getInstance()
     {
-        return currContext;
+        if(currContext==null) throw new RuntimeException("please set XWikiApplicationContext in android manifest <application android:name");
+    	return currContext;
     }
 
     /*

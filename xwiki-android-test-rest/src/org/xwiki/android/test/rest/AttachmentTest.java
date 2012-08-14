@@ -20,15 +20,18 @@
 
 package org.xwiki.android.test.rest;
 
+import java.io.InputStream;
+
 import org.xwiki.android.resources.Attachments;
 import org.xwiki.android.rest.Requests;
+import org.xwiki.android.test.rest.env.TestConstants;
 
 import android.test.AndroidTestCase;
 
 public class AttachmentTest extends AndroidTestCase
 {
-    private String wikiName, spaceName, pageName, url, username, password, version, filePath, attachmentName,
-        attachmentVersion;
+    private String wikiName, spaceName, pageName, url, username, password, pageVersion, filePath, attachmentName,
+        attachmentVersion,attachmentDelName;
 
     private boolean isSecured = true;
 
@@ -38,18 +41,19 @@ public class AttachmentTest extends AndroidTestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-        wikiName = TestResources.WIKI_NAME;
-        spaceName = TestResources.SPACE_NAME;
-        pageName = TestResources.PAGE_NAME;
-        url = TestResources.URL;
-        version = TestResources.PAGE_VERSION;
-        attachmentName = TestResources.ATTACHMENT_NAME;
-        filePath = TestResources.ATTACHMENT_PATH;
-        attachmentVersion = TestResources.ATTACHMENT_VERSION;
+        wikiName = TestConstants.WIKI_NAME;
+        spaceName = TestConstants.SPACE_NAME;
+        pageName = TestConstants.PAGE_NAME;
+        url = TestConstants.SERVER_URL;
+        pageVersion = TestConstants.ATTACHMENT_PAGE_HISTORY_VERSION;
+        attachmentName = TestConstants.ATTACHMENT_NAME;
+        filePath = TestConstants.ATTACHMENT_PATH;
+        attachmentVersion = TestConstants.ATTACHMENT_VERSION;
+        attachmentDelName= TestConstants.ATTACHMENT_DEL_NAME;
 
         if (isSecured) {
-            username = TestResources.USERNAME;
-            password = TestResources.PASSWORD;
+            username = TestConstants.USERNAME;
+            password = TestConstants.PASSWORD;
         }
 
         request = new Requests(url);
@@ -79,22 +83,22 @@ public class AttachmentTest extends AndroidTestCase
 
     public void testDeletePageAttachment() throws Throwable
     {
-        String s = request.deletePageAttachment(wikiName, spaceName, pageName, attachmentName);
+        String s = request.deletePageAttachment(wikiName, spaceName, pageName, attachmentDelName);
         assertNotNull(s);
     }
 
     public void testRequestPageAttchmentsInHistory() throws Throwable
     {
-        Attachments attachments = request.requestPageAttachmentsInHistory(wikiName, spaceName, pageName, version);
+        Attachments attachments = request.requestPageAttachmentsInHistory(wikiName, spaceName, pageName, pageVersion);
         assertNotNull(attachments);
     }
 
-    // public void testRequestPageAttachmentInHistory() throws Throwable
-    // {
-    // InputStream inputStream =
-    // request.requestPageAttachmentsInHistory(wikiName, spaceName, pageName, version, attachmentName);
-    // assertNotNull(inputStream);
-    // }
+//     public void testRequestPageAttachmentInHistory() throws Throwable
+//     {
+//     InputStream inputStream =
+//     request.requestPageAttachmentsInHistory(wikiName, spaceName, pageName, pageVersion, attachmentName);
+//     assertNotNull(inputStream);
+//     } // this test is not working in xwiki 3.5.1. Server Error.
 
     public void testRequestPageAttchmentsInAttachmentHistory() throws Throwable
     {
@@ -103,12 +107,12 @@ public class AttachmentTest extends AndroidTestCase
         assertNotNull(attachments);
     }
 
-    // public void testRequestPageAttachmentInAttachmentHistory() throws Throwable
-    // {
-    // InputStream inputStream =
-    // request.requestPageAttachmentsInAttachmentHistory(wikiName, spaceName, pageName, attachmentName,
-    // attachmentVersion);
-    // assertNotNull(inputStream);
-    // }
+     public void testRequestPageAttachmentInAttachmentHistory() throws Throwable
+     {
+     InputStream inputStream =
+     request.requestPageAttachmentsInAttachmentHistory(wikiName, spaceName, pageName, attachmentName,
+     attachmentVersion);
+     assertNotNull(inputStream);
+     }
 
 }

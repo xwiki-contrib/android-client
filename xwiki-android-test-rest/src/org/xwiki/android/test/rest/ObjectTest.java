@@ -26,6 +26,7 @@ import org.xwiki.android.resources.Objects;
 import org.xwiki.android.resources.Properties;
 import org.xwiki.android.resources.Property;
 import org.xwiki.android.rest.Requests;
+import org.xwiki.android.test.rest.env.TestConstants;
 
 import android.test.AndroidTestCase;
 
@@ -41,17 +42,17 @@ public class ObjectTest extends AndroidTestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-        wikiName = TestResources.WIKI_NAME;
-        spaceName = TestResources.SPACE_NAME;
-        pageName = TestResources.PAGE_NAME;
-        url = TestResources.URL;
-        classname = TestResources.CLASS_NAME;
-        objectNo = TestResources.OBJECT_NUMBER;
-        propertyName = TestResources.OBJECT_PROPERTY_NAME;
+        wikiName = TestConstants.WIKI_NAME;
+        spaceName = TestConstants.SPACE_NAME;
+        pageName = TestConstants.PAGE_NAME;
+        url = TestConstants.SERVER_URL;
+        classname = TestConstants.CLASS_NAME;
+        objectNo = TestConstants.OBJECT_NUMBER;
+        propertyName = TestConstants.OBJECT_PROPERTY_NAME;
 
         if (isSecured) {
-            username = TestResources.USERNAME;
-            password = TestResources.PASSWORD;
+            username = TestConstants.USERNAME;
+            password = TestConstants.PASSWORD;
         }
 
         request = new Requests(url);

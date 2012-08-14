@@ -77,7 +77,7 @@ public class DocumentDismantler_XML
                 pad.editedObjects.put(en.getKey(),ores );
             }
             // mark deleted objects.
-            List<String> delObjs = doc.getAllDeletedObjects();
+            Set<String> delObjs = doc.getDeletedObjects();
             for (String objKey : delObjs) {
                 pad.deletedObjects.add(objKey);
             }
@@ -97,13 +97,11 @@ public class DocumentDismantler_XML
             // updates
             List<Comment> editedComments = doc.getAllEditedComments();
             for (Comment ec : editedComments) {
-                Object ores = new Object();
-                ores.setClassName("XWiki.XWikiComments");
-                ores.setNumber(ec.getId());
+                Object ores=translator.toObject(ec);
                 pad.editedComments.add(ores);
             }
             // deletes
-            List<Integer> deletedComments = doc.getAllDeletedComments();
+            Set<Integer> deletedComments = doc.getDeletedCommentSet();
             for (int id : deletedComments) {
                 String key = "XWiki.XWikiComments";
                 key += "/" + id;
@@ -112,7 +110,7 @@ public class DocumentDismantler_XML
 
         }
         if ((parts & TAGS) == TAGS) {
-            // new,update,del all in one rest method.
+            // new,update,del all in one xmlrpc method.
             Tags tgsres = null;
             if (doc.getAllNewTags() != null && !doc.getAllNewTags().isEmpty()) {
                 tgsres = translator.toTags(doc.getTags());
@@ -126,7 +124,7 @@ public class DocumentDismantler_XML
             edlist.addAll(newlist);
             pad.attatchmentsToupload = edlist;
             // deleted ones
-            pad.deletedAttachments = doc.getAllDeletedAttachments();
+            pad.deletedAttachments = doc.getDeletedAttachments();
         }
         // "ALL", its automatically done as 31=1+2+...
         return pad;

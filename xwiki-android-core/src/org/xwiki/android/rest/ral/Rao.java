@@ -16,6 +16,8 @@ import org.xwiki.android.rest.reference.EntityReference;
 interface Rao<T>
 {
     T create(T resrc) throws RestConnectionException,RaoException;
+    
+    boolean exists(T resrc) throws RestConnectionException,RaoException;
 
     T retreive(T resrc) throws RestConnectionException,RaoException;
 

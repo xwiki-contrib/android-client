@@ -8,8 +8,8 @@ import org.xwiki.android.resources.Object;
 import org.xwiki.android.resources.Tags;
 import org.xwiki.android.rest.RestConnectionException;
 import org.xwiki.android.rest.RestException;
-import org.xwiki.android.rest.XWikiRestConnector;
-import org.xwiki.android.rest.XWikiRestfulAPI;
+import org.xwiki.android.rest.XWikiRestConnecion;
+import org.xwiki.android.rest.XWikiAPI;
 import org.xwiki.android.rest.ral.RaoException;
 import org.xwiki.android.rest.transformation.DocLaunchPadForXML;
 import org.xwiki.android.rest.transformation.DocumentDismantler_XML;
@@ -22,12 +22,12 @@ public class DocUpdateStrategy implements IDocUpdateStragegy
 {
 
     private static final String TAG = "DocUpdate";
-    XWikiRestfulAPI api;
+    XWikiAPI api;
     DocumentDismantler_XML dismantler;
 
     public DocUpdateStrategy(String serverUrl, String username, String password)
     {
-        api = new XWikiRestConnector(serverUrl, username, password);
+        api = new XWikiRestConnecion(serverUrl, username, password);
         dismantler = new DocumentDismantler_XML();
 
     }
@@ -51,7 +51,7 @@ public class DocUpdateStrategy implements IDocUpdateStragegy
             String ss[] = key.split("/");
             Object ores = e.getValue();
             String objectClassname = ss[0];
-            String objectNumber = ss[1];
+            int objectNumber = new Integer(ss[1]);
             try {
                 api.updateObject(wikiName, spaceName, pageName, objectClassname, objectNumber, ores);
                 numEdObj++; // after the api op. If exception happens no ++ happens.
@@ -89,11 +89,11 @@ public class DocUpdateStrategy implements IDocUpdateStragegy
         // edited comments
         // need to conver to objs. Direct editing is not currently supported in
         // xwiki restful api.
-        for (Object comment : pad.getEditedComments()) {
-            String objectClassname = comment.getClassName();
-            String objectNumber = comment.getNumber() + "";
+        for (Object cmntObj : pad.getEditedComments()) {
+            String objectClassname = cmntObj.getClassName();
+            int objectNumber = cmntObj.getNumber();
             try {
-                api.updateObject(wikiName, spaceName, pageName, objectClassname, objectNumber, comment);
+                api.updateObject(wikiName, spaceName, pageName, objectClassname, objectNumber, cmntObj);
                 numEdCmnt++;
             } catch (RestException e1) {
                 // TODO Auto-generated catch block

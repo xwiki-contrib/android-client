@@ -23,6 +23,7 @@ package org.xwiki.android.test.rest;
 import org.xwiki.android.resources.Comment;
 import org.xwiki.android.resources.Comments;
 import org.xwiki.android.rest.Requests;
+import org.xwiki.android.test.rest.env.TestConstants;
 
 import android.test.AndroidTestCase;
 
@@ -38,16 +39,16 @@ public class CommentsTest extends AndroidTestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-        wikiName = TestResources.WIKI_NAME;
-        spaceName = TestResources.SPACE_NAME;
-        pageName = TestResources.PAGE_NAME;
-        url = TestResources.URL;
-        commentId = TestResources.COMMENT_ID;
-        version = TestResources.PAGE_VERSION;
+        wikiName = TestConstants.WIKI_NAME;
+        spaceName = TestConstants.SPACE_NAME;
+        pageName = TestConstants.PAGE_NAME;
+        url = TestConstants.SERVER_URL;
+        commentId = TestConstants.COMMENT_ID;
+        version = TestConstants.COMMENT_PAGE_HISTORY_VERSION;
 
         if (isSecured) {
-            username = TestResources.USERNAME;
-            password = TestResources.PASSWORD;
+            username = TestConstants.USERNAME;
+            password = TestConstants.PASSWORD;
         }
 
         request = new Requests(url);
@@ -86,7 +87,7 @@ public class CommentsTest extends AndroidTestCase
     public void testAddComment() throws Throwable
     {
         Comment comment = new Comment();
-        comment.setText("This is tesing comment in android rest");
+        comment.setText("This is tesing comment in android xmlrpc");
         String s = request.addPageComment(wikiName, spaceName, pageName, comment);
         assertNotNull(s);
     }

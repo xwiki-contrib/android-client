@@ -25,8 +25,10 @@ import org.xwiki.android.resources.Wikis;
 
 import android.util.Log;
 
-public class XWikiRestConnector implements XWikiRestfulAPI
+public class XWikiRestConnecion implements RestConnection, XWikiAPI
 {
+
+    private static final String TAG ="XWikiRestConnecion";
 
     /**
      * URL of the XWiki domain
@@ -51,7 +53,7 @@ public class XWikiRestConnector implements XWikiRestfulAPI
     /**
      * @param URLprefix URL of the XWiki domain
      */
-    public XWikiRestConnector(String URLprefix)
+    public XWikiRestConnecion(String URLprefix)
     {
         this.URLprefix = URLprefix;
         isAuthenticated = false;
@@ -64,7 +66,7 @@ public class XWikiRestConnector implements XWikiRestfulAPI
      * @param username username of the user account
      * @param password password of the user account
      */
-    public XWikiRestConnector(String URLprefix, String username, String password)
+    public XWikiRestConnecion(String URLprefix, String username, String password)
     {
         this.URLprefix = URLprefix;
         this.username = username;
@@ -74,7 +76,7 @@ public class XWikiRestConnector implements XWikiRestfulAPI
 
     /*
      * (non-Javadoc)
-     * @see org.xwiki.android.rest.XWikiRestfulAPI#setAuthentication(java.lang.String, java.lang.String)
+     * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#setAuthentication(java.lang.String, java.lang.String)
      */
     @Override
     public void setAuthentication(String username, String password)
@@ -109,7 +111,7 @@ public class XWikiRestConnector implements XWikiRestfulAPI
 
     /*
      * (non-Javadoc)
-     * @see org.xwiki.android.rest.XWikiRestfulAPI#getSearch(java.lang.String, java.lang.String)
+     * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#getSearch(java.lang.String, java.lang.String)
      */
     @Override
     public SearchResults searchInWiki(String wikiName, String keyword) throws RestConnectionException, RestException, RestException
@@ -129,7 +131,7 @@ public class XWikiRestConnector implements XWikiRestfulAPI
 
     /*
      * (non-Javadoc)
-     * @see org.xwiki.android.rest.XWikiRestfulAPI#getSearch(java.lang.String, java.lang.String, java.lang.String)
+     * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#getSearch(java.lang.String, java.lang.String, java.lang.String)
      */
     @Override
     public SearchResults searchInSpace(String wikiName, String spaceName, String keyword) throws RestConnectionException, RestException
@@ -148,7 +150,7 @@ public class XWikiRestConnector implements XWikiRestfulAPI
 
     /*
      * (non-Javadoc)
-     * @see org.xwiki.android.rest.XWikiRestfulAPI#getWikis()
+     * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#getWikis()
      */
     @Override
     public Wikis getWikis() throws RestConnectionException, RestException
@@ -164,7 +166,7 @@ public class XWikiRestConnector implements XWikiRestfulAPI
 
     /*
      * (non-Javadoc)
-     * @see org.xwiki.android.rest.XWikiRestfulAPI#getSpaces(java.lang.String)
+     * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#getSpaces(java.lang.String)
      */
     @Override
     public Spaces getSpaces(String wikiName) throws RestConnectionException, RestException
@@ -179,7 +181,7 @@ public class XWikiRestConnector implements XWikiRestfulAPI
 
     /*
      * (non-Javadoc)
-     * @see org.xwiki.android.rest.XWikiRestfulAPI#getAllPages(java.lang.String, java.lang.String)
+     * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#getAllPages(java.lang.String, java.lang.String)
      */
     @Override
     public Pages getAllPages(String wikiName, String spaceName) throws RestConnectionException, RestException
@@ -225,7 +227,7 @@ public class XWikiRestConnector implements XWikiRestfulAPI
 
     /*
      * (non-Javadoc)
-     * @see org.xwiki.android.rest.XWikiRestfulAPI#addPage(java.lang.String, java.lang.String, java.lang.String,
+     * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#addPage(java.lang.String, java.lang.String, java.lang.String,
      * org.xwiki.android.resources.Page)
      */
     @Override
@@ -244,7 +246,7 @@ public class XWikiRestConnector implements XWikiRestfulAPI
 
     /*
      * (non-Javadoc)
-     * @see org.xwiki.android.rest.XWikiRestfulAPI#deletePage(java.lang.String, java.lang.String, java.lang.String)
+     * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#deletePage(java.lang.String, java.lang.String, java.lang.String)
      */
     @Override
     public String deletePage(String wikiName, String spaceName, String pageName) throws RestConnectionException, RestException
@@ -262,7 +264,7 @@ public class XWikiRestConnector implements XWikiRestfulAPI
 
     /*
      * (non-Javadoc)
-     * @see org.xwiki.android.rest.XWikiRestfulAPI#deletePage(java.lang.String, java.lang.String, java.lang.String,
+     * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#deletePage(java.lang.String, java.lang.String, java.lang.String,
      * java.lang.String)
      */
     @Override
@@ -283,7 +285,7 @@ public class XWikiRestConnector implements XWikiRestfulAPI
 
     /*
      * (non-Javadoc)
-     * @see org.xwiki.android.rest.XWikiRestfulAPI#getPageHistory(java.lang.String, java.lang.String, java.lang.String)
+     * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#getPageHistory(java.lang.String, java.lang.String, java.lang.String)
      */
 
     @Override
@@ -302,7 +304,7 @@ public class XWikiRestConnector implements XWikiRestfulAPI
 
     /*
      * (non-Javadoc)
-     * @see org.xwiki.android.rest.XWikiRestfulAPI#getPageInVersionHistory(java.lang.String, java.lang.String,
+     * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#getPageInVersionHistory(java.lang.String, java.lang.String,
      * java.lang.String, java.lang.String)
      */
 
@@ -323,7 +325,7 @@ public class XWikiRestConnector implements XWikiRestfulAPI
 
     /*
      * (non-Javadoc)
-     * @see org.xwiki.android.rest.XWikiRestfulAPI#getPageChildren(java.lang.String, java.lang.String, java.lang.String)
+     * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#getPageChildren(java.lang.String, java.lang.String, java.lang.String)
      */
 
     @Override
@@ -343,7 +345,7 @@ public class XWikiRestConnector implements XWikiRestfulAPI
 
     /*
      * (non-Javadoc)
-     * @see org.xwiki.android.rest.XWikiRestfulAPI#getPageTags(java.lang.String, java.lang.String, java.lang.String)
+     * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#getPageTags(java.lang.String, java.lang.String, java.lang.String)
      */
 
     @Override
@@ -362,7 +364,7 @@ public class XWikiRestConnector implements XWikiRestfulAPI
 
     /*
      * (non-Javadoc)
-     * @see org.xwiki.android.rest.XWikiRestfulAPI#addPageTag(java.lang.String, java.lang.String, java.lang.String,
+     * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#addPageTag(java.lang.String, java.lang.String, java.lang.String,
      * org.xwiki.android.resources.Tag)
      */
 
@@ -395,7 +397,7 @@ public class XWikiRestConnector implements XWikiRestfulAPI
 
     /*
      * (non-Javadoc)
-     * @see org.xwiki.android.rest.XWikiRestfulAPI#getWikiTags(java.lang.String)
+     * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#getWikiTags(java.lang.String)
      */
 
     @Override
@@ -412,7 +414,7 @@ public class XWikiRestConnector implements XWikiRestfulAPI
 
     /*
      * (non-Javadoc)
-     * @see org.xwiki.android.rest.XWikiRestfulAPI#getPageComments(java.lang.String, java.lang.String, java.lang.String)
+     * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#getPageComments(java.lang.String, java.lang.String, java.lang.String)
      */
 
     @Override
@@ -428,10 +430,39 @@ public class XWikiRestConnector implements XWikiRestfulAPI
         }
         return commentresources.getPageComments();
     }
+    
+    @Override
+    public boolean existsPageComment(String wikiName, String spaceName, String pageName, int commentId)
+        throws RestConnectionException, RestException
+    {
+        wikiName = urlEncode(wikiName);
+        spaceName = urlEncode(spaceName);
+        pageName = urlEncode(pageName);
+
+        CommentResources commentresources = new CommentResources(URLprefix, wikiName, spaceName, pageName);
+        if (isAuthenticated) {
+            commentresources.setAuthenticaion(username, password);
+        }
+        return commentresources.exists(commentId);
+    }
+
+    @Override
+    public Comment getPageComment(String wikiName, String spaceName, String pageName, int commentId) throws RestConnectionException, RestException
+    {
+        wikiName = urlEncode(wikiName);
+        spaceName = urlEncode(spaceName);
+        pageName = urlEncode(pageName);
+
+        CommentResources commentresources = new CommentResources(URLprefix, wikiName, spaceName, pageName);
+        if (isAuthenticated) {
+            commentresources.setAuthenticaion(username, password);
+        }
+        return commentresources.getPageComment(commentId);
+    }
 
     /*
      * (non-Javadoc)
-     * @see org.xwiki.android.rest.XWikiRestfulAPI#addPageComment(java.lang.String, java.lang.String, java.lang.String,
+     * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#addPageComment(java.lang.String, java.lang.String, java.lang.String,
      * org.xwiki.android.resources.Comment)
      */
 
@@ -452,30 +483,11 @@ public class XWikiRestConnector implements XWikiRestfulAPI
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * @see org.xwiki.android.rest.XWikiRestfulAPI#getPageComments(java.lang.String, java.lang.String, java.lang.String,
-     * java.lang.String)
-     */
-
-    @Override
-    public Comment getPageComments(String wikiName, String spaceName, String pageName, String commentId)
-        throws RestConnectionException, RestException
-    {
-        wikiName = urlEncode(wikiName);
-        spaceName = urlEncode(spaceName);
-        pageName = urlEncode(pageName);
-
-        CommentResources commentresources = new CommentResources(URLprefix, wikiName, spaceName, pageName);
-        if (isAuthenticated) {
-            commentresources.setAuthenticaion(username, password);
-        }
-        return commentresources.getPageComment(commentId);
-    }
+    
 
     /*
      * (non-Javadoc)
-     * @see org.xwiki.android.rest.XWikiRestfulAPI#getPageCommentsInHistory(java.lang.String, java.lang.String,
+     * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#getPageCommentsInHistory(java.lang.String, java.lang.String,
      * java.lang.String, java.lang.String)
      */
 
@@ -496,7 +508,7 @@ public class XWikiRestConnector implements XWikiRestfulAPI
 
     /*
      * (non-Javadoc)
-     * @see org.xwiki.android.rest.XWikiRestfulAPI#getPageCommentsInHistory(java.lang.String, java.lang.String,
+     * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#getPageCommentsInHistory(java.lang.String, java.lang.String,
      * java.lang.String, java.lang.String, java.lang.String)
      */
 
@@ -517,7 +529,7 @@ public class XWikiRestConnector implements XWikiRestfulAPI
 
     /*
      * (non-Javadoc)
-     * @see org.xwiki.android.rest.XWikiRestfulAPI#getAllPageAttachments(java.lang.String, java.lang.String,
+     * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#getAllPageAttachments(java.lang.String, java.lang.String,
      * java.lang.String)
      */
 
@@ -539,7 +551,7 @@ public class XWikiRestConnector implements XWikiRestfulAPI
 
     /*
      * (non-Javadoc)
-     * @see org.xwiki.android.rest.XWikiRestfulAPI#getPageAttachment(java.lang.String, java.lang.String,
+     * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#getPageAttachment(java.lang.String, java.lang.String,
      * java.lang.String, java.lang.String)
      */
 
@@ -561,7 +573,7 @@ public class XWikiRestConnector implements XWikiRestfulAPI
 
     /*
      * (non-Javadoc)
-     * @see org.xwiki.android.rest.XWikiRestfulAPI#addPageAttachment(java.lang.String, java.lang.String,
+     * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#addPageAttachment(java.lang.String, java.lang.String,
      * java.lang.String, java.lang.String, java.lang.String)
      */
 
@@ -583,7 +595,7 @@ public class XWikiRestConnector implements XWikiRestfulAPI
 
     /*
      * (non-Javadoc)
-     * @see org.xwiki.android.rest.XWikiRestfulAPI#deletePageAttachment(java.lang.String, java.lang.String,
+     * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#deletePageAttachment(java.lang.String, java.lang.String,
      * java.lang.String, java.lang.String)
      */
 
@@ -605,7 +617,7 @@ public class XWikiRestConnector implements XWikiRestfulAPI
 
     /*
      * (non-Javadoc)
-     * @see org.xwiki.android.rest.XWikiRestfulAPI#getPageAttachmentsInHistory(java.lang.String, java.lang.String,
+     * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#getPageAttachmentsInHistory(java.lang.String, java.lang.String,
      * java.lang.String, java.lang.String)
      */
 
@@ -626,7 +638,7 @@ public class XWikiRestConnector implements XWikiRestfulAPI
 
     /*
      * (non-Javadoc)
-     * @see org.xwiki.android.rest.XWikiRestfulAPI#getPageAttachmentsInHistory(java.lang.String, java.lang.String,
+     * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#getPageAttachmentsInHistory(java.lang.String, java.lang.String,
      * java.lang.String, java.lang.String, java.lang.String)
      */
 
@@ -648,7 +660,7 @@ public class XWikiRestConnector implements XWikiRestfulAPI
 
     /*
      * (non-Javadoc)
-     * @see org.xwiki.android.rest.XWikiRestfulAPI#getPageAttachmentsInAttachmentHistory(java.lang.String,
+     * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#getPageAttachmentsInAttachmentHistory(java.lang.String,
      * java.lang.String, java.lang.String, java.lang.String)
      */
 
@@ -670,7 +682,7 @@ public class XWikiRestConnector implements XWikiRestfulAPI
 
     /*
      * (non-Javadoc)
-     * @see org.xwiki.android.rest.XWikiRestfulAPI#getPageAttachmentsInAttachmentHistory(java.lang.String,
+     * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#getPageAttachmentsInAttachmentHistory(java.lang.String,
      * java.lang.String, java.lang.String, java.lang.String, java.lang.String)
      */
 
@@ -692,7 +704,7 @@ public class XWikiRestConnector implements XWikiRestfulAPI
 
     /*
      * (non-Javadoc)
-     * @see org.xwiki.android.rest.XWikiRestfulAPI#getWikiClasses(java.lang.String)
+     * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#getWikiClasses(java.lang.String)
      */
 
     @Override
@@ -709,7 +721,7 @@ public class XWikiRestConnector implements XWikiRestfulAPI
 
     /*
      * (non-Javadoc)
-     * @see org.xwiki.android.rest.XWikiRestfulAPI#getWikiClasses(java.lang.String, java.lang.String)
+     * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#getWikiClasses(java.lang.String, java.lang.String)
      */
 
     @Override
@@ -727,7 +739,7 @@ public class XWikiRestConnector implements XWikiRestfulAPI
 
     /*
      * (non-Javadoc)
-     * @see org.xwiki.android.rest.XWikiRestfulAPI#getAllPageTranslations(java.lang.String, java.lang.String,
+     * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#getAllPageTranslations(java.lang.String, java.lang.String,
      * java.lang.String)
      */
 
@@ -748,7 +760,7 @@ public class XWikiRestConnector implements XWikiRestfulAPI
 
     /*
      * (non-Javadoc)
-     * @see org.xwiki.android.rest.XWikiRestfulAPI#getPageTranslation(java.lang.String, java.lang.String,
+     * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#getPageTranslation(java.lang.String, java.lang.String,
      * java.lang.String, java.lang.String)
      */
 
@@ -769,7 +781,7 @@ public class XWikiRestConnector implements XWikiRestfulAPI
 
     /*
      * (non-Javadoc)
-     * @see org.xwiki.android.rest.XWikiRestfulAPI#getPageHistoryInLanguage(java.lang.String, java.lang.String,
+     * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#getPageHistoryInLanguage(java.lang.String, java.lang.String,
      * java.lang.String, java.lang.String)
      */
 
@@ -790,7 +802,7 @@ public class XWikiRestConnector implements XWikiRestfulAPI
 
     /*
      * (non-Javadoc)
-     * @see org.xwiki.android.rest.XWikiRestfulAPI#getPageTranslationInHistory(java.lang.String, java.lang.String,
+     * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#getPageTranslationInHistory(java.lang.String, java.lang.String,
      * java.lang.String, java.lang.String, java.lang.String)
      */
 
@@ -808,10 +820,29 @@ public class XWikiRestConnector implements XWikiRestfulAPI
         }
         return pageresources.getPageTranslation(pageName, language, version);
     }
+    
+    @Override
+    public boolean existsObject(String wikiName, String spaceName, String pageName, String objectClassname,
+        int objectNumber) throws RestConnectionException, RestException
+    {
+        wikiName = urlEncode(wikiName);
+        spaceName = urlEncode(spaceName);
+        pageName = urlEncode(pageName);
+        objectClassname = urlEncode(objectClassname);
+        String objNumber=urlEncode(objectNumber+"");
+        
+        ObjectResources objectresources = new ObjectResources(URLprefix, wikiName, spaceName, pageName);
+        if (isAuthenticated) {
+            objectresources.setAuthenticaion(username, password);
+        }
+        boolean val= objectresources.exists(objectClassname,objNumber);
+        return val; 
+        
+    }
 
     /*
      * (non-Javadoc)
-     * @see org.xwiki.android.rest.XWikiRestfulAPI#addObject(java.lang.String, java.lang.String, java.lang.String,
+     * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#addObject(java.lang.String, java.lang.String, java.lang.String,
      * org.xwiki.android.resources.Object)
      */
 
@@ -841,7 +872,7 @@ public class XWikiRestConnector implements XWikiRestfulAPI
      * @throws RestException 
      */
     @Override
-    public String updateObject(String wikiName, String spaceName, String pageName,String objectClassname, String objectNumber, Object object) throws RestConnectionException, RestException
+    public String updateObject(String wikiName, String spaceName, String pageName,String objectClassname, int objectNumber, Object object) throws RestConnectionException, RestException
     {
         wikiName = urlEncode(wikiName);
         spaceName = urlEncode(spaceName);
@@ -851,13 +882,13 @@ public class XWikiRestConnector implements XWikiRestfulAPI
         if (isAuthenticated) {
             objectresources.setAuthenticaion(username, password);
         }
-        return objectresources.updateObject(objectClassname, objectNumber, object);
+        return objectresources.updateObject(objectClassname, ""+objectNumber, object);
 
     }
 
     /*
      * (non-Javadoc)
-     * @see org.xwiki.android.rest.XWikiRestfulAPI#getAllObjects(java.lang.String, java.lang.String, java.lang.String)
+     * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#getAllObjects(java.lang.String, java.lang.String, java.lang.String)
      */
 
     @Override
@@ -876,7 +907,7 @@ public class XWikiRestConnector implements XWikiRestfulAPI
 
     /*
      * (non-Javadoc)
-     * @see org.xwiki.android.rest.XWikiRestfulAPI#getObjectsInClass(java.lang.String, java.lang.String,
+     * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#getObjectsInClass(java.lang.String, java.lang.String,
      * java.lang.String, java.lang.String)
      */
 
@@ -898,7 +929,7 @@ public class XWikiRestConnector implements XWikiRestfulAPI
 
     /*
      * (non-Javadoc)
-     * @see org.xwiki.android.rest.XWikiRestfulAPI#getObject(java.lang.String, java.lang.String, java.lang.String,
+     * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#getObject(java.lang.String, java.lang.String, java.lang.String,
      * java.lang.String, java.lang.String)
      */
 
@@ -921,7 +952,7 @@ public class XWikiRestConnector implements XWikiRestfulAPI
 
     /*
      * (non-Javadoc)
-     * @see org.xwiki.android.rest.XWikiRestfulAPI#deleteObject(java.lang.String, java.lang.String, java.lang.String,
+     * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#deleteObject(java.lang.String, java.lang.String, java.lang.String,
      * java.lang.String, java.lang.String)
      */
 
@@ -944,7 +975,7 @@ public class XWikiRestConnector implements XWikiRestfulAPI
 
     /*
      * (non-Javadoc)
-     * @see org.xwiki.android.rest.XWikiRestfulAPI#getObjectAllProperties(java.lang.String, java.lang.String,
+     * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#getObjectAllProperties(java.lang.String, java.lang.String,
      * java.lang.String, java.lang.String, java.lang.String)
      */
 
@@ -967,7 +998,7 @@ public class XWikiRestConnector implements XWikiRestfulAPI
 
     /*
      * (non-Javadoc)
-     * @see org.xwiki.android.rest.XWikiRestfulAPI#getObjectProperty(java.lang.String, java.lang.String,
+     * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#getObjectProperty(java.lang.String, java.lang.String,
      * java.lang.String, java.lang.String, java.lang.String, java.lang.String)
      */
 
@@ -991,7 +1022,7 @@ public class XWikiRestConnector implements XWikiRestfulAPI
 
     /*
      * (non-Javadoc)
-     * @see org.xwiki.android.rest.XWikiRestfulAPI#addProperty(java.lang.String, java.lang.String, java.lang.String,
+     * @see org.xwiki.android.xmlrpc.XWikiRestfulAPI#addProperty(java.lang.String, java.lang.String, java.lang.String,
      * java.lang.String, java.lang.String, org.xwiki.android.resources.Property)
      */
 
@@ -1011,6 +1042,31 @@ public class XWikiRestConnector implements XWikiRestfulAPI
         }
         return objectresources.addObjectProperty(objectClassname, objectNumber, property);
     }
+
+    //connection methods
+    
+    
+    @Override
+    public XWikiAPI getBaseAPI()
+    {       
+        return this;
+    }
+
+    @Override
+    public boolean isClosed()
+    {
+       return false;
+    }
+
+    @Override
+    public void close()
+    {    
+        Log.e(TAG, "not implemented: should release any resources: Also see that HttpConnector does not release resources");
+        //httpclient.getConnectionManager().shutdown();
+        //refer: http://hc.apache.org/httpcomponents-client-ga/tutorial/html/connmgmt.html
+       //throw new UnsupportedOperationException("should be releasing resources."); 
+    }
+
 
    
 }

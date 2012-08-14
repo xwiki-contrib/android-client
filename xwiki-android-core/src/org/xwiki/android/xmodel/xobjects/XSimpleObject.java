@@ -40,13 +40,7 @@ public abstract class XSimpleObject extends XObject<XProperty>
     }
     
     
-    /**
-     * same as get className when called from a extended type. Ex: XBlogPost.getType() eq new XblogPost().getClassName();
-     */
-    public static String getType()
-    {
-        return "XSimpleObject";
-    }
+    
     
 //get set pairs.    
 
