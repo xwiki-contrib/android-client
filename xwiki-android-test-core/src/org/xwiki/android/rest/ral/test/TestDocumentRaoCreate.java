@@ -38,233 +38,270 @@ import android.util.Log;
  */
 public class TestDocumentRaoCreate extends AndroidTestCase
 {
-    private static final String TAG = TestDocumentRaoCreate.class.getSimpleName();
+	private static final String TAG = TestDocumentRaoCreate.class.getSimpleName();
 	// test org.xwiki.android.test.fixture.teardown.env parameters.
-    String serverUrl, username, password, wikiName, spaceName, pageName, attachmentName;
-    static int count=1;
+	String serverUrl, username, password, wikiName, spaceName, pageName, attachmentName;
+	static int count = 1;
 
-    // tested apis
-    RESTfulManager rm;
-    DocumentRao rao;
+	// tested apis
+	RESTfulManager rm;
+	DocumentRao rao;
 
-    // api used for output verification
-    XWikiAPI api;
+	// api used for output verification
+	XWikiAPI api;
 
-    // test inputs
-    Document doc;
-    // special inputs set in tests
-    XBlogPost xb1, xb2, xb3;
-    XSimpleObject so1, so2; // a general so.
-    Comment c1, c2, c3;
-    Tag t1, t2;
-    Attachment a1;
-    File af1;
+	// test inputs
+	Document doc;
+	// special inputs set in tests
+	XBlogPost xb1, xb2, xb3;
+	XSimpleObject so1, so2; // a general so.
+	Comment c1, c2, c3, c4;
+	Tag t1, t2;
+	Attachment a1;
+	File af1;
 
-    public TestDocumentRaoCreate()
-    {
-        username = Env.USERNAME;
-        password = Env.PASSWORD;
-        serverUrl = Env.URL;
+	public TestDocumentRaoCreate()
+	{
+		username = Env.USERNAME;
+		password = Env.PASSWORD;
+		serverUrl = Env.URL;
 
-        wikiName = Env.WIKI_NAME;
-        spaceName = Env.SPACE_NAME;
-        pageName = Env.TEMP_PAGE_NAME;
-        attachmentName=Env.ATTACHMENT_NAME;
-    }
+		wikiName = Env.WIKI_NAME;
+		spaceName = Env.SPACE_NAME;
+		pageName = Env.TEMP_PAGE_NAME;
+		attachmentName = Env.ATTACHMENT_NAME;
+	}
 
-    @Override
-    protected void setUp() throws Exception
-    {
-        super.setUp();
-        rm = new XmlRESTFulManager(serverUrl, username, password);
-        api = rm.getConnection().getBaseAPI();
-        rao = rm.newDocumentRao();
-        doc = new Document(wikiName, spaceName, pageName);
-        doc.setTitle(pageName);
+	@Override
+	protected void setUp() throws Exception
+	{
+		super.setUp();
+		rm = new XmlRESTFulManager(serverUrl, username, password);
+		api = rm.getConnection().getBaseAPI();
+		rao = rm.newDocumentRao();
+		doc = new Document(wikiName, spaceName, pageName);
+		doc.setTitle(pageName);
 
-        // setup preconditions on serverside
-        if(count<6)api.deletePage(wikiName, spaceName, pageName);
-        if(count==1){
-            Application sys=XWikiApplicationContext.getInstance();            
-            FileOutputStream fos = sys.openFileOutput(attachmentName, Context.MODE_WORLD_READABLE);            
-            PrintWriter writer=new PrintWriter(fos);
-            writer.println("this is a text attachment.");
-            writer.flush();
-            writer.close();
-            af1=sys.getFileStreamPath(attachmentName);
-        }
-        Log.d(TAG,"setup test method:"+ count );
-        
-    }
+		// setup preconditions on serverside
+		if (count < 7)
+			api.deletePage(wikiName, spaceName, pageName);
+		if (count == 1) {
+			Application sys = XWikiApplicationContext.getInstance();
+			FileOutputStream fos = sys.openFileOutput(attachmentName, Context.MODE_WORLD_READABLE);
+			PrintWriter writer = new PrintWriter(fos);
+			writer.println("this is a text attachment.");
+			writer.flush();
+			writer.close();
+			af1 = sys.getFileStreamPath(attachmentName);
+		}
+		Log.d(TAG, "setup test method:" + count);
 
-    @Override
-    protected void tearDown() throws Exception
-    {
-        super.tearDown();
-        count++;
-        // rm.close();
-    }
+	}
 
-    /**
-     * a minimal test
-     */
-    public void testCreate01() throws Throwable
-    {
-        boolean success = true;
+	@Override
+	protected void tearDown() throws Exception
+	{
+		super.tearDown();
+		count++;
+		// rm.close();
+	}
 
-        try {
-            rao.create(doc);
-            success = api.existsPage(wikiName, spaceName, pageName);
-        } catch (RaoException e) {
-            success = false;
-        } catch (RestException e) {
-            success = false;
-        }
-        assertTrue(success);
-    }
+	/**
+	 * a minimal test
+	 */
+	public void testCreate01() throws Throwable
+	{
+		boolean success = true;
 
-    /**
-     * test with xobjects. Use add method.
-     */
-    public void testCreate02() throws Throwable
-    {
-        boolean success = false;
-        xb1 = new XBlogPost();
-        xb1.setContent("test post");
-        doc.addObject(xb1);
-        try {
-            rao.create(doc);
-        } catch (RaoException e) {
-            success = false;
-        }
-        try {
-            success = api.existsPage(wikiName, spaceName, pageName);
-        } catch (RestException e) {
-            success = false;
-        }
-        assertTrue(success);
-    }
+		try {
+			rao.create(doc);
+			success = api.existsPage(wikiName, spaceName, pageName);
+		} catch (RaoException e) {
+			success = false;
+		} catch (RestException e) {
+			success = false;
+		}
+		assertTrue(success);
+	}
 
-    /**
-     * test add/set general XSimpleObject.
-     * 
-     * @throws Throwable
-     */
-    public void testCreate03() throws Throwable
-    {
-        boolean success;
-        so1 = new XSimpleObject("Blog.BlogClass")
-        {
-        };
-        so2 = new XSimpleObject("Blog.BlogCategoryClass")
-        {
-        };
-        so2.setNumber(1);
-        doc.addObject(so1);
-        doc.setObject(so2);
+	/**
+	 * test with xobjects. Use add method.
+	 */
+	public void testCreate02() throws Throwable
+	{
+		boolean success = false;
+		xb1 = new XBlogPost();
+		xb1.setContent("test post");
+		doc.addObject(xb1);
+		try {
+			rao.create(doc);
+		} catch (RaoException e) {
+			success = false;
+		}
+		try {
+			success = api.existsPage(wikiName, spaceName, pageName);
+		} catch (RestException e) {
+			success = false;
+		}
+		assertTrue(success);
+	}
 
-        try {
-            rao.create(doc);
-        } catch (RaoException e) {
-            success = false;
-        }
+	/**
+	 * test add/set general XSimpleObject.
+	 * 
+	 * @throws Throwable
+	 */
+	public void testCreate03() throws Throwable
+	{
+		boolean success;
+		so1 = new XSimpleObject("Blog.BlogClass")
+		{
+		};
+		so2 = new XSimpleObject("Blog.BlogCategoryClass")
+		{
+		};
+		so2.setNumber(1);
+		doc.addObject(so1);
+		doc.setObject(so2);
 
-        // verify
-        try {
-            success = api.existsPage(wikiName, spaceName, pageName);
-            if (success) {
-                boolean crite1 = api.existsObject(wikiName, spaceName, pageName, so1.getClassName(), 0);
-                boolean crite2 = api.existsObject(wikiName, spaceName, pageName, so1.getClassName(), 0);
-                success = crite1 & crite2;
-            }
-        } catch (RestException e) {
-            success = false;
-        }
-    }
+		try {
+			rao.create(doc);
+		} catch (RaoException e) {
+			success = false;
+		}
 
-    /**
-     * checks wether the objects get added in the correct sequence
-     * 
-     * @throws Throwable
-     */
-    public void testCreate04() throws Throwable
-    {
-        boolean success = false;
-        xb1 = new XBlogPost();
-        xb2 = new XBlogPost();
-        xb3 = new XBlogPost();
+		// verify
+		try {
+			success = api.existsPage(wikiName, spaceName, pageName);
+			if (success) {
+				boolean crite1 = api.existsObject(wikiName, spaceName, pageName, so1.getClassName(), 0);
+				boolean crite2 = api.existsObject(wikiName, spaceName, pageName, so1.getClassName(), 0);
+				success = crite1 & crite2;
+			}
+		} catch (RestException e) {
+			success = false;
+		}
+	}
 
-        xb1.setContent("0");
-        xb2.setContent("1");
-        xb3.setContent("2");
+	/**
+	 * checks wether the objects get added in the correct sequence
+	 * 
+	 * @throws Throwable
+	 */
+	public void testCreate04() throws Throwable
+	{
+		boolean success = false;
+		xb1 = new XBlogPost();
+		xb2 = new XBlogPost();
+		xb3 = new XBlogPost();
 
-        xb1.setNumber(0);
-        // dont set num on xb2
-        xb3.setNumber(2);
+		xb1.setContent("0");
+		xb2.setContent("1");
+		xb3.setContent("2");
 
-        doc.setObject(xb1);
-        doc.addObject(xb2);
-        doc.setObject(xb3);
+		xb1.setNumber(0);
+		// dont set num on xb2
+		xb3.setNumber(2);
 
-        rao.create(doc);
-        
-        try {
-            success = api.existsPage(wikiName, spaceName, pageName);
-            if (success) {
-                boolean crite1 = api.existsObject(wikiName, spaceName, pageName, xb1.getClassName(), 0);
-                boolean crite2 = api.existsObject(wikiName, spaceName, pageName, xb1.getClassName(), 1);
-                boolean crite3 = api.existsObject(wikiName, spaceName, pageName, xb1.getClassName(), 2);
-                success = crite1 & crite2 & crite3;
-            }
-            if (success) {
-                Property xb2PropRet =
-                    api.getObjectProperty(wikiName, spaceName, pageName, xb2.getClassName(), "1", "content");
-                success = xb2PropRet.getValue().equals("1");
-            }
+		doc.setObject(xb1);
+		doc.addObject(xb2);
+		doc.setObject(xb3);
 
-        } catch (RestException e) {
-            success = false;
-        }
-        assertTrue(success);
-    }
+		rao.create(doc);
 
-    public void testCreate05WithCmnts() throws Throwable
-    {
+		try {
+			success = api.existsPage(wikiName, spaceName, pageName);
+			if (success) {
+				boolean crite1 = api.existsObject(wikiName, spaceName, pageName, xb1.getClassName(), 0);
+				boolean crite2 = api.existsObject(wikiName, spaceName, pageName, xb1.getClassName(), 1);
+				boolean crite3 = api.existsObject(wikiName, spaceName, pageName, xb1.getClassName(), 2);
+				success = crite1 & crite2 & crite3;
+			}
+			if (success) {
+				Property xb2PropRet = api.getObjectProperty(wikiName, spaceName, pageName, xb2.getClassName(), "1",
+						"content");
+				success = xb2PropRet.getValue().equals("1");
+			}
 
-        c1 = new Comment("hi");
-        c2 = new Comment("reply to hi");
-        c1.addReplyComment(c2);
-        doc.addComment(c1, true);
+		} catch (RestException e) {
+			success = false;
+		}
+		assertTrue(success);
+	}
 
-        try {
-            rao.create(doc);
-        } catch (RaoException e) {
-            throw new AssertionFailedError("xmlrpc exception code=" + e.getCode());
-        }
-        try {
-            boolean success = api.existsPage(wikiName, spaceName, pageName);
-            assertTrue(success);
-            if (success) {
-                Comments cmnts = api.getPageComments(wikiName, spaceName, pageName);
-                List<org.xwiki.android.resources.Comment> cl = cmnts.comments;
-                assertEquals(2, cl.size());
-                int replyto = cl.get(1).replyTo;
-                assertEquals(0, replyto);
-            }
-        } catch (RestException e) {
-            throw new AssertionFailedError("xmlrpc exception code=" + e.getCode());
-        }
-    }
+	public void testCreate_05_WithCmnts() throws Throwable
+	{
 
-//    public void testCreate06WithAttachment() throws Throwable
-//    {       
-//        
-//        Attachment a=new Attachment(attachmentName, af1);
-//        doc.addAttachment(a);
-//        rao.create(doc);
-//        assertNotNull(api.getPageAttachment(wikiName, spaceName, pageName, attachmentName));
-//        
-//            
-//        
-//    }
+		c1 = new Comment("hi");
+		c2 = new Comment("reply to hi");
+		c1.addReplyComment(c2);
+		doc.addComment(c1, true);
+
+		try {
+			rao.create(doc);
+		} catch (RaoException e) {
+			throw new AssertionFailedError("xmlrpc exception code=" + e.getCode());
+		}
+		try {
+			boolean success = api.existsPage(wikiName, spaceName, pageName);
+			assertTrue(success);
+			if (success) {
+				Comments cmnts = api.getPageComments(wikiName, spaceName, pageName);
+				List<org.xwiki.android.resources.Comment> cl = cmnts.comments;
+				assertEquals(2, cl.size());
+				int replyto = cl.get(1).replyTo;
+				assertEquals(0, replyto);
+			}
+		} catch (RestException e) {
+			throw new AssertionFailedError("xmlrpc exception code=" + e.getCode());
+		}
+	}
+
+	public void testCreate_06_WithCmnts_SequenceCheck() throws Throwable
+	{
+
+		c1 = new Comment("0");
+		c2 = new Comment("1");
+		c3 = new Comment("2");
+		c3.setId(2);
+		c4 = new Comment("3");
+		c4.setId(3);
+
+		c1.addReplyComment(c2);
+		c3.addReplyComment(c4);
+
+		doc.addComment(c1, true);
+		doc.setComment(c3);
+		doc.setComment(c4);
+
+		rao.create(doc);
+
+		boolean success = api.existsPage(wikiName, spaceName, pageName);
+		assertTrue(success);
+		if (success) {
+			Comments cmnts = api.getPageComments(wikiName, spaceName, pageName);
+			List<org.xwiki.android.resources.Comment> clst = cmnts.comments;
+			assertEquals(4, clst.size());
+			int replyto = clst.get(1).replyTo;
+			assertEquals(0, replyto);
+			replyto=clst.get(3).replyTo;
+			assertEquals(2, replyto);
+			
+			assertEquals("3", clst.get(3).text);
+		}
+
+	}
+
+	// public void testCreate_07_WithAttachment() throws Throwable
+	// {
+	//
+	// Attachment a=new Attachment(attachmentName, af1);
+	// doc.addAttachment(a);
+	// rao.create(doc);
+	// assertNotNull(api.getPageAttachment(wikiName, spaceName, pageName,
+	// attachmentName));
+	//
+	//
+	//
+	// }
 }

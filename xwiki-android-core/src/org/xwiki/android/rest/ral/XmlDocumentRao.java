@@ -1,6 +1,9 @@
 package org.xwiki.android.rest.ral;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -14,6 +17,7 @@ import org.xwiki.android.context.XWikiApplicationContext;
 import org.xwiki.android.resources.Comment;
 import org.xwiki.android.resources.Object;
 import org.xwiki.android.resources.Page;
+import org.xwiki.android.resources.Tags;
 import org.xwiki.android.rest.RestConnectionException;
 import org.xwiki.android.rest.RestException;
 import org.xwiki.android.rest.XWikiRestConnecion;
@@ -25,6 +29,7 @@ import org.xwiki.android.rest.ral.algo.IDocUpdateStragegy;
 import org.xwiki.android.rest.reference.DocumentReference;
 import org.xwiki.android.rest.transformation.DocLaunchPadForXML;
 import org.xwiki.android.rest.transformation.DocumentDismantler_XML;
+import org.xwiki.android.xmodel.entity.Attachment;
 import org.xwiki.android.xmodel.entity.Document;
 import org.xwiki.android.xmodel.xobjects.XSimpleObject;
 
@@ -33,7 +38,7 @@ import android.util.Log;
 /**
  * uses simplexml Rest model. Non public. Use XMLRestfulManager to create new. Very primitive implementation with single
  * Http Connection for all work.
- *  
+ * 
  * @author xwiki gsoc 2012
  * @version 0.8 alpha
  */
@@ -41,7 +46,7 @@ import android.util.Log;
 // class. Implement for multiple parallel connections to reduce latency.
 class XmlDocumentRao implements DocumentRao
 {
-    private static String tag = "DocumentRao_XML";
+    private static String TAG = XmlDocumentRao.class.getSimpleName();
     private static int PAGE = DocumentDismantler_XML.PAGE;
     private static int OBJECTS = DocumentDismantler_XML.OBJECTS;
     private static int ALL = DocumentDismantler_XML.ALL;
@@ -64,9 +69,10 @@ class XmlDocumentRao implements DocumentRao
     @Override
     public Document create(Document doc) throws RestConnectionException, RaoException
     {
-        Verifier.verifyDocumentForCreate(doc);//just logs warn msgs if verification failed. Runtime exceptions will be thrown
-        //when server responds with errors.
-        
+        Verifier.verifyDocumentForCreate(doc);// just logs warn msgs if verification failed. Runtime exceptions will be
+                                              // thrown
+        // when server responds with errors.
+
         // TODO: make advanced algo.Put it in ral.algo package. Here we use simple non parellal way to create doc.
         DocumentDismantler_XML con = new DocumentDismantler_XML(ALL);
         DocLaunchPadForXML pad = con.convertDocument(doc);
@@ -80,102 +86,183 @@ class XmlDocumentRao implements DocumentRao
             if (api.existsPage(wikiName, spaceName, pageName)) {
                 throw new RaoException("document already exists: try updating the doucment");
             } else {
-                api.addPage(wikiName, spaceName, pageName, page); 
-                
-                
-                // start Algo . Order objects by number, fill with new
-                LinkedList<Object> obList=new LinkedList<Object>();//'cause we need to add in the middle
-                class Index{                   
+                api.addPage(wikiName, spaceName, pageName, page);
+
+                // start Algo . Order objects by number, fill with new --> try to keep the number seq of created obj in
+                // server, if objects are numbered.
+                // keeping seq makes parallelizations hard. But this semantic must be guaranteed by the RAL Create
+                // methods. Note: when paralleling You have to add work for jobs at points in this algo. Do it in
+                // another strategy.
+                LinkedList<Object> obList = new LinkedList<Object>();// 'cause we need to add in the middle
+                class Index
+                {
                     public Index(int first, int last)
-                    {                        
+                    {
                         this.first = first;
                         this.last = last;
                     }
+
                     int first;
                     int last;
                 }
-                Map<String,Index> indexes=new HashMap<String, Index>(10);//for < 10 classes of objs.
-                               
-                Map<String, Object> edObjs = pad.getEditedObjects(); //objects added using set method. explicitly palced at smplObject.number
-                
-                A:for(String k: edObjs.keySet()){
-                    String ss[]=k.split("/");
-                    String clsName=ss[0];
-                    Object o=edObjs.get(k);
-                    Index i= indexes.get(clsName);
-                    if(i==null){//new class    
+                Map<String, Index> indexes = new HashMap<String, Index>(10);// for < 10 classes of objs.
+
+                Map<String, Object> edObjs = pad.getEditedObjects(); // objects added using set method. explicitly
+                                                                     // palced at smplObject.number
+
+                A: for (String k : edObjs.keySet()) {
+                    String ss[] = k.split("/");
+                    String clsName = ss[0];
+                    Object o = edObjs.get(k);
+                    Index i = indexes.get(clsName);
+                    if (i == null) {// new class
                         obList.add(o);
-                        int first=obList.size()-1;
-                        int last=first;
-                        indexes.put(clsName, new Index(first,last));
-                    }else{
-                        int last=i.last;
-                        for(int j=i.first; j<=last;j++){
-                            Object curr=obList.get(j);
-                            if(o.getNumber()<curr.getNumber()){
-                                obList.add(j,o);
+                        int first = obList.size() - 1;
+                        int last = first;
+                        indexes.put(clsName, new Index(first, last));
+                    } else {
+                        int last = i.last;
+                        for (int j = i.first; j <= last; j++) {
+                            Object curr = obList.get(j);
+                            if (o.getNumber() < curr.getNumber()) {
+                                obList.add(j, o);
                                 i.last++;
                                 continue A;
                             }
                         }
-                        obList.add(last+1,o);
+                        obList.add(last + 1, o);
                         i.last++;
                     }
                 }
-                
+
                 List<Object> newObjects = pad.getNewObjects();
-                
-                A:for(Object o:newObjects){                    
-                    String clsName=o.getClassName();
-                    Index i=indexes.get(clsName);
-                    if(i==null){//this is new object
-                       obList.add(o); 
-                       int first=obList.size()-1;
-                       int last=first;
-                       indexes.put(clsName, new Index(first, last));
-                    }else{
-                        int first=i.first;
-                        int last=i.last;
-                        
-                        Object prev=obList.get(first);
-                        for(int j=first+1; j<=last; j++){
-                           Object curr=obList.get(j);
-                           if(curr.getNumber()-prev.getNumber()>1){
-                               obList.add(j, o);
-                               last++;
-                               i.last=last;
-                               continue A; //restart from A.
-                           }
+
+                A: for (Object o : newObjects) {
+                    String clsName = o.getClassName();
+                    Index i = indexes.get(clsName);
+                    if (i == null) {// this is new object
+                        obList.add(o);
+                        int first = obList.size() - 1;
+                        int last = first;
+                        indexes.put(clsName, new Index(first, last));
+                    } else {
+                        int first = i.first;
+                        int last = i.last;
+
+                        Object prev = obList.get(first);
+                        for (int j = first + 1; j <= last; j++) {
+                            Object curr = obList.get(j);
+                            if (curr.getNumber() - prev.getNumber() > 1) {
+                                obList.add(j, o);
+                                last++;
+                                i.last = last;
+                                continue A; // restart from A.
+                            }
                         }
-                        //if did not get added add to the end.
-                        obList.add(last+1,o);
-                        i.last= ++last;
+                        // if did not get added add to the end.
+                        obList.add(last + 1, o);
+                        i.last = ++last;
                     }
-                    
+
                 }
-                //end algo
-                
-                //upload objects.                
+                // end algo
+
+                // upload objects.
                 for (Object object : obList) {
                     api.addObject(wikiName, spaceName, pageName, object);
-                } 
+                }
+
+                List<Comment> newCmnts = pad.getNewComments();
+                List<Object> edCmnts = pad.getEditedComments();
+                Comparator<Object> comparator = new Comparator<Object>()
+                {
+                    @Override
+                    public int compare(Object object1, Object object2)
+                    {
+                        // we are sure that edited Comments coming as Objects get there number prop filled to comment
+                        // id;
+                        return object1.getNumber() - object2.getNumber();
+                    }
+                };
+                Collections.sort(edCmnts, comparator);
+                // start order comment upload. Try create the setComment(cmnt with id 1) to match the same id in server.
+                int svrCmntId=-1;
+                int used = 0; // how many new comments used
+                int avail = newCmnts.size();
+                int lastId = -1;
+                for (int i = 0; i < edCmnts.size(); i++) {
+                    Object ec = edCmnts.get(i);
+                    int thisId = ec.getNumber();
+                    if (thisId > lastId + 1) {
+                        int needed = thisId - lastId-1;
+                        lastId = thisId;
+                        if (used < avail) {
+                            int start = used;
+                            int end = Math.min(avail, used + needed);
+                            for (int j = used; j < end; j++) {
+                            	Comment cnw=newCmnts.get(j);                            	
+                                api.addPageComment(wikiName, spaceName, pageName, cnw);
+                                svrCmntId++;
+                                for(Comment c:newCmnts){
+                                	if(c.getReplyTo()==cnw.getId()){
+                                		c.setReplyTo(svrCmntId);
+                                	}
+                                }                               
+                            }
+                            used += needed;
+                        }                       
+                        api.addObject(wikiName, spaceName, pageName, ec);  
+                        svrCmntId++;
+                    } else { 
+                    	lastId=thisId;
+                        api.addObject(wikiName, spaceName, pageName, ec); 
+                        svrCmntId++;
+                    }
+                }
                 
-               List<Comment> newCmnts=pad.getNewComments();
-               List<Object> edCmnts=pad.getEditedComments();
-               
-               
-               
+                if(used<avail){
+                	for (int i = used; i < newCmnts.size(); i++){
+                		Comment prnt=newCmnts.get(i);
+                		api.addPageComment(wikiName, spaceName, pageName, prnt);
+                		svrCmntId++;
+                		for(Comment child:newCmnts){
+                        	if(child.getReplyTo()==prnt.getId()){
+                        		child.setReplyTo(svrCmntId);
+                        	}
+                        } 
+                	}
+                }
+            
+                
+                Tags tags= pad.getTags();
+                if(tags!=null){
+                    api.setTags(wikiName, spaceName, pageName, tags);
+                }
+                
+                //attachments
+                for (Attachment a : pad.getAttatchmentsToupload()) {
+                    File f=a.getFile();
+                    if(f!=null){
+                        String filePath=f.getAbsolutePath(); 
+                        String attachmentName=a.getName();
+                        api.putPageAttachment(wikiName, spaceName, pageName, filePath, attachmentName);
+                    }else{
+                        Log.e(TAG, "cant upload attachment. file not set");  
+                    }               
+                    
+                }
+                
+                
                 
                 return null; // TODO RET CREATED DOC. NEED TO ADD CUSTOMIZATION CODE WETHER TO RET OR NOT.
             }
         } catch (RestException e) {
-            Log.d(tag, "couldn't create page" + e.getCode());
+            Log.d(TAG, "couldn't create page" + e.getCode());
             e.printStackTrace();
             throw new RaoException(e);
         }
-
     }
-    
+
     @Override
     public boolean exists(Document doc) throws RestConnectionException, RaoException
     {
@@ -184,11 +271,11 @@ class XmlDocumentRao implements DocumentRao
         String pageName = doc.getPageName();
         boolean exists;
         try {
-            exists=api.existsPage(wikiName, spaceName, pageName);
+            exists = api.existsPage(wikiName, spaceName, pageName);
             return exists;
         } catch (RestException e) {
             throw new RaoException(e);
-        }        
+        }
     }
 
     @Override
@@ -256,9 +343,5 @@ class XmlDocumentRao implements DocumentRao
     {
         delete(resrc.getDocumentReference());
     }
-
-   
-
-   
 
 }

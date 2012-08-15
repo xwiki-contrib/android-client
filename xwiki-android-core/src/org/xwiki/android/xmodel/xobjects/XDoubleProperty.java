@@ -27,5 +27,11 @@ public class XDoubleProperty extends XNumberProperty<Double>
     {
       this.val=new Double(val);        
     }
+    
+    @Override
+    public String toString()
+    {
+    	return val+"";
+    }
 
 }

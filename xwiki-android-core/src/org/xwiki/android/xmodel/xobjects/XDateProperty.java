@@ -43,7 +43,12 @@ public class XDateProperty extends XPropertyBase<Date>
             SimpleDateFormat sdf = new SimpleDateFormat(fmt);
             return sdf.format(value);
         }
-        return value.toGMTString();
+        if(value!=null){
+        	return value.toGMTString();
+        }else{
+        	return null;
+        }
+        
     }
     
 

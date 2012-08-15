@@ -577,7 +577,7 @@ public class XWikiRestConnecion implements RestConnection, XWikiAPI
      * java.lang.String, java.lang.String, java.lang.String)
      */
 
-    @Override
+    @Override    
     public String putPageAttachment(String wikiName, String spaceName, String pageName, String filePath,
         String attachmentName) throws RestConnectionException, RestException
     {
@@ -592,6 +592,8 @@ public class XWikiRestConnecion implements RestConnection, XWikiAPI
         }
         return attachmentresources.putPageAttachment(filePath, attachmentName);
     }
+    
+   
 
     /*
      * (non-Javadoc)

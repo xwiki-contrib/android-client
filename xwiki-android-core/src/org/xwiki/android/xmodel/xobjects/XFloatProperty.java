@@ -28,5 +28,11 @@ public class XFloatProperty extends XNumberProperty<Float>
     {
         this.val=new Float(val);
     }
+    
+    @Override
+    public String toString()
+    {    	
+    	return val+"";
+    }
 
 }

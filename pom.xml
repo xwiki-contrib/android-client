@@ -137,7 +137,7 @@
                                         <type>zip</type>
                                     </artifactItem>
                                 </artifactItems>
-                                <outputDirectory>${xwikiExecutionDirectory}/../</outputDirectory>
+                                <outputDirectory>${xwikiServerUnpackDirectory}</outputDirectory>
                                 <!-- Allow skipping the unpack -->
                                 <skip>${xwiki.test.skipUnpack}</skip>
                             </configuration>
@@ -181,6 +181,7 @@
         <xwiki.test.skipUnpack>false</xwiki.test.skipUnpack>
         <xwikiExecutionDirectory>${project.parent.basedir}/target/test-server/xwiki-enterprise-jetty-${xwiki.db}-${xwiki.xe.version}</xwikiExecutionDirectory>
         <xwikiExecutionIndex>0</xwikiExecutionIndex>
+        <xwikiServerUnpackDirectory>${project.parent.basedir}/target/test-server/</xwikiServerUnpackDirectory>
     </properties>
    <!--
     profile taken from
