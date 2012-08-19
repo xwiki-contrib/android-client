@@ -23,7 +23,7 @@ public class XComment extends XSimpleObject
         XStringProperty prop = (XStringProperty) fields.get("author");
         if (prop == null) {
             prop = new XStringProperty();
-            fields.put("author", prop);
+            setProperty("author", prop);
         }
         prop.setValue(author);
     }
@@ -40,7 +40,7 @@ public class XComment extends XSimpleObject
         XTextAreaProperty prop = (XTextAreaProperty) fields.get("comment");
         if (prop == null) {
             prop = new XTextAreaProperty();
-            fields.put("comment", prop);
+            setProperty("comment", prop);
         }
         prop.setValue(comment);
     }
@@ -57,7 +57,7 @@ public class XComment extends XSimpleObject
         XDateProperty prop = (XDateProperty) fields.get("date");
         if (prop == null) {
             prop = new XDateProperty();
-            fields.put("date", prop);
+            setProperty("date", prop);
         }
         prop.setValue(date);
     }
@@ -74,7 +74,7 @@ public class XComment extends XSimpleObject
         XTextAreaProperty prop = (XTextAreaProperty) fields.get("highlight");
         if (prop == null) {
             prop = new XTextAreaProperty();
-            fields.put("highlight", prop);
+            setProperty("highlight", prop);
         }
         prop.setValue(highlight);
     }
@@ -91,7 +91,7 @@ public class XComment extends XSimpleObject
         XIntegerProperty prop = (XIntegerProperty) fields.get("replyto");
         if (prop == null) {
             prop = new XIntegerProperty();
-            fields.put("replyto", prop);
+            setProperty("replyto", prop);
         }
         prop.setValue(replyto);
     }
@@ -104,7 +104,7 @@ public class XComment extends XSimpleObject
     }
     public void setpAuthor(XStringProperty author)
     {
-        fields.put("author", author);
+        setProperty("author", author);
     }
     
     public XTextAreaProperty getpComment()
@@ -113,7 +113,7 @@ public class XComment extends XSimpleObject
     }
     public void setpComment(XTextAreaProperty comment)
     {
-        fields.put("comment", comment);
+        setProperty("comment", comment);
     }
     public XDateProperty getpDate()
     {
@@ -121,7 +121,7 @@ public class XComment extends XSimpleObject
     }
     public void setpDate(XDateProperty date)
     {
-        fields.put("date", date);
+        setProperty("date", date);
     }
     public XTextAreaProperty getpHighlight()
     {
@@ -129,7 +129,7 @@ public class XComment extends XSimpleObject
     }
     public void setpHighlight(XTextAreaProperty highlight)
     {
-        fields.put("highlight", highlight);
+        setProperty("highlight", highlight);
     }
     public XIntegerProperty getpReplyto()
     {
@@ -137,7 +137,7 @@ public class XComment extends XSimpleObject
     }
     public void setpReplyto(XIntegerProperty replyto)
     {
-        fields.put("replyto", replyto);
+        setProperty("replyto", replyto);
     }    
     
 }

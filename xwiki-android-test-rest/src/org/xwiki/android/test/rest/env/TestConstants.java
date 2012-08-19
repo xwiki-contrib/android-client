@@ -7,7 +7,7 @@ package org.xwiki.android.test.rest.env;
 
 public class TestConstants {
 
-    public static final int SERVER_INDEX; //not used.
+    public static final int SERVER_INDEX;
     public static final String HOST = "10.0.2.2";
     public static final int PORT = 8080; //actual port is port+server_index
     public static final String SCHEME="http://";
@@ -18,12 +18,9 @@ public class TestConstants {
     //external test fixture.
 
     public static final String WIKI_NAME = "xwiki";
-
     public static final String SPACE_NAME = "Blog";
-
     public static final String PAGE_NAME = "test2";
-
-    public static final String PAGE_VERSION = "1.1";
+    public static final String PAGE_VERSION = "1.1";    
 
     public static final String COMMENT_ID = "0";
     public static final String COMMENT_TEXT = "hi";

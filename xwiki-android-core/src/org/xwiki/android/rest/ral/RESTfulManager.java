@@ -1,23 +1,19 @@
 package org.xwiki.android.rest.ral;
 
-import java.util.Properties;
-
-import org.xwiki.android.resources.Space;
-import org.xwiki.android.resources.Wiki;
-import org.xwiki.android.rest.RestConnection;
-import org.xwiki.android.rest.XWikiAPI;
-import org.xwiki.android.xmodel.entity.Document;
+import org.xwiki.android.rest.XWikiRestConnector;
+import org.xwiki.android.rest.rpc.RestClient;
 
 public interface RESTfulManager
-{    
+{
     DocumentRao newDocumentRao();
 
     SpaceRao newSpaceRao();
 
     WikiRao newWikiRao();
+
+    RestClient getRestClient();
     
-    RestConnection getConnection();
-    
-  
-   
+    @Deprecated
+    XWikiRestConnector getRestConnector();
+
 }

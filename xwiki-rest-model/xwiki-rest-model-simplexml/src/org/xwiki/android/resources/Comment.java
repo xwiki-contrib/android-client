@@ -53,7 +53,7 @@ import org.simpleframework.xml.Root;
 
 @Root
 @Namespace(reference="http://www.xwiki.org")
-public class Comment extends LinkCollection
+public class Comment extends LinkCollection implements Resource
 {
     @Element(required = false)
     public int id;

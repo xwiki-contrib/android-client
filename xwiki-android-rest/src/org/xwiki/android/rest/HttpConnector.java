@@ -278,7 +278,7 @@ public class HttpConnector
         String Uri;
         int responseCode = 0;
 
-        Uri = "http://" + Url + "/xwiki/rest/";
+        Uri = "http://" + Url + "/xwiki/xmlrpc/";
 
         try {
             requestUri = new URI(Uri);

@@ -39,7 +39,7 @@ public class XBlogPost extends XSimpleObject
         XDBTreeListProperty prop = (XDBTreeListProperty) fields.get("category");
         if (prop == null) {
             prop = new XDBTreeListProperty();
-            fields.put("category", prop);
+            setProperty("category", prop);
         }
         prop.getValue().clear();
         prop.getValue().add(category);
@@ -59,7 +59,7 @@ public class XBlogPost extends XSimpleObject
         XTextAreaProperty prop = (XTextAreaProperty) fields.get("content");
         if (prop == null) {
             prop = new XTextAreaProperty();
-            fields.put("content", prop);
+            setProperty("content", prop);
         }
         prop.setValue(content);
     }
@@ -78,7 +78,7 @@ public class XBlogPost extends XSimpleObject
         XTextAreaProperty prop = (XTextAreaProperty) fields.get("extract");
         if (prop == null) {
             prop = new XTextAreaProperty();
-            fields.put("extract", prop);
+            setProperty("extract", prop);
         }
         prop.setValue(extract);
     }
@@ -101,7 +101,7 @@ public class XBlogPost extends XSimpleObject
         XBooleanProperty prop = (XBooleanProperty) fields.get("hidden");
         if (prop == null) {
             prop = new XBooleanProperty();
-            fields.put("hidden", prop);
+            setProperty("hidden", prop);
         }
         prop.setValue(hidden);
     }
@@ -120,7 +120,7 @@ public class XBlogPost extends XSimpleObject
         XDateProperty prop = (XDateProperty) fields.get("publishDate");
         if (prop == null) {
             prop = new XDateProperty();
-            fields.put("publishDate", prop);
+            setProperty("publishDate", prop);
         }
         prop.setValue(publishDate);
     }
@@ -143,7 +143,7 @@ public class XBlogPost extends XSimpleObject
         XBooleanProperty prop = (XBooleanProperty) fields.get("published");
         if (prop == null) {
             prop = new XBooleanProperty();
-            fields.put("published", prop);
+            setProperty("published", prop);
         }
         prop.setValue(published);
     }
@@ -162,7 +162,7 @@ public class XBlogPost extends XSimpleObject
         XStringProperty prop = (XStringProperty) fields.get("title");
         if (prop == null) {
             prop = new XStringProperty();
-            fields.put("title", prop);
+            setProperty("title", prop);
         }
         prop.setValue(title);
     }
@@ -174,7 +174,7 @@ public class XBlogPost extends XSimpleObject
 
     public void setpCategory(XDBTreeListProperty category)
     {
-        fields.put("category", category);
+        setProperty("category", category);
     }
 
     public XTextAreaProperty getpContent()
@@ -184,7 +184,7 @@ public class XBlogPost extends XSimpleObject
 
     public void setpContent(XTextAreaProperty content)
     {
-        fields.put("content", content);
+        setProperty("content", content);
     }
 
     public XTextAreaProperty getpExtract()
@@ -194,7 +194,7 @@ public class XBlogPost extends XSimpleObject
 
     public void setpExtract(XTextAreaProperty extract)
     {
-        fields.put("extract", extract);
+        setProperty("extract", extract);
     }
 
     public XBooleanProperty getpHidden()
@@ -204,7 +204,7 @@ public class XBlogPost extends XSimpleObject
 
     public void setpHidden(XBooleanProperty hidden)
     {
-        fields.put("hidden", hidden);
+        setProperty("hidden", hidden);
     }
 
     public XDateProperty getpPublishDate()
@@ -214,7 +214,7 @@ public class XBlogPost extends XSimpleObject
 
     public void setpPublishDate(XDateProperty publishDate)
     {
-        fields.put("publishDate", publishDate);
+        setProperty("publishDate", publishDate);
     }
 
     public XBooleanProperty getpPublished()
@@ -224,7 +224,7 @@ public class XBlogPost extends XSimpleObject
 
     public void setpPublished(XBooleanProperty published)
     {
-        fields.put("published", published);
+        setProperty("published", published);
     }
 
     public XStringProperty getpTitle()
@@ -234,7 +234,7 @@ public class XBlogPost extends XSimpleObject
 
     public void setpTitle(XStringProperty title)
     {
-        fields.put("title", title);
+        setProperty("title", title);
     }
 
 }

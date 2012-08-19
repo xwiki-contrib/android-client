@@ -5,7 +5,7 @@ import java.util.Date;
 
 import java.net.URL;
 
-public class Attachment extends Resource
+public class Attachment extends XWikiResource
 {
     // remote
     private String id;
@@ -162,6 +162,12 @@ public class Attachment extends Resource
         if (!(o instanceof Attachment))
             return false;
         return ((Attachment) o).getName().equals(getName());
+    }
+    
+    @Override
+    public String toString()
+    {
+       return "@: "+ name +" file: "+ (file!=null? file.getAbsolutePath() : "nil") ;
     }
 
 }

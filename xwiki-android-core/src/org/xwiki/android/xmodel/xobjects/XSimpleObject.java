@@ -144,14 +144,23 @@ public abstract class XSimpleObject extends XObject<XProperty>
     /**
      * 
      * @param p
-     *  property to set. Key will be p.getName.
+     *  property to set. 
      */
     public void setProperty(XProperty p){
         if(p.getName()==null)throw new NullPointerException();//no need for HashTable. But if we change to HashMap or ...
         fields.put(p.getName(), p);
     }
-    public void setProperty(String key,XProperty p){        
-        fields.put(key,p);
+    /**
+     * Ignored if either parameter is null.
+     * Key will be set to the property name.
+     * @param key  must be property name.
+     * @param p  the property. 
+     */
+    public void setProperty(String key,XProperty p){ 
+        if(p!=null && key !=null){
+            p.setName(key);
+            fields.put(key,p);
+        }
     }
     
     public void removeProperty(String pname){

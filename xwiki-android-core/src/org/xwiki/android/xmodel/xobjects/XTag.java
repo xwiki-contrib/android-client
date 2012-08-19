@@ -42,7 +42,7 @@ public class XTag extends XSimpleObject
     
     
     public void setpTags(XStaticListProperty<String> prop){
-        fields.put("tags",prop);
+        setProperty("tags",prop);
     }
     public XStaticListProperty<String> getpTags(){
         return (XStaticListProperty<String>) fields.get("tags");

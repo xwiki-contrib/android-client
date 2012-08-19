@@ -7,9 +7,9 @@ import java.util.List;
 import org.xwiki.android.rest.reference.Link;
 import org.xwiki.android.xmodel.xobjects.XComment;
 
-public class Comment extends Resource
+public class Comment extends XWikiResource
 {
-	List<Link> links;
+	
 	int id = -1; // -1 to mean null
 	String author;
 	Date date;
@@ -74,27 +74,12 @@ public class Comment extends Resource
 	{
 		this.replies = replies;
 	}
+	
 
-	public List<Link> getLinks()
-	{
-		return links;
-	}
-
-	public void addLink(Link link)
-	{
-		links.add(link);
-	}
-
-	public void removeLink(int index)
-	{
-		links.remove(index);
-	}
-
-	public void clearLinks()
-	{
-		links.clear();
-	}
-
+	//
+	//getter setteres
+	//
+	
 	public int getId()
 	{
 		return id;

@@ -8,9 +8,9 @@ import org.xwiki.android.resources.Object;
 import org.xwiki.android.resources.Tags;
 import org.xwiki.android.rest.RestConnectionException;
 import org.xwiki.android.rest.RestException;
-import org.xwiki.android.rest.XWikiRestConnecion;
-import org.xwiki.android.rest.XWikiAPI;
+import org.xwiki.android.rest.XWikiRestConnector;
 import org.xwiki.android.rest.ral.RaoException;
+import org.xwiki.android.rest.rpc.XWikiAPI;
 import org.xwiki.android.rest.transformation.DocLaunchPadForXML;
 import org.xwiki.android.rest.transformation.DocumentDismantler_XML;
 import org.xwiki.android.xmodel.entity.Attachment;
@@ -27,7 +27,7 @@ public class DocUpdateStrategy implements IDocUpdateStragegy
 
     public DocUpdateStrategy(String serverUrl, String username, String password)
     {
-        api = new XWikiRestConnecion(serverUrl, username, password);
+        api = new XWikiRestConnector(serverUrl, username, password);
         dismantler = new DocumentDismantler_XML();
 
     }
@@ -56,7 +56,7 @@ public class DocUpdateStrategy implements IDocUpdateStragegy
                 api.updateObject(wikiName, spaceName, pageName, objectClassname, objectNumber, ores);
                 numEdObj++; // after the api op. If exception happens no ++ happens.
             } catch (RestException e1) {
-                throw new RaoException(e1);
+                throw new RaoException("Object may not exist in actual doc. Also see wether you are updating non existing document. Because Update does not check for doc existence.", e1);
                 // TODO
             }
         }
@@ -70,13 +70,13 @@ public class DocUpdateStrategy implements IDocUpdateStragegy
                 numDelObj++;
             } catch (RestException e1) {
                 // TODO Auto-generated catch block
-                throw new RaoException(e1);
+                throw new RaoException("?. By the way, delete op should work even if there is no actual object in the server to delete.",e1);
             }
         }
 
         // new comments
 
-        for (Comment comment : pad.getNewComments()) {
+        for (Comment comment : pad.getNewComments()) {//TODO: Update op cannot achieve replyto s, unless rest layer is upgraded.
             try {
                 api.addPageComment(wikiName, spaceName, pageName, comment);
                 numNwCmnt++;

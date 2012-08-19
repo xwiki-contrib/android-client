@@ -1,6 +1,7 @@
 package org.xwiki.android.rest.ral.test;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.util.List;
@@ -8,18 +9,19 @@ import java.util.List;
 import junit.framework.AssertionFailedError;
 
 import org.xwiki.android.context.XWikiApplicationContext;
-import org.xwiki.android.core.test.properties.Env;
+import org.xwiki.android.core.test.properties.TestConstants;
 import org.xwiki.android.resources.Comments;
 import org.xwiki.android.resources.Object;
 import org.xwiki.android.resources.Property;
 import org.xwiki.android.rest.PageResources;
 import org.xwiki.android.rest.RestConnectionException;
 import org.xwiki.android.rest.RestException;
-import org.xwiki.android.rest.XWikiAPI;
+import org.xwiki.android.rest.XWikiRestConnector;
 import org.xwiki.android.rest.ral.DocumentRao;
 import org.xwiki.android.rest.ral.RESTfulManager;
 import org.xwiki.android.rest.ral.RaoException;
 import org.xwiki.android.rest.ral.XmlRESTFulManager;
+import org.xwiki.android.rest.rpc.XWikiAPI;
 import org.xwiki.android.svc.cmn.LoginFacade;
 import org.xwiki.android.xmodel.blog.XBlogPost;
 import org.xwiki.android.xmodel.entity.Attachment;
@@ -48,7 +50,7 @@ public class TestDocumentRaoCreate extends AndroidTestCase
 	DocumentRao rao;
 
 	// api used for output verification
-	XWikiAPI api;
+	XWikiRestConnector api;
 
 	// test inputs
 	Document doc;
@@ -60,38 +62,44 @@ public class TestDocumentRaoCreate extends AndroidTestCase
 	Attachment a1;
 	File af1;
 
-	public TestDocumentRaoCreate()
-	{
-		username = Env.USERNAME;
-		password = Env.PASSWORD;
-		serverUrl = Env.URL;
-
-		wikiName = Env.WIKI_NAME;
-		spaceName = Env.SPACE_NAME;
-		pageName = Env.TEMP_PAGE_NAME;
-		attachmentName = Env.ATTACHMENT_NAME;
-	}
-
+	
 	@Override
-	protected void setUp() throws Exception
+	public void setUp() throws Exception
 	{
 		super.setUp();
+		username = TestConstants.USERNAME;
+        password = TestConstants.PASSWORD;
+        serverUrl = TestConstants.SERVER_URL;
+
+        wikiName = TestConstants.WIKI_NAME;
+        spaceName = TestConstants.SPACE_NAME;
+        pageName = TestConstants.CREATE_PAGE_NAME+"-"+count;
+        attachmentName = TestConstants.ATTACHMENT_NAME;
+		
+		
 		rm = new XmlRESTFulManager(serverUrl, username, password);
-		api = rm.getConnection().getBaseAPI();
+		api = rm.getRestConnector();
 		rao = rm.newDocumentRao();
 		doc = new Document(wikiName, spaceName, pageName);
 		doc.setTitle(pageName);
 
-		// setup preconditions on serverside
-		if (count < 7)
-			api.deletePage(wikiName, spaceName, pageName);
-		if (count == 1) {
+		// setup preconditions on serverside //TODO: change as you add more methods and you need to keep the tempTestPage undeleted after a test.
+		api.deletePage(wikiName, spaceName, pageName);
+		
+		if (count == 8) {//make attachment file
 			Application sys = XWikiApplicationContext.getInstance();
 			FileOutputStream fos = sys.openFileOutput(attachmentName, Context.MODE_WORLD_READABLE);
 			PrintWriter writer = new PrintWriter(fos);
 			writer.println("this is a text attachment.");
 			writer.flush();
 			writer.close();
+			FileInputStream fis=sys.openFileInput(attachmentName);
+			byte[] buff=new byte[30];
+			int i=0;
+			while(i!=-1){
+			   i= fis.read(buff);
+			}
+			Log.d(TAG, new String(buff));			
 			af1 = sys.getFileStreamPath(attachmentName);
 		}
 		Log.d(TAG, "setup test method:" + count);
@@ -99,7 +107,7 @@ public class TestDocumentRaoCreate extends AndroidTestCase
 	}
 
 	@Override
-	protected void tearDown() throws Exception
+	public void tearDown() throws Exception
 	{
 		super.tearDown();
 		count++;
@@ -291,17 +299,52 @@ public class TestDocumentRaoCreate extends AndroidTestCase
 		}
 
 	}
+	
+	public void testCreate_07_WithCmnts_SequenceCheck2() throws Throwable
+    {
 
-	// public void testCreate_07_WithAttachment() throws Throwable
-	// {
-	//
-	// Attachment a=new Attachment(attachmentName, af1);
-	// doc.addAttachment(a);
-	// rao.create(doc);
-	// assertNotNull(api.getPageAttachment(wikiName, spaceName, pageName,
-	// attachmentName));
-	//
-	//
-	//
-	// }
+        c1 = new Comment("1");
+        c2 = new Comment("2");
+        c3 = new Comment("0");
+        c3.setId(0);                   //here the set id is changed
+        c4 = new Comment("6");
+        c4.setId(6);
+
+        c1.addReplyComment(c2);
+        c3.addReplyComment(c4);
+
+        doc.addComment(c1, true);
+        doc.setComment(c3);
+        doc.setComment(c4);
+
+        rao.create(doc);
+
+        boolean success = api.existsPage(wikiName, spaceName, pageName);
+        assertTrue(success);
+        if (success) {
+            Comments cmnts = api.getPageComments(wikiName, spaceName, pageName);
+            List<org.xwiki.android.resources.Comment> clst = cmnts.comments;
+            assertEquals(4, clst.size());
+            int replyto = clst.get(2).replyTo;
+            assertEquals(1, replyto);
+            replyto=clst.get(3).replyTo;
+            assertEquals(0, replyto);
+            
+            assertEquals("6", clst.get(3).text);
+        }
+
+    }
+
+	 public void testCreate_08_WithAttachment() throws Throwable
+	 {
+	 assertNotNull("No file to upload as attachement. Set it up in setup method" ,af1);
+	 Attachment a=new Attachment(attachmentName, af1);
+	 doc.addAttachment(a);
+	 rao.create(doc);
+	 assertNotNull(api.getPageAttachment(wikiName, spaceName, pageName,
+	 attachmentName));
+	
+	
+	
+	 }
 }

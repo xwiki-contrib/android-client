@@ -55,7 +55,7 @@ import org.simpleframework.xml.Root;
 
 @Root
 @Namespace(reference = "http://www.xwiki.org")
-public class Page extends PageSummary
+public class Page extends PageSummary  
 {
 
     @Element(required = false)

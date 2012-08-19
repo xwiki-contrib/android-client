@@ -21,17 +21,18 @@ import org.xwiki.android.resources.Translation;
 import org.xwiki.android.resources.Translations;
 
 import org.xwiki.android.xmodel.entity.Document;
+import org.xwiki.android.xmodel.entity.XWikiPage;
 import org.xwiki.android.xmodel.xobjects.XComment;
 import org.xwiki.android.xmodel.xobjects.XProperty;
 import org.xwiki.android.xmodel.xobjects.XSimpleObject;
 
 public class XModelTranslator_XML
 {
-    public Page toPage(Document doc)
+    public  Page toPage(XWikiPage doc)
     {
         Page page = new Page();
 
-        page.id = doc.getRemoteId();
+        page.id = doc.getId();
         page.fullName = doc.getFullName();
         page.wiki = doc.getWikiName();
         page.space = doc.getSpaceName();
@@ -73,8 +74,8 @@ public class XModelTranslator_XML
 
         return page;
     }
-
-    public Object toObject(XSimpleObject xso)
+    
+    public  Object toObject(XSimpleObject xso)
     {
 
         Object obj = new Object();
@@ -120,23 +121,22 @@ public class XModelTranslator_XML
     }
     
     public Object toObject(org.xwiki.android.xmodel.entity.Comment c){
-    	XComment xc=new XComment();
+    	XComment xc=new XComment();    	
     	xc.setNumber((c.getId()));
-		xc.setAuthor(c.getAuthor());
-		xc.setDate(c.getDate());
+    	if(c.getAuthor()!=null){
+    	    xc.setAuthor(c.getAuthor());
+    	}
+    	if(c.getDate()!=null){
+    	    xc.setDate(c.getDate());
+    	}		
 		xc.setComment(c.getText());
-		xc.setReplyto(c.getReplyTo());		
+		if(c.getReplyTo()!=-1){
+		    xc.setReplyto(c.getReplyTo());        
+		}		
 		return toObject(xc);
     }
     
-    public Object toObject(Comment c){
-		XComment xc=new XComment();
-		xc.setAuthor(c.getAuthor());
-		xc.setComment(c.getText());
-		//xc.setDate(c.getDate());
-		//TODO
-		return toObject(xc);
-	}
+    
 
     public Comment toComment(org.xwiki.android.xmodel.entity.Comment c)
     {
@@ -148,7 +148,9 @@ public class XModelTranslator_XML
         }        
         cres.highlight = c.getHighlight();
         cres.text = c.getText();
-        cres.replyTo = c.getReplyTo();
+        if(!(c.getReplyTo()==-1)){
+            cres.replyTo =c.getReplyTo();
+        }        
         return cres;
 
     }

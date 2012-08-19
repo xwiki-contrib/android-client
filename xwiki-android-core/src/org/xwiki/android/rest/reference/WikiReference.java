@@ -14,10 +14,6 @@ public class WikiReference extends EntityReference
         this.wiki = wiki;
     }
 
-    @Override
-    public String getURL()
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
+  
+    
 }

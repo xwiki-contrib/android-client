@@ -1,15 +1,10 @@
 package org.xwiki.android.xmodel.entity;
 
-import java.util.List;
-
-import org.xwiki.android.rest.reference.Link;
-import org.xwiki.android.xmodel.xobjects.XTag;
-
-import com.j256.ormlite.table.DatabaseTable;
-
-public class Tag
+public class Tag extends XWikiResource
 {
-    private List<Link> links;
+   
+    private static final long serialVersionUID = 3416603502937027872L;
+   
     private String name;
 //    private XTag xobj;
 //    private int index;
@@ -18,26 +13,7 @@ public class Tag
     {
         this.name=name;
     }
-
-    public List<Link> getLinks()
-    {
-        return links;
-    }
-
-    public void addLink(Link link)
-    {
-        links.add(link);
-    }
-
-    public void removeLink(int index)
-    {
-        links.remove(index);
-    }
-
-    public void clearLinks()
-    {
-        links.clear();
-    }
+    
 
     public String getName()
     {
@@ -47,6 +23,11 @@ public class Tag
     public void setName(String name)
     {
         this.name = name;
+    }
+    @Override
+    public String toString()
+    {        
+        return name;
     }
 
 }

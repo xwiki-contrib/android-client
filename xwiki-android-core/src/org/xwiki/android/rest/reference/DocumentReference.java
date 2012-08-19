@@ -15,6 +15,10 @@ public class DocumentReference extends EntityReference<Document>
 
     @DatabaseField
     protected String pageName;
+    
+    protected String pageVersion;
+    
+    protected String language;
 
     public DocumentReference()
     {
@@ -77,10 +81,35 @@ public class DocumentReference extends EntityReference<Document>
         this.pageName = pageName;
     }
 
-    @Override
-    public String getURL()
+    public String getVersion()
     {
-        return getAuthority() + "/xwiki/xmlrpc/wikis/" + wikiName + "/spaces" + spaceName + "/pages" + pageName;
+        return pageVersion;
     }
 
+    public void setVersion(String version)
+    {
+        this.pageVersion = version;
+    }
+    
+    public String getLanguage()
+    {
+        return language;
+    }
+    /**
+     * refers to a translation of a Document.
+     * When retrieving the document will have a XWikiPage in the translatedPages set.
+     * Also mind that the Documents direct content, version, ... will be null.
+     * The XWikiPage in translatedPages will have them filled.
+     * @param language
+     */
+    public void setLanguage(String language)
+    {
+        this.language = language;
+    }
+
+   
+    
+    
+
+   
 }

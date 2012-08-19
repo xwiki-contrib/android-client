@@ -2,12 +2,8 @@ package org.xwiki.android.rest.ral;
 
 import java.util.Properties;
 
-import org.xwiki.android.resources.Space;
-import org.xwiki.android.resources.Wiki;
-import org.xwiki.android.rest.RestConnection;
-import org.xwiki.android.rest.XWikiAPI;
-import org.xwiki.android.rest.XWikiRestConnecion;
-import org.xwiki.android.xmodel.entity.Document;
+import org.xwiki.android.rest.XWikiRestConnector;
+import org.xwiki.android.rest.rpc.RestClient;
 
 public class XmlRESTFulManager implements RESTfulManager
 {
@@ -57,10 +53,18 @@ public class XmlRESTFulManager implements RESTfulManager
     }
 
     @Override
-    public RestConnection getConnection()
+    public RestClient getRestClient()
     {
-        return new XWikiRestConnecion(serverUrl,username,password);
+       throw new UnsupportedOperationException("under construction. see rest.rpc package in rest module");
     }
+
+    @Override
+    public XWikiRestConnector getRestConnector()
+    {        
+        return new XWikiRestConnector(serverUrl, username, password);
+    }
+
+   
 
     
 

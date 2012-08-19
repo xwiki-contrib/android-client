@@ -26,10 +26,5 @@ public class SpaceReference extends EntityReference
         this.space = space;
     }
 
-    @Override
-    public String getURL()
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
+    
 }

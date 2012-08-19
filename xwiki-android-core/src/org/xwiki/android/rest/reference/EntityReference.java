@@ -18,6 +18,9 @@ public abstract class EntityReference<T> implements Serializable
     // do not mark this class as @DatabaseTable, table inheritance is not yet supported in ORMLite.
     // make inheriting class mark @DatabaseTable
 
+    
+    // !***! These are to identify multiple Xwiki servers that may have identically named but different documents.
+    
     /**
      * http:// scheme. host section sample:- http://username:password@host:8080/directory/file?querryparam #fragment
      */
@@ -45,15 +48,6 @@ public abstract class EntityReference<T> implements Serializable
     public String getAuthority()
     {
         return authInfo.getUserName() + ":" + authInfo.getPassword() + "@" + host + ":" + port;
-    }
-
-    public abstract String getURL();
-
-    // special setters
-
-    public void setFromURL() throws MalformedURLException
-    {
-        // TODO: implement
     }
 
     public String getHost()

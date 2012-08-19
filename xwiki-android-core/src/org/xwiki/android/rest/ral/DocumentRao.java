@@ -7,18 +7,7 @@ import org.xwiki.android.xmodel.entity.Document;
 
 public interface DocumentRao extends Rao<Document>
 {
-    //parts of a doc.
-    int PAGE = 1;
-    /**
-     * all Objects except comment and tag objects.
-     */
-    int OBJECTS = 2;
-    int COMMENTS = 4;
-    int TAGS = 8;
-    int ATTACHMENTS = 16;
-    int COMMENT_OBJECTS=32;
-    int TAG_OBJECT=64;
-    int ALL = 2147483647;
+    
 
     /**
      * semantics: 
@@ -57,23 +46,9 @@ public interface DocumentRao extends Rao<Document>
      */
     Document retreive(DocumentReference dref) throws RestConnectionException, RaoException;
 
-    // TODO: SPECIFY default semantics ;-)
-    /**
-     * 
-     * @param dref  ex: flags=OBJECTS+TAGS. Loads a Document object with XObjects and tags only.
-     * @param flags
-     * @return
-     */
-    Document retreive(DocumentReference dref, int flags);
-    /**
-     * 
-     * @param dref
-     * @param flags
-     * @param objTypeArgs 
-     *          ex: Blog.BlogPostClass:0:2 blog post objects from index 0 to 2. i.e 3 objs if available.
-     * @return
-     */
-    Document retreive(DocumentReference dref, int flags, String... objTypeArgs);
+    Document retreive(DocumentReference dref, FetchConfig lazyConfig) throws RestConnectionException, RaoException;
+    
+    Document retreive(Document doc, FetchConfig lazyConfig);
 
     void delete(DocumentReference dRef) throws RestConnectionException, RaoException;
 }

@@ -1,9 +1,13 @@
 package org.xwiki.android.xmodel.xobjects;
 
+
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -39,31 +43,43 @@ public class XUtils
         return value;
     }
 
-    public static Date toDate(String ds)
+    public static Date toDate(String ds) throws IllegalArgumentException
     {
        
-
-        String[] fmts = {"yyyy-MM-dd'T'HH:mm:ssZ", "yyyy-mm-dd HH:mm:ss.SSS"};
-        int ivr[] = {0, -1};// input validation routine
-
+        String orig=ds;
+        String[] fmts = {"yyyy-MM-dd'T'HH:mm:ssZ","yyyy-mm-dd'T'HH:mm:ss.SSSZ","yyyy-mm-dd HH:mm:ss.SSSZ" ,"yyyy-mm-dd HH:mm:ss.SSS"}; //when adding format see ivr[], Input validation routine
+        //ex:{2012-08-13T22:26:54+05:30, 2012-08-13T22:26:54.510+05:30 ,2012-08-13 22:26:54.377+05:30 ,2012-08-13 22:26:54.377
+        int ivr[] = {0, 1, 1,-1};// input validation routine
+        String[] tried=new String[fmts.length]; //for debug only
+        
         for (int i = 0; i < fmts.length; i++) {
+            ds=orig;
             String fmtStr=fmts[i];
             int key=ivr[i];
             // IVR s
             switch (key) {
-                case 0: {
-                	if(ds.length()>21){
-                		String gmt = ds.substring(20);
+                case 0: { //removes : in 05:30  to 0530 >> at the end 2012-08-13T22:26:54+05:30 ---> 2012-08-13T22:26:54+0530 
+                    if(ds.length()>21){
+                        String gmt = ds.substring(20);
                         gmt = gmt.substring(0, 2) + gmt.substring(3);
-                        System.out.println(gmt);
+                        //System.out.println(gmt);
                         ds = ds.substring(0, 20) + gmt;
-                	}                    
-                }
+                    } 
                     break;
+                }               
+                case 1: { //same as in 0  :  2012-08-13 22:26:54.377+05:30  ---> 2012-08-13 22:26:54.377+0530 
+                    if(ds.length()>25){
+                        String gmt = ds.substring(24);
+                        gmt = gmt.substring(0, 2) + gmt.substring(3);
+                        //System.out.println(gmt);
+                        ds = ds.substring(0, 24) + gmt;
+                    }
+                    break;
+                }
                 default:
                     break;
             }
-            
+            tried[i]=ds;
             //try to parse
             DateFormat fmt = new SimpleDateFormat(fmtStr); 
             Date d = null;
@@ -73,10 +89,9 @@ public class XUtils
             } catch (ParseException e) {               
             }
         }
-
         // end
-        throw new IllegalArgumentException(
-            "date format not supported. Only supported format are [...] see XUtils.toDate(String)");  
+        
+        throw new IllegalArgumentException("Unable to Parse"+orig+". After validation processing = "+Arrays.asList(tried)+" .Only supported format are [...] see"+XUtils.class.getSimpleName()+"#toDate(String)");  
     }
 
     /**
@@ -86,6 +101,9 @@ public class XUtils
      */
     public static List<String> toStringList(String listStr, String seperators)
     {
+        if(listStr==null){
+            return new ArrayList<String>();
+        }
         seperators = "[" + seperators + "]";
         String[] items = listStr.split(seperators);
         return Arrays.asList(items);

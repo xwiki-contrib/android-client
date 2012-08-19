@@ -8,13 +8,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.xwiki.android.rest.reference.Link;
-import org.xwiki.android.xmodel.entity.Resource;
+import org.xwiki.android.xmodel.entity.XWikiResource;
 
 /**
  * @author sasindap
  * @param <T> :The type of fields. i.e: XProperty, XObject
  */
-public abstract class XObject<T> extends Resource implements Serializable, Cloneable
+public abstract class XObject<T> extends XWikiResource implements Serializable, Cloneable
 {
     protected Map<String, T> fields;
 

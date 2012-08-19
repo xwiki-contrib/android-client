@@ -22,6 +22,7 @@ import org.xwiki.android.resources.Translations;
 import org.xwiki.android.rest.ral.wrappers.XSimpleObjectWrapper_RAL;
 import org.xwiki.android.rest.reference.Link;
 import org.xwiki.android.xmodel.entity.Document;
+import org.xwiki.android.xmodel.entity.XWikiPage;
 import org.xwiki.android.xmodel.xobjects.XProperty;
 import org.xwiki.android.xmodel.xobjects.XSimpleObject;
 import org.xwiki.android.xmodel.xobjects.XUtils;
@@ -30,8 +31,8 @@ import android.util.Log;
 
 public class DocumentBuilder_XML implements DocumentBuilder
 {
-    private final String TAG=this.getClass().getSimpleName();
-    
+    private final String TAG = this.getClass().getSimpleName();
+
     Document d;
     XObjectFactory xofac;
     XPropertyFactory xpfac;
@@ -42,23 +43,42 @@ public class DocumentBuilder_XML implements DocumentBuilder
         xofac = new XObjectFactory();
         xpfac = new XPropertyFactory();
     }
+
+    public DocumentBuilder_XML(Document doc)
+    {
+        d = doc;
+        xofac = new XObjectFactory();
+        xpfac = new XPropertyFactory();
+    }
+
     /**
      * Create document without page data. Build it wrapped with a DocumentWrapper.
+     * 
      * @param wikiName
      * @param spaceName
      * @param pageName
      */
-    public DocumentBuilder_XML(String wikiName, String spaceName, String pageName){
-        d=new Document(wikiName, spaceName, pageName);        
+    public DocumentBuilder_XML(String wikiName, String spaceName, String pageName)
+    {
+        d = new Document(wikiName, spaceName, pageName);
     }
 
-    private DocumentBuilder initWithPage(Page p)
+    /**
+     * start off with a new document. The earlier build will be lost.
+     * 
+     * @param p
+     * @return
+     */
+    public DocumentBuilder initWithPage(Page p)
     {
-
         d = new Document(p.wiki, p.space, p.name);
+        return withPage(p);
+    }
 
-        List<org.xwiki.android.resources.Link> linksRes = p.links;        
-        if(linksRes!=null){
+    public DocumentBuilder withPage(Page p)
+    {
+        List<org.xwiki.android.resources.Link> linksRes = p.links;
+        if (linksRes != null) {
             List<Link> links = new ArrayList<Link>();
             for (org.xwiki.android.resources.Link lres : linksRes) {
                 Link l = new Link();
@@ -67,9 +87,9 @@ public class DocumentBuilder_XML implements DocumentBuilder
                 links.add(l);
             }
             d.setLinks(links);
-        }  
-        
-        d.setRemoteId(p.id);
+        }
+
+        d.setId(p.id);
         d.setFullName(p.fullName);
         d.setWikiName(p.wiki);
         d.setSpaceName(p.space);
@@ -105,7 +125,63 @@ public class DocumentBuilder_XML implements DocumentBuilder
         return this;
     }
 
-    /* (non-Javadoc)
+    public DocumentBuilder withTranslatedPage(Page trns)
+    {
+        XWikiPage page = new XWikiPage(null, null, null)
+        {
+        };
+        List<org.xwiki.android.resources.Link> linksRes = trns.links;
+        if (linksRes != null) {
+            List<Link> links = new ArrayList<Link>();
+            for (org.xwiki.android.resources.Link lres : linksRes) {
+                Link l = new Link();
+                l.setHref(lres.href);
+                l.setRelType(lres.getRel());
+                links.add(l);
+            }
+            page.setLinks(links);
+        }
+
+        page.setId(trns.id);
+        page.setFullName(trns.fullName);
+        page.setWikiName(trns.wiki);
+        page.setSpaceName(trns.space);
+        page.setPageName(trns.name);
+        page.setTitle(trns.title);
+        page.setParentFullName(trns.parent);
+        page.setParentId(trns.parentId);
+        page.setXwikiRelativeUrl(trns.xwikiRelativeUrl);
+        page.setXwikiAbsoluteUrl(trns.xwikiAbsoluteUrl);
+
+        Translations trsRes = trns.getTranslations();
+        if (!trsRes.getTranslations().isEmpty()) {
+            List<String> ts = new ArrayList<String>();
+            for (Translation tres : trsRes.translations) {
+                String t = tres.getLanguage();
+                ts.add(t);
+            }
+            page.setTranslations(ts);
+            page.setDefalutTranslation(trsRes.getDefault());
+        }
+
+        page.setSyntax(trns.syntax);
+        page.setLanguage(trns.language);
+        page.setVersion(trns.version);
+        page.setMajorVersion(trns.majorVersion);
+        page.setMinorVersion(trns.minorVersion);
+        page.setCreated(XUtils.toDate(trns.created));
+        page.setCreator(trns.creator);
+        page.setModified(XUtils.toDate(trns.modified));
+        page.setModifier(trns.modifier);
+        page.setContent(trns.content);
+
+        page.setEdited(false);
+        d.setTranslationPage(page);
+        return this;
+    }
+
+    /*
+     * (non-Javadoc)
      * @see org.xwiki.android.xmlrpc.transformation.DocumentBuilder#withObject(org.xwiki.android.resources.Object)
      */
     @Override
@@ -114,9 +190,9 @@ public class DocumentBuilder_XML implements DocumentBuilder
         XSimpleObject xo = xofac.newXSimpleObject(res.className);
         // object's links not supported yet.For performance enhancements.
 
-        String xokey=res.getClassName()+"/"+res.getNumber();
-        Log.d(TAG, "creating xobject for "+xokey);
-        
+        // String xokey=res.getClassName()+"/"+res.getNumber();
+        // Log.d(TAG, "creating xobject for "+xokey);
+
         xo.setId(res.id);
         xo.setGuid(res.guid);
         xo.setPageid(res.pageId);
@@ -137,16 +213,19 @@ public class DocumentBuilder_XML implements DocumentBuilder
             // xp.setType(pres.getType());//implicit for the XProperty obj.
             xp.setName(pres.name);
             xp.setValueFromString(pres.getValue());
-            xo.setProperty(key,xp);
-            Log.d(TAG, "added xproperty "+key);
+            xo.setProperty(key, xp);
+            Log.d(TAG, "added xproperty " + key);
         }
         xo.setEdited(false);
-        d.setObject(xokey, xo);
+        d.setObject(xo);
         return this;
     }
 
-    /* (non-Javadoc)
-     * @see org.xwiki.android.xmlrpc.transformation.DocumentBuilder#withObjectSummary(org.xwiki.android.resources.ObjectSummary)
+    /*
+     * (non-Javadoc)
+     * @see
+     * org.xwiki.android.xmlrpc.transformation.DocumentBuilder#withObjectSummary(org.xwiki.android.resources.ObjectSummary
+     * )
      */
     @Override
     public DocumentBuilder withObjectSummary(ObjectSummary res)
@@ -164,13 +243,15 @@ public class DocumentBuilder_XML implements DocumentBuilder
         xo.setNumber(res.number);
         xo.setHeadline(res.headline);
         XSimpleObjectWrapper_RAL xowrap = new XSimpleObjectWrapper_RAL(xo);
+
         xo.setEdited(false);
-        d.setObject(res.className + "/" + res.number, xowrap);
+        d.setObject(xowrap);
 
         return this;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see org.xwiki.android.xmlrpc.transformation.DocumentBuilder#withComments(org.xwiki.android.resources.Comments)
      */
     @Override
@@ -182,25 +263,34 @@ public class DocumentBuilder_XML implements DocumentBuilder
         return this;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see org.xwiki.android.xmlrpc.transformation.DocumentBuilder#withComment(org.xwiki.android.resources.Comment)
      */
     @Override
     public DocumentBuilder withComment(Comment cmntRes)
     {
         org.xwiki.android.xmodel.entity.Comment c = new org.xwiki.android.xmodel.entity.Comment();
-        c.setId(cmntRes.id);
+
+        c.setId(-1);
+        c.setId(cmntRes.id);// if u send a comment resource without seting id it will always have id =0; Though
+                            // entity.comment has def val -1 it will be overriden
         c.setAuthor(cmntRes.author);
         c.setDate(XUtils.toDate(cmntRes.date));
         c.setText(cmntRes.text);
-        c.setReplyTo(cmntRes.replyTo);
+        if (cmntRes.replyTo != null) {
+            c.setReplyTo(cmntRes.replyTo);
+        }
+
         c.setEdited(false);
-        d.addComment(c);
+        d.setComment(c);
+
         // TODO: keep link if needed. c.addLink(new Link...cmntRes.getLinks().get(0) ...);
         return this;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see org.xwiki.android.xmlrpc.transformation.DocumentBuilder#withTags(org.xwiki.android.resources.Tags)
      */
     @Override
@@ -208,25 +298,30 @@ public class DocumentBuilder_XML implements DocumentBuilder
     {
         for (Tag tr : tags.getTags()) {
             org.xwiki.android.xmodel.entity.Tag t = new org.xwiki.android.xmodel.entity.Tag(tr.name);
+            t.setEdited(false);
             d.addTag(t);
         }
         return this;
     }
 
-    /* (non-Javadoc)
-     * @see org.xwiki.android.xmlrpc.transformation.DocumentBuilder#withAttachments(org.xwiki.android.resources.Attachments)
+    /*
+     * (non-Javadoc)
+     * @see
+     * org.xwiki.android.xmlrpc.transformation.DocumentBuilder#withAttachments(org.xwiki.android.resources.Attachments)
      */
     @Override
     public DocumentBuilder withAttachments(Attachments attachments)
     {
-        for(Attachment ares:attachments.getAttachments()){
+        for (Attachment ares : attachments.getAttachments()) {
             withAttachment(ares);
         }
         return this;
     }
 
-    /* (non-Javadoc)
-     * @see org.xwiki.android.xmlrpc.transformation.DocumentBuilder#withAttachment(org.xwiki.android.resources.Attachment)
+    /*
+     * (non-Javadoc)
+     * @see
+     * org.xwiki.android.xmlrpc.transformation.DocumentBuilder#withAttachment(org.xwiki.android.resources.Attachment)
      */
     @Override
     public DocumentBuilder withAttachment(Attachment attachment)
@@ -241,9 +336,9 @@ public class DocumentBuilder_XML implements DocumentBuilder
         a.setMimeType(attachment.mimeType);
         a.setAuthor(attachment.author);
         a.setDate(XUtils.toDate(attachment.date));
-        
-        URL absUrl=null;
-        URL relUrl=null;
+
+        URL absUrl = null;
+        URL relUrl = null;
         try {
             absUrl = new URL(attachment.xwikiAbsoluteUrl);
             relUrl = new URL(attachment.xwikiRelativeUrl);
@@ -253,9 +348,10 @@ public class DocumentBuilder_XML implements DocumentBuilder
         }
         a.setXwikiAbsoluteUrl(absUrl);// can convert to URL to make android independant.
         a.setXwikiRelativeUrl(relUrl);
+
         a.setEdited(false);
         a.setNew(false);
-        d.addAttachment(a);
+        d.setAttachment(a);
         return this;
     }
 
@@ -366,7 +462,8 @@ public class DocumentBuilder_XML implements DocumentBuilder
     // return this;
     // }
     //
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see org.xwiki.android.xmlrpc.transformation.DocumentBuilder#build()
      */
     @Override

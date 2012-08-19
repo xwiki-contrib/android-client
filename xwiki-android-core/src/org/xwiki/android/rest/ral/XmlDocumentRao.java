@@ -20,13 +20,13 @@ import org.xwiki.android.resources.Page;
 import org.xwiki.android.resources.Tags;
 import org.xwiki.android.rest.RestConnectionException;
 import org.xwiki.android.rest.RestException;
-import org.xwiki.android.rest.XWikiRestConnecion;
-import org.xwiki.android.rest.XWikiAPI;
+import org.xwiki.android.rest.XWikiRestConnector;
 import org.xwiki.android.rest.ral.algo.DocRetreiveStrategy;
 import org.xwiki.android.rest.ral.algo.DocUpdateStrategy;
 import org.xwiki.android.rest.ral.algo.IDocRetreiveStrategy;
 import org.xwiki.android.rest.ral.algo.IDocUpdateStragegy;
 import org.xwiki.android.rest.reference.DocumentReference;
+import org.xwiki.android.rest.rpc.XWikiAPI;
 import org.xwiki.android.rest.transformation.DocLaunchPadForXML;
 import org.xwiki.android.rest.transformation.DocumentDismantler_XML;
 import org.xwiki.android.xmodel.entity.Attachment;
@@ -57,7 +57,7 @@ class XmlDocumentRao implements DocumentRao
     public XmlDocumentRao(String serverUrl, String username, String password)
     {
 
-        api = new XWikiRestConnecion(serverUrl, username, password);
+        api = new XWikiRestConnector(serverUrl, username, password);
         retStr = new DocRetreiveStrategy(username, password, serverUrl);
         updStr = new DocUpdateStrategy(serverUrl, username, password);
         // consider IoC to app context
@@ -200,11 +200,13 @@ class XmlDocumentRao implements DocumentRao
                             int start = used;
                             int end = Math.min(avail, used + needed);
                             for (int j = used; j < end; j++) {
-                            	Comment cnw=newCmnts.get(j);                            	
+                            	Comment cnw=newCmnts.get(j);
+                            	int tmpId=cnw.getId();
+                            	cnw.setId(++svrCmntId);
                                 api.addPageComment(wikiName, spaceName, pageName, cnw);
-                                svrCmntId++;
+                                
                                 for(Comment c:newCmnts){
-                                	if(c.getReplyTo()==cnw.getId()){
+                                	if(c.getReplyTo()!=null && c.getReplyTo()==tmpId){
                                 		c.setReplyTo(svrCmntId);
                                 	}
                                 }                               
@@ -223,10 +225,11 @@ class XmlDocumentRao implements DocumentRao
                 if(used<avail){
                 	for (int i = used; i < newCmnts.size(); i++){
                 		Comment prnt=newCmnts.get(i);
-                		api.addPageComment(wikiName, spaceName, pageName, prnt);
-                		svrCmntId++;
+                		int tmpId=prnt.getId();
+                		prnt.setId(++svrCmntId);
+                		api.addPageComment(wikiName, spaceName, pageName, prnt);                		
                 		for(Comment child:newCmnts){
-                        	if(child.getReplyTo()==prnt.getId()){
+                        	if(child.getReplyTo()!=null &&child.getReplyTo()==tmpId){
                         		child.setReplyTo(svrCmntId);
                         	}
                         } 
@@ -243,7 +246,7 @@ class XmlDocumentRao implements DocumentRao
                 for (Attachment a : pad.getAttatchmentsToupload()) {
                     File f=a.getFile();
                     if(f!=null){
-                        String filePath=f.getAbsolutePath(); 
+                        String filePath=f.getParentFile().getAbsolutePath()+"/"; 
                         String attachmentName=a.getName();
                         api.putPageAttachment(wikiName, spaceName, pageName, filePath, attachmentName);
                     }else{
@@ -290,6 +293,13 @@ class XmlDocumentRao implements DocumentRao
     {
         return retStr.retreive(doc);
     }
+    
+    @Override
+    public Document retreive(Document doc, FetchConfig lazyConfig)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
     @Override
     public Document retreive(DocumentReference dref) throws RestConnectionException, RaoException
@@ -298,15 +308,9 @@ class XmlDocumentRao implements DocumentRao
     }
 
     @Override
-    public Document retreive(DocumentReference dref, int flags)
+    public Document retreive(DocumentReference dref, FetchConfig lazyConfig)
     {
-        return retStr.retreive(dref, flags);
-    }
-
-    @Override
-    public Document retreive(DocumentReference dref, int flags, String... objTypeArgs)
-    {
-        return retStr.retreive(dref, flags, objTypeArgs);
+        return retStr.retreive(dref, lazyConfig);
     }
 
     @Override
@@ -343,5 +347,7 @@ class XmlDocumentRao implements DocumentRao
     {
         delete(resrc.getDocumentReference());
     }
+
+    
 
 }

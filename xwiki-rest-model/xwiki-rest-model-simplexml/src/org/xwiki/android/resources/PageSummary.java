@@ -58,7 +58,7 @@ import org.simpleframework.xml.Root;
 
 @Root
 @Namespace(reference = "http://www.xwiki.org")
-public class PageSummary extends LinkCollection
+public class PageSummary extends LinkCollection  implements Resource
 {
 
     @Element(required = false)
@@ -150,11 +150,11 @@ public class PageSummary extends LinkCollection
     /**
      * Sets the value of the wiki property.
      * 
-     * @param value allowed object is {@link String }
+     * @param wikiName allowed object is {@link String }
      */
-    public void setWiki(String value)
+    public void setWiki(String wikiName)
     {
-        this.wiki = value;
+        this.wiki = wikiName;
     }
 
     /**
@@ -170,11 +170,11 @@ public class PageSummary extends LinkCollection
     /**
      * Sets the value of the space property.
      * 
-     * @param value allowed object is {@link String }
+     * @param spaceName allowed object is {@link String }
      */
-    public void setSpace(String value)
+    public void setSpace(String spaceName)
     {
-        this.space = value;
+        this.space = spaceName;
     }
 
     /**
@@ -190,11 +190,11 @@ public class PageSummary extends LinkCollection
     /**
      * Sets the value of the name property.
      * 
-     * @param value allowed object is {@link String }
+     * @param name allowed object is {@link String }
      */
-    public void setName(String value)
+    public void setName(String name)
     {
-        this.name = value;
+        this.name = name;
     }
 
     /**
