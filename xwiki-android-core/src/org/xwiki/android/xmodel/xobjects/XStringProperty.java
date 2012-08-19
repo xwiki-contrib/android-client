@@ -12,6 +12,14 @@ public class XStringProperty extends XPropertyBase<String>
        super("com.xpn.xwiki.objects.classes.StringClass");
 
     }
+    
+    public XStringProperty(String value)
+    {
+       super("com.xpn.xwiki.objects.classes.StringClass");
+       this.value=value;
+
+    }
+    
 
     // special attr
 

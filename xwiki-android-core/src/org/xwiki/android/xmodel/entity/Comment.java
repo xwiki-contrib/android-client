@@ -9,186 +9,229 @@ import org.xwiki.android.xmodel.xobjects.XComment;
 
 public class Comment extends XWikiResource
 {
-	
-	int id = -1; // -1 to mean null
-	String author;
-	Date date;
-	String text;
-	int replyTo = -1; // -1 to mean null
-	String highlight;
 
-	Document ownerDoc;
-	List<Comment> replies;
-	// object associated to this comment.
-	XComment xobj;
+    private int id = -1; // -1 to mean null
+    private String author;
+    private Date date;
+    private String text;
+    private int replyTo = -1; // -1 to mean null
+    private String highlight;
 
-	public Comment()
-	{
-		replies = new ArrayList<Comment>();
-	}
+    private Document ownerDoc;
+    private List<Comment> replies;
+   
+    //non bean props.
+    // object associated to this comment.
+    private XComment xobj;
+    boolean isaReply;
 
-	public Comment(String text)
-	{
-		this();
-		this.text = text;
-	}
+    public Comment()
+    {
+        replies = new ArrayList<Comment>();
+    }
 
-	/**
-	 * 
-	 * This method also adds the reply comment to the parent comment's owning
-	 * document if it is owned by a document.
-	 * 
-	 * @return true if added. false if already contained the comment.
-	 */
-	public boolean addReplyComment(Comment rply)
-	{
-		if (!replies.contains(rply)) {
-			replies.add(rply);
-			if (ownerDoc != null) {
-				ownerDoc.addComment(rply);
-			}
-			rply.replyTo = this.id;
-			return true;
-		} else {
-			return false;
-		}
-	}
+    public Comment(String text)
+    {
+        this();
+        this.text = text;
+    }
+    
+    public void replyTo(Comment c){
+        c.addReplyComment(this);
+        isaReply=true;
+    }
 
-	/**
-	 * when the id of this comment is changed refresh the change to replyTo
-	 * fields of direct reply comments.
-	 */
-	private void refreshChildrenReplyToID()
-	{
-		for (Comment rply : this.getReplies()) {
-			rply.setReplyTo(this.getId());
-		}
-	}
+    /**
+     * This method also adds the reply comment to the parent comment's owning document if it is owned by a document.
+     * 
+     * @return true if added. false if already contained the comment.
+     */
+    public boolean addReplyComment(Comment rply)
+    {
+        if (this == rply)
+            throw new IllegalArgumentException("Comment cannot reply to itself");
+        rply.isaReply=true;
+        if (!replies.contains(rply)) {
+            replies.add(rply);
+            if (ownerDoc != null) {
+                ownerDoc.addComment(rply);
+            }
+            rply.setReplyTo(this.id);
+            return true;
+        } else {
+            return false;
+        }
+        
+    }    
+    
 
-	public List<Comment> getReplies()
-	{
-		return replies;
-	}
+    /**
+     * when the id of this comment is changed refresh the change to replyTo fields of direct reply comments.
+     */
+    private void refreshChildrenReplyToID()
+    {
+        for (Comment rply : this.getReplies()) {
+            rply.setReplyTo(this.getId());
+        }
+    }
 
-	public void setReplies(List<Comment> replies)
-	{
-		this.replies = replies;
-	}
-	
+    public List<Comment> getReplies()
+    {
+        return replies;
+    }
 
-	//
-	//getter setteres
-	//
-	
-	public int getId()
-	{
-		return id;
-	}
+    public void setReplies(List<Comment> replies)
+    {
+        for (Comment c : replies) {
+            addReplyComment(c);
+        }
+    }
 
-	public void setId(int id)
-	{
-		if (ownerDoc != null) {
-			throw new IllegalStateException("You cannot alter the id of a comment after it is owned by a document");
-		}
-		this.id = id;
-		refreshChildrenReplyToID();
-	}
+    //
+    // getter setteres
+    //
 
-	public String getAuthor()
-	{
-		return author;
-	}
+    public int getId()
+    {
+        return id;
+    }
 
-	public void setAuthor(String author)
-	{
-		this.author = author;
-	}
+    public void setId(int id)
+    {
+        if (ownerDoc != null) {
+            throw new IllegalStateException("You cannot alter the id of a comment after it is owned by a document");
+        }
+        this.id = id;
+        refreshChildrenReplyToID();
+    }
 
-	public Date getDate()
-	{
-		return date;
-	}
+    public String getAuthor()
+    {
+        return author;
+    }
 
-	public void setDate(Date date)
-	{
-		this.date = date;
-	}
+    public void setAuthor(String author)
+    {
+        this.author = author;
+    }
 
-	public String getText()
-	{
-		return text;
-	}
+    public Date getDate()
+    {
+        return date;
+    }
 
-	public void setText(String text)
-	{
-		this.text = text;
-	}
+    public void setDate(Date date)
+    {
+        this.date = date;
+    }
 
-	public int getReplyTo()
-	{
-		return replyTo;
-	}
+    public String getText()
+    {
+        return text;
+    }
 
-	public void setReplyTo(int replyTo)
-	{
-		this.replyTo = replyTo;
-	}
+    public void setText(String text)
+    {
+        this.text = text;
+    }
 
-	public String getHighlight()
-	{
-		return highlight;
-	}
+    public int getReplyTo()
+    {
+        return replyTo;
+    }
 
-	public void setHighlight(String highlight)
-	{
-		this.highlight = highlight;
-	}
+    public void setReplyTo(int replyTo)
+    {
+        if(replyTo!=-1){
+            if (this.id == -1) {
+                this.replyTo = replyTo;
+            } else if (this.id >= 0) {
+                if (replyTo < -1) {
+                    if ((-10 - replyTo) > id) {
+                        String msg =
+                            "this cmnts id is " + id + " but we reply to " + replyTo + " which is the " + (-10 - replyTo)
+                                + "th new comment which obviously gets added after this comment";
+                        throw new IllegalStateException(msg);
+                    }
+                } else if (replyTo >= 0) {
+                    if (!(replyTo < id)) {
+                        throw new IllegalStateException("cannot reply to a comment that is after this.");
+                    }
+                } else {// replyto=-1
+                    if (this.ownerDoc != null) {
+                        int newCmnts = ownerDoc.getAllNewComments().size();
+                        if (newCmnts >= id) {
+                            throw new IllegalStateException(
+                                "replying to a comment that will obviously be added after this comment. there are "
+                                    + newCmnts + " already added to Document. They are enough to fill the gap. this.id is:"
+                                    + id);
+                        }
+                    }
+                }
+            }else{//this.id<-1 i.e. already associated to document.
+               if(!(id<replyTo)){
+                   throw new IllegalStateException("this.tmp_id: "+id+" i.e. this is the "+(-10-id)+"th comment. Replying to "+(-10-replyTo)+"th comment with tmpid:"+replyTo);
+               }
+            } 
+        }
+        this.replyTo = replyTo;
+    }
 
-	// package
+    public String getHighlight()
+    {
+        return highlight;
+    }
 
-	Document getDocument()
-	{
-		return ownerDoc;
-	}
+    public void setHighlight(String highlight)
+    {
+        this.highlight = highlight;
+    }
 
-	void setOwner(Document ownerDoc)
-	{
-		this.ownerDoc = ownerDoc;
-	}
+    // package
 
-	// private
+    Document getDocument()
+    {
+        return ownerDoc;
+    }
 
-	private XComment getXObject()
-	{
-		if (xobj == null) {
-			xobj = new XComment();
+    void setOwner(Document ownerDoc)
+    {
+        this.ownerDoc = ownerDoc;
+    }
 
-			// ! xobj.setId(""+id);// dont set.Not the same.
-			xobj.setNumber(id);
-			xobj.setAuthor(author);
-			xobj.setDate(date);
-			xobj.setComment(text);
-			xobj.setReplyto(replyTo);
+    // private
 
-		}
-		return xobj;
-	}
+    private XComment getXObject()
+    {
+        if (xobj == null) {
+            xobj = new XComment();
 
-	private void setXObject(XComment xobj)
-	{
-		this.xobj = xobj;
-	}
+            // ! xobj.setId(""+id);// dont set.Not the same.
+            xobj.setNumber(id);
+            xobj.setAuthor(author);
+            xobj.setDate(date);
+            xobj.setComment(text);
+            xobj.setReplyto(replyTo);
 
-	@Override
-	public boolean equals(Object o)
-	{
-		if (!(o instanceof XComment)) {
-			return false;
-		} else {
-			Comment c = (Comment) o;
-			return c.getId() == this.id && c.text == this.text;
-		}
+        }
+        return xobj;
+    }
 
-	}
+    private void setXObject(XComment xobj)
+    {
+        this.xobj = xobj;
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (!(o instanceof XComment)) {
+            return false;
+        } else {
+            Comment c = (Comment) o;
+            return c.getId() == this.id && c.text == this.text;
+        }
+
+    }
 
 }

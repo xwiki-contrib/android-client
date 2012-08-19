@@ -6,6 +6,7 @@ import org.xwiki.android.rest.RestException;
  * @author xwiki gsoc 2012 For exceptional situations where client is doing some thing wrong due to lack of knowledge of
  *         the remote servers state.Ex: Call to create a document that already exsist in the remote server.
  */
+//TODO: PLEASE SEE THE SUB EXCEPTION TYPES. Make Raos throw them at specific points.
 public class RaoException extends Exception
 {
 
@@ -42,7 +43,7 @@ public class RaoException extends Exception
         super(throwable);
         // TODO Auto-generated constructor stub
     }
-    
+
     public RaoException(RestException rex)
     {
         super(rex);
@@ -69,7 +70,25 @@ public class RaoException extends Exception
     {
         this.code = code;
     }
-    
-    
+
+    public class DuplicateDocument extends RaoException
+    {
+
+    }
+
+    public class DocumentNotFound extends RaoException
+    {
+
+    }
+
+    /**
+     * when updating a object in a document. Object not found thrown for set obj ops
+     * 
+     * @author xwiki gsoc 2012
+     */
+    public class ObjectNotFound extends RaoException
+    {
+
+    }
 
 }

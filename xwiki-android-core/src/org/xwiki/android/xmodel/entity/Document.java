@@ -79,9 +79,9 @@ public class Document extends XWikiPage
 	{
 		super(wikiName, spaceName, pageName);
 
-		objects = new Hashtable<String, XSimpleObject>();
+		objects = new HashMap<String, XSimpleObject>();
 		newObjects = new ArrayList<XSimpleObject>();
-		editedObjects = new Hashtable<String, XSimpleObject>();
+		editedObjects = new HashMap<String, XSimpleObject>();
 		deletedObjects = new ArrayList<String>();
 
 		comments = new HashMap<Integer, Comment>();
@@ -89,7 +89,7 @@ public class Document extends XWikiPage
 		editedComments = new ArrayList<Comment>();
 		deletedCommetns = new ArrayList<Integer>();
 
-		attatchments = new Hashtable<String, Attachment>();
+		attatchments = new HashMap<String, Attachment>();
 		newAttachments = new ArrayList<Attachment>();
 		editedAttachments = new ArrayList<Attachment>();
 		deletedAttachments = new ArrayList<String>();

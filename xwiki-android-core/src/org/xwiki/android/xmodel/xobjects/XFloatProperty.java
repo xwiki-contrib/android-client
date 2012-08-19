@@ -10,6 +10,12 @@ public class XFloatProperty extends XNumberProperty<Float>
        //type="com.xpn.xwiki.objects.classes.NumberClass";// in super()
        fields.put("numberType","float");
     }
+    
+    public XFloatProperty(Float val)
+    {
+       this();
+       this.val=val;
+    }
 
     @Override
     public void setValue(Float val)

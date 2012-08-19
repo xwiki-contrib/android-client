@@ -97,8 +97,8 @@ public class DocumentDismantler_XML
             // updates
             List<Comment> editedComments = doc.getAllEditedComments();
             for (Comment ec : editedComments) {
-                Object ores=translator.toObject(ec);
-                pad.editedComments.add(ores);
+                org.xwiki.android.resources.Comment c=translator.toComment(ec);
+                pad.editedComments.add(c);
             }
             // deletes
             Set<Integer> deletedComments = doc.getDeletedCommentSet();

@@ -29,6 +29,7 @@ import org.xwiki.android.xmodel.entity.Comment;
 import org.xwiki.android.xmodel.entity.Document;
 import org.xwiki.android.xmodel.entity.Tag;
 import org.xwiki.android.xmodel.xobjects.XSimpleObject;
+import org.xwiki.android.xmodel.xobjects.XTextAreaProperty;
 
 import android.app.Application;
 import android.content.Context;
@@ -42,7 +43,7 @@ public class TestDocumentRaoCreate extends AndroidTestCase
 {
 	private static final String TAG = TestDocumentRaoCreate.class.getSimpleName();
 	// test org.xwiki.android.test.fixture.teardown.env parameters.
-	String serverUrl, username, password, wikiName, spaceName, pageName, attachmentName;
+	String serverUrl, username, password, wikiName, spaceName, pageName, attachmentName, objClsName1, objClsName2;
 	static int count = 1;
 
 	// tested apis
@@ -75,7 +76,8 @@ public class TestDocumentRaoCreate extends AndroidTestCase
         spaceName = TestConstants.SPACE_NAME;
         pageName = TestConstants.CREATE_PAGE_NAME+"-"+count;
         attachmentName = TestConstants.ATTACHMENT_NAME;
-		
+		objClsName1=TestConstants.OBJECT_CLASS_NAME_1;
+		objClsName2=TestConstants.OBJECT_CLASS_NAME_2;
 		
 		rm = new XmlRESTFulManager(serverUrl, username, password);
 		api = rm.getRestConnector();
@@ -162,13 +164,14 @@ public class TestDocumentRaoCreate extends AndroidTestCase
 	public void testCreate03() throws Throwable
 	{
 		boolean success;
-		so1 = new XSimpleObject("Blog.BlogClass")
+		so1 = new XSimpleObject(objClsName1)
 		{
 		};
-		so2 = new XSimpleObject("Blog.BlogCategoryClass")
+		so2 = new XSimpleObject(objClsName2)
 		{
 		};
 		so2.setNumber(1);
+		so2.setProperty("content", new XTextAreaProperty("hi"));
 		doc.addObject(so1);
 		doc.setObject(so2);
 
@@ -183,7 +186,7 @@ public class TestDocumentRaoCreate extends AndroidTestCase
 			success = api.existsPage(wikiName, spaceName, pageName);
 			if (success) {
 				boolean crite1 = api.existsObject(wikiName, spaceName, pageName, so1.getClassName(), 0);
-				boolean crite2 = api.existsObject(wikiName, spaceName, pageName, so1.getClassName(), 0);
+				boolean crite2 = api.existsObject(wikiName, spaceName, pageName, so2.getClassName(), 0);
 				success = crite1 & crite2;
 			}
 		} catch (RestException e) {
@@ -334,8 +337,44 @@ public class TestDocumentRaoCreate extends AndroidTestCase
         }
 
     }
+	
+	
+	public void testCreate_08_WithCmnts_wieredReplyTos() throws Throwable
+    {
 
-	 public void testCreate_08_WithAttachment() throws Throwable
+        c1 = new Comment("0");
+        c2 = new Comment("1");
+        c3 = new Comment("2");
+        c3.setId(2);                   //here the set id is changed
+        c4 = new Comment("3");
+        c4.setId(3);
+
+        c2.addReplyComment(c1);
+        c4.addReplyComment(c3);
+
+        doc.addComment(c1, true);
+        doc.setComment(c3);
+        doc.setComment(c4);
+
+        rao.create(doc);
+
+        boolean success = api.existsPage(wikiName, spaceName, pageName);
+        assertTrue(success);
+        if (success) {
+            Comments cmnts = api.getPageComments(wikiName, spaceName, pageName);
+            List<org.xwiki.android.resources.Comment> clst = cmnts.comments;
+            assertEquals(4, clst.size());
+            int replyto = clst.get(2).replyTo;
+            assertEquals(1, replyto);
+            replyto=clst.get(3).replyTo;
+            assertEquals(0, replyto);
+            
+            assertEquals("6", clst.get(3).text);
+        }
+
+    }
+
+	 public void testCreate_09_WithAttachment() throws Throwable
 	 {
 	 assertNotNull("No file to upload as attachement. Set it up in setup method" ,af1);
 	 Attachment a=new Attachment(attachmentName, af1);

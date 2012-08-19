@@ -27,7 +27,7 @@ public class DocLaunchPadForXML
     List<String> deletedObjects; // locally
     
     List<Comment> newComments;
-    List<Object> editedComments;//modification of comments sup for obj only.
+    List<Comment> editedComments;//modification of comments sup for obj only.
     List<String> deletedComments;
     
     Tags tags;    
@@ -41,7 +41,7 @@ public class DocLaunchPadForXML
         editedObjects = new Hashtable<String, Object>();
         deletedObjects = new ArrayList<String>();
         newComments=new ArrayList<Comment>();
-        editedComments=new ArrayList<Object>();
+        editedComments=new ArrayList<Comment>();
         deletedComments=new ArrayList<String>();
         
         attatchmentsToupload=new ArrayList<org.xwiki.android.xmodel.entity.Attachment>();
@@ -112,7 +112,7 @@ public class DocLaunchPadForXML
 		return newComments;
 	}
 
-	public List<Object> getEditedComments()
+	public List<Comment> getEditedComments()
 	{
 		return editedComments;
 	}

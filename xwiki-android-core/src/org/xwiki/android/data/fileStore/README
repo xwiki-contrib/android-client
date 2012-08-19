@@ -1,0 +1,7 @@
+This is intended to be lightweight mimic of a document oriented Database.
+
+Issues:
+The File Store needs more specification.
+Suggest
+key= wikiName, spaceName, pageName, localVersin(new field)
+What if user connects to 2 XWiki servers with same coordintates as above but 2 different Xwikis?

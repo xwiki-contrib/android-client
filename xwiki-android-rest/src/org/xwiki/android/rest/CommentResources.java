@@ -165,6 +165,15 @@ public class CommentResources extends HttpConnector
 
         return super.postRequest(Uri, buildXmlComment(comment));
     }
+    
+    public Comment addPageCommentForResult(Comment comment) throws RestConnectionException, RestException
+    {
+        String uri =
+            "http://" + URLprefix + PAGE_URL_PREFIX + wikiName + "/spaces/" + spaceName + "/pages/" + pageName
+                + "/comments";
+
+        return super.postForResource(uri, comment, Comment.class);
+    }
 
     /**
      * Parse xml into a Comments object

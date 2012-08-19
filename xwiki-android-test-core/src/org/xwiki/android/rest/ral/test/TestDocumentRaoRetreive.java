@@ -48,7 +48,7 @@ public class TestDocumentRaoRetreive extends AndroidTestCase
         wikiName = TestConstants.WIKI_NAME;
         spaceName = TestConstants.SPACE_NAME;
         pageName = TestConstants.PAGE_NAME;
-        objectClassname = TestConstants.CLASS_NAME;
+        objectClassname = TestConstants.OBJECT_CLASS_NAME_1;
         objectNumber = TestConstants.OBJECT_NUMBER;
         propertyName = TestConstants.OBJECT_PROPERTY_NAME;
 

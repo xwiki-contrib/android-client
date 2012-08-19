@@ -3,7 +3,8 @@ package org.xwiki.android.rest.reference;
 import java.io.Serializable;
 
 /**
- * @author xwiki gsoc 2012 http://www.xwiki.org/rel/wikis The representation containing the list of virtual wikis.
+ * @author xwiki gsoc 2012 
+ *         http://www.xwiki.org/rel/wikis The representation containing the list of virtual wikis.
  *         http://www.xwiki.org/rel/spaces The representation containing the list of spaces in a wiki.
  *         http://www.xwiki.org/rel/pages The representation containing the list of pages in a space.
  *         http://www.xwiki.org/rel/translation The representation containing a translation of a page.

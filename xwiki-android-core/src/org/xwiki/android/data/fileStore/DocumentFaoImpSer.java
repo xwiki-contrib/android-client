@@ -30,12 +30,12 @@ import com.j256.ormlite.dao.Dao;
 class DocumentFaoImpSer implements DocumentFao
 {
 
-    private final String TAG="Document FAO";
+    private static final String TAG="Document FAO";
     
 	private XWikiApplicationContext ctx;
 	private final File FSDIR;
 	
-	private static final String tag="DocumentFao";//loggin tag
+	
 
 	public DocumentFaoImpSer(XWikiApplicationContext ctx, FileStoreManager mngr)
 	{
@@ -50,15 +50,14 @@ class DocumentFaoImpSer implements DocumentFao
 		String wikiName = doc.getWikiName();
 		String spaceName = doc.getSpaceName();
 		String pageName = doc.getPageName();
-		String dirPath = FSDIR.getAbsolutePath() + wikiName + "/" + spaceName + "/" + pageName;
+		String dirPath = FSDIR.getAbsolutePath() +"/"+ wikiName + "/" + spaceName + "/" + pageName;
 		String filePath=dirPath+"/doc.ser";
 		f = new File(filePath);
 		boolean success=true;
 
 		FSDocumentReference fsref = new FSDocumentReference();
 		// doc ref data
-		DocumentReference docref = doc.getDocumentReference();
-		docref.setServerName(ctx.getUserSession().getRealm());
+		DocumentReference docref = doc.getDocumentReference();		
 		fsref.copyfrom(docref);
 		// fs data
 		fsref.setTag(tag);
@@ -81,11 +80,14 @@ class DocumentFaoImpSer implements DocumentFao
                 if(!lst.isEmpty()){
                     fsref= lst.get(0); 
                     Log.d(TAG,"Doc already saved "+ fsref.getPageName());
-                    return fsref;
+                    if(!(fsref.getTag().equals(tag))){
+                        throw new FileStoreException.UnsupportedOperation("["+tag+"!="+fsref.tag+"] Try to save an already saved document with a different tag. We can have only one tag");
+                    }
+                    
                 }else{
                     throw new RuntimeException("error in logic");
                 }
-            } catch (SQLException e1) {               
+            } catch (SQLException e1) {                
                 Log.e(TAG, "error while retreiving already saved doc's doc ref");
             }		    
 		}
@@ -222,7 +224,21 @@ class DocumentFaoImpSer implements DocumentFao
                dao.delete(ref); 
            }
            em.close();
-           File f = ref.getFile();
+           
+          File f = ref.getFile();
+          if(f==null){
+              String wikiName=ref.getWikiName();
+              String spaceName=ref.getSpaceName();
+              String pageName=ref.getPageName();
+              
+              if(wikiName==null || spaceName==null || pageName==null){
+                  throw new IllegalArgumentException("at least specify wiki,space,page coordinates. If not giving a direct file in fsref");
+              }
+              String dirPath=FSDIR.getAbsolutePath() +"/"+ wikiName + "/" + spaceName + "/" + pageName;
+              String filePath=dirPath+"/doc.ser";
+              f=new File(filePath);
+          }         
+           
            return f.delete();
        } catch (SQLException e) {
            Log.e(TAG, e.getMessage());          

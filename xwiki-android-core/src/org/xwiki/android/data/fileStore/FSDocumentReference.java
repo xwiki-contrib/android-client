@@ -37,8 +37,9 @@ public class FSDocumentReference extends DocumentReference
     }
 
     public File getFile()
-    {
-        if(file==null){
+    {        
+        if(file==null ){
+            if(filePath==null)return null;
             file=new File(filePath);
         }            
         return this.file;

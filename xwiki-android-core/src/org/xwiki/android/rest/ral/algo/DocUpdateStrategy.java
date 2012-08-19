@@ -1,5 +1,6 @@
 package org.xwiki.android.rest.ral.algo;
 
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -13,6 +14,7 @@ import org.xwiki.android.rest.ral.RaoException;
 import org.xwiki.android.rest.rpc.XWikiAPI;
 import org.xwiki.android.rest.transformation.DocLaunchPadForXML;
 import org.xwiki.android.rest.transformation.DocumentDismantler_XML;
+import org.xwiki.android.rest.transformation.RestModelTransformer;
 import org.xwiki.android.xmodel.entity.Attachment;
 import org.xwiki.android.xmodel.entity.Document;
 
@@ -22,12 +24,12 @@ public class DocUpdateStrategy implements IDocUpdateStragegy
 {
 
     private static final String TAG = "DocUpdate";
-    XWikiAPI api;
+    XWikiRestConnector rpc;
     DocumentDismantler_XML dismantler;
 
     public DocUpdateStrategy(String serverUrl, String username, String password)
     {
-        api = new XWikiRestConnector(serverUrl, username, password);
+        rpc = new XWikiRestConnector(serverUrl, username, password);
         dismantler = new DocumentDismantler_XML();
 
     }
@@ -53,7 +55,7 @@ public class DocUpdateStrategy implements IDocUpdateStragegy
             String objectClassname = ss[0];
             int objectNumber = new Integer(ss[1]);
             try {
-                api.updateObject(wikiName, spaceName, pageName, objectClassname, objectNumber, ores);
+                rpc.updateObject(wikiName, spaceName, pageName, objectClassname, objectNumber, ores);
                 numEdObj++; // after the api op. If exception happens no ++ happens.
             } catch (RestException e1) {
                 throw new RaoException("Object may not exist in actual doc. Also see wether you are updating non existing document. Because Update does not check for doc existence.", e1);
@@ -66,7 +68,7 @@ public class DocUpdateStrategy implements IDocUpdateStragegy
             String objectClassname = ss[0];
             String objectNumber = ss[1];
             try {
-                api.deleteObject(wikiName, spaceName, pageName, objectClassname, objectNumber);
+                rpc.deleteObject(wikiName, spaceName, pageName, objectClassname, objectNumber);
                 numDelObj++;
             } catch (RestException e1) {
                 // TODO Auto-generated catch block
@@ -75,11 +77,23 @@ public class DocUpdateStrategy implements IDocUpdateStragegy
         }
 
         // new comments
-
-        for (Comment comment : pad.getNewComments()) {//TODO: Update op cannot achieve replyto s, unless rest layer is upgraded.
+        //TODO: this algo needs improvements if a large num of comments is added.
+        List<Comment> newComments = pad.getNewComments();
+        List<Comment> editedComments = pad.getEditedComments();
+        for (Comment comment : newComments) {//TODO: Update op cannot achieve replyto s, unless rest layer is upgraded.
             try {
-                api.addPageComment(wikiName, spaceName, pageName, comment);
-                numNwCmnt++;
+                 Comment c = rpc.commentOperations(wikiName, spaceName, pageName).addPageCommentForResult(comment);
+                 for(Comment rply:newComments){
+                     if(rply.replyTo!=null && rply.replyTo==comment.replyTo){//cause both cmnts id,replyTo can be null.
+                         rply.setReplyTo(comment.id);
+                     }
+                 }
+                 for(Comment rply:editedComments){
+                     if(rply.replyTo!=null && rply.replyTo==comment.replyTo){//cause both cmnts id,replyTo can be null.
+                         rply.setReplyTo(comment.id);
+                     }
+                 }
+                 numNwCmnt++;
             } catch (RestException e1) {
                 // TODO Auto-generated catch block
                 throw new RaoException(e1);
@@ -89,11 +103,13 @@ public class DocUpdateStrategy implements IDocUpdateStragegy
         // edited comments
         // need to conver to objs. Direct editing is not currently supported in
         // xwiki restful api.
-        for (Object cmntObj : pad.getEditedComments()) {
+        RestModelTransformer transformer =new RestModelTransformer();
+        for (Comment cmnt : pad.getEditedComments()) {
+            Object cmntObj=transformer.toObject(cmnt);
             String objectClassname = cmntObj.getClassName();
             int objectNumber = cmntObj.getNumber();
             try {
-                api.updateObject(wikiName, spaceName, pageName, objectClassname, objectNumber, cmntObj);
+                rpc.updateObject(wikiName, spaceName, pageName, objectClassname, objectNumber, cmntObj);
                 numEdCmnt++;
             } catch (RestException e1) {
                 // TODO Auto-generated catch block
@@ -109,7 +125,7 @@ public class DocUpdateStrategy implements IDocUpdateStragegy
             String objectClassname = ss[0];
             String objectNumber = ss[1];
             try {
-                api.deleteObject(wikiName, spaceName, pageName, objectClassname, objectNumber);
+                rpc.deleteObject(wikiName, spaceName, pageName, objectClassname, objectNumber);
                 numDelCmnt++;
             } catch (RestException e1) {
                 // TODO Auto-generated catch block
@@ -121,7 +137,7 @@ public class DocUpdateStrategy implements IDocUpdateStragegy
         Tags tags = pad.getTags();
         if (tags != null) {
             try {
-                api.setTags(wikiName, spaceName, pageName, tags);
+                rpc.setTags(wikiName, spaceName, pageName, tags);
                 numTags = tags.getTags().size();
             } catch (RestException e1) {
                 // TODO Auto-generated catch block
@@ -134,7 +150,7 @@ public class DocUpdateStrategy implements IDocUpdateStragegy
 
         for (Attachment a : pad.getAttatchmentsToupload()) {
             try {
-                api.putPageAttachment(wikiName, spaceName, pageName, a.getFile().getAbsolutePath(), a.getName());
+                rpc.putPageAttachment(wikiName, spaceName, pageName, a.getFile().getAbsolutePath(), a.getName());
                 numEdNwAtch++;
             } catch (RestException e1) {
                 // TODO Auto-generated catch block
@@ -146,7 +162,7 @@ public class DocUpdateStrategy implements IDocUpdateStragegy
 
         for (String s : pad.getDeletedAttachments()) {
             try {
-                api.deletePageAttachment(wikiName, spaceName, pageName, s);
+                rpc.deletePageAttachment(wikiName, spaceName, pageName, s);
                 numDelAtch++;
             } catch (RestException e1) {
                 // TODO Auto-generated catch block

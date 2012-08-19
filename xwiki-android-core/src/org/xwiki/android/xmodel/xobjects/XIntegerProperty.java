@@ -8,6 +8,12 @@ public class XIntegerProperty extends XNumberProperty<Integer>
 	{
 		fields.put("numberType", "integer");
 	}
+	
+	public XIntegerProperty(Integer val)
+    {
+        this();
+        this.val=val;
+    }
 
 	@Override
 	public void setValue(Integer val)

@@ -14,6 +14,12 @@ public class XTextAreaProperty extends XPropertyBase<String>
     {
         super("com.xpn.xwiki.objects.classes.TextAreaClass");
     }
+    
+    public XTextAreaProperty(String value)
+    {
+        super("com.xpn.xwiki.objects.classes.TextAreaClass");
+        this.value=value;
+    }
 
     @Override
     public String toString()

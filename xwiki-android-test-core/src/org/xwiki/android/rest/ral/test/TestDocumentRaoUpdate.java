@@ -112,7 +112,7 @@ public class TestDocumentRaoUpdate extends AndroidTestCase
 
     }
 
-    public void testUpdate_02() throws Throwable
+    public void testUpdate_02_withComments() throws Throwable
     {
         boolean success = true;
         
@@ -133,6 +133,8 @@ public class TestDocumentRaoUpdate extends AndroidTestCase
         assertTrue(numCmntsAfter == numCmntsBefore+1);
     }
     
-    //public void testUp
+    public void testUpdate_03_withComments(){
+        
+    }
 
 }

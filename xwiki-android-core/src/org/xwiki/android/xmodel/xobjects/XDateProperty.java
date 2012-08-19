@@ -15,7 +15,16 @@ public class XDateProperty extends XPropertyBase<Date>
     public XDateProperty()
     {
         super("com.xpn.xwiki.objects.classes.DateClass");
-    }    
+    }
+       
+
+    public XDateProperty(Date value)
+    {
+        this();
+        this.value = value;
+    }
+
+
 
     @Override
     public void setValue(Date date)

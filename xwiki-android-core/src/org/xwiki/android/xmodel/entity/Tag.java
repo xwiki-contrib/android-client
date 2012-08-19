@@ -3,7 +3,7 @@ package org.xwiki.android.xmodel.entity;
 public class Tag extends XWikiResource
 {
    
-    private static final long serialVersionUID = 3416603502937027872L;
+    //private static final long serialVersionUID = 3416603502937027872L;
    
     private String name;
 //    private XTag xobj;

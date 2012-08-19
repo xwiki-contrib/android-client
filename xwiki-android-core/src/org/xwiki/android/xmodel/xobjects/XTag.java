@@ -11,7 +11,8 @@ public class XTag extends XSimpleObject
     {
         super("XWiki.TagClass");
     }
-
+    
+    
     public void addTag(String tag)
     {
         XStaticListProperty<String> prop = (XStaticListProperty<String>) fields.get("category");

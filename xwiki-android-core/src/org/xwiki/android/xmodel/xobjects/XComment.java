@@ -10,6 +10,12 @@ public class XComment extends XSimpleObject
         super("XWiki.XWikiComments");
     }
     
+    public XComment(String comment)
+    {
+        this();
+        setComment(comment);
+    }
+    
     String getAuthor()
     {
         XStringProperty prop = (XStringProperty) fields.get("author");

@@ -9,6 +9,12 @@ public class XDoubleProperty extends XNumberProperty<Double>
     {
         fields.put("numberType","double");
     }
+    
+    public XDoubleProperty(Double val)
+    {
+        this();
+        this.val=val;
+    }
 
     @Override
     public void setValue(Double val)

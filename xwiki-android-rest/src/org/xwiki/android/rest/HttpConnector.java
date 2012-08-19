@@ -25,10 +25,12 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.StringWriter;
 import java.net.SocketTimeoutException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpException;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpRequest;
@@ -55,6 +57,11 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.ExecutionContext;
 import org.apache.http.protocol.HttpContext;
+import org.apache.http.util.EntityUtils;
+import org.simpleframework.xml.Serializer;
+import org.simpleframework.xml.core.Persister;
+import org.xwiki.android.resources.Comment;
+import org.xwiki.android.resources.Resource;
 
 import android.util.Log;
 
@@ -72,6 +79,10 @@ public class HttpConnector
 	 * custom response code for client connection timeout
 	 */
 	 public static final int RESP_CODE_CLIENT_CON_TIMEOUT=21408;
+
+    private static final String TAG = HttpConnector.class.getSimpleName();
+
+  
 	 
     /**
      * URI of the Remote XWiki instance
@@ -254,6 +265,149 @@ public class HttpConnector
 
         return "error";
     }
+    
+    
+   
+    
+    /**
+     *  
+     * @param uri
+     * @param res  The resource to be posted to server. Ex {@link Comment}
+     * @param retType The type of Resource to be extracted from the response to post request
+     * @return
+     * @throws RestConnectionException
+     * @throws RestException
+     */
+    public <T extends Resource> T postForResource(String uri, Resource res, Class<T> retType)
+        throws RestConnectionException, RestException
+    {
+        String content = toXmlString(res);
+        HttpResponse response = post(uri, content);
+        if (retType != null) {
+            return buildResource(retType, response.getEntity());
+        } else {
+            return null;
+        }
+    }
+
+    public <T extends Resource> T putForResource(String uri, Resource res, Class<T> retType)
+        throws RestConnectionException, RestException
+    {
+        String content = toXmlString(res);
+        HttpResponse response = put(uri, content);
+        if (retType != null) {
+            return buildResource(retType, response.getEntity());
+        } else {
+            return null;
+        }
+    }
+    
+    /**
+     * Perform HTTP Post method execution and return its Response
+     * 
+     * @param uri URL of XWiki RESTful API call.
+     * @param content content to be posted to the server
+     * @return status code of the Post method execution
+     * @throws RestConnectionException
+     * @throws RestException
+     */
+    HttpResponse post(String uri, String content) throws RestConnectionException, RestException
+    {
+
+        HttpPost request = new HttpPost();
+
+        try {
+            URI requestUri = new URI(uri);
+            request.setURI(requestUri);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+
+        Log.d(TAG, "POST URL :" + uri);
+
+        try {
+            Log.d("Post content", "content=" + content);
+            StringEntity se = new StringEntity(content, "UTF-8");
+
+            se.setContentType("application/xml");
+            // se.setContentType("text/plain");
+            request.setEntity(se);
+            request.setHeader("Content-Type", "application/xml;charset=UTF-8");
+
+            HttpResponse response = client.execute(request);
+            Log.d(TAG, response.getStatusLine().toString());
+
+            validate(response.getStatusLine().getStatusCode());
+            return response;
+
+        } catch (ClientProtocolException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            throw new RestConnectionException(e);
+        }
+        return null;
+    }
+
+    /**
+     * Perform HTTP Put method execution and return its Response
+     * 
+     * @param uri URL of XWiki RESTful API call.
+     * @param content content to be posted to the server
+     * @return status code of the Put method execution
+     * @throws RestConnectionException
+     * @throws RestException
+     */
+    public HttpResponse put(String uri, String content) throws RestConnectionException, RestException
+    {
+
+        HttpPut request = new HttpPut();
+
+        try {
+            Log.d(TAG, "Request URL :" + uri);
+            System.out.println(uri);
+            URI requestUri = new URI(uri);
+            request.setURI(requestUri);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            Log.d(TAG, "Put content=" + content);
+            StringEntity se = new StringEntity(content, "UTF-8");
+
+            se.setContentType("application/xml");
+            // se.setContentType("text/plain");
+            request.setEntity(se);
+            request.setHeader("Content-Type", "application/xml;charset=UTF-8");
+
+            HttpResponse response = client.execute(request);
+            Log.d(TAG, response.getStatusLine().toString());
+            // close the stream to releas resources. //TODO: [ignore since test utils.]ideally this should be closed
+            // after content is read (if needed) by requester. So move it to PageOps etc.
+            validate(response.getStatusLine().getStatusCode());
+            return response;
+
+        } catch (ClientProtocolException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            throw new RestConnectionException(e);
+        }
+
+        return null;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
     /**
      * Checks whether user credentials are valid in the provided remote XWiki
@@ -278,7 +432,7 @@ public class HttpConnector
         String Uri;
         int responseCode = 0;
 
-        Uri = "http://" + Url + "/xwiki/xmlrpc/";
+        Uri = "http://" + Url + "/xwiki/rest/";
 
         try {
             requestUri = new URI(Uri);
@@ -572,6 +726,39 @@ public class HttpConnector
             throw new RestBadRequestException();
         }
         
+    }
+    /**
+     * Methods taken from the inspiration of rpc.XMLRestCient.
+     * these methods don't suite here if we name this as a Http Connector.
+     * @param res
+     * @return
+     */
+    
+    private String toXmlString(Resource res)
+    {
+        Serializer serializer = new Persister();
+        StringWriter result = new StringWriter();
+
+        try {
+            serializer.write(res, result);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return result.toString();
+    }
+
+    private <T extends Resource> T buildResource(Class<T> ofType, HttpEntity from)
+    {
+        Serializer serializer = new Persister();
+        T res = null;
+        try {
+            res = serializer.read(ofType, EntityUtils.toString(from));
+            from.consumeContent(); // from.finish().
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage());
+        }
+        return res;
     }
 
 }

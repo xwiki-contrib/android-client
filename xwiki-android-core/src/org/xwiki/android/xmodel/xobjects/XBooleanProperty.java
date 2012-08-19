@@ -14,6 +14,14 @@ public class XBooleanProperty extends XPropertyBase<Boolean>
     {
         super("com.xpn.xwiki.objects.classes.BooleanClass");
     }
+    
+
+    public XBooleanProperty(Boolean value)
+    {
+        this();
+        this.value = value;
+    }
+
 
     @Override
     public void setValue(Boolean val)

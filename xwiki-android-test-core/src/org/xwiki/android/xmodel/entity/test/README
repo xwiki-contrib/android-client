@@ -1,0 +1,2 @@
+Testing  non android dependant xmodel.
+If xmodel is seperated to a J2SE module take these to that module as well. 

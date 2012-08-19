@@ -29,6 +29,7 @@ import org.xwiki.android.rest.reference.DocumentReference;
 import org.xwiki.android.rest.rpc.XWikiAPI;
 import org.xwiki.android.rest.transformation.DocLaunchPadForXML;
 import org.xwiki.android.rest.transformation.DocumentDismantler_XML;
+import org.xwiki.android.rest.transformation.RestModelTransformer;
 import org.xwiki.android.xmodel.entity.Attachment;
 import org.xwiki.android.xmodel.entity.Document;
 import org.xwiki.android.xmodel.xobjects.XSimpleObject;
@@ -173,68 +174,51 @@ class XmlDocumentRao implements DocumentRao
                 }
 
                 List<Comment> newCmnts = pad.getNewComments();
-                List<Object> edCmnts = pad.getEditedComments();
-                Comparator<Object> comparator = new Comparator<Object>()
-                {
-                    @Override
-                    public int compare(Object object1, Object object2)
-                    {
-                        // we are sure that edited Comments coming as Objects get there number prop filled to comment
-                        // id;
-                        return object1.getNumber() - object2.getNumber();
-                    }
-                };
-                Collections.sort(edCmnts, comparator);
-                // start order comment upload. Try create the setComment(cmnt with id 1) to match the same id in server.
-                int svrCmntId=-1;
-                int used = 0; // how many new comments used
-                int avail = newCmnts.size();
-                int lastId = -1;
-                for (int i = 0; i < edCmnts.size(); i++) {
-                    Object ec = edCmnts.get(i);
-                    int thisId = ec.getNumber();
-                    if (thisId > lastId + 1) {
-                        int needed = thisId - lastId-1;
-                        lastId = thisId;
-                        if (used < avail) {
-                            int start = used;
-                            int end = Math.min(avail, used + needed);
-                            for (int j = used; j < end; j++) {
-                            	Comment cnw=newCmnts.get(j);
-                            	int tmpId=cnw.getId();
-                            	cnw.setId(++svrCmntId);
-                                api.addPageComment(wikiName, spaceName, pageName, cnw);
-                                
-                                for(Comment c:newCmnts){
-                                	if(c.getReplyTo()!=null && c.getReplyTo()==tmpId){
-                                		c.setReplyTo(svrCmntId);
-                                	}
-                                }                               
+                List<Comment> edCmnts = pad.getEditedComments();
+                
+                List<Comment> cmnts=new LinkedList<Comment>(newCmnts);
+                
+                if(edCmnts.size()>0){
+                    RestModelTransformer transformer=new RestModelTransformer();
+                    Comparator<Comment> comparator=new Comparator<Comment>()
+                        {
+                            @Override
+                            public int compare(Comment c1, Comment c2)
+                            {                        
+                                return c1.getId()-c2.getId();
                             }
-                            used += needed;
-                        }                       
-                        api.addObject(wikiName, spaceName, pageName, ec);  
-                        svrCmntId++;
-                    } else { 
-                    	lastId=thisId;
-                        api.addObject(wikiName, spaceName, pageName, ec); 
-                        svrCmntId++;
+                        };
+                        Collections.sort(edCmnts, comparator);
+                       
+                        Comment ec;
+                        for(int i=0 ; i<edCmnts.size(); i++){
+                            ec=edCmnts.get(i);
+                            if(ec.getId()<cmnts.size()){
+                                cmnts.add(ec.id, ec);
+                            }else{
+                                List<Comment>collection=edCmnts.subList(i, edCmnts.size());
+                                cmnts.addAll(collection);
+                                break;
+                            }
+                        }
+                }
+                for(int i=0; i<cmnts.size(); i++){
+                    Comment p=cmnts.get(i);
+                    int tmpId=p.getId();
+                    int id=i;
+                    p.setId(id);
+                    for(int j=i+1; j<cmnts.size();j++){
+                        Comment c=cmnts.get(j);
+                        if(c.getReplyTo()!=null && c.replyTo==tmpId){
+                            c.setReplyTo(id);
+                        }
                     }
                 }
                 
-                if(used<avail){
-                	for (int i = used; i < newCmnts.size(); i++){
-                		Comment prnt=newCmnts.get(i);
-                		int tmpId=prnt.getId();
-                		prnt.setId(++svrCmntId);
-                		api.addPageComment(wikiName, spaceName, pageName, prnt);                		
-                		for(Comment child:newCmnts){
-                        	if(child.getReplyTo()!=null &&child.getReplyTo()==tmpId){
-                        		child.setReplyTo(svrCmntId);
-                        	}
-                        } 
-                	}
+                for(Comment comment:cmnts){
+                    api.addPageComment(wikiName, spaceName, pageName, comment);
                 }
+                
             
                 
                 Tags tags= pad.getTags();
@@ -351,3 +335,85 @@ class XmlDocumentRao implements DocumentRao
     
 
 }
+
+/** 
+ * old algo for ordering comments. Which was done because earlier the doc pad returned Objects res as edited comment. This went stupidly long.
+ * 
+ * 
+ * int svrCmntId=-1;
+                int used = 0; // how many new comments used
+                int avail = newCmnts.size();
+                int lastId = -1;
+                
+                if(edCmnts.size()>0){
+                    RestModelTransformer transformer=new RestModelTransformer();
+                    Comparator<Comment> comparator=new Comparator<Comment>()
+                        {
+                            @Override
+                            public int compare(Comment c1, Comment c2)
+                            {                        
+                                return c1.getId()-c2.getId();
+                            }
+                        };
+                        Collections.sort(edCmnts, comparator);
+                        // start order comment upload. Try create the setComment(cmnt with id 1) to match the same id in server.
+                        
+                        for (int i = 0; i < edCmnts.size(); i++) {
+                            Comment ec = edCmnts.get(i);
+                            int thisId = ec.getId();
+                            if (thisId > lastId + 1) {
+                                int needed = thisId - lastId-1;
+                                lastId = thisId;
+                                if (used < avail) {
+                                    int start = used;
+                                    int end = Math.min(avail, used + needed);
+                                    for (int j = used; j < end; j++) {
+                                        Comment cnw=newCmnts.get(j);
+                                        int tmpId=cnw.getId();
+                                        cnw.setId(++svrCmntId);
+                                        api.addPageComment(wikiName, spaceName, pageName, cnw);                                
+                                        for(Comment c:newCmnts){
+                                            if(c.getReplyTo()!=null && c.getReplyTo()==tmpId){
+                                                c.setReplyTo(svrCmntId);
+                                            }
+                                        }
+                                        for(Comment c:edCmnts){
+                                            if(c.getReplyTo()!=null && c.getReplyTo()==tmpId){
+                                                c.setReplyTo(svrCmntId);
+                                            }
+                                        }
+                                    }
+                                    
+                                    
+                                } 
+                                Object eo = transformer.toObject(ec);
+                                api.addObject(wikiName, spaceName, pageName,eo );  
+                                if(used+needed>avail){//if avail<used+needed edited comment id gets changed. That is cmnt set with id 5 may get put at cmnt 3 because no comments without an id to fill the gap.
+                                    
+                                }
+                                svrCmntId++;
+                                used += needed;
+                            } else { 
+                                lastId=thisId;
+                                Object eo = transformer.toObject(ec);
+                                api.addObject(wikiName, spaceName, pageName, eo); 
+                                svrCmntId++;
+                            }
+                        }
+                }
+                
+                
+                if(used<avail){
+                    for (int i = used; i < newCmnts.size(); i++){
+                        Comment prnt=newCmnts.get(i);
+                        int tmpId=prnt.getId();
+                        prnt.setId(++svrCmntId);
+                        api.addPageComment(wikiName, spaceName, pageName, prnt);                        
+                        for(Comment child:newCmnts){
+                            if(child.getReplyTo()!=null &&child.getReplyTo()==tmpId){
+                                child.setReplyTo(svrCmntId);
+                            }
+                        }                       
+                    }
+                }
+ **/

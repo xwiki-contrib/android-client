@@ -8,6 +8,10 @@ public class XLongProperty extends XNumberProperty<Long>
 	{
 		fields.put("numberType", "long");
 	}
+	
+	public XLongProperty(Long val){
+	    this.val=val;
+	}
 
 	@Override
 	public void setValue(Long val)

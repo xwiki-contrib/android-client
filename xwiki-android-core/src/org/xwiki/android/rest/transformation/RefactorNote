@@ -2,3 +2,7 @@ consider: apply Builder pattern with a Director.
 So, which REST model to use can be identified from the config.xml and convert accordingly.
 
 *** This is currently achieved by creating a separate ReSTfulManager for each ReST scheme we use. (performance efficient)
+
+
+
+
