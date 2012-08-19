@@ -1,0 +1,13 @@
+How to parallel
+Make Worker thread which can do Jobs.
+CreateJob
+{ pages, comments, tags, attachmnts, ...}
+UpdateJob
+{ comments , ...}
+RetreiveJob
+{
+pages, ...
+
+}
+Worker knows what to do for each job. The worker is allowed to parallelize at any extent.
+i.e upload each item in comments, page, etc parallel.

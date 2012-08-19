@@ -1,0 +1,19 @@
+Under construction.
+--------------------
+New requirements came as the RAL was under development.
+* We must be able to process results from put post methods.
+		ex: we add a new comment to a page. We need to add a reply comment to that comment. We should have processed the resp for earlier
+		comment posting and extracted its id.
+* there are a lot of repetitive code that can be reduced using generic code. (see how toXml, buileComment like methods in all *Resource classes was extracted to 1 single method in XmlRestClient)
+
+
+		
+* Also the earlier implementation created a DefaultHttpClient for every single rpc call.
+Here we set a single HttpClient with a pooled connection manager for each RestClient. The HttpClient must continue until the
+RestClient shuts down.
+
+! after completion , Replace the XmlRestCient to be the rest client used by RestFulManger.
+! then we can write ral.algo.---- classes for parallel uploads, downloads.
+
+
+// Todo redefine add** , update** methods in each **Operations interface.
