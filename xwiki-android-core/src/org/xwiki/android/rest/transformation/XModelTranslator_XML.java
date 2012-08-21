@@ -26,6 +26,11 @@ import org.xwiki.android.xmodel.xobjects.XComment;
 import org.xwiki.android.xmodel.xobjects.XProperty;
 import org.xwiki.android.xmodel.xobjects.XSimpleObject;
 
+/**
+ * 
+ * Translates XModel to rest Model (other model).
+ *
+ */
 public class XModelTranslator_XML
 {
     public  Page toPage(XWikiPage doc)

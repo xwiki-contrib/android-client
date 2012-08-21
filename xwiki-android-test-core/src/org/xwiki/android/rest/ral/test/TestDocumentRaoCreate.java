@@ -88,7 +88,7 @@ public class TestDocumentRaoCreate extends AndroidTestCase
 		// setup preconditions on serverside //TODO: change as you add more methods and you need to keep the tempTestPage undeleted after a test.
 		api.deletePage(wikiName, spaceName, pageName);
 		
-		if (count == 8) {//make attachment file
+		if (count == 9) {//make attachment file
 			Application sys = XWikiApplicationContext.getInstance();
 			FileOutputStream fos = sys.openFileOutput(attachmentName, Context.MODE_WORLD_READABLE);
 			PrintWriter writer = new PrintWriter(fos);
@@ -342,6 +342,7 @@ public class TestDocumentRaoCreate extends AndroidTestCase
 	public void testCreate_08_WithCmnts_wieredReplyTos() throws Throwable
     {
 
+	    boolean success=false;
         c1 = new Comment("0");
         c2 = new Comment("1");
         c3 = new Comment("2");
@@ -349,28 +350,23 @@ public class TestDocumentRaoCreate extends AndroidTestCase
         c4 = new Comment("3");
         c4.setId(3);
 
+        try{            
+        
         c2.addReplyComment(c1);
         c4.addReplyComment(c3);
 
         doc.addComment(c1, true);
         doc.setComment(c3);
         doc.setComment(c4);
+        }catch(IllegalStateException e){
+            success=true;
+        }
 
         rao.create(doc);
 
-        boolean success = api.existsPage(wikiName, spaceName, pageName);
+        success = api.existsPage(wikiName, spaceName, pageName);// any way the page should get created. You could not add the last 2 comments because you replied to a comment that is added after this.
         assertTrue(success);
-        if (success) {
-            Comments cmnts = api.getPageComments(wikiName, spaceName, pageName);
-            List<org.xwiki.android.resources.Comment> clst = cmnts.comments;
-            assertEquals(4, clst.size());
-            int replyto = clst.get(2).replyTo;
-            assertEquals(1, replyto);
-            replyto=clst.get(3).replyTo;
-            assertEquals(0, replyto);
-            
-            assertEquals("6", clst.get(3).text);
-        }
+        
 
     }
 

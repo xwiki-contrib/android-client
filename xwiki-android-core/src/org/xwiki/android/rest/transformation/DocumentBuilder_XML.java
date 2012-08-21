@@ -354,8 +354,20 @@ public class DocumentBuilder_XML implements DocumentBuilder
         d.setAttachment(a);
         return this;
     }
+    
+//    @Override
+//    public DocumentBuilder withHistory(Attachments attachments)
+//    {
+//        for (Attachment ares : attachments.getAttachments()) {
+//            withAttachment(ares);
+//        }
+//        return this;
+//    }
 
-    // public DocumentBuilder_XML withLinks(List<Link> links)
+    // 
+    // These methods are too fine grain to be worth it. 
+    //
+    //public DocumentBuilder_XML withLinks(List<Link> links)
     // {
     // return this;
     // }
@@ -462,6 +474,7 @@ public class DocumentBuilder_XML implements DocumentBuilder
     // return this;
     // }
     //
+    
     /*
      * (non-Javadoc)
      * @see org.xwiki.android.xmlrpc.transformation.DocumentBuilder#build()

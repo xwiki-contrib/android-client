@@ -313,7 +313,8 @@ public class HttpConnector
      */
     HttpResponse post(String uri, String content) throws RestConnectionException, RestException
     {
-
+        initialize();
+        setCredentials();
         HttpPost request = new HttpPost();
 
         try {
@@ -360,7 +361,8 @@ public class HttpConnector
      */
     public HttpResponse put(String uri, String content) throws RestConnectionException, RestException
     {
-
+        initialize();
+        setCredentials();
         HttpPut request = new HttpPut();
 
         try {
@@ -433,7 +435,7 @@ public class HttpConnector
         int responseCode = 0;
 
         Uri = "http://" + Url + "/xwiki/rest/";
-
+        
         try {
             requestUri = new URI(Uri);
 

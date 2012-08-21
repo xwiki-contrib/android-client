@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.xwiki.android.core.test.properties.TestConstants;
 import org.xwiki.android.resources.Attribute;
+import org.xwiki.android.resources.Comments;
 import org.xwiki.android.resources.Objects;
 import org.xwiki.android.resources.Page;
 import org.xwiki.android.resources.Object;
@@ -60,11 +61,13 @@ public class TestDocumentRaoUpdate extends AndroidTestCase
         doc.setTitle(pageName);
 
         // setup external fixture
+        //add page
         Page page = new Page();
         page.setName(pageName);
         page.setSpace(spaceName);
         page.setWiki(wikiName);
         api.addPage(wikiName, spaceName, pageName, page);
+       //add object blogpost 0
         Object o = new Object();
         o.setClassName("Blog.BlogPostClass");
         Property content = new Property();
@@ -81,6 +84,10 @@ public class TestDocumentRaoUpdate extends AndroidTestCase
         published.setValue("1");
         o.withProperties(content, category, published);
         api.addObject(wikiName, spaceName, pageName, o);
+        //add comment
+        org.xwiki.android.resources.Comment comment=new org.xwiki.android.resources.Comment();
+        comment.setText("0");        
+        api.addPageComment(wikiName, spaceName, pageName, comment);
 
     }
 
@@ -133,8 +140,37 @@ public class TestDocumentRaoUpdate extends AndroidTestCase
         assertTrue(numCmntsAfter == numCmntsBefore+1);
     }
     
-    public void testUpdate_03_withComments(){
+    public void testUpdate_03_withComments() throws Throwable{
         
+        //get state of external fixture page.
+        int numCmntsBefore=0;
+        List<org.xwiki.android.resources.Comment> comments = api.getPageComments(wikiName, spaceName, pageName).comments;
+        if(comments!=null){
+            numCmntsBefore=comments.size();
+        } 
+        
+        //tested logic        
+        Comment cmnt = new Comment("hi comment");
+        String rtBfr="hi reply";
+        Comment cmnt2= new Comment(rtBfr);
+        cmnt2.replyTo(cmnt);
+        
+        doc.addComment(cmnt,true); //add the prnt cmnt with cascade to replies.
+        
+        rao.update(doc);
+        
+        //verify
+        Comments comments2 = api.getPageComments(wikiName, spaceName, pageName);
+        int numCmntsAfter =api.getPageComments(wikiName, spaceName, pageName).comments.size();
+        assertTrue(numCmntsAfter == numCmntsBefore+2); // make sure 2 new were added.
+        
+        List<org.xwiki.android.resources.Comment> lst = comments2.getComments();
+        org.xwiki.android.resources.Comment rply=lst.get(lst.size()-1);//it should get added last
+        int replyTo=rply.replyTo;
+        String rtAftr=rply.text;
+        
+        
+        assertEquals(rtBfr, rtAftr);
     }
 
 }

@@ -1076,7 +1076,7 @@ public class XWikiRestConnector implements XWikiAPI
     
     public ObjectResources objectOperations(String wikiName, String spaceName, String pageName)
     {        
-        ObjectResources ops= new ObjectResources(spaceName, wikiName, spaceName, pageName);
+        ObjectResources ops= new ObjectResources(URLprefix, wikiName, spaceName, pageName);
         if (isAuthenticated) {
             ops.setAuthenticaion(username, password);
         }
@@ -1085,7 +1085,7 @@ public class XWikiRestConnector implements XWikiAPI
     
     public CommentResources commentOperations(String wikiName, String spaceName, String pageName)
     {        
-        CommentResources ops= new CommentResources(spaceName, wikiName, spaceName, pageName);
+        CommentResources ops= new CommentResources(URLprefix, wikiName, spaceName, pageName);
         if (isAuthenticated) {
             ops.setAuthenticaion(username, password);
         }
@@ -1094,7 +1094,7 @@ public class XWikiRestConnector implements XWikiAPI
     
     public TagResources tagOperations(String wikiName, String spaceName, String pageName)
     {        
-        TagResources ops= new TagResources(spaceName, wikiName, spaceName, pageName);
+        TagResources ops= new TagResources(URLprefix, wikiName, spaceName, pageName);
         if (isAuthenticated) {
             ops.setAuthenticaion(username, password);
         }
@@ -1103,7 +1103,7 @@ public class XWikiRestConnector implements XWikiAPI
     
     public AttachmentResources attachmentOperations(String wikiName, String spaceName, String pageName)
     {        
-        AttachmentResources ops= new AttachmentResources(spaceName, wikiName, spaceName, pageName);
+        AttachmentResources ops= new AttachmentResources(URLprefix, wikiName, spaceName, pageName);
         if (isAuthenticated) {
             ops.setAuthenticaion(username, password);
         }
@@ -1112,7 +1112,7 @@ public class XWikiRestConnector implements XWikiAPI
     
     public HistoryResources historyOperations(String wikiName, String spaceName, String pageName)
     {        
-        HistoryResources ops= new HistoryResources(spaceName, wikiName, spaceName, pageName);
+        HistoryResources ops= new HistoryResources(URLprefix, wikiName, spaceName, pageName);
         if (isAuthenticated) {
             ops.setAuthenticaion(username, password);
         }
