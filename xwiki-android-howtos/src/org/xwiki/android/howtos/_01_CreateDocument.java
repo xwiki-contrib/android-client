@@ -1,12 +1,13 @@
 package org.xwiki.android.howtos;
 
-import org.xwiki.android.blog.xobj.XBlogPost;
-import org.xwiki.android.ral.RaoException;
+import org.xwiki.android.rest.ral.RaoException;
+import org.xwiki.android.svc.xmodel.DocumentRemoteSvcCallbacks;
+import org.xwiki.android.svc.xmodel.DocumentRemoteSvcs;
+import org.xwiki.android.svc.xmodel.DocumentSvcImpl;
+import org.xwiki.android.xmodel.blog.XBlogPost;
 import org.xwiki.android.xmodel.entity.Document;
-import org.xwiki.android.xmodel.entity.Document;
-import org.xwiki.android.xmodel.svc.DocumentRemoteSvcCallbacks;
-import org.xwiki.android.xmodel.svc.DocumentRemoteSvcs;
-import org.xwiki.android.xmodel.svc.DocumentSvcImpl;
+
+
 
 
 public class _01_CreateDocument

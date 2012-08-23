@@ -10,9 +10,9 @@ public class XWikiResource implements Serializable
 
     List<Link> links;
     
-    private boolean isNew=true;
+    protected boolean isNew=true;
 
-    private boolean edited=true;
+    protected boolean edited=true;
 
     public void setNew(boolean val)
     {

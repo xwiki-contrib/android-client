@@ -3,11 +3,11 @@ package org.xwiki.android.howtos;
 import java.util.List;
 import java.util.Map;
 
-import org.xwiki.android.fileStore.FSDocumentReference;
+import org.xwiki.android.data.fileStore.FSDocumentReference;
+import org.xwiki.android.svc.xmodel.DocumentLocalSvcCallbacks;
+import org.xwiki.android.svc.xmodel.DocumentLocalSvcs;
+import org.xwiki.android.svc.xmodel.DocumentSvcImpl;
 import org.xwiki.android.xmodel.entity.Document;
-import org.xwiki.android.xmodel.svc.DocumentLocalSvcCallbacks;
-import org.xwiki.android.xmodel.svc.DocumentLocalSvcs;
-import org.xwiki.android.xmodel.svc.DocumentSvcImpl;
 
 import android.app.Activity;
 
@@ -17,6 +17,7 @@ public class _05_ListAndLoadDocuments extends Activity
     FSDocumentReference loadMe;
     DocumentLocalSvcs ds;
 
+    @Override
     protected void onCreate(android.os.Bundle savedInstanceState)
     {
 

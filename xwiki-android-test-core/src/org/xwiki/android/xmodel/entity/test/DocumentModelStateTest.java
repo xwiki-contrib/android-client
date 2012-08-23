@@ -29,7 +29,7 @@ public class DocumentModelStateTest extends AndroidTestCase
         xblgpst1.setEdited(false);
         doc.setObject(xblgpst1);
         xblgpst2.setNew(false);
-        doc.addObject(xblgpst1);
+        doc.addObject(xblgpst2);
         
         c1.setId(0);
         c1.setEdited(false);

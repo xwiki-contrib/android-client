@@ -2,10 +2,10 @@ package org.xwiki.android.howtos;
 
 import java.io.File;
 
+import org.xwiki.android.svc.xmodel.DocumentLocalSvcCallbacks;
+import org.xwiki.android.svc.xmodel.DocumentLocalSvcs;
+import org.xwiki.android.svc.xmodel.DocumentSvcImpl;
 import org.xwiki.android.xmodel.entity.Document;
-import org.xwiki.android.xmodel.svc.DocumentLocalSvcCallbacks;
-import org.xwiki.android.xmodel.svc.DocumentLocalSvcs;
-import org.xwiki.android.xmodel.svc.DocumentSvcImpl;
 
 public class _04_SaveDocumentAdv
 {

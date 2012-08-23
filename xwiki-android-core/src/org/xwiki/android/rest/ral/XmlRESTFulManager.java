@@ -37,6 +37,12 @@ public class XmlRESTFulManager implements RESTfulManager
     {
         return new XmlDocumentRao(serverUrl, username, password);
     }
+    
+    @Override
+    public DocumentRao getDocumentRao()
+    {
+       return new XmlDocumentRao(serverUrl, username, password);//TODO: cache this rao. Dont make new every time. Make thread safe.
+    }
 
     public SpaceRao newSpaceRao()
     {
@@ -63,6 +69,8 @@ public class XmlRESTFulManager implements RESTfulManager
     {        
         return new XWikiRestConnector(serverUrl, username, password);
     }
+
+    
 
    
 

@@ -30,8 +30,7 @@ public abstract class XWikiPage extends XWikiPageSummary
 
     protected String content;
 
-    
-    
+   
 
    
     /**
@@ -244,6 +243,21 @@ public abstract class XWikiPage extends XWikiPageSummary
     public void setContent(String value)
     {
         this.content = value;
+        edited=true;
     }
 
+    
+
+    /**
+     * if set to false update operations will not update the content of this page.
+     * @param pageEdited
+     */
+    @Override
+    public void setEdited(boolean pageEdited)
+    {
+        this.edited = pageEdited;
+    }
+
+    
+    
 }

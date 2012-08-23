@@ -5,12 +5,15 @@ import org.xwiki.android.rest.rpc.RestClient;
 
 public interface RESTfulManager
 {
+    /**
+     * misnormer. We will be giving the save Rao instance.
+     * Use getDocumentRao() which is named correctly;
+     * @return
+     */
+    
     DocumentRao newDocumentRao();
-
-    SpaceRao newSpaceRao();
-
-    WikiRao newWikiRao();
-
+    DocumentRao getDocumentRao();
+    
     RestClient getRestClient();
     
     @Deprecated

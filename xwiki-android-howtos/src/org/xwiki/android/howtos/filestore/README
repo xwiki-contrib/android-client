@@ -1,0 +1,2 @@
+These how tos explain how to directly use the File Store.
+(DocumentSvc in svc.xmodel package provide an asynchronous layer with call backs to call these same methods.)

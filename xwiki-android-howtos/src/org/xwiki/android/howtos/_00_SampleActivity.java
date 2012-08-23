@@ -1,5 +1,7 @@
 package org.xwiki.android.howtos;
 
+import org.xwiki.android.howtos.R;
+
 import android.app.Activity;
 import android.os.Bundle;
 

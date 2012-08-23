@@ -1,0 +1,3 @@
+These how tos explain how to directly use the RAL layer.
+All the operations here are longrunning blocking operations. 
+So it is adviced to use the svc.xmodel package's DocumentSvc classes to do these asynchronically.

@@ -1,6 +1,6 @@
 package org.xwiki.android.howtos;
 
-import org.xwiki.android.blog.xobj.XBlogPost;
+import org.xwiki.android.xmodel.blog.XBlogPost;
 import org.xwiki.android.xmodel.entity.Document;
 import org.xwiki.android.xmodel.xobjects.XBooleanProperty;
 
@@ -20,7 +20,7 @@ public class _02_AdvancedObjectEditing
         //change an attribute of the property.
         hiddenP.setPrettyName("Hidden pretty name");
         
-        //Since a reference is passed, you do not have to blgpstObj.setpHidden(hiddenP) to commit the effects.
+        //Since a reference is passed, you do not have to do a blgpstObj.setpHidden(hiddenP) to commit the effects.
         
     }
 }

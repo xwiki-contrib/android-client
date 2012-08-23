@@ -211,10 +211,11 @@ public class Document extends XWikiPage
 	 */
 	public String addObject(XSimpleObject obj)
 	{
-		String key = obj.getClassName() + "/new/" + _addNum++;
-		obj.setNew(true);
+		String key = obj.getClassName() + "/new/" + _addNum++;		
 		objects.put(key, obj);
-		newObjects.add(obj);
+		if(obj.isNew()){
+		    newObjects.add(obj); 
+		}		
 		return key;
 	}
 
